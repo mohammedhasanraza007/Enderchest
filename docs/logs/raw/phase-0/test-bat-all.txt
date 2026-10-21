@@ -1,0 +1,67 @@
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+All checks passed!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.................................................................        [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+65 passed, 1 warning in 0.57s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.............................................                            [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+45 passed, 1 warning in 4.77s
+There is no end-to-end suite yet. It starts in Phase 1, when the first screen exists.
+Unit, integration and lint passed. Run "test.bat probes" for the Docker probes.

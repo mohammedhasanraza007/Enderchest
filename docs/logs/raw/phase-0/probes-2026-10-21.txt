@@ -1,0 +1,36 @@
+Phase 0 gate probes (docs/DATA_SAFETY.md 10), run from the host with backend/tests/probes/run-probes.ps1
+against the TEST stack (project enderchest-test, port 8471), 2026-10-21, Docker Engine 29.8.2.
+The live stack and the live volume were never started, built or named by any probe.
+
+== Full run, 21:15 (after fixes to probes 4 and 12) ==
+PROBE 1: PASS - records before=305 after stop/up=305, consistent=True, quick_check=ok
+PROBE 2: PASS - container removed=True; records before=313 after=313, consistent=True
+PROBE 3: PASS - no-cache build ok=True; records before=312 after=312, consistent=True
+PROBE 4: PASS - copy at Enderchest-moved-410095: up=True; same project containers=[enderchest-test-app-1]; records before=305 after=305
+PROBE 5: PASS - container removed=True; records before=309 after=309, consistent=True
+PROBE 6: PASS - round 1 killed at ~156 rows, after restart rows=165 consistent=True quick_check=ok; round 2 killed at ~371 rows, after restart rows=382 consistent=True quick_check=ok; round 3 killed at ~625 rows, after restart rows=634 consistent=True quick_check=ok
+PROBE 7: PASS - state=locked/no_data_volume; /data contents=[]; API status 503
+PROBE 8: PASS - after delete state=recovery; backups offered=1; restore status=200; records before=306 after=306
+PROBE 9: PASS - test stack: build:0 build:0 build:0 up:0 up:0 up:0; records before=303 after=303
+PROBE 10: FAIL - the throwaway test stack did not start        (probe defect: a reused volume already held a database)
+PROBE 11: FAIL - fresh volume state=recovery:False; restore status=409  (probe defect: the "fresh" volume was not fresh)
+PROBE 12: PASS - all 6 checks refused or clean as required
+PROBE 13: PASS - live config on test data: locked/env_mismatch; test config on live-marked data: locked/env_mismatch; files unchanged: test=True live-marked=True
+PROBE 14: PASS - kills=1; a .partial was seen after a kill=True; listed as backup=False; left after restart=False; next backup status=201
+
+== Probes 10 and 11 after giving each run its own new throwaway volume (run twice, both passed) ==
+PROBE 10: PASS - state=locked/newer_data schema_found=99; API 503; file hash unchanged=True
+PROBE 11: PASS - app uid=10001; backup on host=True; photo mirrored=True; fresh volume state=recovery:True; restore status=200; records before=311 after=311; photo sha256 equal=True
+PROBE 10: PASS - (second run, same result)
+PROBE 11: PASS - ... records before=305 after=305; photo sha256 equal=True
+
+== Regression after the last-good-backup fix and a rebuilt image ==
+PROBE 8: PASS - after delete state=recovery; backups offered=1; restore status=200; records before=307 after=307
+PROBE 11: PASS - app uid=10001; ... restore status=200; records before=304 after=304; photo sha256 equal=True
+PROBE 12: PASS - all 6 checks refused or clean as required
+
+Earlier defects found by the probes and fixed (not in the product): probe 12 joined nested arrays (CORS check),
+probe 4 overwrote the library's project variable (case-insensitive PowerShell names) and left a stray stack,
+the runner parsed "-Only 12,7,1" as one number.
+Notes: probe 14 interrupted one backup mid-copy on its first kill. Photos in probe 11 are a real file written
+into /data/photos as the app user, not an upload (uploads arrive in Phase 2).

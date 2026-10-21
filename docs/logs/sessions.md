@@ -26,3 +26,12 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed: none.
 - Blocked on owner: O-010 (open; its default applies).
 - Next: Phase 0 task 1. Paste `pack-v5.1.zip` into a new chat in the Enderchest project; nothing else is needed.
+
+## 2026-10-21 · phase0 · Phase 0 build
+- Zip in: `pack-v5.1.zip` (Desktop). Its `.git` history was not used: baseline commit `e86aa59` (tag `pack-v4-baseline`) holds the owner's v4 files, `4e47ee2` adds v5.1 over it. Worktree `D:\Projects\Enderchest-phase-0`, branch `phase-0`.
+- Zip out: `D:\Projects\phase0.zip`, made from a clean local `git clone` of branch `phase-0` (so `.git` carries the history) with the Windows `tar -a -c -f ... -T` route (see the evidence log).
+- Phase worked on: 0, tasks 1 to 10, all built. Not closed: verification and owner acceptance pending.
+- Checks: deny rules 16 of 16 refused; `test.bat all` 65 unit and 45 integration tests, ruff clean; probes 1 to 14 PASS on the test stack; boot pages checked in the browser pane; docs checker 0 errors.
+- Failed and fixed: restore on an empty volume (missing folder), last good backup after a restore, and four defects in the probe scripts (all recorded in `raw/phase-0/probes-2026-10-21.txt`). Two mistakes of mine: extracting the zip over the worktree replaced its `.git` link (repaired), and a relative path wrote 7 empty `.bat` files into the main folder (removed).
+- Blocked on owner: live-stack checks (`build.bat` x3, `run.bat`, `backup.bat`, `restore.bat`, live probes 4 and 9), see handoff "Owner runs next".
+- Next: fresh-session verification of Phase 0; Phase 1 only after PASS and only when the owner says so.

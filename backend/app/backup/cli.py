@@ -52,7 +52,8 @@ def main(argv: list[str]) -> int:
                 return 2
             result = restore_backup(settings, argv[1])
             safety = result.safety_backup or "none (no database)"
-            print(f"Restored {result.restored}. Items: {result.items}. "
+            items = result.items if result.items is not None else "not counted yet"
+            print(f"Restored {result.restored}. Items: {items}. "
                   f"Safety copy of the previous data: {safety}.")
             return 0
         conn = connect(settings.db_path)

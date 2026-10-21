@@ -3,40 +3,39 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Pack: v5.1 (D-067 to D-071). This zip: `pack-v5.1.zip`.
-- Last closed phase: none. Phase 0 is not started.
-- Next phase: 0. Next task: 1, prove the deny rules (`docs/specs/phase-0-foundation.md`, task 1).
-- Verification: none pending.
-- Resume check: the newest commit subject must be `pack: v5.1 visuals checked every chat, start on paste (D-070, D-071)`. The baseline is `2abbefc`; the v5 commit is `7aebb6a`.
-- Owner answers still open: O-010 (where Docker probes run). Its default applies. O-011 is answered (D-070).
+- Pack: v5.1 plus the Phase 0 build. This zip: `phase0.zip`.
+- Last closed phase: none. Phase 0 is BUILT but not closed.
+- Verification: pending for phase 0. The next chat's first job is the fresh-session verification (`docs/PROCESS.md` 4), written to `docs/reviews/phase-0-verification.md`. Phase 1 starts only after its PASS. The owner said: do not start Phase 1 or later in the Phase 0 chat.
+- Next task after PASS: Phase 1 (`docs/specs/phase-1-*.md`), only when the owner says so.
+- Resume check: the newest commit subject must be `phase0: close chat (handoff, sessions, evidence)`. The history in this zip is the worktree's: baseline `e86aa59` (tag `pack-v4-baseline`, pack v4 content), then `4e47ee2` (pack v5.1 over v4), then the `phase0:` commits. The hashes `2abbefc`, `7aebb6a`, `7f710cb` named in older notes are NOT in this history.
+- Owner answers still open: O-010 (where Docker probes run; they ran on the laptop, the default).
 
 ## Current state
-- Phase: 0 (not started)
-- Gate status: none run
-- Commit subjects: `phase<N>:` for phase work, `pack:` for workflow and docs.
+- Phase 0 tasks 1 to 10 are done. Task 1 (deny rules): 16 of 16 refused. Lint, 65 unit and 45 integration tests pass in `test.bat all`. Probes 1 to 14 PASS on the laptop against the TEST stack (`docs/logs/raw/phase-0/`).
+- Gate item 4 (`build.bat` three times) and the owner acceptance are NOT done: they use the live volume. See "Owner runs next".
+- Docker Desktop is at `D:\DockerDesktop\Docker Desktop.exe`; Claude cannot keep it running, the owner starts it.
 
 ## Done (with commit ids)
-- `2abbefc` baseline: DOC-20261017-WA0002.zip (pack v4, no prior git history).
-- `7aebb6a` pack v5: zip-in/zip-out workflow (D-067 to D-069).
-- Newest commit: pack v5.1 (subject in Resume check): the visuals are checked every chat (D-070), a chat starts on paste (D-071), and every "wait for go" wording is removed from the rules.
-
-## Next
-1. Phase 0, task 1 (`docs/specs/phase-0-foundation.md`): prove the deny rules in `.claude/settings.json` with the harmless `--help` forms, in Bash and PowerShell. Needs Claude Code on the laptop. If this chat cannot run them, record NOT VERIFIED and list the owner's commands under "Owner runs next".
-2. Then Phase 0 tasks 2 to 10, in order.
+- `e86aa59` baseline · `4e47ee2` pack v5.1 · `ef800c8` deny-rule proof · then skeleton, database layer, backup and restore, boot and API, scripts, tests, probes, decisions D-072 to D-081, fixes (see `git log --oneline`).
 
 ## Owner runs next
-- Nothing yet. Phase 0 acceptance (`docs/specs/phase-0-foundation.md`, owner acceptance) happens on the laptop after Phase 0 is built.
+1. Start Docker Desktop. In the project folder run `build.bat`, then `run.bat`: the browser shows the foundation status page. Run `backup.bat`: a new `.sqlite3` appears in `%USERPROFILE%\Enderchest-Backups`. `stop.bat`, then `run.bat`: the page returns. Tell Claude "accepted" or what looked wrong.
+2. Gate 4 and the live variants: `test.bat probes` already ran 4 and 9 on the test stack. For the live ones: `powershell -File backend\tests\probes\run-probes.ps1 -Only "4,9" -Live` (uses the real `build.bat`/`run.bat`; creates the live volume on first use).
+3. `restore.bat` (try it once on a real backup): it lists, asks a number, asks you to type RESTORE.
+4. Optional: remove old throwaway test volumes `enderchest_test_data_p10*`, `_p11*`, `_p13` (Docker Desktop or `docker volume rm`, by hand; Claude's guard blocks it).
 
 ## Blocked on the owner
-- Nothing blocks Phase 0 task 1.
+- Nothing blocks the verification pass. Phase 0 cannot CLOSE until the owner acceptance above is reported.
 
 ## Decisions made so far (also in `docs/DECISIONS.md`)
-- D-067 zip in, zip out. D-068 resume is compulsory. D-069 verification runs first in the next chat. D-070 the three visuals are checked every chat. D-071 a chat starts on paste, with no confirmation step.
+- D-067 to D-071 (zip workflow). D-072 to D-081 (Phase 0 build: Python 3.13 and pins, empty frontend stage, file-name backup listing, API additions, Host ports, UTC default zone, migration needs backup folder, stale WAL means recovery, test endpoint guard, PowerShell probes).
 
 ## Known issues to carry
-- `tests/fixtures/expiry_cases.csv` has CRLF line endings while `.gitattributes` says LF. Harmless to the CSV reader; normalise in Phase 3 (TODO in `docs/logs/evidence-log.md`).
-- The zip command is proven on Linux only. The Windows `tar` route is unproven until the first laptop chat (TODO in `docs/logs/evidence-log.md`).
-- Start-on-paste depends on the one-time project instruction (`docs/OWNER_TASKS.md`, Once). Without it, the fallback line is needed.
+- `tests/fixtures/expiry_cases.csv` has CRLF endings while `.gitattributes` says LF (Phase 3 TODO).
+- `photos_missing` and backup `item_count` are placeholders until Phase 2's tables exist (evidence-log TODO).
+- The pack zip contains `.git`; extracting it over a git worktree replaces the worktree's `.git` link. Extract to a new empty folder.
+- Windows zip route: see the `sessions.md` entry for how `phase0.zip` was made.
 
 ## Commands that matter
-- `build.bat`, `run.bat`, `stop.bat`, `backup.bat`, `restore.bat`, `test.bat`, `dev.bat` (after Phase 0 creates them).
+- `test.bat unit|integration|lint|probes|all` (from cmd use `.\test.bat`). Probes: `powershell -File backend\tests\probes\run-probes.ps1 -Only "6,12"` (a quoted string, not a bare list).
+- `build.bat`, `run.bat`, `stop.bat`, `backup.bat`, `restore.bat`, `dev.bat` (live stack except `test.bat` and `dev.bat`).
