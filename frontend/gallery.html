@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" data-theme-pref="system">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enderchest component gallery (tests only)</title>
+    <link rel="stylesheet" href="/tokens.css" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var pref = root.getAttribute("data-theme-pref") || "system";
+        var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        root.setAttribute("data-theme", pref === "system" ? (dark ? "dark" : "light") : pref);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/gallery/main.tsx"></script>
+  </body>
+</html>

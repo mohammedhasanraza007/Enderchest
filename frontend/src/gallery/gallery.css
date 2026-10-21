@@ -1,0 +1,14 @@
+/* Layout of the test-only gallery page. */
+.gallery__section {
+  margin: var(--space-5) 0;
+}
+.gallery__heading {
+  margin-bottom: var(--space-3);
+  font-size: 1.5rem;
+}
+.gallery__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}

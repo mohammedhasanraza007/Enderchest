@@ -1,0 +1,85 @@
+// Gate 4 of Phase 1: first run. Closing the tab after the name step and reopening resumes
+// correctly. (That the name survives stop.bat then run.bat is probe 17, which restarts the
+// container; a browser test cannot.)
+
+import { expect, test } from "@playwright/test";
+import { resetApp, saveProfile } from "./helpers";
+
+test.beforeEach(async ({ request }) => {
+  await resetApp(request);
+});
+
+test("a new database sends the owner to the welcome screen from any address", async ({ page }) => {
+  for (const path of ["/", "/settings", "/nothing-here"]) {
+    await page.goto(path);
+    await expect(page).toHaveURL(/\/welcome$/);
+    await expect(page.getByRole("heading", { name: "Welcome to Enderchest" })).toBeVisible();
+  }
+});
+
+test("an empty or too long name is refused with a message and nothing is saved", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/welcome");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Enter a name of 1 to 40 characters.")).toBeVisible();
+  await page.getByLabel("Your name").fill("x".repeat(41));
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(page.getByText("Enter a name of 1 to 40 characters.")).toBeVisible();
+  const profile = await (await request.get("/api/v1/profile")).json();
+  expect(profile.name).toBeNull();
+});
+
+test("saving a name and time zone shows a greeting and then the app", async ({ page, request }) => {
+  await page.goto("/welcome");
+  await page.getByLabel("Your name").fill("Mohammed");
+  await page.getByLabel("Time zone").selectOption("Asia/Kolkata");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await expect(
+    page.getByRole("heading", { name: /^Good (morning|afternoon|evening|night), Mohammed$/ }),
+  ).toBeVisible();
+  const profile = await (await request.get("/api/v1/profile")).json();
+  expect(profile).toMatchObject({
+    name: "Mohammed",
+    timezone: "Asia/Kolkata",
+    first_run_complete: true,
+  });
+
+  await page.getByRole("link", { name: "Open settings" }).click();
+  await expect(page).toHaveURL(/\/settings$/);
+  await expect(page.getByRole("button", { name: "Mohammed" })).toBeVisible();
+});
+
+test("closing the tab after the name step and reopening resumes in the app", async ({
+  browser,
+}) => {
+  const first = await browser.newContext({ baseURL: "http://127.0.0.1:8470" });
+  const tab = await first.newPage();
+  await tab.goto("/welcome");
+  await tab.getByLabel("Your name").fill("Mohammed");
+  await tab.getByRole("button", { name: "Continue" }).click();
+  await expect(tab.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
+  await first.close(); // the tab is gone
+
+  const second = await browser.newContext({ baseURL: "http://127.0.0.1:8470" });
+  const reopened = await second.newPage();
+  await reopened.goto("/");
+  await expect(reopened).toHaveURL(/\/settings$/);
+  await expect(reopened.getByRole("button", { name: "Mohammed" })).toBeVisible();
+  await reopened.goto("/welcome"); // first run cannot be repeated
+  await expect(reopened).toHaveURL(/\/settings$/);
+  await second.close();
+});
+
+test("the name can be changed later in Settings and shows in the capsule", async ({
+  page,
+  request,
+}) => {
+  await saveProfile(request, { name: "Mohammed", timezone: "UTC" });
+  await page.goto("/settings");
+  await page.getByLabel("Your name").fill("Mo");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByText("Profile saved.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mo", exact: true })).toBeVisible();
+});
