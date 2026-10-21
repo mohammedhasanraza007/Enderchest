@@ -1,0 +1,34 @@
+# Secrets and local data: never commit
+.env
+.env.local
+secrets/
+*.key
+data/
+backups/
+.test-backups/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# The owner's real photos (belongings, may carry location data). Keep the folder, not the contents.
+tests/fixtures/private/*
+!tests/fixtures/private/.gitkeep
+
+# Build and tooling output
+node_modules/
+dist/
+build/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+playwright-report/
+test-results/
+coverage/
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
