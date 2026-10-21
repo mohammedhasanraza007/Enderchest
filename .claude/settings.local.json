@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(rm -rf skills/continuous-learning skills/strategic-compact)",
+      "Bash(ls agents *)"
     ]
   }
 }
