@@ -4,7 +4,9 @@
 # user to prove the photo mirror (this is a file-level check, not an upload check).
 . "$PSScriptRoot\lib.ps1"
 $ok = $false
-$fresh = 'enderchest_test_data_p11'
+# A new volume name per run so the volume is genuinely fresh. Volumes are never deleted by the
+# probes (the guard forbids it), so each run leaves one tiny test volume behind.
+$fresh = 'enderchest_test_data_p11_' + (Get-Date -Format 'yyyyMMddHHmmss')
 $freshPort = 8473
 $hostBackups = Join-Path $script:Root '.test-backups'
 

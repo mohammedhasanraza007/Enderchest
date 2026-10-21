@@ -1,9 +1,12 @@
 # Probe 10: set meta.schema_version higher in a TEST database and start the app on it:
 # locked / newer_data, and the database file is byte-for-byte untouched by that start.
-# Uses its own throwaway test volume (enderchest_test_data_p10); it is kept, never removed.
+# Uses its own throwaway test volume (enderchest_test_data_p10_<time>); it is kept, never removed.
 . "$PSScriptRoot\lib.ps1"
 $ok = $false
-$env:ENDERCHEST_TEST_VOLUME = 'enderchest_test_data_p10'
+# A new volume name per run: a reused volume would already hold a database. Volumes are never
+# deleted by the probes (the guard forbids it), so each run leaves one tiny test volume behind.
+$vol = 'enderchest_test_data_p10_' + (Get-Date -Format 'yyyyMMddHHmmss')
+$env:ENDERCHEST_TEST_VOLUME = $vol
 $env:ENDERCHEST_TEST_PORT = '8474'
 # Its own empty backup folder: a volume with no database but with backups beside it is
 # (correctly) sent to recovery by the first-run rule, which is not what this probe tests.
@@ -13,7 +16,6 @@ $env:ENDERCHEST_TEST_BACKUP_DIR = $p10Backups -replace '\\', '/'
 $script:Project = 'enderchest-test-p10'
 $script:Container = 'enderchest-test-p10-app-1'
 $port = 8474
-$vol = 'enderchest_test_data_p10'
 
 function Hash-Db { return ((Dk run --rm -v "${vol}:/data" enderchest-app:latest sha256sum /data/db/enderchest.sqlite3) -split '\s+')[0] }
 

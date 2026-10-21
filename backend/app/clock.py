@@ -10,15 +10,15 @@ from datetime import UTC, date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 _lock = threading.Lock()
-_fake_base: datetime | None = None
+_set_base: datetime | None = None
 _real_base: float = 0.0
 
 
 def now() -> datetime:
     with _lock:
-        if _fake_base is None:
+        if _set_base is None:
             return datetime.now(UTC)
-        return _fake_base + timedelta(seconds=time.monotonic() - _real_base)
+        return _set_base + timedelta(seconds=time.monotonic() - _real_base)
 
 
 def local_date(tz_name: str) -> date:
@@ -26,9 +26,9 @@ def local_date(tz_name: str) -> date:
 
 
 def set_now(moment: datetime) -> None:
-    global _fake_base, _real_base
+    global _set_base, _real_base
     with _lock:
-        _fake_base = moment.astimezone(UTC)
+        _set_base = moment.astimezone(UTC)
         _real_base = time.monotonic()
 
 
@@ -44,6 +44,6 @@ def set_local_date(day: date, tz_name: str) -> None:
 
 
 def reset() -> None:
-    global _fake_base
+    global _set_base
     with _lock:
-        _fake_base = None
+        _set_base = None
