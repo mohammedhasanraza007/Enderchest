@@ -1,0 +1,92 @@
+/* Screens: the welcome card and the Settings sections. Tokens only. */
+
+/* ------------------------------------------------------------------ welcome (P-01) */
+.welcome-card__title {
+  font-size: 2.25rem;
+}
+.welcome-card__intro {
+  color: var(--text-muted-glass);
+}
+
+.form-failure {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------ settings (P-02) */
+.settings__title {
+  margin-bottom: var(--space-5);
+  font-size: 2.5rem;
+}
+.settings__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 720px;
+}
+
+.section-note {
+  color: var(--text-muted-glass);
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.zone-offer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.backup-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.backup-warning {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--hairline-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+}
+.backup-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted-glass);
+}
+.backup-list li {
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--hairline-panel);
+}
+
+.about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+}
+.about__list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+.about__list div {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: var(--space-3);
+}
+.about__list dt {
+  color: var(--text-muted-glass);
+}
+.about__list dd {
+  margin: 0;
+}

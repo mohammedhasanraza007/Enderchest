@@ -1,0 +1,444 @@
+/*
+  Primitives (DESIGN.md 6.10, 6.12). No colour, radius or duration is written here: all of them
+  are tokens. Dark: pills everywhere, cards 24 px. Light: everything is a pill, and containers
+  taller than about 120 px use a soft capsule radius (DESIGN.md 5.2).
+*/
+
+/* ------------------------------------------------------------------ pills and buttons */
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 38px;
+  padding: 0 var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+/* The visible pill is 38 px; this keeps the pointer target at the 44 px minimum (DESIGN.md 14). */
+.pill::after {
+  content: "";
+  position: absolute;
+  inset: -3px 0;
+}
+
+.pill:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.pill--primary {
+  background: var(--cream-fill);
+  color: var(--on-cream);
+}
+.pill--primary:hover:not(:disabled) {
+  background: var(--cream-fill-hover);
+}
+.pill--primary:active:not(:disabled) {
+  background: var(--cream-fill-pressed);
+}
+
+.pill--secondary {
+  background: var(--surface-pill);
+  border-color: var(--hairline-pill);
+  color: var(--text);
+}
+.pill--secondary:hover:not(:disabled) {
+  background: var(--surface-pill-hover);
+}
+
+.pill--ghost {
+  background: transparent;
+  color: var(--text);
+}
+.pill--ghost:hover:not(:disabled) {
+  background: var(--surface-pill);
+}
+
+.pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pill__reason {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 0.875rem;
+  color: var(--text-muted-glass);
+}
+
+/* The progress dot inside a loading button: it only fades, so reduced motion can switch it off. */
+.pill__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  animation: dot-fade 1s ease-in-out infinite;
+}
+
+@keyframes dot-fade {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field__label {
+  font-size: 0.9375rem;
+  color: var(--text-muted-glass);
+}
+
+.field__control {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-input);
+  color: var(--text);
+}
+
+.field__control::placeholder {
+  color: var(--text-muted-glass);
+}
+
+.field__control:focus-visible {
+  border-color: color-mix(in srgb, var(--text) 70%, transparent);
+}
+
+.field__control[aria-invalid="true"] {
+  border-color: var(--danger-border);
+}
+
+.field__select {
+  position: relative;
+}
+.field__select .field__control {
+  appearance: none;
+  padding-right: var(--space-7);
+  text-overflow: ellipsis;
+}
+.field__chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text);
+}
+
+.field__hint {
+  font-size: 0.875rem;
+  color: var(--text-muted-glass);
+}
+
+.field__error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+.field__error-icon {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--status-chip-fill);
+  color: var(--chip-danger);
+}
+
+/* ------------------------------------------------------------------ toggle */
+.toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.toggle {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  flex: none;
+  padding: 0;
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-pill);
+  cursor: pointer;
+}
+.toggle[aria-checked="true"] {
+  background: var(--toggle-on);
+  border-color: transparent;
+}
+.toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--toggle-thumb);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.toggle[aria-checked="true"] .toggle__thumb {
+  transform: translateX(22px);
+}
+.toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-pill);
+  color: var(--text);
+  font-size: 0.9375rem;
+}
+.chip--button {
+  cursor: pointer;
+}
+.chip--button:hover {
+  background: var(--surface-pill-hover);
+}
+.chip.is-selected {
+  background: var(--surface-nav-active);
+  border-color: var(--hairline-nav);
+}
+
+/* A status word on glass: a dark pill, an icon and the word in the semantic colour. */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 12px 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--status-chip-fill);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.status-chip--success {
+  color: var(--chip-success);
+}
+.status-chip--warning {
+  color: var(--chip-warning);
+}
+.status-chip--danger {
+  color: var(--chip-danger);
+}
+.status-chip--info {
+  color: var(--chip-info);
+}
+
+/* ------------------------------------------------------------------ glass */
+.glass-card {
+  padding: var(--space-5);
+  border: 1px solid var(--hairline-card);
+  border-radius: var(--radius-card);
+  background: linear-gradient(180deg, var(--surface-card-top), var(--surface-card-bottom));
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 var(--highlight-top);
+  backdrop-filter: var(--blur-card);
+  color: var(--text);
+}
+.glass-card__title {
+  margin-bottom: var(--space-4);
+  font-size: 1.5rem;
+}
+
+/* No blur on the inner panel: it is the one allowed nested level and only a fill (DESIGN.md 4.3). */
+.inner-panel {
+  padding: var(--space-4);
+  border: 1px solid var(--hairline-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+}
+
+:root[data-theme="light"] .glass-card {
+  padding: var(--space-6) var(--space-7);
+  border-radius: 52px; /* a soft capsule: a full radius on a tall box would make an ellipse */
+}
+:root[data-theme="light"] .inner-panel {
+  padding: var(--space-5) var(--space-6);
+  border-radius: 40px;
+}
+
+/* ------------------------------------------------------------------ dialog and sheet */
+.overlay {
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+}
+.overlay::backdrop {
+  background: var(--scrim);
+}
+.overlay--dialog {
+  width: min(520px, calc(100vw - 2 * var(--space-4)));
+  margin: auto;
+}
+.overlay--sheet {
+  width: min(440px, 100vw);
+  height: 100dvh;
+  margin: 0 0 0 auto;
+}
+.overlay__body {
+  padding: var(--space-5);
+  border: 1px solid var(--hairline-card);
+  border-radius: var(--radius-card);
+  background: linear-gradient(180deg, var(--surface-card-top), var(--surface-card-bottom));
+  box-shadow: var(--shadow-card);
+}
+.overlay--sheet .overlay__body {
+  min-height: 100%;
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+}
+:root[data-theme="light"] .overlay__body {
+  border-radius: 52px;
+  padding: var(--space-6) var(--space-7);
+}
+:root[data-theme="light"] .overlay--sheet .overlay__body {
+  border-radius: 52px 0 0 52px;
+}
+.overlay__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.overlay__title {
+  font-size: 1.5rem;
+}
+.overlay__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-pill);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ toast */
+.toast-region {
+  position: fixed;
+  bottom: var(--space-5);
+  left: 50%;
+  z-index: 100;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 2 * var(--space-4));
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--hairline-nav);
+  border-radius: var(--radius-pill);
+  background: var(--surface-nav);
+  box-shadow: var(--shadow-nav);
+  color: var(--text);
+  animation: toast-in var(--dur-base) var(--ease-out);
+}
+.toast__action {
+  min-height: 32px;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------------------------ skeleton */
+.skeleton {
+  display: block;
+  border-radius: var(--radius-pill);
+  background: var(--surface-pill);
+  animation: skeleton-fade 1.4s ease-in-out infinite;
+}
+@keyframes skeleton-fade {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ brand mark and LIVE badge */
+.brand-mark {
+  display: block;
+  flex: none;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--clay-badge);
+  color: var(--on-clay);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.live-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  animation: dot-fade 1s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pill__dot,
+  .skeleton,
+  .live-badge__dot,
+  .toast {
+    animation: none;
+  }
+  .pill,
+  .toggle__thumb {
+    transition: none;
+  }
+}

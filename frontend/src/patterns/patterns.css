@@ -1,0 +1,182 @@
+/* Patterns: the navigation capsule, name menu, backup banner and shared page layouts.
+   Colours, radii and durations are tokens only (DESIGN.md 6.2 to 6.6, 4.3). */
+
+/* ------------------------------------------------------------------ skip link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-4);
+  z-index: 200;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--cream-fill);
+  color: var(--on-cream);
+}
+.skip-link:focus {
+  top: var(--space-3);
+}
+
+/* ------------------------------------------------------------------ navigation capsule */
+.nav {
+  position: sticky;
+  top: var(--space-3);
+  z-index: 50;
+  margin: clamp(12px, 3.6vw, 50px) var(--page-margin) 0;
+  transform-origin: top center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.nav--compact {
+  transform: scale(0.96);
+}
+
+.nav__capsule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: var(--nav-height);
+  padding: 0 var(--space-3) 0 var(--space-5);
+  border: 1px solid var(--hairline-nav);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--surface-nav), var(--surface-nav-glow));
+  box-shadow:
+    var(--shadow-nav),
+    inset 0 1px 0 var(--highlight-top);
+  backdrop-filter: var(--blur-nav);
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--text);
+  text-decoration: none;
+}
+.nav__wordmark {
+  font-family: var(--font-display);
+  font-size: 1.625rem;
+  font-weight: 450;
+  line-height: 1;
+}
+.nav__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------ name pill and menu */
+.name-menu {
+  position: relative;
+  min-width: 0;
+}
+
+.name-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 220px;
+  min-height: 44px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-name-pill);
+  color: var(--text);
+  font-size: 1.0625rem;
+  cursor: pointer;
+}
+.name-pill__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name-menu__panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 280px;
+  padding: var(--space-4);
+  border: 1px solid var(--hairline-card);
+  border-radius: var(--radius-card);
+  background: linear-gradient(180deg, var(--surface-card-top), var(--surface-card-bottom));
+  box-shadow: var(--shadow-card);
+}
+:root[data-theme="light"] .name-menu__panel {
+  padding: var(--space-5);
+  border-radius: 40px;
+}
+.name-menu__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  text-decoration: none;
+}
+.name-menu__link:hover {
+  background: var(--surface-pill);
+}
+.name-menu__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.name-menu__status {
+  padding: 0 var(--space-4);
+  font-size: 0.875rem;
+  color: var(--text-muted-glass);
+}
+
+/* ------------------------------------------------------------------ backup banner */
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-3) var(--page-margin) 0;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--hairline-card);
+  border-radius: var(--radius-panel);
+  background: var(--surface-card-bottom);
+  color: var(--text);
+}
+:root[data-theme="light"] .banner {
+  padding: var(--space-4) var(--space-6);
+  border-radius: 32px;
+}
+.banner__message {
+  flex: 1 1 320px;
+}
+
+/* ------------------------------------------------------------------ shared page layouts */
+.center-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding-top: var(--space-8);
+}
+.center-card > .glass-card {
+  width: 100%;
+}
+.stack-gap {
+  margin-bottom: var(--space-4);
+}
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+/* ------------------------------------------------------------------ reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .nav {
+    transition: none;
+  }
+}
