@@ -29,17 +29,25 @@ def listing(settings: Settings, conn: sqlite3.Connection | None, mounted: bool) 
     ]
 
 
-def last_good(conn: sqlite3.Connection) -> dict | None:
+def last_good(conn: sqlite3.Connection, settings: Settings, mounted: bool) -> dict | None:
     row = conn.execute(
         "SELECT name, finished_at, bytes FROM backup_log "
         "WHERE ok = 1 AND verified = 1 AND kind != 'restore' ORDER BY id DESC LIMIT 1"
     ).fetchone()
-    if row is None:
-        return None
-    return {"name": row["name"], "at": row["finished_at"], "bytes": row["bytes"]}
+    if row is not None:
+        return {"name": row["name"], "at": row["finished_at"], "bytes": row["bytes"]}
+    # A restored database has no log row for the backup it came from: the log lives inside
+    # the backup, which was taken before its own row was written. The folder still has it,
+    # and a finished (non-.partial) file there was verified when it was made.
+    entries = catalog.list_backups(settings.backups_dir) if mounted else []
+    if entries:
+        newest = entries[0]
+        return {"name": newest.name, "at": _iso(newest.at), "bytes": newest.bytes}
+    return None
 
 
-def status(conn: sqlite3.Connection, mounted: bool, now: datetime | None = None) -> str:
+def status(conn: sqlite3.Connection, settings: Settings, mounted: bool,
+           now: datetime | None = None) -> str:
     if not mounted:
         return "unavailable"
     recent = conn.execute(
@@ -48,7 +56,7 @@ def status(conn: sqlite3.Connection, mounted: bool, now: datetime | None = None)
     ).fetchall()
     if len(recent) == FAILING_AFTER and all(r["ok"] == 0 for r in recent):
         return "failing"
-    good = last_good(conn)
+    good = last_good(conn, settings, mounted)
     if good is None:
         # A brand-new install has nothing to be stale about until a backup is due.
         return "ok"

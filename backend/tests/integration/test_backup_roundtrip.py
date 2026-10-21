@@ -105,6 +105,20 @@ def test_restoring_a_name_that_does_not_exist_changes_nothing(settings: Settings
         assert stack.client.get("/health").json()["status"] == "recovery"
 
 
+def test_after_a_restore_the_last_good_backup_is_the_one_in_the_folder(settings: Settings):
+    with Stack(settings) as stack:
+        name = stack.post("/api/v1/backups").json()["name"]
+    for suffix in ("", "-wal", "-shm"):
+        settings.db_path.with_name(settings.db_path.name + suffix).unlink(missing_ok=True)
+    with Stack(settings) as stack:
+        stack.post("/api/v1/boot/restore", {"name": name, "confirm": "RESTORE"})
+        listing = stack.client.get("/api/v1/backups").json()
+        # the restored log has no row for its own backup; the folder is the honest source
+        assert listing["last_good"]["name"] == name
+        assert listing["last_good"]["bytes"] > 0
+        assert listing["status"] == "ok"
+
+
 def test_status_becomes_failing_after_two_failed_backups(stack: Stack):
     for _ in range(2):
         stack.manager.db().execute(

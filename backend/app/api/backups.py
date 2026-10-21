@@ -19,8 +19,8 @@ def list_backups(manager: BootManager = Depends(require_ok),
                  conn: sqlite3.Connection = Depends(get_db)) -> dict:
     mounted = manager.backups_mounted
     return {
-        "status": backup_service.status(conn, mounted),
-        "last_good": backup_service.last_good(conn),
+        "status": backup_service.status(conn, manager.settings, mounted),
+        "last_good": backup_service.last_good(conn, manager.settings, mounted),
         "warnings": manager.warnings(),
         "items": backup_service.listing(manager.settings, conn, mounted),
     }
