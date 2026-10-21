@@ -193,3 +193,14 @@ Full contract in `DATA_SAFETY.md`. The short list:
 - Don't mark a gate PASS using generated images, a fake camera feed or a mocked service where real input is required: it is BLOCKED (D-056).
 - Don't read the whole pack, or more than three documents at once; open the phase spec and its Read list (`PROCESS.md` 6).
 - Don't use the lead-in "expiring" as a status word; use the defined words (`DATA_MODEL.md` 3.2).
+
+## N. Added by the Phase 0 build (each one happened)
+- Don't extract a pack zip over a git worktree: the zip carries its own `.git`, which replaces the worktree's `.git` link and makes `git status` look clean when it is not. Extract into a new empty folder (`tar` from PowerShell; Git Bash's `tar` cannot read zips).
+- Don't use .NET file calls (`[IO.File]::ReadAllText`) or relative paths in a Claude shell after `cd`: the process folder can still be the main checkout, and a write there creates files in the wrong repository. Use full paths.
+- Don't pass embedded double quotes to a native command from Windows PowerShell 5.1 (they are mangled); use single quotes inside the string or a file. Don't pass `-Only 6,12` to a script run with `-File`: it arrives as one string.
+- PowerShell variable names are case-insensitive: a probe variable `$project` overwrote the library's `$script:Project` and started a stray compose stack. Give script-level variables distinctive names.
+- Don't write a probe that needs a "fresh" Docker volume with a fixed name: after one run it is no longer fresh, and volumes cannot be removed (the guard blocks it). Use a new name per run.
+- Don't run a clone, copy or zip step without checking it worked: a failed `git clone` let the next commands run in the previous folder. Stop on the first error.
+- A first-run rule must treat existing backups as "not fresh" (it did, correctly): a test or probe that expects a brand-new database on a volume whose backup folder holds backups will get `recovery`.
+- Don't rely on `backup_log` alone for "last good backup": after a restore the log is the old file's log. The folder is the fallback (`services/backups.py`).
+- Docker Desktop at `D:\DockerDesktop\Docker Desktop.exe` cannot be kept running by a Claude shell; the owner starts it. Windows paths in the scratchpad are too long for `git clone`; use a short temp folder.

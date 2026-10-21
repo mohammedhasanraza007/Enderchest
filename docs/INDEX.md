@@ -14,6 +14,7 @@ Do not read the whole pack. Find your task, open that file, open only that secti
 | style anything (colour, glass, pill, type, motion) | `docs/DESIGN.md` | 4, 5, 6 |
 | build the dashboard look | `docs/DESIGN.md` | 6 (+ `docs/design/reference-dashboard.jpg`) |
 | install a dependency, add a script, set up tests | `docs/ARCHITECTURE.md` | 6, 8, 10 |
+| write or change backend code, scripts or tests (what exists, how to extend it) | `docs/CODE_MAP.md` | 1, 2 |
 | decide something that feels ambiguous | `docs/DECISIONS.md` | search the topic first |
 | avoid a known trap | `docs/MISTAKES_TO_AVOID.md` | the letter for your area |
 | run or write a verification | `docs/PROCESS.md` | 4, 5 |

@@ -35,3 +35,8 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed: restore on an empty volume (missing folder), last good backup after a restore, and four defects in the probe scripts (all recorded in `raw/phase-0/probes-2026-10-21.txt`). Two mistakes of mine: extracting the zip over the worktree replaced its `.git` link (repaired), and a relative path wrote 7 empty `.bat` files into the main folder (removed).
 - Blocked on owner: live-stack checks (`build.bat` x3, `run.bat`, `backup.bat`, `restore.bat`, live probes 4 and 9), see handoff "Owner runs next".
 - Next: fresh-session verification of Phase 0; Phase 1 only after PASS and only when the owner says so.
+
+## 2026-10-21 · phase0 · closing addendum (same chat)
+- The owner ran `build.bat`, `run.bat`, `backup.bat`, `stop.bat`, `run.bat` on the laptop and reported that they work (recorded in the evidence log). Claude confirmed read-only that the live app is `ok`/`live`; it did not see a `manual-` backup file and found an unexplained container `great_gagarin` (both open in the evidence log).
+- Added for the next chat: `docs/CODE_MAP.md` (listed in `CLAUDE.md` 2 and `INDEX.md`), `MISTAKES_TO_AVOID.md` section N, a fuller `handoff.md`. `phase0.zip` was rebuilt from the final commit (same recipe as above).
+- Next: fresh-session verification of Phase 0, then Phase 1 only after PASS.

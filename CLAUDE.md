@@ -49,6 +49,7 @@ Owner: Mohammed, 2nd-year mechanical engineering student aiming at SAP QM/PM. A 
 | `docs/PAGES.md` | every screen: layout, controls, endpoints, states |
 | `docs/DESIGN.md` | tokens, components, motion, logo rules, storyboard |
 | `docs/ARCHITECTURE.md` | environment, layout, scripts, dependencies, security, testing, budgets |
+| `docs/CODE_MAP.md` | what the code is after each phase: modules, interfaces, how to extend, gaps (update it every phase) |
 | `docs/PROCESS.md` | phases, gates, verification, evidence rules |
 | `docs/DECISIONS.md` | settled decisions (never revert without the owner) |
 | `docs/MISTAKES_TO_AVOID.md` | pitfalls by area |
