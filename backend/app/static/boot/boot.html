@@ -4,30 +4,58 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Enderchest</title>
+<link rel="stylesheet" href="/tokens.css">
+<!-- No database may exist here, so the stored theme is unknown: this page follows the system. -->
+<script>
+  document.documentElement.setAttribute("data-theme",
+    window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+</script>
 <style>
-  :root { color-scheme: dark; }
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #1b1410;
-         color: #f1e6d6; font: 16px/1.5 system-ui, sans-serif; }
-  main { width: min(640px, calc(100vw - 32px)); background: #2a211a; border: 1px solid #5a4a3b;
-         border-radius: 16px; padding: 28px; }
-  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 600; }
+  /* Same tokens as the app (/tokens.css). Each var() has the dark value as a fallback, so the page
+     is still readable if the app files are missing from a build. */
+  html { background: var(--bg-base, #16110d); }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; color: var(--text, #fffaf0);
+         font: 16px/1.5 var(--font-sans, system-ui, sans-serif); }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+                 background: radial-gradient(70vw circle at 100% 10%, var(--bg-glow-corner, #4c392b), transparent 70%); }
+  .boot { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 32px 0; }
+  .boot img { display: block; }
+  main { width: min(640px, calc(100vw - 32px)); padding: 28px; box-sizing: border-box;
+         border: 1px solid var(--hairline-card, rgba(255, 243, 226, .3)); border-radius: var(--radius-card, 24px);
+         background: linear-gradient(180deg, var(--surface-card-top, #6b5b4f), var(--surface-card-bottom, #4e4138));
+         box-shadow: var(--shadow-card, 0 24px 60px rgba(0, 0, 0, .35)); }
+  :root[data-theme="light"] main { border-radius: 52px; padding: 32px 40px; }
+  h1 { margin: 0 0 8px; font: 450 1.75rem/1.15 var(--font-display, Georgia, serif); }
   p { margin: 8px 0; }
-  .muted { color: #c9b9a4; font-size: 14px; }
+  .muted { color: var(--text-muted-glass, #e3dacf); font-size: 14px; }
   ul { list-style: none; padding: 0; margin: 16px 0; }
-  li { margin: 6px 0; padding: 10px 12px; border: 1px solid #5a4a3b; border-radius: 10px; }
+  li { margin: 6px 0; padding: 10px 16px; border: 1px solid var(--hairline-panel, rgba(255, 243, 226, .18));
+       border-radius: var(--radius-panel, 18px); background: var(--surface-panel, #67594e); }
   label { display: block; cursor: pointer; }
-  input[type=text] { width: 100%; box-sizing: border-box; padding: 10px; margin: 8px 0;
-                     background: #1b1410; color: #f1e6d6; border: 1px solid #8a7560; border-radius: 8px; }
-  button { padding: 10px 16px; border-radius: 999px; border: 0; background: #f1e6d6; color: #1b1410;
-           font: inherit; cursor: pointer; }
-  button.secondary { background: transparent; color: #f1e6d6; border: 1px solid #8a7560; }
-  button:disabled { opacity: .5; cursor: default; }
-  .error { color: #ffb4a2; }
+  input[type=radio] { accent-color: var(--cream-fill, #fdecda); }
+  input::placeholder { color: var(--text-muted-glass, #e3dacf); opacity: 1; }
+  input[type=text] { width: 100%; box-sizing: border-box; min-height: 44px; padding: 0 20px; margin: 8px 0;
+                     background: var(--surface-input, #75665b); color: var(--text, #fffaf0);
+                     border: 1px solid var(--hairline-pill, rgba(255, 243, 226, .22)); border-radius: 9999px; }
+  button { min-height: 38px; padding: 0 24px; border-radius: 9999px; border: 1px solid transparent;
+           background: var(--cream-fill, #fdecda); color: var(--on-cream, #2a1a12); font: inherit; cursor: pointer; }
+  button.secondary { background: var(--surface-pill, #75665b); color: var(--text, #fffaf0);
+                     border-color: var(--hairline-pill, rgba(255, 243, 226, .22)); }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  :focus-visible { outline: 2px solid var(--focus-ring, #fffaf0); outline-offset: 2px; }
+  /* Problems are said in words on a panel, never as coloured text on glass (DESIGN.md 4.5). */
+  .error { padding: 10px 16px; border: 1px solid var(--danger-border, #e07a6c);
+           border-radius: var(--radius-panel, 18px); background: var(--surface-panel, #67594e); }
+  .error:empty { display: none; }
   details { margin-top: 20px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 </head>
 <body>
+<div class="boot">
+<img src="/enderchest-logo.svg" width="72" height="72" alt="Enderchest" onerror="this.remove()">
 <main id="root" aria-live="polite"><h1>Enderchest</h1><p>Checking your data…</p></main>
+</div>
 <script>
 "use strict";
 const root = document.getElementById("root");

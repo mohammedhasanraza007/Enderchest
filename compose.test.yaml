@@ -107,6 +107,24 @@ services:
       - ./backend/app:/app/app
     command: ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8470", "--reload", "--reload-dir", "/app/app"]
 
+  # dev.bat: Vite for the frontend, in front of the `dev` app above (it proxies /api and /health to
+  # it). Source is mounted, so an edit shows after a page reload. Never the live stack.
+  vite:
+    profiles: ["dev"]
+    image: enderchest-tools:latest
+    build:
+      context: .
+      target: tools
+    working_dir: /frontend
+    command: ["npm", "run", "dev"]
+    ports:
+      - "127.0.0.1:5173:5173"
+    volumes:
+      - ./frontend/src:/frontend/src
+      - ./frontend/index.html:/frontend/index.html
+    depends_on:
+      - dev
+
   # Lint, unit and integration tests. Run through test.bat; uses temporary folders, no volumes.
   tools:
     profiles: ["tools"]
