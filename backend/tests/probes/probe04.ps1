@@ -35,11 +35,12 @@ if ($Live) {
         $up = ($script:LastExit -eq 0)
         [void](Wait-State 'ok')
         $after = Get-Report
-        $project = Dk ps --filter "label=com.docker.compose.project=enderchest-test" --format '{{.Names}}'
+        # (not named $project: PowerShell variables are case-insensitive and lib.ps1 owns $script:Project)
+        $sameProject = Dk ps --filter "label=com.docker.compose.project=enderchest-test" --format '{{.Names}}'
         [void](Dc stop)
         $script:ComposeDir = $null
         $script:NoProjectFlag = $false
-        $ok = Result 4 ($up -and (Same-Data $before $after)) "copy at $(Split-Path $copy -Leaf): up=$up; same project containers=[$project]; records before=$($before.rows) after=$($after.rows)"
+        $ok = Result 4 ($up -and (Same-Data $before $after)) "copy at $(Split-Path $copy -Leaf): up=$up; same project containers=[$sameProject]; records before=$($before.rows) after=$($after.rows)"
     } else { [void](Result 4 $false 'copy failed') }
     [void](Start-TestStack)
 } else { [void](Result 4 $false 'could not start and reset the test stack') }

@@ -5,6 +5,11 @@
 $ok = $false
 $env:ENDERCHEST_TEST_VOLUME = 'enderchest_test_data_p10'
 $env:ENDERCHEST_TEST_PORT = '8474'
+# Its own empty backup folder: a volume with no database but with backups beside it is
+# (correctly) sent to recovery by the first-run rule, which is not what this probe tests.
+$p10Backups = Join-Path $script:Root 'test-results\p10-backups'
+New-Item -ItemType Directory -Force $p10Backups | Out-Null
+$env:ENDERCHEST_TEST_BACKUP_DIR = $p10Backups -replace '\\', '/'
 $script:Project = 'enderchest-test-p10'
 $script:Container = 'enderchest-test-p10-app-1'
 $port = 8474

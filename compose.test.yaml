@@ -18,10 +18,10 @@ services:
     environment:
       ENDERCHEST_ENV: test
       ENDERCHEST_PORT: ${ENDERCHEST_TEST_PORT:-8471}
-      ENDERCHEST_BACKUP_DIR: ./.test-backups
+      ENDERCHEST_BACKUP_DIR: ${ENDERCHEST_TEST_BACKUP_DIR:-./.test-backups}
     volumes:
       - enderchest_test_data:/data
-      - ./.test-backups:/backups
+      - ${ENDERCHEST_TEST_BACKUP_DIR:-./.test-backups}:/backups
     healthcheck:
       test:
         - CMD

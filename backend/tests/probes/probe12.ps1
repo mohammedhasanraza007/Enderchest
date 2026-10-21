@@ -22,13 +22,15 @@ if (Reset-TestData) {
     $checks += [pscustomobject]@{ Name = 'refused requests changed nothing'; Pass = ($listing.Json.items.Count -eq 0) }
 
     # No CORS header on any response, including a cross-origin preflight and a refusal.
-    $headerDump = @(
-        (& curl.exe -s -D - -o NUL "http://127.0.0.1:$($script:Port)/health"),
-        (& curl.exe -s -D - -o NUL -H 'Origin: http://evil.example' "http://127.0.0.1:$($script:Port)/api/v1/boot"),
-        (& curl.exe -s -D - -o NUL -X OPTIONS -H 'Origin: http://evil.example' -H 'Access-Control-Request-Method: POST' "http://127.0.0.1:$($script:Port)/api/v1/backups"),
-        (& curl.exe -s -D - -o NUL -H 'Host: evil.example' "http://127.0.0.1:$($script:Port)/health")
-    ) -join "`n"
-    $checks += [pscustomobject]@{ Name = 'no CORS headers'; Pass = ($headerDump -notmatch '(?im)^access-control-') -and ($headerDump -match 'HTTP/') }
+    $base = "http://127.0.0.1:$($script:Port)"
+    $dump = @()   # flat list of header lines from four different requests
+    $dump += & curl.exe -s -D - -o NUL "$base/health"
+    $dump += & curl.exe -s -D - -o NUL -H 'Origin: http://evil.example' "$base/api/v1/boot"
+    $dump += & curl.exe -s -D - -o NUL -X OPTIONS -H 'Origin: http://evil.example' -H 'Access-Control-Request-Method: POST' "$base/api/v1/backups"
+    $dump += & curl.exe -s -D - -o NUL -H 'Host: evil.example' "$base/health"
+    $statusLines = @($dump | Where-Object { $_ -match '^HTTP/' })
+    $cors = @($dump | Where-Object { $_ -match '^(?i)access-control-' })
+    $checks += [pscustomobject]@{ Name = 'no CORS headers'; Pass = ($statusLines.Count -eq 4) -and ($cors.Count -eq 0) }
 
     $failed = @($checks | Where-Object { -not $_.Pass } | ForEach-Object { $_.Name })
     $ok = Result 12 ($failed.Count -eq 0) $(if ($failed.Count) { "failed: $($failed -join ', ')" } else { "all $($checks.Count) checks refused or clean as required" })
