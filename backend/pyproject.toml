@@ -1,0 +1,35 @@
+[project]
+name = "enderchest"
+version = "0.1.0"
+description = "Enderchest backend: camera-driven personal inventory and maintenance"
+requires-python = ">=3.13"
+# Runtime dependencies come from the allow-list in docs/ARCHITECTURE.md 8.
+# requirements.lock holds the exact pins that the Docker image installs.
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "tzdata",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "ruff",
+  "httpx",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency-injection idiom: Depends(...) as a parameter default is intended.
+extend-immutable-calls = ["fastapi.Depends"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["integration: needs a temporary data directory"]

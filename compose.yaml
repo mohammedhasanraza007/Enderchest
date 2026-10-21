@@ -1,0 +1,44 @@
+# The LIVE stack (docs/DATA_SAFETY.md 3, docs/ARCHITECTURE.md 3).
+# The project name and the data volume name are pinned so the folder name never matters.
+name: enderchest
+
+services:
+  app:
+    image: enderchest-app:latest
+    build:
+      context: .
+      target: runtime
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "127.0.0.1:${ENDERCHEST_PORT:-8470}:8470"
+    environment:
+      ENDERCHEST_ENV: live
+      ENDERCHEST_PORT: ${ENDERCHEST_PORT:-8470}
+      # Shown to the owner only; the container sees the folder as /backups.
+      ENDERCHEST_BACKUP_DIR: ${ENDERCHEST_BACKUP_DIR:?run build.bat first; it writes .env}
+    volumes:
+      - enderchest_data:/data
+      - ${ENDERCHEST_BACKUP_DIR}:/backups
+    healthcheck:
+      # The standard library only: slim images have no curl. The Host header must match the
+      # port the app expects, which differs between the live and test stacks.
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os,urllib.request as u; u.urlopen(u.Request('http://127.0.0.1:8470/health', headers={'Host': '127.0.0.1:' + os.environ.get('ENDERCHEST_PORT', '8470')}), timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+
+volumes:
+  enderchest_data:
+    # External on purpose: if build.bat has not created it, `up` fails loudly
+    # instead of silently starting with an empty volume.
+    external: true
+    name: enderchest_data
