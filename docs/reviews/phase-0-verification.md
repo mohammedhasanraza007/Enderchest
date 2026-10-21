@@ -47,3 +47,22 @@ Phase 0 is **not closed**. The owner chose to start Phase 1 with this open (deci
 2. F-2: decide the first-run listing from `backups_dir` whenever it is a directory, not only when it is a writable mount; keep the red banner for "not a mount". Add an integration test for the fifth case above.
 3. F-3: `fullmatch` instead of `match` on the restore name.
 4. Run the V9 test-clock probe and the other NOT VERIFIED items, then rewrite this file's verdict.
+
+---
+
+## Fix pass (2026-10-21, same chat, after the owner's "go, fix Phase 0 first")
+
+Each fix was written test-first: the new test or probe was seen to FAIL on the old code for the stated reason, then PASS after the change. One commit per fix.
+
+| # | Result | Commit | Evidence of the before and after |
+|---|---|---|---|
+| F-1 | **fixed** | `535493f` | probe 15 (the real `scripts/post-backup.ps1` on the test stack): FAIL "Requests must be JSON." before, PASS after with a real 44 KB `manual-` file (`raw/phase-1/probe15-before-fix.txt`, `probe15-after-fix.txt`) |
+| F-2 | **fixed** | `b30cc45` | two integration tests (folder not a mount; folder mounted read-only) fail before, pass after (`f2-integration-before-fix.txt`, `f2-integration-after-fix.txt`). End to end in a real container with a read-only backup folder holding a backup: `/health` says `recovery / database_missing`, `/data/db` is empty (`f2-e2e-container.txt`) |
+| F-3 | **fixed** | `67128b3` | one unit test fails before, passes after (`f3-unit-before-fix.txt`, `f3-unit-after-fix.txt`) |
+| F-4 (new) | **found by probe 16, then fixed** | `586ae93` | Hourly backups of an idle database, **confirmed**: with the test clock 90 minutes ahead and no data change, the scheduler took `auto-20261021T165430Z` (reason `changed`, 45056 bytes, the same size as the baseline) within one tick (`probe16-before-fix.txt`). Cause: a backup's own `backup_log` row, written after the backup starts, counted as "the database changed". Fix: the engine remembers the modification time its own log write left; only a later modification counts (`changed_since_own_write`). Integration test and probe 16 fail before, pass after (`probe16-after-fix.txt`: 0 automatic backups on the idle database, the control backup after a real write still fires). Trade-off recorded in D-083: a user write made while a backup runs is not seen until the next change or the daily backup, and one extra backup may follow an app restart. |
+
+**Regression after the fixes** (image rebuilt from the final code): `test.bat all` clean: lint, 66 unit, 48 integration tests (`raw/phase-1/fixes-test-all.txt`); probes 1 to 16 all PASS on the test stack (`raw/phase-1/probes-all-after-fixes.txt`). The live stack was not touched.
+
+**Still NOT VERIFIED:** the restore HTTP cases (wrong confirmation, state `ok`, double submit), the hardening extras (look-alike hosts, `Origin: null`, preflight, multipart, oversized body), a GET on the live app, `scripts/check_docs.py`, cold start against the 20 s budget, SIGTERM shutdown time. Hypothesis not tested: after repeated failures `tick()` retries every 30 s while no good backup exists. **Owner-only, after this fix pass:** run `backup.bat` once and look for a `manual-` file in `%USERPROFILE%\Enderchest-Backups`; the `-Live` probes 4 and 9; `restore.bat`. Note that `run.bat` after this chat recreates the live container on the new image.
+
+**Verdict after the fix pass:** the four defects are fixed and the regression is green, but the verification is **not complete** (items above) and the owner has not repeated the live checks, so this file does **not** record a PASS. Phase 0 stays `Verification: pending for phase 0` in `handoff.md` (D-082). It can close with a short fresh-session pass over the NOT VERIFIED items plus the owner's live checks.

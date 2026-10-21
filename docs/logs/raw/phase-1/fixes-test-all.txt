@@ -1,0 +1,223 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.9s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 DONE 0.9s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 285B done
+#6 DONE 0.0s
+
+#7 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#7 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 93.98kB 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 5/5] RUN pip install -r requirements.lock
+#9 CACHED
+
+#10 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#10 CACHED
+
+#11 [python-base 3/5] WORKDIR /app
+#11 CACHED
+
+#12 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#12 CACHED
+
+#13 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#13 CACHED
+
+#14 [tools 2/3] RUN pip install -r requirements-dev.lock
+#14 CACHED
+
+#15 [tools 3/3] COPY backend/ ./
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:5b36d39ae7e433098a4d9b0c457c7c86036e072860463b03221e3bf9cd728c1c done
+#16 exporting config sha256:c1a5e54019572bc5d6f5a2f4e364f1f4f56c19dfc36d5f363a4fdfbe7e83efc5 done
+#16 exporting attestation manifest sha256:c95ceb4300ac36e1f28b89523f7f4a0fe57abcb128a3a11e7d24f1d3c63dcc3a 0.0s done
+#16 exporting manifest list sha256:1fa2729f7135103603e467189f2bcc6f9ed465b1d62786e12f9b831add606b91
+#16 exporting manifest list sha256:1fa2729f7135103603e467189f2bcc6f9ed465b1d62786e12f9b831add606b91 0.0s done
+#16 naming to docker.io/library/enderchest-tools:latest done
+#16 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#16 DONE 0.2s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-0c833b71c07f Creating 
+ Container enderchest-test-tools-run-0c833b71c07f Created 
+All checks passed!
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 DONE 0.3s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 285B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 4.38kB 0.0s done
+#7 DONE 0.0s
+
+#8 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#8 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 3/5] WORKDIR /app
+#9 CACHED
+
+#10 [python-base 5/5] RUN pip install -r requirements.lock
+#10 CACHED
+
+#11 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#11 CACHED
+
+#12 [tools 2/3] RUN pip install -r requirements-dev.lock
+#12 CACHED
+
+#13 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#13 CACHED
+
+#14 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#14 CACHED
+
+#15 [tools 3/3] COPY backend/ ./
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:5b36d39ae7e433098a4d9b0c457c7c86036e072860463b03221e3bf9cd728c1c done
+#16 exporting config sha256:c1a5e54019572bc5d6f5a2f4e364f1f4f56c19dfc36d5f363a4fdfbe7e83efc5 done
+#16 exporting attestation manifest sha256:24ed8b682377fc89477c40b235d4d4072290d02a0ea1b2053fd67a439bcde7c1 0.0s done
+#16 exporting manifest list sha256:9d10d59c1db7bdd75db1dc76100121ca98583acf4dc78eb43dc3d8c162d6b06b done
+#16 naming to docker.io/library/enderchest-tools:latest
+#16 naming to docker.io/library/enderchest-tools:latest done
+#16 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-3465d5d1c309 Creating 
+ Container enderchest-test-tools-run-3465d5d1c309 Created 
+..................................................................       [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+66 passed, 1 warning in 0.56s
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 DONE 0.3s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 285B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 4.38kB done
+#7 DONE 0.0s
+
+#8 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#8 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 5/5] RUN pip install -r requirements.lock
+#9 CACHED
+
+#10 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#10 CACHED
+
+#11 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#11 CACHED
+
+#12 [python-base 3/5] WORKDIR /app
+#12 CACHED
+
+#13 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#13 CACHED
+
+#14 [tools 2/3] RUN pip install -r requirements-dev.lock
+#14 CACHED
+
+#15 [tools 3/3] COPY backend/ ./
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:5b36d39ae7e433098a4d9b0c457c7c86036e072860463b03221e3bf9cd728c1c done
+#16 exporting config sha256:c1a5e54019572bc5d6f5a2f4e364f1f4f56c19dfc36d5f363a4fdfbe7e83efc5 done
+#16 exporting attestation manifest sha256:8227b2db78055b82db787a97413fda8c471f8a28aa66ac6ab31aae19c6985737 0.0s done
+#16 exporting manifest list sha256:daf944e5cbbf37d1098b4e9fc60f135a8102f0b617050d82c1326f999276e9ed 0.0s done
+#16 naming to docker.io/library/enderchest-tools:latest done
+#16 unpacking to docker.io/library/enderchest-tools:latest
+#16 unpacking to docker.io/library/enderchest-tools:latest done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-3f894e410fae Creating 
+ Container enderchest-test-tools-run-3f894e410fae Created 
+................................................                         [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+48 passed, 1 warning in 4.96s
+There is no end-to-end suite yet. It starts in Phase 1, when the first screen exists.
+Unit, integration and lint passed. Run "test.bat probes" for the Docker probes.

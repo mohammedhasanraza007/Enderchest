@@ -1,0 +1,34 @@
+--- probe 1 ---
+PROBE 1: PASS - records before=301 after stop/up=301, consistent=True, quick_check=ok
+--- probe 2 ---
+PROBE 2: PASS - container removed=True; records before=299 after=299, consistent=True
+--- probe 3 ---
+PROBE 3: PASS - no-cache build ok=True; records before=304 after=304, consistent=True
+--- probe 4 ---
+PROBE 4: PASS - copy at Enderchest-moved-531de6: up=True; same project containers=[enderchest-test-app-1
+great_gagarin]; records before=304 after=304
+--- probe 5 ---
+PROBE 5: PASS - container removed=True; records before=302 after=302, consistent=True
+--- probe 6 ---
+PROBE 6: PASS - round 1 killed at ~156 rows, after restart rows=165 consistent=True quick_check=ok; round 2 killed at ~364 rows, after restart rows=373 consistent=True quick_check=ok; round 3 killed at ~609 rows, after restart rows=617 consistent=True quick_check=ok
+--- probe 7 ---
+PROBE 7: PASS - state=locked/no_data_volume; /data contents=[]; API status 503
+--- probe 8 ---
+PROBE 8: PASS - after delete state=recovery; backups offered=1; restore status=200; records before=305 after=305
+--- probe 9 ---
+PROBE 9: PASS - test stack: build:0 build:0 build:0 up:0 up:0 up:0; records before=301 after=301
+--- probe 10 ---
+PROBE 10: PASS - state=locked/newer_data schema_found=99; API 503; file hash unchanged=True
+--- probe 11 ---
+PROBE 11: PASS - app uid=10001; backup on host=True; photo mirrored=True; fresh volume state=recovery:True; restore status=200; records before=309 after=309; photo sha256 equal=True
+--- probe 12 ---
+PROBE 12: PASS - all 6 checks refused or clean as required
+--- probe 13 ---
+PROBE 13: PASS - live config on test data: locked/env_mismatch; test config on live-marked data: locked/env_mismatch; files unchanged: test=True live-marked=True
+--- probe 14 ---
+PROBE 14: PASS - kills=1; a .partial was seen after a kill=True; listed as backup=False; left after restart=False; next backup status=201
+--- probe 15 ---
+PROBE 15: PASS - script exit=0; new manual files=1; name printed=True; listed by the API=True; output=[Backup made and verified: manual-20261021T170305Z.sqlite3 (44 KB) | Folder: ./.test-backups]
+--- probe 16 ---
+PROBE 16: PASS - baseline manual-20261021T170307Z; clock moved to 18:33Z; auto backups on an idle database after two ticks: 0; after a real write: control backup made=True; backup_due reasons in the log=[startup,changed]
+ALL PASSED: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
