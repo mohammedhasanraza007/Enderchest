@@ -62,7 +62,7 @@ export function NameMenu({ profile }: { profile: Profile & { name: string } }) {
       </button>
       {open ? (
         <div id={panelId} className="name-menu__panel">
-          <Link to="/settings" className="name-menu__link">
+          <Link to="/settings" className="name-menu__link" onClick={() => setOpen(false)}>
             Settings
           </Link>
           <div className="name-menu__group" role="radiogroup" aria-label="Theme">

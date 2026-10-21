@@ -92,6 +92,14 @@ describe("Toggle and Chip", () => {
     );
     expect(radio).toContain('role="radio"');
     expect(radio).toContain('aria-checked="true"');
+    expect(radio).toContain("<svg"); // the chosen chip has a check mark, not only a tint
+    const other = html(
+      <Chip role="radio" selected={false} onSelect={() => undefined}>
+        Light
+      </Chip>,
+    );
+    expect(other).toContain('aria-checked="false"');
+    expect(other).not.toContain("<svg");
     expect(html(<Chip>Label</Chip>)).toBe('<span class="chip">Label</span>');
   });
 });

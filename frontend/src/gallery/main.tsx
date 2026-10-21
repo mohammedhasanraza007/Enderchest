@@ -47,7 +47,8 @@ const SAMPLE_BACKUPS: BackupsView = {
   folder_hint: "C:/Users/example/Enderchest-Backups",
 };
 
-const client = new QueryClient();
+// The sample data is fresh for ever, so nothing tries to fetch it from a server that is not there.
+const client = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } });
 client.setQueryData(keys.backups, SAMPLE_BACKUPS);
 
 const ZONES = [

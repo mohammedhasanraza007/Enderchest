@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import type { ReactNode } from "react";
 
 // Chips and filters (DESIGN.md 6.12): pills at the secondary-pill level; a selected chip uses
@@ -25,6 +26,8 @@ export function Chip({ children, selected, onSelect, role }: ChipProps) {
       aria-pressed={role === "radio" ? undefined : Boolean(selected)}
       onClick={onSelect}
     >
+      {/* The chosen chip carries a check mark, so the choice is not shown by a tint alone. */}
+      {selected ? <Check size={16} strokeWidth={1.5} aria-hidden="true" /> : null}
       {children}
     </button>
   );

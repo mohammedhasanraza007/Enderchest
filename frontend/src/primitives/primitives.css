@@ -221,6 +221,7 @@
   font-size: 0.9375rem;
 }
 .chip--button {
+  gap: var(--space-2);
   cursor: pointer;
 }
 .chip--button:hover {
@@ -228,7 +229,7 @@
 }
 .chip.is-selected {
   background: var(--surface-nav-active);
-  border-color: var(--hairline-nav);
+  border-color: color-mix(in srgb, var(--text) 70%, transparent);
 }
 
 /* A status word on glass: a dark pill, an icon and the word in the semantic colour. */

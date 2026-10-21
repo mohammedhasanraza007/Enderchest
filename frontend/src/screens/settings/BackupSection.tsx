@@ -16,10 +16,13 @@ import { useToast } from "../../primitives/Toast";
 
 const RECENT = 8;
 
-function chipFor(status: BackupsView["status"]): { kind: StatusKind; word: string } {
-  if (status === "ok") return { kind: "success", word: "Working" };
-  if (status === "stale") return { kind: "warning", word: "Old" };
-  return { kind: "danger", word: status === "failing" ? "Failing" : "Not connected" };
+function chipFor(view: BackupsView): { kind: StatusKind; word: string } {
+  // "Working" is claimed only when a good backup exists; before the first one it says "New".
+  if (view.status === "ok") {
+    return view.last_good ? { kind: "success", word: "Working" } : { kind: "info", word: "New" };
+  }
+  if (view.status === "stale") return { kind: "warning", word: "Old" };
+  return { kind: "danger", word: view.status === "failing" ? "Failing" : "Not connected" };
 }
 
 export function BackupSection({ timeZone }: { timeZone: string }) {
@@ -48,7 +51,7 @@ export function BackupSection({ timeZone }: { timeZone: string }) {
   }
 
   const view = backups.data;
-  const chip = chipFor(view.status);
+  const chip = chipFor(view);
   return (
     <GlassCard title="Backup">
       <div className="stack">
@@ -63,7 +66,7 @@ export function BackupSection({ timeZone }: { timeZone: string }) {
           </p>
         ) : (
           <p className="section-note">
-            No backup yet. Enderchest makes one when it starts and after changes.
+            Enderchest makes the first one when it starts, and more after changes.
           </p>
         )}
         {view.warnings.map((warning) => (
