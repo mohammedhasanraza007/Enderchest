@@ -17,6 +17,33 @@ from . import catalog
 # guarantees one process; this guards the threads inside it.
 _backup_slot = threading.Lock()
 
+# DATA_SAFETY 7 takes an automatic backup "after changes", judged by the database's newest
+# modification time. Every backup writes its own backup_log row once it has started, which
+# would count as a change and make that rule fire every hour on an idle database. The time left
+# by that write is kept here (one database per process); only a later modification counts.
+# A user write made while a backup runs (before its log row) is therefore not seen; the next
+# change or the daily backup picks it up.
+_own_write_mtime: dict[Path, float] = {}
+
+
+def _db_mtime(settings: Settings) -> float | None:
+    files = (settings.db_path, settings.db_path.with_name(settings.db_path.name + "-wal"))
+    times = [p.stat().st_mtime for p in files if p.exists()]
+    return max(times) if times else None
+
+
+def _note_own_write(settings: Settings, log_conn: sqlite3.Connection | None) -> None:
+    if log_conn is not None:  # record_log wrote nothing without a connection
+        _own_write_mtime[settings.db_path] = _db_mtime(settings) or 0.0
+
+
+def changed_since_own_write(settings: Settings) -> datetime | None:
+    """When the database was last modified by anything other than a backup's own log row."""
+    newest = _db_mtime(settings)
+    if newest is None or newest <= _own_write_mtime.get(settings.db_path, 0.0):
+        return None
+    return datetime.fromtimestamp(newest, UTC)
+
 
 class BackupError(Exception):
     """A backup could not be built or did not verify; nothing partial is kept."""
@@ -120,6 +147,7 @@ def create_backup(settings: Settings, kind: str, *, log_conn: sqlite3.Connection
             log_event("error", "backup_failed", kind=kind, name=name, reason=message)
             record_log(log_conn, kind=kind, name=name, started_at=started, ok=False, error=message,
                        size=0, item_count=None, verified=False)
+            _note_own_write(settings, log_conn)
             if isinstance(exc, BackupError):
                 raise
             raise BackupError(message) from exc
@@ -127,6 +155,7 @@ def create_backup(settings: Settings, kind: str, *, log_conn: sqlite3.Connection
         copied, warnings = mirror_photos(settings)
         record_log(log_conn, kind=kind, name=name, started_at=started, ok=True, error=None,
                    size=size, item_count=check.item_count, verified=True)
+        _note_own_write(settings, log_conn)
         log_event("info", "backup_done", kind=kind, name=name, bytes=size)
         return BackupResult(name, size, check.item_count, True, settings.backup_dir_hint,
                             copied, warnings)

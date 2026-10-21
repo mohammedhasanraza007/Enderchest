@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from .. import clock
 from ..backup import catalog
-from ..backup.engine import BackupError, create_backup
+from ..backup.engine import BackupError, changed_since_own_write, create_backup
 from ..backup.retention import plan_deletions
 from ..boot.manager import BootManager, Status, WrongState
 from ..logs import log_event
@@ -63,10 +63,7 @@ class BackupScheduler:
         ).fetchone()
         newest = (datetime.strptime(row["started_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
                   if row else None)
-        mtimes = [p.stat().st_mtime for p in
-                  (settings.db_path, settings.db_path.with_name(settings.db_path.name + "-wal"))
-                  if p.exists()]
-        changed = datetime.fromtimestamp(max(mtimes), UTC) if mtimes else None
+        changed = changed_since_own_write(settings)
         tz_name = conn.execute("SELECT timezone FROM users WHERE id = 1").fetchone()["timezone"]
         return Facts(now=clock.now(), newest_backup_at=newest, db_changed_at=changed,
                      startup_pending=self._startup_pending, tz=ZoneInfo(tz_name))

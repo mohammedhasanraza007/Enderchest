@@ -1,13 +1,14 @@
 # Runs the Phase 0 gate probes (docs/DATA_SAFETY.md 10) against the TEST stack, one fresh
 # PowerShell process per probe, and writes the results to test-results\probes.txt.
-# Probe 15 is not a DATA_SAFETY gate probe: it runs the real backup.bat helper script (D-083).
-#   run-probes.ps1                run probes 1 to 15
+# Probes 15 and 16 are not DATA_SAFETY gate probes (D-083): 15 runs the real backup.bat helper
+# script, 16 moves the test clock and checks an idle database is not backed up again.
+#   run-probes.ps1                run probes 1 to 16
 #   run-probes.ps1 -Only "6,12"   run only those
 #   run-probes.ps1 -Live          probes 4 and 9 use the live build.bat/run.bat (the owner's choice)
 param([string]$Only = '', [switch]$Live)   # -Only is a string: "6,12" (powershell -File does not build arrays)
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
-$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..15 }
+$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..16 }
 $out = Join-Path $root 'test-results'
 New-Item -ItemType Directory -Force $out | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $root '.test-backups') | Out-Null

@@ -1,0 +1,45 @@
+﻿PROBE 16: FAIL - baseline manual-20261021T165405Z; clock moved to 18:24Z; auto backups on an idle database after two ticks: 1; after a real write: control backup made=True; backup_due reasons in the log=[INFO:     Started server process [7]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8470 (Press CTRL+C to quit)
+{"ts": "2026-10-21T16:54:00Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-21T16:54:00Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+INFO:     127.0.0.1:55992 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:49342 - "GET /health HTTP/1.1" 200 OK
+{"ts": "2026-10-21T16:54:05Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-21T16:54:05Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+INFO:     172.18.0.1:49358 - "POST /api/v1/test/reset HTTP/1.1" 200 OK
+{"ts": "2026-10-21T16:54:05Z", "level": "info", "event": "backup_done", "kind": "manual", "name": "manual-20261021T165405Z", "bytes": 45056}
+INFO:     172.18.0.1:49364 - "POST /api/v1/backups HTTP/1.1" 201 Created
+INFO:     172.18.0.1:49370 - "POST /api/v1/test/clock HTTP/1.1" 200 OK
+INFO:     172.18.0.1:49386 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     172.18.0.1:49388 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34882 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:49394 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32970 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:52194 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32994 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:52210 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51738 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:34462 - "GET /api/v1/backups HTTP/1.1" 200 OK
+changed
+{"ts": "2026-10-21T16:54:30Z", "level": "info", "event": "backup_done", "kind": "auto", "name": "auto-20261021T165430Z", "bytes": 45056}
+INFO:     172.18.0.1:34464 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     172.18.0.1:34472 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     172.18.0.1:34488 - "POST /api/v1/test/write-loop HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51760 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:34496 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56536 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:45328 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56556 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:45332 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44928 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:58374 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44950 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:58376 - "GET /api/v1/backups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49334 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:36794 - "GET /api/v1/backups HTTP/1.1" 200 OK
+changed
+{"ts": "2026-10-21T16:55:00Z", "level": "info", "event": "backup_done", "kind": "auto", "name": "auto-20261021T165500Z", "bytes": 61440}
+INFO:     127.0.0.1:49352 - "GET /health HTTP/1.1" 200 OK
+INFO:     172.18.0.1:36808 - "GET /api/v1/backups HTTP/1.1" 200 OK]

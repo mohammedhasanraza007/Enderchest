@@ -1,0 +1,81 @@
+Enderchest build. Safe to run again at any time; it never deletes anything.
+The data volume already exists. Left as it is.
+ Image enderchest-app:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 545B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 ...
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 0.3s
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.9s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 285B done
+#7 DONE 0.0s
+
+#8 [frontend-build 1/3] FROM docker.io/library/node:22-bookworm-slim@sha256:a6385bc33f0f9d6a08482c87f52baee537a9184e2b47dea1ed97caac62f8960c
+#8 resolve docker.io/library/node:22-bookworm-slim@sha256:a6385bc33f0f9d6a08482c87f52baee537a9184e2b47dea1ed97caac62f8960c 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#9 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#9 DONE 0.0s
+
+#10 [internal] load build context
+#10 transferring context: 2.23kB done
+#10 DONE 0.0s
+
+#11 [frontend-build 2/3] WORKDIR /frontend
+#11 CACHED
+
+#12 [frontend-build 3/3] RUN mkdir -p dist
+#12 CACHED
+
+#13 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#13 CACHED
+
+#14 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#14 CACHED
+
+#15 [python-base 3/5] WORKDIR /app
+#15 CACHED
+
+#16 [python-base 5/5] RUN pip install -r requirements.lock
+#16 CACHED
+
+#17 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#17 DONE 0.0s
+
+#18 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#18 DONE 0.0s
+
+#19 exporting to image
+#19 exporting layers 0.1s done
+#19 exporting manifest sha256:ca04dd83381d9b4aa8c6b20db4d64088bc7788e6bc9d39599c9559c1fa25aa88 done
+#19 exporting config sha256:aaa6806ba003dd8ac5358ae9467c18d55bce4df39d3ad34b8d54f06b6a578556 done
+#19 exporting attestation manifest sha256:44bbda312f55d022588a2f10401bbcfffdd964563e836f448ea1bb29ad9c60a8 0.0s done
+#19 exporting manifest list sha256:977773a383e173901140357541d60dc452c569ffcf00bb84ddce27ef8bfcfe7f done
+#19 naming to docker.io/library/enderchest-app:latest done
+#19 unpacking to docker.io/library/enderchest-app:latest 0.0s done
+#19 DONE 0.2s
+
+#20 resolving provenance for metadata file
+#20 DONE 0.0s
+ Image enderchest-app:latest Built 
+Build finished. Next: run.bat

@@ -1,0 +1,1 @@
+﻿PROBE 16: PASS - baseline manual-20261021T165747Z; clock moved to 18:27Z; auto backups on an idle database after two ticks: 0; after a real write: control backup made=True; backup_due reasons in the log=[changed]

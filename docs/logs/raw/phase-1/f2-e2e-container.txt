@@ -1,0 +1,13 @@
+﻿F-2 end to end, 2026-10-21: image built from phase-1 with the F-2 fix; container run with an anonymous /data volume and a READ-ONLY bind mount holding one backup-named file.
+docker run -d -p 127.0.0.1:8473:8470 -v /data -v <host test-results\f2-ro-backups>:/backups:ro -e ENDERCHEST_ENV=test enderchest-app:latest
+--- /health
+{"status":"recovery","reason":"database_missing","app_version":"0.1.0","schema_found":null,"schema_supported":1,"env":"test"}
+--- /api/v1/boot
+{"state":"recovery","reason":"database_missing","message":"The database is missing but photos or backups were found, and the backup folder is not connected or not writable. Nothing was created. Fix the backup folder, then start Enderchest again.","data_mounted":true,"backups_mounted":false,"schema_found":null,"schema_supported":1,"backups":[],"warnings":["The backup folder is not connected. Nothing is being backed up."]}
+--- ls -la /data/db
+total 8
+drwxr-xr-x 2 enderchest enderchest 4096 Oct 21 16:53 .
+drwxr-xr-x 7 enderchest enderchest 4096 Oct 21 16:53 ..
+--- boot log
+{"ts": "2026-10-21T16:53:22Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-21T16:53:22Z", "level": "info", "event": "boot_state", "state": "recovery", "reason": "database_missing"}

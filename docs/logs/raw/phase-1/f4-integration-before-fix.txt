@@ -1,0 +1,115 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.3s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 1.2s
+
+#8 [internal] load .dockerignore
+#8 transferring context: 285B done
+#8 DONE 0.0s
+
+#9 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#9 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#9 DONE 0.0s
+
+#10 [internal] load build context
+#10 transferring context: 93.76kB 0.0s done
+#10 DONE 0.0s
+
+#11 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#11 CACHED
+
+#12 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#12 CACHED
+
+#13 [python-base 5/5] RUN pip install -r requirements.lock
+#13 CACHED
+
+#14 [python-base 3/5] WORKDIR /app
+#14 CACHED
+
+#15 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#15 CACHED
+
+#16 [tools 2/3] RUN pip install -r requirements-dev.lock
+#16 CACHED
+
+#17 [tools 3/3] COPY backend/ ./
+#17 DONE 0.0s
+
+#18 exporting to image
+#18 exporting layers 0.1s done
+#18 exporting manifest sha256:7af19b995d10ff4b608f25bb4b670bc460b6fae22fa45975d0c31b5745eb4b51 0.0s done
+#18 exporting config sha256:569c6892abd9bcf094082662d93308902c7816f03e3a8c8b86dd3ca4a8ae740d 0.0s done
+#18 exporting attestation manifest sha256:da93361092bf04be8ca9f59e180dad43aadd0faff54e3982b4e730feabcfa75f 0.0s done
+#18 exporting manifest list sha256:da2021444f3590cdb437166c3ec00f99a14a800a2ca42e65185a878fdc3457a1 0.0s done
+#18 naming to docker.io/library/enderchest-tools:latest done
+#18 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#18 DONE 0.2s
+
+#19 resolving provenance for metadata file
+#19 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-b8a0ba794106 Creating 
+ Container enderchest-test-tools-run-b8a0ba794106 Created 
+..............................F.................                         [100%]
+=================================== FAILURES ===================================
+_______ test_an_idle_database_is_not_backed_up_again_but_a_real_write_is _______
+
+stack = <tests.conftest.Stack object at 0x76d64b8a0a70>, real_clock = None
+
+    def test_an_idle_database_is_not_backed_up_again_but_a_real_write_is(stack: Stack, real_clock):
+        conn = stack.manager.db()
+        conn.execute("UPDATE users SET timezone = ? WHERE id = 1", (_zone_where_it_is_ten_in_the_morning(),))
+        started = datetime.now(UTC)
+        engine.create_backup(stack.settings, "manual", log_conn=conn)
+    
+        clock.set_now(started + timedelta(minutes=90))  # old enough for the "changed" rule
+        scheduler = BackupScheduler(stack.manager)
+>       assert scheduler.tick() is None  # nothing changed except the backup's own log row
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'changed' is None
+E        +  where 'changed' = tick()
+E        +    where tick = <app.scheduler.backups.BackupScheduler object at 0x76d64b4f3a10>.tick
+
+tests/integration/test_idle_backups.py:42: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+{"ts": "2026-10-21T16:56:47Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-21T16:56:47Z", "level": "info", "event": "database_created", "env": "test"}
+{"ts": "2026-10-21T16:56:47Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+----------------------------- Captured stdout call -----------------------------
+{"ts": "2026-10-21T16:56:47Z", "level": "info", "event": "backup_done", "kind": "manual", "name": "manual-20261021T165647Z", "bytes": 45056}
+{"ts": "2026-10-21T16:56:47Z", "level": "info", "event": "backup_due", "reason": "changed"}
+{"ts": "2026-10-21T16:56:47Z", "level": "info", "event": "backup_done", "kind": "auto", "name": "auto-20261021T165647Z", "bytes": 45056}
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_idle_backups.py::test_an_idle_database_is_not_backed_up_again_but_a_real_write_is
+1 failed, 47 passed, 1 warning in 4.93s
+
