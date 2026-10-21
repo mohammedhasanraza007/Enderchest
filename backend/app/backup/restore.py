@@ -20,7 +20,7 @@ from ..logs import log_event
 from . import catalog
 from .engine import BackupError, create_backup, mirror_photos, record_log, verify_database
 
-_SAFE_NAME = re.compile(r"^[A-Za-z0-9._-]+$")
+_SAFE_NAME = re.compile(r"[A-Za-z0-9._-]+")  # used with fullmatch: `$` would allow a newline
 
 
 class RestoreError(Exception):
@@ -41,7 +41,7 @@ def _sidecars(db: Path) -> list[Path]:
 
 
 def restore_backup(settings: Settings, name: str) -> RestoreResult:
-    if not _SAFE_NAME.match(name) or catalog.kind_of(name) is None:
+    if not _SAFE_NAME.fullmatch(name) or catalog.kind_of(name) is None:
         raise RestoreError("that is not a backup name")
     source = settings.backups_dir / f"{name}.sqlite3"
     if not source.is_file():

@@ -1,0 +1,94 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 1.0s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 DONE 0.8s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 285B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 10.97kB done
+#7 DONE 0.0s
+
+#8 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#8 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#9 CACHED
+
+#10 [python-base 5/5] RUN pip install -r requirements.lock
+#10 CACHED
+
+#11 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#11 CACHED
+
+#12 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#12 CACHED
+
+#13 [python-base 3/5] WORKDIR /app
+#13 CACHED
+
+#14 [tools 2/3] RUN pip install -r requirements-dev.lock
+#14 CACHED
+
+#15 [tools 3/3] COPY backend/ ./
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:5eb3693f8ffe31fd799bdac68954d30729273fb768535874c3599bf36ff533c8 0.0s done
+#16 exporting config sha256:61743771b6364161cb6e1425bd54576fbcb3dbf1ecf562062014d3ccfadd815f done
+#16 exporting attestation manifest sha256:cdac318051e8668e4a2914d6f893a90fe09932a6b41b838c9d242977352273b2 0.0s done
+#16 exporting manifest list sha256:a0df989348ce458822ace5a1620cadab2f609a481c21b07cd5c7e64a460218e8 0.0s done
+#16 naming to docker.io/library/enderchest-tools:latest done
+#16 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#16 DONE 0.2s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-69ea39c2ef5a Creating 
+ Container enderchest-test-tools-run-69ea39c2ef5a Created 
+...........................F......................................       [100%]
+=================================== FAILURES ===================================
+_____________ test_a_name_ending_in_a_newline_is_not_a_backup_name _____________
+
+settings = Settings(env='test', port=8470, data_dir=PosixPath('/tmp/pytest-of-root/pytest-0/test_a_name_ending_in_a_newlin0/data'...t-of-root/pytest-0/test_a_name_ending_in_a_newlin0/backups'), backup_dir_hint='the backup folder', app_version='0.1.0')
+
+    def test_a_name_ending_in_a_newline_is_not_a_backup_name(settings: Settings):
+        # F-3 of the Phase 0 verification: `$` matches before a trailing newline, so the name
+        # check must use fullmatch. The refusal has to come from the name check itself.
+        make_database(settings)
+>       with pytest.raises(RestoreError, match="not a backup name"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'not a backup name'
+E         Actual message: 'backup auto-20261021T093000Z\n was not found in the backup folder'
+
+tests/unit/test_restore_order.py:129: AssertionError
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_restore_order.py::test_a_name_ending_in_a_newline_is_not_a_backup_name
+1 failed, 65 passed, 1 warning in 0.59s
+

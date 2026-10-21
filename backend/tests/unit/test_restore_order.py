@@ -122,6 +122,14 @@ def test_unsafe_or_unknown_names_are_refused_before_anything_changes(settings: S
     assert settings.db_path.read_bytes() == before
 
 
+def test_a_name_ending_in_a_newline_is_not_a_backup_name(settings: Settings):
+    # F-3 of the Phase 0 verification: `$` matches before a trailing newline, so the name
+    # check must use fullmatch. The refusal has to come from the name check itself.
+    make_database(settings)
+    with pytest.raises(RestoreError, match="not a backup name"):
+        restore_backup(settings, "auto-20261021T093000Z\n")
+
+
 def test_a_backup_from_another_environment_is_refused(settings: Settings, tmp_path: Path):
     live = Settings(env="live", port=8470, data_dir=tmp_path / "live-data",
                     backups_dir=settings.backups_dir, backup_dir_hint="x")
