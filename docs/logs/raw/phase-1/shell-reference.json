@@ -1,0 +1,43 @@
+{
+  "frame": "1376x768 dark",
+  "nav": {
+    "x": 70,
+    "y": 50,
+    "width": 1236,
+    "height": 60
+  },
+  "reference": {
+    "x": 70,
+    "y": 50,
+    "width": 1235,
+    "height": 60
+  },
+  "differences": {
+    "x": 0,
+    "y": 0,
+    "width": 1,
+    "height": 0
+  },
+  "logo": {
+    "x": 95,
+    "y": 64,
+    "width": 32,
+    "height": 32
+  },
+  "wordmark": {
+    "fontSize": 26,
+    "family": "\"Newsreader Variable\", Newsreader, Georgia, \"Times New Roman\", serif",
+    "colour": "rgb(255, 250, 240)"
+  },
+  "capsule": {
+    "background": "linear-gradient(90deg, rgb(82, 71, 63), rgb(99, 84, 72))",
+    "border": "rgba(255, 243, 226, 0.38)",
+    "radius": "9999px",
+    "blur": "blur(18px) saturate(1.4)"
+  },
+  "logoStyle": {
+    "filter": "none",
+    "transform": "none",
+    "src": "/enderchest-logo.svg"
+  }
+}

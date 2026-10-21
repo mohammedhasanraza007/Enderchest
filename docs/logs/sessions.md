@@ -40,3 +40,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - The owner ran `build.bat`, `run.bat`, `backup.bat`, `stop.bat`, `run.bat` on the laptop and reported that they work (recorded in the evidence log). Claude confirmed read-only that the live app is `ok`/`live`; it did not see a `manual-` backup file and found an unexplained container `great_gagarin` (both open in the evidence log).
 - Added for the next chat: `docs/CODE_MAP.md` (listed in `CLAUDE.md` 2 and `INDEX.md`), `MISTAKES_TO_AVOID.md` section N, a fuller `handoff.md`. `phase0.zip` was rebuilt from the final commit (same recipe as above).
 - Next: fresh-session verification of Phase 0, then Phase 1 only after PASS.
+
+## 2026-10-21 · phase1.1 · Phase 0 verification and fix pass, then Phase 1 build (checkpoint)
+- Zip in: `phase0.zip`. Zip out: `D:\Projects\phase1.1.zip` (a checkpoint inside Phase 1: the chat ran short of room). Worktree `D:\Projects\Enderchest-phase-1`, branch `phase-1` from `d6b71fa` (no phase-0 tag existed, D-082). Windows `tar` zip route used.
+- Phase 0: partial fresh-session verification (`docs/reviews/phase-0-verification.md`) found F-1 `backup.bat` broken, F-2 first-run rule with an unwritable backup folder, F-3 name regex, and (probe 16) F-4 hourly backups of an idle database. All fixed test-first (`phase0-fix:` commits), probes 15 and 16 added.
+- Phase 1 built: profile and settings API, typed responses, app serving with the theme written in, boot page restyle, the whole frontend, browser tests (Playwright), probe 17, Docker stages, `test.bat` commands, `dev.bat` Vite.
+- Failed and fixed on the way: double click made two backups; Chrome's `Asia/Calcutta`; selected chip invisible in light; misleading "Working" chip; menu link that did nothing. Docker Desktop stopped once mid-run; the owner restarted it.
+- Not done: Phase 1 and Phase 0 fresh-session verification, owner approval of screenshots, `dev.bat` run, live `run.bat`.
+- Next: see `handoff.md` "Next steps".

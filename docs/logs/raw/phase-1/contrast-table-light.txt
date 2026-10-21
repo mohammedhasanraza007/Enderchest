@@ -1,0 +1,5 @@
+--success-text on --bg-base: 5.38 (table 5.38)
+--warning-text on --bg-base: 5.00 (table 5)
+--danger-text on --bg-base: 4.77 (table 4.77)
+--info-text on --bg-base: 4.94 (table 4.94)
+--text-muted-page on --bg-base: 5.62 (table 5.6)

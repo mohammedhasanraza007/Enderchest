@@ -1,0 +1,12 @@
+{
+  "rupee-sans": [
+    "DM Sans 9pt (bundled): 9"
+  ],
+  "rupee-display": [
+    "Newsreader 16pt (bundled): 9"
+  ],
+  "rupee-mono": [
+    "FreeSans (system): 1",
+    "JetBrains Mono (bundled): 8"
+  ]
+}

@@ -1,0 +1,143 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 ...
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 0.3s
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.3s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 320B done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 9.41kB 0.0s done
+#8 DONE 0.0s
+
+#9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#9 DONE 0.0s
+
+#10 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#10 DONE 0.0s
+
+#11 [tools  3/10] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#11 CACHED
+
+#12 [tools  1/10] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#12 CACHED
+
+#13 [tools  9/10] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#13 CACHED
+
+#14 [tools  2/10] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#14 CACHED
+
+#15 [tools  7/10] COPY assets/logo /assets/logo
+#15 CACHED
+
+#16 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#16 CACHED
+
+#17 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#17 CACHED
+
+#18 [tools  6/10] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#18 CACHED
+
+#19 [tools  8/10] COPY frontend/ /frontend/
+#19 CACHED
+
+#20 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#20 CACHED
+
+#21 [python-base 3/5] WORKDIR /app
+#21 CACHED
+
+#22 [frontend-deps 2/4] WORKDIR /frontend
+#22 CACHED
+
+#23 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#23 CACHED
+
+#24 [tools  4/10] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#24 CACHED
+
+#25 [tools  5/10] RUN pip install -r requirements-dev.lock
+#25 CACHED
+
+#26 [python-base 5/5] RUN pip install -r requirements.lock
+#26 CACHED
+
+#27 [tools 10/10] COPY backend/ ./
+#27 CACHED
+
+#28 exporting to image
+#28 exporting layers done
+#28 exporting manifest sha256:d19de15e7bc64f2dda41b3e3d9837676bbcab768f80f7f4f62eb9edb70c1231b done
+#28 exporting config sha256:60fee7981ae212dcc1ccbaf82d4fe7539c9b7276755e37f7af7586aed205ad6b done
+#28 exporting attestation manifest sha256:96268b105acd33614422d5cc33648fb51bd6efb92cea3266019c5a5b57841b77 0.0s done
+#28 exporting manifest list sha256:6b08092b66fb04a9df7044bb9a10f38e76c29c02f320e682eba0fec328a94233 0.0s done
+#28 naming to docker.io/library/enderchest-tools:latest done
+#28 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#28 DONE 0.1s
+
+#29 resolving provenance for metadata file
+#29 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-2b79ca02c5bb Creating 
+ Container enderchest-test-tools-run-2b79ca02c5bb Created 
+....................................................................     [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+68 passed, 1 warning in 0.63s
+ Container enderchest-test-tools-run-ca1a071b6899 Creating 
+ Container enderchest-test-tools-run-ca1a071b6899 Created 
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90m/frontend[39m
+
+ [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/lib/format.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m src/primitives/primitives.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
+[2m   Start at [22m 18:02:04
+[2m   Duration [22m 429ms[2m (transform 52%, import 27%, tests 18%, worker 3%)[22m
+
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+
+> enderchest-frontend@0.1.0 api-types:check
+> openapi-typescript openapi.json -o /tmp/schema.d.ts && diff -q /tmp/schema.d.ts src/api/schema.d.ts
+
+✨ openapi-typescript 7.13.0
+🚀 openapi.json → /tmp/schema.d.ts [49.2ms]

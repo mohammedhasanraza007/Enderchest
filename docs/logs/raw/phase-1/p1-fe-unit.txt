@@ -14,13 +14,13 @@
 #4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
 #4 CACHED
 
-#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
 #5 ...
 
-#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
 #6 DONE 0.3s
 
-#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
 #5 DONE 0.3s
 
 #7 [internal] load .dockerignore
@@ -28,7 +28,7 @@
 #7 DONE 0.0s
 
 #8 [internal] load build context
-#8 transferring context: 14.79kB 0.0s done
+#8 transferring context: 9.41kB 0.0s done
 #8 DONE 0.0s
 
 #9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
@@ -39,72 +39,72 @@
 #10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
 #10 DONE 0.0s
 
-#11 [python-base 3/5] WORKDIR /app
+#11 [frontend-deps 2/4] WORKDIR /frontend
 #11 CACHED
 
-#12 [frontend-deps 2/4] WORKDIR /frontend
+#12 [tools  2/10] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
 #12 CACHED
 
-#13 [tools  4/10] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#13 [tools  1/10] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
 #13 CACHED
 
-#14 [tools  6/10] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#14 [python-base 5/5] RUN pip install -r requirements.lock
 #14 CACHED
 
-#15 [tools  2/10] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#15 [tools  3/10] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 #15 CACHED
 
-#16 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#16 [tools  6/10] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
 #16 CACHED
 
-#17 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#17 [tools  5/10] RUN pip install -r requirements-dev.lock
 #17 CACHED
 
-#18 [tools  3/10] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#18 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
 #18 CACHED
 
-#19 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#19 [tools  9/10] COPY scripts/export_openapi.py ./scripts/export_openapi.py
 #19 CACHED
 
-#20 [tools  1/10] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#20 [python-base 3/5] WORKDIR /app
 #20 CACHED
 
-#21 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#21 [tools  8/10] COPY frontend/ /frontend/
 #21 CACHED
 
-#22 [tools  5/10] RUN pip install -r requirements-dev.lock
+#22 [tools  4/10] COPY backend/requirements-dev.lock ./requirements-dev.lock
 #22 CACHED
 
-#23 [python-base 5/5] RUN pip install -r requirements.lock
+#23 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
 #23 CACHED
 
 #24 [tools  7/10] COPY assets/logo /assets/logo
 #24 CACHED
 
-#25 [tools  8/10] COPY frontend/ /frontend/
-#25 DONE 0.0s
+#25 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#25 CACHED
 
-#26 [tools  9/10] COPY scripts/export_openapi.py ./scripts/export_openapi.py
-#26 DONE 0.0s
+#26 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#26 CACHED
 
 #27 [tools 10/10] COPY backend/ ./
-#27 DONE 0.0s
+#27 CACHED
 
 #28 exporting to image
-#28 exporting layers 0.1s done
-#28 exporting manifest sha256:f24d2cf4b8c5715a656d49a00c38373e91fe295e3965e06273192454f1e65d0f done
-#28 exporting config sha256:35a77c723be5cc30af6ca856eaef0136f5910d56e2f2e1238a06f2984a94cc94 done
-#28 exporting attestation manifest sha256:da692b0572806342d3776797651c75c46b255dd19222c58371a63c1598ac543d 0.0s done
-#28 exporting manifest list sha256:7671367586c32399dd20b0993c353e5bb2adef6916e5801afd17a2373abe329b 0.0s done
+#28 exporting layers done
+#28 exporting manifest sha256:046eaa3826cad212f1fd57e45cfd9ada217cc1e9b6625faf31f5676949fd76db done
+#28 exporting config sha256:551bb610ccec387def4c97ab24d40fbe599c19a430b5ab6fff03ee36c8ee8e8f done
+#28 exporting attestation manifest sha256:8f5ebd23f8ffecfcd2c69757c65eb979f52d14390256f6c8f3f879ca3307a026 0.0s done
+#28 exporting manifest list sha256:5db6651967ca19fad32e483e1f518afc5ae5e9659dd56322b744d90955f93ce2 done
 #28 naming to docker.io/library/enderchest-tools:latest done
-#28 unpacking to docker.io/library/enderchest-tools:latest 0.1s done
-#28 DONE 0.3s
+#28 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#28 DONE 0.1s
 
 #29 resolving provenance for metadata file
 #29 DONE 0.0s
  Image enderchest-tools:latest Built 
- Container enderchest-test-tools-run-191fc57d863c Creating 
- Container enderchest-test-tools-run-191fc57d863c Created 
+ Container enderchest-test-tools-run-e6504137754e Creating 
+ Container enderchest-test-tools-run-e6504137754e Created 
 ....................................................................     [100%]
 =============================== warnings summary ===============================
 ../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
@@ -112,23 +112,23 @@
     from starlette.testclient import TestClient as TestClient  # noqa
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-68 passed, 1 warning in 0.70s
- Container enderchest-test-tools-run-1972401d4002 Creating 
- Container enderchest-test-tools-run-1972401d4002 Created 
+68 passed, 1 warning in 0.66s
+ Container enderchest-test-tools-run-4e3c0612070a Creating 
+ Container enderchest-test-tools-run-4e3c0612070a Created 
 
 [1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90m/frontend[39m
 
- [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
- [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 33[2mms[22m[39m
- [32m✓[39m src/lib/format.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 29[2mms[22m[39m
- [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/lib/format.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 35[2mms[22m[39m
  [32m✓[39m src/primitives/primitives.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 22[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
 [2m      Tests [22m [1m[32m44 passed[39m[22m[90m (44)[39m
-[2m   Start at [22m 17:41:28
-[2m   Duration [22m 460ms[2m (transform 48%, import 32%, tests 16%, worker 3%)[22m
+[2m   Start at [22m 17:57:35
+[2m   Duration [22m 441ms[2m (transform 56%, import 25%, tests 16%, worker 3%)[22m
 
 npm notice
 npm notice New major version of npm available! 10.9.9 -> 12.2.0
@@ -140,4 +140,4 @@ npm notice
 > openapi-typescript openapi.json -o /tmp/schema.d.ts && diff -q /tmp/schema.d.ts src/api/schema.d.ts
 
 ✨ openapi-typescript 7.13.0
-🚀 openapi.json → /tmp/schema.d.ts [54.2ms]
+🚀 openapi.json → /tmp/schema.d.ts [49ms]
