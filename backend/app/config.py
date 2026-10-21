@@ -7,6 +7,7 @@ from pathlib import Path
 
 APP_VERSION = "0.1.0"
 INTERNAL_PORT = 8470
+DEFAULT_FRONTEND_DIR = Path("/app/frontend-dist")
 
 
 @dataclass(frozen=True)
@@ -18,6 +19,7 @@ class Settings:
     backup_dir_hint: str  # the host folder, shown to the owner only
     app_version: str = APP_VERSION
     gemini_model_default: str = ""  # ENDERCHEST_GEMINI_MODEL; Phase 3 picks the real default
+    frontend_dir: Path = DEFAULT_FRONTEND_DIR  # the built frontend, copied into the image
 
     @property
     def db_path(self) -> Path:
@@ -61,4 +63,5 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
         backups_dir=backups_dir,
         backup_dir_hint=env.get("ENDERCHEST_BACKUP_DIR", str(backups_dir)),
         gemini_model_default=env.get("ENDERCHEST_GEMINI_MODEL", ""),
+        frontend_dir=Path(env.get("ENDERCHEST_FRONTEND_DIR", str(DEFAULT_FRONTEND_DIR))),
     )

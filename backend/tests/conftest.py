@@ -16,13 +16,20 @@ PORT = 8470
 HEADERS = {"X-Enderchest": "1"}
 
 
+# What the Vite build leaves behind, reduced to what the server reads: a shell with a theme hint.
+SHELL_HTML = ('<!doctype html><html lang="en" data-theme-pref="system"><head>'
+              '<title>Enderchest</title></head><body><div id="root"></div></body></html>')
+
+
 @pytest.fixture
 def settings(tmp_path: Path) -> Settings:
-    data, backups = tmp_path / "data", tmp_path / "backups"
+    data, backups, frontend = tmp_path / "data", tmp_path / "backups", tmp_path / "frontend"
     data.mkdir()
     backups.mkdir()
+    frontend.mkdir()
+    (frontend / "index.html").write_text(SHELL_HTML)
     return Settings(env="test", port=PORT, data_dir=data, backups_dir=backups,
-                    backup_dir_hint="the backup folder")
+                    backup_dir_hint="the backup folder", frontend_dir=frontend)
 
 
 def make_database(settings: Settings) -> None:

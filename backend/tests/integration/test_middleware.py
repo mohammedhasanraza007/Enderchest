@@ -81,10 +81,3 @@ def test_unexpected_exceptions_become_internal_error(stack: Stack, monkeypatch):
     assert "secret detail" not in response.text and "Traceback" not in response.text
 
 
-def test_the_home_page_is_the_status_page_when_ok_and_the_boot_page_otherwise(settings):
-    from tests.conftest import Stack as S
-
-    with S(settings) as ok:
-        assert "Foundation status" in ok.client.get("/").text
-    with S(settings, is_mount=lambda p: False) as locked:
-        assert "Checking your data" in locked.client.get("/").text
