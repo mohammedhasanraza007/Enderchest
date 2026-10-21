@@ -54,7 +54,7 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 ### 2.1 Boot and health
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 0 | GET | /health | none | `{status:'starting'\|'ok'\|'recovery'\|'locked'\|'failed', reason\|null, app_version, schema_found\|null, schema_supported, env}` always 200 when the process answers | none |
+| 0 | GET | /health | none | `{status:'starting'\|'ok'\|'recovery'\|'locked'\|'failed', reason\|null, app_version, schema_found\|null, schema_supported, env, build_date}` always 200 when the process answers; `build_date` is `YYYY-MM-DD` set by `build.bat`, or `null` when not recorded (D-085) | none |
 | 0 | GET | /boot | none | `{state, reason, message\|null, data_mounted, backups_mounted, schema_found, schema_supported, backups:[{name,kind,at,bytes,item_count\|null,ok}], warnings:[string]}` available in every state (`message` is the plain sentence the boot page shows; D-075) | none |
 | 0 | POST | /boot/restore | `{name, confirm:'RESTORE'}` (recovery state only) | `{restored:name, items, photos_missing:n}` | `validation_error`, `conflict` |
 | 0 | POST | /boot/start-empty | `{confirm:'START EMPTY'}` (recovery state only; first makes a safety backup of whatever is on disk) | `{state:'ok'}` | `conflict` |
@@ -63,14 +63,14 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
 | 1 | GET | /profile | none | `{name\|null, timezone, theme, first_run_complete}` | `locked` |
-| 1 | PUT | /profile | `{name, timezone, theme?}` | profile | `validation_error` |
+| 1 | PUT | /profile | `{name, timezone, theme?}`; name 1 to 40 characters after trimming, no control characters; timezone from the IANA list; a theme left out stays as it is (D-085) | profile | `validation_error` |
 | 1 | GET | /settings | none | all keys of `DATA_MODEL.md` 2.3 with defaults filled | |
 | 1 | PATCH | /settings | partial settings | settings | `validation_error` |
 
 ### 2.3 Backups
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 0 | GET | /backups | none | `{status:'ok'\|'stale'\|'failing'\|'unavailable', last_good:{name,at,bytes}\|null, warnings:[string], items:[{name,kind,at,bytes,item_count\|null,ok}]}` | |
+| 0 | GET | /backups | none | `{status:'ok'\|'stale'\|'failing'\|'unavailable', last_good:{name,at,bytes}\|null, warnings:[string], items:[{name,kind,at,bytes,item_count\|null,ok}], folder_hint}`; `folder_hint` is the host folder, shown on the Settings page (D-085) | |
 | 0 | POST | /backups | none | 201 `{name, bytes, verified:true, folder_hint}` | `backup_unavailable`, `internal_error` |
 
 ### 2.4 Categories and locations

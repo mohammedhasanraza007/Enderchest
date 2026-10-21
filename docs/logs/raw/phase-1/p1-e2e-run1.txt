@@ -1,0 +1,979 @@
+ Image enderchest-app:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 550B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.9s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/node:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 1.1s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 1.3s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:a6385bc33f0f9d6a08482c87f52baee537a9184e2b47dea1ed97caac62f8960c
+#11 resolve docker.io/library/node:22-bookworm-slim@sha256:a6385bc33f0f9d6a08482c87f52baee537a9184e2b47dea1ed97caac62f8960c 0.0s done
+#11 DONE 0.0s
+
+#12 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#12 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#12 DONE 0.0s
+
+#13 [internal] load build context
+#13 transferring context: 10.54kB 0.0s done
+#13 DONE 0.0s
+
+#14 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#14 CACHED
+
+#15 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#15 CACHED
+
+#16 [frontend-deps 2/4] WORKDIR /frontend
+#16 CACHED
+
+#17 [frontend-build 1/3] COPY assets/logo /assets/logo
+#17 CACHED
+
+#18 [frontend-build 2/3] COPY frontend/ ./
+#18 DONE 0.0s
+
+#19 [frontend-build 3/3] RUN npm run build
+#19 0.273 
+#19 0.273 > enderchest-frontend@0.1.0 build
+#19 0.273 > tsc --noEmit && vite build
+#19 0.273 
+#19 2.542 vite v8.3.5 building client environment for production...
+#19 2.558 transforming...
+#19 2.574 
+#19 2.574 /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+#19 2.714 ✓ 2023 modules transformed.
+#19 2.786 rendering chunks...
+#19 2.862 computing gzip size...
+#19 2.867 dist/index.html                                                     1.12 kB │ gzip:  0.58 kB
+#19 2.867 dist/assets/jetbrains-mono-vietnamese-wght-normal-Bt-aOZkq.woff2    7.50 kB
+#19 2.867 dist/assets/jetbrains-mono-greek-wght-normal-Bw9x6K1M.woff2         9.00 kB
+#19 2.867 dist/assets/jetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2     12.10 kB
+#19 2.867 dist/assets/jetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2    15.19 kB
+#19 2.867 dist/assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2           18.22 kB
+#19 2.867 dist/assets/newsreader-vietnamese-opsz-normal-BjhtXyW2.woff2       27.24 kB
+#19 2.867 dist/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2               36.93 kB
+#19 2.867 dist/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2        40.40 kB
+#19 2.867 dist/assets/newsreader-latin-ext-opsz-normal-BQn1nviT.woff2        86.60 kB
+#19 2.867 dist/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2           132.00 kB
+#19 2.867 dist/assets/index-CPD7g0Jf.css                                     19.12 kB │ gzip:  6.02 kB
+#19 2.867 dist/assets/index-CGBDlb6F.js                                     318.59 kB │ gzip: 99.70 kB
+#19 2.867 
+#19 2.869 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+#19 2.869     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/index.mjs:11:1 [38;5;246m][0m
+#19 2.869     [38;5;246m│[0m
+#19 2.869  [38;5;246m11 │[0m "use client";
+#19 2.869  [38;5;240m   │[0m ──────┬──────  
+#19 2.869  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#19 2.869  [38;5;240m   │[0m 
+#19 2.869  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.869 [38;5;246m────╯[0m
+#19 2.869 
+#19 2.869 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+#19 2.869    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+#19 2.869    [38;5;246m│[0m
+#19 2.869  [38;5;246m1 │[0m "use client";
+#19 2.869  [38;5;240m  │[0m ──────┬──────  
+#19 2.869  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.869  [38;5;240m  │[0m 
+#19 2.869  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.869 [38;5;246m───╯[0m
+#19 2.869 
+#19 2.870 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+#19 2.870    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+#19 2.870    [38;5;246m│[0m
+#19 2.870  [38;5;246m1 │[0m "use client";
+#19 2.870  [38;5;240m  │[0m ──────┬──────  
+#19 2.870  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.870  [38;5;240m  │[0m 
+#19 2.870  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.870 [38;5;246m───╯[0m
+#19 2.870 
+#19 2.870 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+#19 2.870    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+#19 2.870    [38;5;246m│[0m
+#19 2.870  [38;5;246m1 │[0m "use client";
+#19 2.870  [38;5;240m  │[0m ──────┬──────  
+#19 2.870  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.870  [38;5;240m  │[0m 
+#19 2.870  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.870 [38;5;246m───╯[0m
+#19 2.870 
+#19 2.870 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+#19 2.870    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+#19 2.870    [38;5;246m│[0m
+#19 2.870  [38;5;246m1 │[0m "use client";
+#19 2.870  [38;5;240m  │[0m ──────┬──────  
+#19 2.870  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.870  [38;5;240m  │[0m 
+#19 2.870  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.870 [38;5;246m───╯[0m
+#19 2.870 
+#19 2.871 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+#19 2.871    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+#19 2.871    [38;5;246m│[0m
+#19 2.871  [38;5;246m1 │[0m "use client";
+#19 2.871  [38;5;240m  │[0m ──────┬──────  
+#19 2.871  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.871  [38;5;240m  │[0m 
+#19 2.871  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.871 [38;5;246m───╯[0m
+#19 2.871 
+#19 2.871 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+#19 2.871    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+#19 2.871    [38;5;246m│[0m
+#19 2.871  [38;5;246m1 │[0m "use client";
+#19 2.871  [38;5;240m  │[0m ──────┬──────  
+#19 2.871  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.871  [38;5;240m  │[0m 
+#19 2.871  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.871 [38;5;246m───╯[0m
+#19 2.871 
+#19 2.872 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+#19 2.872    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+#19 2.872    [38;5;246m│[0m
+#19 2.872  [38;5;246m1 │[0m "use client";
+#19 2.872  [38;5;240m  │[0m ──────┬──────  
+#19 2.872  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.872  [38;5;240m  │[0m 
+#19 2.872  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.872 [38;5;246m───╯[0m
+#19 2.872 
+#19 2.872 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+#19 2.872    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+#19 2.872    [38;5;246m│[0m
+#19 2.872  [38;5;246m1 │[0m "use client";
+#19 2.872  [38;5;240m  │[0m ──────┬──────  
+#19 2.872  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.872  [38;5;240m  │[0m 
+#19 2.872  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.872 [38;5;246m───╯[0m
+#19 2.872 
+#19 2.872 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+#19 2.872    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+#19 2.872    [38;5;246m│[0m
+#19 2.872  [38;5;246m1 │[0m "use client";
+#19 2.872  [38;5;240m  │[0m ──────┬──────  
+#19 2.872  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.872  [38;5;240m  │[0m 
+#19 2.872  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.872 [38;5;246m───╯[0m
+#19 2.872 
+#19 2.873 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+#19 2.873    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+#19 2.873    [38;5;246m│[0m
+#19 2.873  [38;5;246m1 │[0m "use client";
+#19 2.873  [38;5;240m  │[0m ──────┬──────  
+#19 2.873  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.873  [38;5;240m  │[0m 
+#19 2.873  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.873 [38;5;246m───╯[0m
+#19 2.873 
+#19 2.873 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+#19 2.873    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+#19 2.873    [38;5;246m│[0m
+#19 2.873  [38;5;246m1 │[0m "use client";
+#19 2.873  [38;5;240m  │[0m ──────┬──────  
+#19 2.873  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.873  [38;5;240m  │[0m 
+#19 2.873  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.873 [38;5;246m───╯[0m
+#19 2.873 
+#19 2.873 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+#19 2.873    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+#19 2.873    [38;5;246m│[0m
+#19 2.873  [38;5;246m1 │[0m "use client";
+#19 2.873  [38;5;240m  │[0m ──────┬──────  
+#19 2.873  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.873  [38;5;240m  │[0m 
+#19 2.873  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.873 [38;5;246m───╯[0m
+#19 2.873 
+#19 2.873 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+#19 2.873    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+#19 2.873    [38;5;246m│[0m
+#19 2.873  [38;5;246m1 │[0m "use client";
+#19 2.873  [38;5;240m  │[0m ──────┬──────  
+#19 2.873  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.873  [38;5;240m  │[0m 
+#19 2.873  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.873 [38;5;246m───╯[0m
+#19 2.873 
+#19 2.874 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+#19 2.874    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+#19 2.874    [38;5;246m│[0m
+#19 2.874  [38;5;246m1 │[0m "use client";
+#19 2.874  [38;5;240m  │[0m ──────┬──────  
+#19 2.874  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.874  [38;5;240m  │[0m 
+#19 2.874  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.874 [38;5;246m───╯[0m
+#19 2.874 
+#19 2.874 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+#19 2.874    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+#19 2.874    [38;5;246m│[0m
+#19 2.874  [38;5;246m1 │[0m "use client";
+#19 2.874  [38;5;240m  │[0m ──────┬──────  
+#19 2.874  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.874  [38;5;240m  │[0m 
+#19 2.874  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.874 [38;5;246m───╯[0m
+#19 2.874 
+#19 2.874 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+#19 2.874     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/dom-export.mjs:11:1 [38;5;246m][0m
+#19 2.874     [38;5;246m│[0m
+#19 2.874  [38;5;246m11 │[0m "use client";
+#19 2.874  [38;5;240m   │[0m ──────┬──────  
+#19 2.874  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#19 2.874  [38;5;240m   │[0m 
+#19 2.874  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.874 [38;5;246m────╯[0m
+#19 2.874 
+#19 2.874 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+#19 2.874    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/context.mjs:2:1 [38;5;246m][0m
+#19 2.874    [38;5;246m│[0m
+#19 2.874  [38;5;246m2 │[0m "use client";
+#19 2.874  [38;5;240m  │[0m ──────┬──────  
+#19 2.874  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.874  [38;5;240m  │[0m 
+#19 2.874  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.874 [38;5;246m───╯[0m
+#19 2.874 
+#19 2.875 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+#19 2.875    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/Icon.mjs:2:1 [38;5;246m][0m
+#19 2.875    [38;5;246m│[0m
+#19 2.875  [38;5;246m2 │[0m "use client";
+#19 2.875  [38;5;240m  │[0m ──────┬──────  
+#19 2.875  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#19 2.875  [38;5;240m  │[0m 
+#19 2.875  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#19 2.875 [38;5;246m───╯[0m
+#19 2.875 
+#19 2.875 ✓ built in 332ms
+#19 DONE 2.9s
+
+#20 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#20 CACHED
+
+#21 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#21 CACHED
+
+#22 [python-base 5/5] RUN pip install -r requirements.lock
+#22 CACHED
+
+#23 [python-base 3/5] WORKDIR /app
+#23 CACHED
+
+#24 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#24 CACHED
+
+#25 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#25 DONE 0.0s
+
+#26 exporting to image
+#26 exporting layers 0.1s done
+#26 exporting manifest sha256:ccfd5832e419f6b66e47616a862305695f42f5b6d2ab8d7df6a37a1b835dd2b4 done
+#26 exporting config sha256:ad421cb5df6d1f208400009454d52949de70f847829143d85b1359db7b3b92ef done
+#26 exporting attestation manifest sha256:440eba7f577ca5d86451834ea47f4ab6946b21b4abb0f93756d6bf3e0ca4e69c 0.0s done
+#26 exporting manifest list sha256:0241fb1b64b8c9a1c5053c943087bf89def297f6844d648f572e24ee896c3c53 done
+#26 naming to docker.io/library/enderchest-app:latest done
+#26 unpacking to docker.io/library/enderchest-app:latest 0.0s done
+#26 DONE 0.2s
+
+#27 resolving provenance for metadata file
+#27 DONE 0.0s
+ Image enderchest-app:latest Built 
+ Image enderchest-e2e:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 994B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for mcr.microsoft.com/playwright:v1.64.1-noble
+#5 DONE 0.4s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 320B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 48.87kB 0.0s done
+#7 DONE 0.0s
+
+#8 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+#8 resolve mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf 0.0s done
+#8 DONE 0.1s
+
+#8 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 0B / 314.30MB 0.2s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 0B / 122.08MB 0.2s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 0B / 113.75MB 0.2s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 0B / 294.57MB 0.2s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 6.29MB / 122.08MB 1.5s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 6.29MB / 113.75MB 1.8s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 12.58MB / 122.08MB 3.0s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 12.58MB / 113.75MB 3.8s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 15.73MB / 294.57MB 4.5s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 18.87MB / 122.08MB 5.0s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 11.53MB / 314.30MB 5.3s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 25.17MB / 122.08MB 6.3s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 18.87MB / 113.75MB 6.3s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 31.46MB / 122.08MB 8.3s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 25.17MB / 113.75MB 8.6s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 30.41MB / 294.57MB 9.6s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 37.75MB / 122.08MB 9.8s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 24.12MB / 314.30MB 10.4s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 31.46MB / 113.75MB 12.6s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 44.04MB / 122.08MB 13.4s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 39.85MB / 294.57MB 14.7s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 50.33MB / 122.08MB 14.9s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 37.75MB / 113.75MB 14.9s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 33.55MB / 314.30MB 15.5s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 56.62MB / 122.08MB 16.7s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 44.04MB / 113.75MB 17.1s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 62.91MB / 122.08MB 18.2s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 50.33MB / 113.75MB 19.4s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 69.21MB / 122.08MB 19.8s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 55.57MB / 294.57MB 19.8s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 46.14MB / 314.30MB 20.6s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 52.43MB / 113.75MB 24.4s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 72.35MB / 122.08MB 24.9s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 57.67MB / 294.57MB 24.9s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 46.14MB / 314.30MB 25.7s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 54.53MB / 113.75MB 29.6s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 74.45MB / 122.08MB 30.0s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 59.77MB / 294.57MB 30.0s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 50.33MB / 314.30MB 30.8s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 60.82MB / 113.75MB 33.3s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 80.74MB / 122.08MB 34.1s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 70.25MB / 294.57MB 35.1s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 87.03MB / 122.08MB 35.5s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 67.11MB / 113.75MB 35.5s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 58.72MB / 314.30MB 35.9s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 93.32MB / 122.08MB 37.4s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 73.40MB / 113.75MB 37.5s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 79.69MB / 113.75MB 39.0s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 99.61MB / 122.08MB 39.3s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 83.89MB / 294.57MB 40.2s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 69.21MB / 314.30MB 41.0s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 105.91MB / 122.08MB 41.1s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 85.98MB / 113.75MB 42.0s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 112.20MB / 122.08MB 43.3s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 92.27MB / 113.75MB 44.0s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 118.49MB / 122.08MB 45.1s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 97.52MB / 294.57MB 45.3s
+#8 sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 122.08MB / 122.08MB 46.0s done
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 82.84MB / 314.30MB 46.1s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 98.57MB / 113.75MB 46.1s
+#8 sha256:78ee9142e3341681cf74691dc85e198954e5f2c776b3fdf953508aab7badc219 0B / 3.17MB 0.2s
+#8 sha256:78ee9142e3341681cf74691dc85e198954e5f2c776b3fdf953508aab7badc219 1.05MB / 3.17MB 0.5s
+#8 sha256:78ee9142e3341681cf74691dc85e198954e5f2c776b3fdf953508aab7badc219 2.10MB / 3.17MB 0.8s
+#8 sha256:78ee9142e3341681cf74691dc85e198954e5f2c776b3fdf953508aab7badc219 3.17MB / 3.17MB 1.0s done
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 0B / 108.64MB 0.2s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 104.86MB / 113.75MB 48.6s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 6.29MB / 108.64MB 1.7s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 113.25MB / 294.57MB 49.8s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 12.58MB / 108.64MB 3.2s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 95.42MB / 314.30MB 51.1s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 111.15MB / 113.75MB 51.1s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 18.87MB / 108.64MB 4.8s
+#8 sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 113.75MB / 113.75MB 51.9s done
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 0B / 29.76MB 0.2s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 2.10MB / 29.76MB 1.2s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 25.17MB / 108.64MB 6.4s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 4.19MB / 29.76MB 1.8s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 128.97MB / 294.57MB 54.3s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 6.29MB / 29.76MB 2.9s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 31.46MB / 108.64MB 8.2s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 8.39MB / 29.76MB 3.5s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 106.95MB / 314.30MB 56.2s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 10.49MB / 29.76MB 4.4s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 12.58MB / 29.76MB 5.0s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 37.75MB / 108.64MB 10.3s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 14.68MB / 29.76MB 5.7s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 16.78MB / 29.76MB 6.8s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 44.04MB / 108.64MB 11.8s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 143.65MB / 294.57MB 59.4s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 18.87MB / 29.76MB 7.5s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 20.97MB / 29.76MB 8.1s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 23.07MB / 29.76MB 8.7s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 50.33MB / 108.64MB 13.8s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 121.63MB / 314.30MB 61.3s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 25.17MB / 29.76MB 9.5s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 27.26MB / 29.76MB 10.2s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 56.62MB / 108.64MB 15.3s
+#8 sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 29.76MB / 29.76MB 11.0s done
+#8 extracting sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70
+#8 extracting sha256:a60ef8ec184edb5ed91f5983f00261359fb2fe20f603e8d488b9477d32fcad70 1.2s done
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 62.91MB / 108.64MB 17.2s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 159.38MB / 294.57MB 64.5s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 69.21MB / 108.64MB 18.7s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 137.36MB / 314.30MB 66.0s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 75.50MB / 108.64MB 20.1s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 175.11MB / 294.57MB 68.2s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 81.79MB / 108.64MB 21.4s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 88.08MB / 108.64MB 22.8s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 153.09MB / 314.30MB 70.5s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 94.37MB / 108.64MB 24.4s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 190.84MB / 294.57MB 71.8s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 100.66MB / 108.64MB 26.1s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 106.95MB / 108.64MB 27.6s
+#8 sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 108.64MB / 108.64MB 27.8s done
+#8 extracting sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 168.82MB / 314.30MB 75.4s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 206.57MB / 294.57MB 75.6s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 222.30MB / 294.57MB 77.8s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 184.55MB / 314.30MB 78.4s
+#8 extracting sha256:c5480f689a28c81884305e47f713a582bc62a229e1dd37fb01515ba8442e2709 4.6s done
+#8 extracting sha256:78ee9142e3341681cf74691dc85e198954e5f2c776b3fdf953508aab7badc219 0.0s done
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 239.08MB / 294.57MB 80.2s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 200.28MB / 314.30MB 81.4s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 254.80MB / 294.57MB 82.6s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 216.01MB / 314.30MB 84.6s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 270.53MB / 294.57MB 84.9s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 231.74MB / 314.30MB 87.3s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 286.26MB / 294.57MB 87.4s
+#8 sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 294.57MB / 294.57MB 89.0s done
+#8 extracting sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 248.51MB / 314.30MB 89.5s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 264.24MB / 314.30MB 90.9s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 279.97MB / 314.30MB 92.1s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 295.70MB / 314.30MB 93.4s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 312.48MB / 314.30MB 94.8s
+#8 sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 314.30MB / 314.30MB 94.9s done
+#8 extracting sha256:2d370c712b39dd321ae06a3834d1eafe511a8c0e790e33c4ee8a3b148c9b4c7e 7.9s done
+#8 DONE 97.0s
+
+#8 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+#8 extracting sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c
+#8 extracting sha256:e20e5ef3d394f99e31aa3f12e05c702d7fab0f958f9a20895f11e4b3e282066c 3.2s done
+#8 DONE 100.2s
+
+#8 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+#8 extracting sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af
+#8 extracting sha256:8e76854735f1ff0cbac804200a73a599cb51c0692601fbeda64ffd8930fab4af 1.5s done
+#8 DONE 101.7s
+
+#8 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:7852dc5a7d72f5fe458a597d690f6c42fbc8e9e26ddfa95f8e6ef552558d9bbf
+#8 extracting sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66
+#8 extracting sha256:ee918a637493be99132a3d3d8da8579e74002930bcf465da88bff56248173b66 1.6s done
+#8 DONE 103.3s
+
+#9 [e2e 2/8] WORKDIR /frontend
+#9 DONE 0.3s
+
+#10 [e2e 3/8] COPY frontend/package.json frontend/package-lock.json ./
+#10 DONE 0.0s
+
+#11 [e2e 4/8] RUN npm ci --ignore-scripts --no-audit --no-fund
+#11 11.33 
+#11 11.33 added 178 packages in 11s
+#11 11.33 npm notice
+#11 11.33 npm notice New major version of npm available! 11.19.0 -> 12.2.0
+#11 11.33 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+#11 11.33 npm notice To update run: npm install -g npm@12.2.0
+#11 11.33 npm notice
+#11 DONE 11.5s
+
+#12 [e2e 5/8] COPY assets/logo /assets/logo
+#12 DONE 0.1s
+
+#13 [e2e 6/8] COPY frontend/ ./
+#13 DONE 0.1s
+
+#14 [e2e 7/8] COPY tests/e2e /tests/e2e
+#14 DONE 0.0s
+
+#15 [e2e 8/8] RUN ln -s /frontend/node_modules /tests/node_modules
+#15 DONE 0.2s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 7.1s done
+#16 exporting manifest sha256:923cdf164e760b515e65ee9f76c7ae22e4f5ecb60e28595dd2849b81023811aa 0.0s done
+#16 exporting config sha256:5643cf79cd9239105e939a1d15e325cc2f300ace53967fd36daa336be32c03ba done
+#16 exporting attestation manifest sha256:56cd387d9709ff12668f65d79e7e6af7afdc13221eb3d0254a0d47b8de511b6c 0.0s done
+#16 exporting manifest list sha256:2105bf4f5627a2c3c596c17f7225af2af39aeb81e4e9e3d952394020950c1c52 done
+#16 naming to docker.io/library/enderchest-e2e:latest done
+#16 unpacking to docker.io/library/enderchest-e2e:latest
+#16 unpacking to docker.io/library/enderchest-e2e:latest 24.3s done
+#16 DONE 31.5s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-e2e:latest Built 
+ Container enderchest-test-app-1 Recreate 
+ Container enderchest-test-app-1 Recreated 
+ Container enderchest-test-app-1 Starting 
+ Container enderchest-test-app-1 Started 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-app-1 Running 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-e2e-run-57fac1e833c5 Creating 
+ Container enderchest-test-e2e-run-57fac1e833c5 Created 
+[WebServer] 
+[WebServer] /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/dom-export.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+Running 29 tests using 1 worker
+
+  ✓   1 ../tests/e2e/backups.spec.ts:15:5 › Back up now makes a real file in the backup folder and lists it (561ms)
+  ✘   2 ../tests/e2e/backups.spec.ts:44:5 › a double click makes one backup, not two (3.2s)
+  ✓   3 ../tests/e2e/backups.spec.ts:56:5 › no backup banner shows while backups are healthy (242ms)
+  ✘   4 ../tests/e2e/contrast.spec.ts:73:9 › dark theme › every piece of text on every primitive passes WCAG AA (441ms)
+  ✓   5 ../tests/e2e/contrast.spec.ts:107:9 › dark theme › the ratios match the tables in DESIGN.md (262ms)
+  ✓   6 ../tests/e2e/contrast.spec.ts:73:9 › light theme › every piece of text on every primitive passes WCAG AA (390ms)
+  ✓   7 ../tests/e2e/contrast.spec.ts:107:9 › light theme › the ratios match the tables in DESIGN.md (158ms)
+  ✓   8 ../tests/e2e/contrast.spec.ts:129:5 › light theme text on its surfaces also clears 4.5:1 (no table exists for these) (181ms)
+  ✓   9 ../tests/e2e/dead-controls.spec.ts:116:7 › dead-control crawler › /welcome has no dead controls (1.9s)
+  ✘  10 ../tests/e2e/dead-controls.spec.ts:123:7 › dead-control crawler › /settings has no dead controls (1.5s)
+  ✘  11 ../tests/e2e/dead-controls.spec.ts:131:7 › dead-control crawler › the not-found page has no dead controls (1.4s)
+  ✘  12 ../tests/e2e/dead-controls.spec.ts:139:7 › dead-control crawler › the skip link moves to the main content (10.2s)
+  ✓  13 ../tests/e2e/first-run.spec.ts:12:5 › a new database sends the owner to the welcome screen from any address (353ms)
+  ✓  14 ../tests/e2e/first-run.spec.ts:20:5 › an empty or too long name is refused with a message and nothing is saved (311ms)
+  ✘  15 ../tests/e2e/first-run.spec.ts:34:5 › saving a name and time zone shows a greeting and then the app (1.0m)
+  ✓  16 ../tests/e2e/first-run.spec.ts:54:5 › closing the tab after the name step and reopening resumes in the app (536ms)
+  ✓  17 ../tests/e2e/first-run.spec.ts:75:5 › the name can be changed later in Settings and shows in the capsule (357ms)
+  ✘  18 ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the dark theme (526ms)
+  ✘  19 ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the light theme (536ms)
+  ✓  20 ../tests/e2e/primitives.spec.ts:69:5 › shape rules: pills everywhere, soft capsules for tall boxes in light, 24 px cards in dark (219ms)
+  ✓  21 ../tests/e2e/primitives.spec.ts:114:5 › the rupee sign renders from a real font in every family (gate 7) (166ms)
+  ✓  22 ../tests/e2e/shell-reference.spec.ts:25:5 › the navigation capsule matches the reference frame within 12 px (469ms)
+  ✓  23 ../tests/e2e/shell-reference.spec.ts:92:5 › screenshots of the shell for the owner to approve (1.9s)
+  ✓  24 ../tests/e2e/theme.spec.ts:19:5 › the choice is saved on the server and survives a reload (413ms)
+  ✓  25 ../tests/e2e/theme.spec.ts:30:5 › there is no flash: the theme is on the page before any script of the app runs (631ms)
+  ✓  26 ../tests/e2e/theme.spec.ts:73:5 › System follows the operating system, live (352ms)
+  ✓  27 ../tests/e2e/theme.spec.ts:83:5 › the name menu changes the theme too (324ms)
+  ✓  28 ../tests/e2e/theme.spec.ts:90:5 › reduced motion is honoured: no crossfade, no transitions, no running animations (660ms)
+  ✓  29 ../tests/e2e/theme.spec.ts:121:5 › without reduced motion the theme change crossfades briefly (274ms)
+
+
+  1) ../tests/e2e/backups.spec.ts:44:5 › a double click makes one backup, not two ──────────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 2
+
+      51 |   await expect(page.getByText(/^Backup saved/)).toBeVisible();
+      52 |   await page.waitForTimeout(1500);
+    > 53 |   expect(manualBackups().length).toBe(before + 1);
+         |                                  ^
+      54 | });
+      55 |
+      56 | test("no backup banner shows while backups are healthy", async ({ page, request }) => {
+        at /tests/e2e/backups.spec.ts:53:34
+
+    Error Context: ../test-results/playwright/backups-a-double-click-makes-one-backup-not-two/error-context.md
+
+  2) ../tests/e2e/contrast.spec.ts:73:9 › dark theme › every piece of text on every primitive passes WCAG AA 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 11
+
+    - Array []
+    + Array [
+    +   "button.pill \"Back up now\" 1.14 < 4.5",
+    +   "button.pill \"Back up now\" 1.14 < 4.5",
+    +   "button.pill \"Primary\" 3.26 < 4.5",
+    +   "button.pill \"Secondary\" 1.14 < 4.5",
+    +   "button.pill \"Loading\" 3.26 < 4.5",
+    +   "a.pill \"Link button\" 1.14 < 4.5",
+    +   "button.pill \"Open dialog\" 1.14 < 4.5",
+    +   "button.pill \"Open sheet\" 1.14 < 4.5",
+    +   "button.pill \"Show toast\" 1.14 < 4.5",
+    + ]
+
+      102 |         ),
+      103 |       );
+    > 104 |       expect(failing).toEqual([]);
+          |                       ^
+      105 |     });
+      106 |
+      107 |     test("the ratios match the tables in DESIGN.md", async ({ page }) => {
+        at /tests/e2e/contrast.spec.ts:104:23
+
+    Error Context: ../test-results/playwright/contrast-dark-theme-every--fe683-ry-primitive-passes-WCAG-AA/error-context.md
+
+  3) ../tests/e2e/dead-controls.spec.ts:123:7 › dead-control crawler › /settings has no dead controls 
+
+    TypeError: request.url.includes is not a function
+
+      53 |   let requests = 0;
+      54 |   const count = (request: { url: string }) => {
+    > 55 |     if (request.url.includes("/api/") || request.url.includes("/health")) requests += 1;
+         |                     ^
+      56 |   };
+      57 |   page.on("request", count);
+      58 |   await control.click();
+        at _Page.count (/tests/e2e/dead-controls.spec.ts:55:21)
+
+    Error: page.waitForTimeout: Test ended.
+
+      57 |   page.on("request", count);
+      58 |   await control.click();
+    > 59 |   await page.waitForTimeout(500);
+         |              ^
+      60 |   page.off("request", count);
+      61 |   const after = await snapshot(page);
+      62 |   if (after.url !== before.url) return "navigated";
+        at activate (/tests/e2e/dead-controls.spec.ts:59:14)
+        at crawl (/tests/e2e/dead-controls.spec.ts:93:17)
+        at /tests/e2e/dead-controls.spec.ts:126:20
+
+    Error Context: ../test-results/playwright/dead-controls-dead-control-dc1a6-ttings-has-no-dead-controls/error-context.md
+
+  4) ../tests/e2e/dead-controls.spec.ts:131:7 › dead-control crawler › the not-found page has no dead controls 
+
+    TypeError: request.url.includes is not a function
+
+      53 |   let requests = 0;
+      54 |   const count = (request: { url: string }) => {
+    > 55 |     if (request.url.includes("/api/") || request.url.includes("/health")) requests += 1;
+         |                     ^
+      56 |   };
+      57 |   page.on("request", count);
+      58 |   await control.click();
+        at _Page.count (/tests/e2e/dead-controls.spec.ts:55:21)
+
+    Error: page.waitForTimeout: Test ended.
+
+      57 |   page.on("request", count);
+      58 |   await control.click();
+    > 59 |   await page.waitForTimeout(500);
+         |              ^
+      60 |   page.off("request", count);
+      61 |   const after = await snapshot(page);
+      62 |   if (after.url !== before.url) return "navigated";
+        at activate (/tests/e2e/dead-controls.spec.ts:59:14)
+        at crawl (/tests/e2e/dead-controls.spec.ts:93:17)
+        at /tests/e2e/dead-controls.spec.ts:134:20
+
+    Error Context: ../test-results/playwright/dead-controls-dead-control-ff230-d-page-has-no-dead-controls/error-context.md
+
+  5) ../tests/e2e/dead-controls.spec.ts:139:7 › dead-control crawler › the skip link moves to the main content 
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('link', { name: 'Skip to content' })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('link', { name: 'Skip to content' }) with timeout 10000ms
+      - waiting for getByRole('link', { name: 'Skip to content' })
+        24 × locator resolved to <a href="#main" class="skip-link">Skip to content</a>
+           - unexpected value "inactive"
+
+
+      142 |     await page.goto("/settings");
+      143 |     await page.keyboard.press("Tab");
+    > 144 |     await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
+          |                                                                       ^
+      145 |     await page.keyboard.press("Enter");
+      146 |     await expect(page).toHaveURL(/#main$/);
+      147 |   });
+        at /tests/e2e/dead-controls.spec.ts:144:71
+
+    Error Context: ../test-results/playwright/dead-controls-dead-control-b0f06-k-moves-to-the-main-content/error-context.md
+
+  6) ../tests/e2e/first-run.spec.ts:34:5 › saving a name and time zone shows a greeting and then the app 
+
+    Test timeout of 60000ms exceeded.
+
+    Error Context: ../test-results/playwright/first-run-saving-a-name-an-60413-a-greeting-and-then-the-app/error-context.md
+
+  7) ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the dark theme ───────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    + ]
+
+      62 |     );
+      63 |     expect(overflow).toBeLessThanOrEqual(0);
+    > 64 |     expect(problems).toEqual([]);
+         |                      ^
+      65 |     await page.screenshot({ path: `/test-results/gallery-${theme}.png`, fullPage: true });
+      66 |   });
+      67 | }
+        at /tests/e2e/primitives.spec.ts:64:22
+
+    Error Context: ../test-results/playwright/primitives-every-primitive-renders-in-the-dark-theme/error-context.md
+
+  8) ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the light theme ──────────────
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    + ]
+
+      62 |     );
+      63 |     expect(overflow).toBeLessThanOrEqual(0);
+    > 64 |     expect(problems).toEqual([]);
+         |                      ^
+      65 |     await page.screenshot({ path: `/test-results/gallery-${theme}.png`, fullPage: true });
+      66 |   });
+      67 | }
+        at /tests/e2e/primitives.spec.ts:64:22
+
+    Error Context: ../test-results/playwright/primitives-every-primitive-renders-in-the-light-theme/error-context.md
+
+  8 failed
+    ../tests/e2e/backups.spec.ts:44:5 › a double click makes one backup, not two ───────────────────
+    ../tests/e2e/contrast.spec.ts:73:9 › dark theme › every piece of text on every primitive passes WCAG AA 
+    ../tests/e2e/dead-controls.spec.ts:123:7 › dead-control crawler › /settings has no dead controls 
+    ../tests/e2e/dead-controls.spec.ts:131:7 › dead-control crawler › the not-found page has no dead controls 
+    ../tests/e2e/dead-controls.spec.ts:139:7 › dead-control crawler › the skip link moves to the main content 
+    ../tests/e2e/first-run.spec.ts:34:5 › saving a name and time zone shows a greeting and then the app 
+    ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the dark theme ────────────────
+    ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the light theme ───────────────
+  21 passed (1.6m)
+
