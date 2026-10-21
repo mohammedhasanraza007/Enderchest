@@ -16,6 +16,7 @@ Real results only: command output, read-backs, test results, measurements. One s
 - 2026-10-21 — Pack v5.1 — phase-0 spec: "do not read ... the images" removed and amended in place (D-070; O-011 answered). Check: `grep -rniE 'do not read[^.]*image' docs/` returns only the O-011 and D-070 rows, which describe the decision; no spec excludes the visuals now. — PASS
 - 2026-10-21 — Pack v5.1 — "wait for go" wording removed from CLAUDE.md 0, PROCESS.md 3, README.md and OWNER_TASKS.md; a chat starts on paste (D-071). Check: `grep -rnwE 'go' --include='*.md' . | grep -v history/` leaves only the ledger rows D-058 and D-067, the v4 review row 17 in PLAN_REVIEW.md, the two entries that describe the removal, and ordinary English. — PASS
 - 2026-10-21 — Pack v5.1 — `scripts/check_docs.py`: 31 md files, 80 endpoints, 80 referenced, 0 errors, 0 warnings — PASS (docs check only)
+- 2026-10-21 — Phase 0 task 1 — Deny-rule proof. All 8 commands of `docs/specs/phase-0-foundation.md` task 1 were run through Claude Code's Bash tool and again through its PowerShell tool, one call each, in a session started in the main checkout (`.claude/settings.json` identical to the phase-0 worktree). — result: 16 of 16 refused with "Permission to use <tool> with command ... has been denied" and none ran; no fix to `.claude/settings.json` needed — PASS (the refusal text does not say deny rule or prompt; the owner did not decline any of them)
 
 ## Idea list (not in scope; the owner decides)
 - Host-side Windows toast helper so reminders show with the browser closed (O-007).
