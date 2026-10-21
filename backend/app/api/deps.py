@@ -23,3 +23,8 @@ def require_ok(request: Request) -> BootManager:
 
 def get_db(request: Request) -> sqlite3.Connection:
     return require_ok(request).db()
+
+
+def current_user_id() -> int:
+    """The one user of this laptop app (DATA_MODEL 1). Phase 10 would read it from a session."""
+    return 1

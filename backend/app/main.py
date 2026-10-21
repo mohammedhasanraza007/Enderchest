@@ -8,7 +8,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-from .api import backups, boot, pages, security, test_support
+from .api import backups, boot, pages, profile, security, test_support
 from .boot.manager import BootManager
 from .boot.mounts import is_mount_point
 from .config import Settings, load_settings
@@ -47,7 +47,8 @@ def create_app(settings: Settings | None = None,
     app.include_router(boot.health_router)
     app.include_router(boot.router)
     app.include_router(backups.router)
-    app.include_router(pages.router)
+    app.include_router(profile.router)
     if settings.env == "test":
         app.include_router(test_support.router)
+    app.include_router(pages.router)  # last: its catch-all must never shadow an API route
     return app

@@ -17,6 +17,7 @@ class Settings:
     backups_dir: Path
     backup_dir_hint: str  # the host folder, shown to the owner only
     app_version: str = APP_VERSION
+    gemini_model_default: str = ""  # ENDERCHEST_GEMINI_MODEL; Phase 3 picks the real default
 
     @property
     def db_path(self) -> Path:
@@ -59,4 +60,5 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
         data_dir=Path(env.get("ENDERCHEST_DATA_DIR", "/data")),
         backups_dir=backups_dir,
         backup_dir_hint=env.get("ENDERCHEST_BACKUP_DIR", str(backups_dir)),
+        gemini_model_default=env.get("ENDERCHEST_GEMINI_MODEL", ""),
     )
