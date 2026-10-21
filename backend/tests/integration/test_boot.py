@@ -127,6 +127,31 @@ def test_missing_database_with_a_backup_is_recovery(settings: Settings):
     assert not settings.db_path.exists()
 
 
+def _assert_recovery_with_nothing_created(stack: Stack, settings: Settings) -> None:
+    body = stack.client.get("/api/v1/boot").json()
+    assert (body["state"], body["reason"]) == ("recovery", "database_missing")
+    assert body["backups_mounted"] is False
+    assert "backup folder" in body["message"]  # tells the owner what to fix, not just "restore"
+    assert not settings.db_path.exists()
+
+
+def test_a_backup_in_a_folder_that_is_not_a_mount_still_blocks_a_new_database(
+        settings: Settings):
+    # F-2 of the Phase 0 verification: the folder holds a backup but the container cannot treat
+    # it as a mount. "Not connected" must never read as "no backups" (DATA_SAFETY 5).
+    (settings.backups_dir / "auto-20261021T093000Z.sqlite3").write_bytes(b"x")
+    with Stack(settings, is_mount=lambda p: p == settings.data_dir) as stack:
+        _assert_recovery_with_nothing_created(stack, settings)
+
+
+def test_a_backup_in_a_read_only_mount_still_blocks_a_new_database(
+        settings: Settings, monkeypatch: pytest.MonkeyPatch):
+    (settings.backups_dir / "auto-20261021T093000Z.sqlite3").write_bytes(b"x")
+    monkeypatch.setattr("app.boot.manager.is_writable", lambda p: p != settings.backups_dir)
+    with Stack(settings) as stack:  # both folders are mounts; only /backups is not writable
+        _assert_recovery_with_nothing_created(stack, settings)
+
+
 def test_a_stale_wal_without_a_database_is_recovery(settings: Settings):
     settings.db_path.parent.mkdir(parents=True)
     settings.db_path.with_name(settings.db_path.name + "-wal").write_bytes(b"stale")

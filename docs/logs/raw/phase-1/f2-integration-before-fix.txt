@@ -1,0 +1,153 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.3s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 1.2s
+
+#8 [internal] load .dockerignore
+#8 transferring context: 285B done
+#8 DONE 0.0s
+
+#9 [internal] load build context
+#9 transferring context: 20.23kB 0.0s done
+#9 DONE 0.0s
+
+#10 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#10 DONE 0.0s
+
+#11 [python-base 5/5] RUN pip install -r requirements.lock
+#11 CACHED
+
+#12 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#12 CACHED
+
+#13 [python-base 3/5] WORKDIR /app
+#13 CACHED
+
+#14 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#14 CACHED
+
+#15 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#15 CACHED
+
+#16 [tools 2/3] RUN pip install -r requirements-dev.lock
+#16 CACHED
+
+#17 [tools 3/3] COPY backend/ ./
+#17 DONE 0.0s
+
+#18 exporting to image
+#18 exporting layers
+#18 exporting layers 0.1s done
+#18 exporting manifest sha256:d66fd5273e887a1c91d8643eb9adf32d1b6912c2ce2cf5c4b5474a9eb88af13f 0.0s done
+#18 exporting config sha256:c5696b73fbcdba7356234be0d7df2463a60e8ec8badf8ecbc1ec11b43422cefe 0.0s done
+#18 exporting attestation manifest sha256:763bbf50a23ca2e0df77832cb10612f6a73d7bf92152208f7efbd7b5b5d3f33c 0.0s done
+#18 exporting manifest list sha256:d11b67c70e0aae5ecab13ffd78f91a435bc3fecda72a926f27bca00a55cce8d1
+#18 exporting manifest list sha256:d11b67c70e0aae5ecab13ffd78f91a435bc3fecda72a926f27bca00a55cce8d1 0.0s done
+#18 naming to docker.io/library/enderchest-tools:latest done
+#18 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#18 DONE 0.2s
+
+#19 resolving provenance for metadata file
+#19 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-4a64491fd043 Creating 
+ Container enderchest-test-tools-run-4a64491fd043 Created 
+....................FF.........................                          [100%]
+=================================== FAILURES ===================================
+__ test_a_backup_in_a_folder_that_is_not_a_mount_still_blocks_a_new_database ___
+
+settings = Settings(env='test', port=8470, data_dir=PosixPath('/tmp/pytest-of-root/pytest-0/test_a_backup_in_a_folder_that0/data'...t-of-root/pytest-0/test_a_backup_in_a_folder_that0/backups'), backup_dir_hint='the backup folder', app_version='0.1.0')
+
+    def test_a_backup_in_a_folder_that_is_not_a_mount_still_blocks_a_new_database(
+            settings: Settings):
+        # F-1 of the Phase 0 verification: the folder holds a backup but the container cannot treat
+        # it as a mount. "Not connected" must never read as "no backups" (DATA_SAFETY 5).
+        (settings.backups_dir / "auto-20261021T093000Z.sqlite3").write_bytes(b"x")
+        with Stack(settings, is_mount=lambda p: p == settings.data_dir) as stack:
+>           _assert_recovery_with_nothing_created(stack, settings)
+
+tests/integration/test_boot.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+stack = <tests.conftest.Stack object at 0x74b04b4ad080>
+settings = Settings(env='test', port=8470, data_dir=PosixPath('/tmp/pytest-of-root/pytest-0/test_a_backup_in_a_folder_that0/data'...t-of-root/pytest-0/test_a_backup_in_a_folder_that0/backups'), backup_dir_hint='the backup folder', app_version='0.1.0')
+
+    def _assert_recovery_with_nothing_created(stack: Stack, settings: Settings) -> None:
+        body = stack.client.get("/api/v1/boot").json()
+>       assert (body["state"], body["reason"]) == ("recovery", "database_missing")
+E       AssertionError: assert ('ok', None) == ('recovery', ...base_missing')
+E         
+E         At index 0 diff: 'ok' != 'recovery'
+E         Use -v to get more diff
+
+tests/integration/test_boot.py:132: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"ts": "2026-10-21T16:50:34Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-21T16:50:34Z", "level": "info", "event": "database_created", "env": "test"}
+{"ts": "2026-10-21T16:50:34Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+________ test_a_backup_in_a_read_only_mount_still_blocks_a_new_database ________
+
+settings = Settings(env='test', port=8470, data_dir=PosixPath('/tmp/pytest-of-root/pytest-0/test_a_backup_in_a_read_only_m0/data'...t-of-root/pytest-0/test_a_backup_in_a_read_only_m0/backups'), backup_dir_hint='the backup folder', app_version='0.1.0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74b04b5936f0>
+
+    def test_a_backup_in_a_read_only_mount_still_blocks_a_new_database(
+            settings: Settings, monkeypatch: pytest.MonkeyPatch):
+        (settings.backups_dir / "auto-20261021T093000Z.sqlite3").write_bytes(b"x")
+        monkeypatch.setattr("app.boot.manager.is_writable", lambda p: p != settings.backups_dir)
+        with Stack(settings) as stack:  # both folders are mounts; only /backups is not writable
+>           _assert_recovery_with_nothing_created(stack, settings)
+
+tests/integration/test_boot.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+stack = <tests.conftest.Stack object at 0x74b04b0f6820>
+settings = Settings(env='test', port=8470, data_dir=PosixPath('/tmp/pytest-of-root/pytest-0/test_a_backup_in_a_read_only_m0/data'...t-of-root/pytest-0/test_a_backup_in_a_read_only_m0/backups'), backup_dir_hint='the backup folder', app_version='0.1.0')
+
+    def _assert_recovery_with_nothing_created(stack: Stack, settings: Settings) -> None:
+        body = stack.client.get("/api/v1/boot").json()
+>       assert (body["state"], body["reason"]) == ("recovery", "database_missing")
+E       AssertionError: assert ('ok', None) == ('recovery', ...base_missing')
+E         
+E         At index 0 diff: 'ok' != 'recovery'
+E         Use -v to get more diff
+
+tests/integration/test_boot.py:132: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"ts": "2026-10-21T16:50:34Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-21T16:50:34Z", "level": "info", "event": "database_created", "env": "test"}
+{"ts": "2026-10-21T16:50:34Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_boot.py::test_a_backup_in_a_folder_that_is_not_a_mount_still_blocks_a_new_database
+FAILED tests/integration/test_boot.py::test_a_backup_in_a_read_only_mount_still_blocks_a_new_database
+2 failed, 45 passed, 1 warning in 4.84s
+

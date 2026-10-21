@@ -1,0 +1,71 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 556B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.27kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 DONE 0.4s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 285B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 28.55kB 0.0s done
+#7 DONE 0.0s
+
+#8 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d
+#8 resolve docker.io/library/python:3.13-slim-bookworm@sha256:73aa5faee130c60da030e105ec971ccf57473fbd22ce73bd6fc9ba99a40b838d 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 5/5] RUN pip install -r requirements.lock
+#9 CACHED
+
+#10 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#10 CACHED
+
+#11 [python-base 3/5] WORKDIR /app
+#11 CACHED
+
+#12 [tools 1/3] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#12 CACHED
+
+#13 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#13 CACHED
+
+#14 [tools 2/3] RUN pip install -r requirements-dev.lock
+#14 CACHED
+
+#15 [tools 3/3] COPY backend/ ./
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:ba91ed5f69f8ee390384ad3f56b983ebb2a1b522ac03661b35f87d304d5710e2 0.0s done
+#16 exporting config sha256:3460331cc240c5a8f63d773febcd35322771e0ffbd1ffd09dc6aa4c36846fae4 done
+#16 exporting attestation manifest sha256:8b0261f0af9d3e191fa65a8748fde2392dcc2476b5d44a15230d422bdc17d3fc 0.0s done
+#16 exporting manifest list sha256:ba843af1ab3bac57c44f68b2598acf02c3541947d0228727d69b215a60e68dbe
+#16 exporting manifest list sha256:ba843af1ab3bac57c44f68b2598acf02c3541947d0228727d69b215a60e68dbe 0.0s done
+#16 naming to docker.io/library/enderchest-tools:latest done
+#16 unpacking to docker.io/library/enderchest-tools:latest
+#16 unpacking to docker.io/library/enderchest-tools:latest 0.9s done
+#16 DONE 1.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-3c248771133b Creating 
+ Container enderchest-test-tools-run-3c248771133b Created 
+All checks passed!

@@ -208,11 +208,17 @@ class BootManager:
         s = self.settings
         sidecars = [s.db_path.with_name(s.db_path.name + suffix) for suffix in ("-wal", "-shm")]
         has_photos = s.photos_dir.is_dir() and any(p.is_file() for p in s.photos_dir.iterdir())
-        has_backups = self.backups_mounted and bool(catalog.list_backups(s.backups_dir))
+        # Look at the folder even when it is not a writable mount: "not connected" must never
+        # read as "no backups", or a lost volume would silently start empty (DATA_SAFETY 5).
+        has_backups = bool(catalog.list_backups(s.backups_dir))
         if has_photos or has_backups or any(p.exists() for p in sidecars):
-            self._set(Status.RECOVERY, "database_missing",
-                      detail="The database is missing but photos or backups were found. "
-                             "Choose a backup to restore.")
+            detail = ("The database is missing but photos or backups were found. "
+                      "Choose a backup to restore.")
+            if not self.backups_mounted:
+                detail = ("The database is missing but photos or backups were found, and the "
+                          "backup folder is not connected or not writable. Nothing was created. "
+                          "Fix the backup folder, then start Enderchest again.")
+            self._set(Status.RECOVERY, "database_missing", detail=detail)
             return False
         create_database(s)
         log_event("info", "database_created", env=s.env)
