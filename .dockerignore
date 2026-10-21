@@ -8,7 +8,9 @@ data/
 backups/
 .test-backups/
 *.sqlite3*
-node_modules
+**/node_modules
+frontend/dist
+frontend/dist-e2e
 .venv
 __pycache__
 *.pyc

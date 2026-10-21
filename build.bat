@@ -44,6 +44,8 @@ if errorlevel 1 (
   echo The data volume already exists. Left as it is.
 )
 
+REM The image reports this date in Settings, About. Without it the page says it is not recorded.
+for /f "usebackq delims=" %%D in (`powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"`) do set "BUILD_DATE=%%D"
 docker compose build app
 if errorlevel 1 (
   echo The build failed. Nothing was deleted. Read the message above.

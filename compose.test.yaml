@@ -33,6 +33,60 @@ services:
       retries: 12
       start_period: 10s
 
+  # e2e only: the same app WITHOUT a /backups mount, on a throwaway data volume, so the browser
+  # tests can show the real "backup folder not connected" banner (Phase 1 gate 5). Never published.
+  app-nobackups:
+    profiles: ["e2e-nobackups"]
+    image: enderchest-app:latest
+    init: true
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      ENDERCHEST_ENV: test
+      ENDERCHEST_PORT: 8470
+    volumes:
+      - /data
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os,urllib.request as u; u.urlopen(u.Request('http://127.0.0.1:8470/health', headers={'Host': '127.0.0.1:' + os.environ.get('ENDERCHEST_PORT', '8470')}), timeout=3)"
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # Playwright (ARCHITECTURE 3, 10). It shares the app's network namespace, so the app is at
+  # 127.0.0.1:8470 and the Host header passes the localhost check. Test stack only.
+  e2e:
+    profiles: ["e2e"]
+    build:
+      context: .
+      target: e2e
+    image: enderchest-e2e:latest
+    network_mode: "service:app"
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      E2E_PROJECT: main
+    volumes:
+      - ./test-results:/test-results
+      - ${ENDERCHEST_TEST_BACKUP_DIR:-./.test-backups}:/backups:ro
+
+  e2e-nobackups:
+    profiles: ["e2e-nobackups"]
+    image: enderchest-e2e:latest
+    network_mode: "service:app-nobackups"
+    depends_on:
+      app-nobackups:
+        condition: service_healthy
+    environment:
+      E2E_PROJECT: nobackups
+    volumes:
+      - ./test-results:/test-results
+
   # dev.bat: the same test app with the source mounted and uvicorn --reload. Never the live volume.
   dev:
     profiles: ["dev"]

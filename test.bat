@@ -1,9 +1,16 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-REM test.bat [unit|integration|lint|probes|e2e|all]   (default: all)
+REM test.bat [unit|integration|lint|probes|e2e|types|all]   (default: all)
 REM Everything here uses the TEST stack (compose.test.yaml) or temporary folders in a container.
 REM It never touches the live stack or the live volume.
+REM   lint         ruff (Python), then tsc, eslint and prettier (frontend)
+REM   unit         pytest unit tests, vitest, and a check that the generated API types are current
+REM   integration  pytest integration tests on temporary folders
+REM   probes       the Docker probes of docs/DATA_SAFETY.md 10 (and 15, 16) against the test stack
+REM   e2e          Playwright: contrast, dead controls, theme, first run, backups (test stack)
+REM   types        rewrite frontend/openapi.json and frontend/src/api/schema.d.ts from the backend
+REM   format       rewrite the frontend files with prettier (lint only checks them)
 
 set "WHAT=%~1"
 if "%WHAT%"=="" set "WHAT=all"
@@ -23,8 +30,10 @@ if /I "%WHAT%"=="integration" goto integration
 if /I "%WHAT%"=="lint" goto lint
 if /I "%WHAT%"=="probes" goto probes
 if /I "%WHAT%"=="e2e" goto e2e
+if /I "%WHAT%"=="types" goto types
+if /I "%WHAT%"=="format" goto format
 if /I "%WHAT%"=="all" goto all
-echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|all]
+echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|all]
 exit /b 2
 
 :build
@@ -38,11 +47,15 @@ exit /b 0
 :lint
 call :build || exit /b 1
 %DC% run --rm tools ruff check .
+if errorlevel 1 exit /b 1
+%DC% run --rm tools sh -c "cd /frontend && npx tsc --noEmit && npx eslint . && npx prettier --check ."
 exit /b %errorlevel%
 
 :unit
 call :build || exit /b 1
 %DC% run --rm tools pytest tests/unit -q -p no:cacheprovider
+if errorlevel 1 exit /b 1
+%DC% run --rm tools sh -c "cd /frontend && npx vitest run && npm run api-types:check"
 exit /b %errorlevel%
 
 :integration
@@ -50,18 +63,41 @@ call :build || exit /b 1
 %DC% run --rm tools pytest tests/integration -q -p no:cacheprovider
 exit /b %errorlevel%
 
+:types
+call :build || exit /b 1
+%DC% run --rm -v "%~dp0frontend:/frontend-host" tools sh -c "python scripts/export_openapi.py /frontend-host/openapi.json && /frontend/node_modules/.bin/openapi-typescript /frontend-host/openapi.json -o /frontend-host/src/api/schema.d.ts"
+exit /b %errorlevel%
+
+:format
+call :build || exit /b 1
+%DC% run --rm -v "%~dp0frontend:/frontend-host" tools sh -c "cd /frontend-host && /frontend/node_modules/.bin/prettier --write ."
+exit /b %errorlevel%
+
 :probes
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0backend\tests\probes\run-probes.ps1" %2 %3 %4 %5 %6 %7
 exit /b %errorlevel%
 
 :e2e
-echo There is no end-to-end suite yet. It starts in Phase 1, when the first screen exists.
-exit /b 0
+set "E2E=docker compose -f compose.test.yaml"
+REM Rebuild the app image so the browser tests run against the current backend and frontend.
+%E2E% build app
+if errorlevel 1 exit /b 1
+%E2E% --profile e2e build e2e
+if errorlevel 1 exit /b 1
+%E2E% up -d --wait app
+if errorlevel 1 exit /b 1
+%E2E% --profile e2e run --rm e2e
+if errorlevel 1 exit /b 1
+REM The second run needs an app without a /backups mount (the "folder not connected" banner).
+%E2E% --profile e2e-nobackups up -d --wait app-nobackups
+if errorlevel 1 exit /b 1
+%E2E% --profile e2e-nobackups run --rm e2e-nobackups
+exit /b %errorlevel%
 
 :all
 call :lint || exit /b 1
 call :unit || exit /b 1
 call :integration || exit /b 1
-call :e2e
-echo Unit, integration and lint passed. Run "test.bat probes" for the Docker probes.
+call :e2e || exit /b 1
+echo Lint, unit, integration and end-to-end passed. Run "test.bat probes" for the Docker probes.
 exit /b 0
