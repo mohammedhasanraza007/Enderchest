@@ -55,7 +55,7 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
 | 0 | GET | /health | none | `{status:'starting'\|'ok'\|'recovery'\|'locked'\|'failed', reason\|null, app_version, schema_found\|null, schema_supported, env}` always 200 when the process answers | none |
-| 0 | GET | /boot | none | `{state, reason, data_mounted, backups_mounted, schema_found, schema_supported, backups:[{name,kind,at,bytes,item_count\|null,ok}], warnings:[string]}` available in every state | none |
+| 0 | GET | /boot | none | `{state, reason, message\|null, data_mounted, backups_mounted, schema_found, schema_supported, backups:[{name,kind,at,bytes,item_count\|null,ok}], warnings:[string]}` available in every state (`message` is the plain sentence the boot page shows; D-075) | none |
 | 0 | POST | /boot/restore | `{name, confirm:'RESTORE'}` (recovery state only) | `{restored:name, items, photos_missing:n}` | `validation_error`, `conflict` |
 | 0 | POST | /boot/start-empty | `{confirm:'START EMPTY'}` (recovery state only; first makes a safety backup of whatever is on disk) | `{state:'ok'}` | `conflict` |
 
@@ -195,6 +195,7 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | 0 | POST | /test/reset | none | wipes the test database and files, re-initialises | `forbidden_host` |
 | 0 | POST | /test/delete-db | none | deletes only the test database file (probe 8) | |
 | 0 | POST | /test/write-loop | `{seconds}` | starts a background loop of marked writes (probe 6) | |
+| 0 | GET | /test/write-loop | none | `{running, rows, counter, consistent, quick_check}`: the loop's records must be 1..N with the counter equal to N (probes 1 to 6, 8, 11; D-075) | |
 | 0 | GET | /test/clock | none | `{now, local_date}` | |
 | 0 | POST | /test/clock | `{now?, advance_seconds?, local_date?}` | `{now, local_date}` | |
 | 5 | POST | /test/fixtures/{name} | none | loads a named fixture set (for example `storyboard-1`, `items-1000`) into the **test** database | `not_found` |

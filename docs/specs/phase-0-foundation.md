@@ -21,7 +21,7 @@ A Dockerised backend that cannot lose data, can prove it, and tells the owner pl
 10. **Tests:** unit tests (retention algorithm, mount check, marker check, restore step order including WAL move-aside, backup naming, `.partial` handling), integration tests (migration from a hand-built previous-version file, backup then restore round trip, middleware rejections), and the 14 probes as scripts under `backend/tests/probes/` driven by `test.bat`.
 
 ## Deliverables
-Endpoints: the Phase 0 rows of `API.md` 2.1, 2.3, 2.17. Tables: migration 0001. Files: everything above.
+Endpoints: the Phase 0 rows of `API.md` 2.1, 2.3, 2.17, including `GET /api/v1/test/write-loop`, which the probes read (D-075). Tables: migration 0001. Files: everything above.
 
 ## Gate (all must PASS with real evidence)
 1. Deny-rule proof (task 1) recorded.
