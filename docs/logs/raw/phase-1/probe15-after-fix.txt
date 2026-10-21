@@ -1,0 +1,1 @@
+﻿PROBE 15: PASS - script exit=0; new manual files=1; name printed=True; listed by the API=True; output=[Backup made and verified: manual-20261021T164957Z.sqlite3 (44 KB) | Folder: ./.test-backups]
