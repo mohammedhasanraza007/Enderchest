@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enderchest</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #1b1410;
+         color: #f1e6d6; font: 16px/1.5 system-ui, sans-serif; }
+  main { width: min(640px, calc(100vw - 32px)); background: #2a211a; border: 1px solid #5a4a3b;
+         border-radius: 16px; padding: 28px; }
+  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 600; }
+  p { margin: 8px 0; }
+  .muted { color: #c9b9a4; font-size: 14px; }
+  ul { list-style: none; padding: 0; margin: 16px 0; }
+  li { margin: 6px 0; padding: 10px 12px; border: 1px solid #5a4a3b; border-radius: 10px; }
+  label { display: block; cursor: pointer; }
+  input[type=text] { width: 100%; box-sizing: border-box; padding: 10px; margin: 8px 0;
+                     background: #1b1410; color: #f1e6d6; border: 1px solid #8a7560; border-radius: 8px; }
+  button { padding: 10px 16px; border-radius: 999px; border: 0; background: #f1e6d6; color: #1b1410;
+           font: inherit; cursor: pointer; }
+  button.secondary { background: transparent; color: #f1e6d6; border: 1px solid #8a7560; }
+  button:disabled { opacity: .5; cursor: default; }
+  .error { color: #ffb4a2; }
+  details { margin-top: 20px; }
+</style>
+</head>
+<body>
+<main id="root" aria-live="polite"><h1>Enderchest</h1><p>Checking your data…</p></main>
+<script>
+"use strict";
+const root = document.getElementById("root");
+const TITLES = {
+  no_data_volume: "The data volume is not connected",
+  data_not_writable: "The data volume cannot be written to",
+  second_instance: "Enderchest is already running",
+  env_mismatch: "This data belongs to a different setup",
+  newer_data: "This data is from a newer version",
+  corrupt: "The database needs attention",
+  database_missing: "We found existing backups",
+  backup_folder_unavailable: "An update is waiting for the backup folder",
+  pre_migration_backup_failed: "The backup before updating failed",
+  migration_failed: "The update failed and was undone",
+  unexpected_error: "Enderchest could not start",
+};
+
+function el(tag, text, cls) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (cls) node.className = cls;
+  return node;
+}
+
+async function post(path, body) {
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Enderchest": "1" },
+    body: JSON.stringify(body),
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error ? data.error.message : "The request failed.");
+  return data;
+}
+
+function recoveryView(boot) {
+  const box = el("div");
+  box.append(el("p", boot.message || ""));
+  if (!boot.backups_mounted) {
+    box.append(el("p", "The backup folder is not connected, so nothing can be restored yet.", "error"));
+  }
+  const list = el("ul");
+  boot.backups.forEach((backup, index) => {
+    const row = el("li");
+    const label = el("label");
+    const radio = document.createElement("input");
+    radio.type = "radio"; radio.name = "backup"; radio.value = backup.name;
+    radio.checked = index === 0;
+    const when = new Date(backup.at).toLocaleString();
+    label.append(radio, " " + when + " — " + backup.kind + ", " + Math.round(backup.bytes / 1024) + " KB");
+    row.append(label);
+    list.append(row);
+  });
+  box.append(list);
+
+  const typed = document.createElement("input");
+  typed.type = "text"; typed.placeholder = "Type RESTORE to confirm"; typed.autocomplete = "off";
+  const restore = el("button", "Restore this backup");
+  const message = el("p", "", "error");
+  restore.addEventListener("click", async () => {
+    const chosen = document.querySelector("input[name=backup]:checked");
+    if (!chosen) { message.textContent = "Choose a backup first."; return; }
+    restore.disabled = true;
+    try {
+      await post("/api/v1/boot/restore", { name: chosen.value, confirm: typed.value });
+      location.reload();
+    } catch (error) { message.textContent = error.message; restore.disabled = false; }
+  });
+  if (boot.backups.length) box.append(typed, restore);
+
+  const details = el("details");
+  details.append(el("summary", "Start empty anyway"));
+  details.append(el("p", "A safety copy of whatever is on disk is made first. Existing files are moved aside, never deleted.", "muted"));
+  const typedEmpty = document.createElement("input");
+  typedEmpty.type = "text"; typedEmpty.placeholder = "Type START EMPTY to confirm"; typedEmpty.autocomplete = "off";
+  const empty = el("button", "Start empty", "secondary");
+  empty.addEventListener("click", async () => {
+    empty.disabled = true;
+    try {
+      await post("/api/v1/boot/start-empty", { confirm: typedEmpty.value });
+      location.reload();
+    } catch (error) { message.textContent = error.message; empty.disabled = false; }
+  });
+  details.append(typedEmpty, empty);
+  box.append(details, message);
+  return box;
+}
+
+function render(boot) {
+  root.replaceChildren();
+  if (boot.state === "ok") { location.reload(); return; }
+  if (boot.state === "starting") {
+    root.append(el("h1", "Starting…"), el("p", "Checking your data. This takes a few seconds.", "muted"));
+    return;
+  }
+  root.append(el("h1", TITLES[boot.reason] || "Enderchest needs attention"));
+  if (boot.state === "recovery") { root.append(recoveryView(boot)); return; }
+  root.append(el("p", boot.message || ""));
+  root.append(el("p", "Your data has not been changed or deleted.", "muted"));
+}
+
+async function poll() {
+  try {
+    const response = await fetch("/api/v1/boot");
+    const boot = await response.json();
+    // Re-rendering would wipe what the owner is typing on the recovery page.
+    const typing = document.activeElement && document.activeElement.tagName === "INPUT";
+    if (!(boot.state === "recovery" && root.dataset.state === "recovery") && !typing) {
+      render(boot);
+    }
+    root.dataset.state = boot.state;
+    if (boot.state !== "starting") return;
+  } catch (error) {
+    root.replaceChildren(el("h1", "Enderchest is not answering"),
+      el("p", "The app may still be starting. This page will keep trying.", "muted"));
+  }
+  setTimeout(poll, 1500);
+}
+poll();
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enderchest</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #1b1410;
+         color: #f1e6d6; font: 16px/1.5 system-ui, sans-serif; }
+  main { width: min(640px, calc(100vw - 32px)); background: #2a211a; border: 1px solid #5a4a3b;
+         border-radius: 16px; padding: 28px; }
+  h1 { margin: 0 0 4px; font-size: 24px; font-weight: 600; }
+  .muted { color: #c9b9a4; font-size: 14px; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; margin: 20px 0 0; }
+  dt { color: #c9b9a4; }
+  dd { margin: 0; }
+  .warn { margin-top: 16px; padding: 10px 12px; border: 1px solid #ffb4a2; border-radius: 10px; color: #ffb4a2; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Enderchest</h1>
+  <p class="muted">Foundation status. The app screens arrive in the next phase.</p>
+  <div id="warnings"></div>
+  <dl id="values"></dl>
+</main>
+<script>
+"use strict";
+const values = document.getElementById("values");
+const warnings = document.getElementById("warnings");
+
+function row(label, value) {
+  const dt = document.createElement("dt"); dt.textContent = label;
+  const dd = document.createElement("dd"); dd.textContent = value;
+  values.append(dt, dd);
+}
+
+function readable(bytes) {
+  return bytes < 1048576 ? Math.max(1, Math.round(bytes / 1024)) + " KB"
+                         : (bytes / 1048576).toFixed(1) + " MB";
+}
+
+async function load() {
+  const [health, backups] = await Promise.all([
+    fetch("/health").then((r) => r.json()),
+    fetch("/api/v1/backups").then((r) => r.json()),
+  ]);
+  if (health.status !== "ok" || !backups.status) { location.reload(); return; }
+  row("App version", health.app_version);
+  row("Database version", health.schema_found + " (this app supports " + health.schema_supported + ")");
+  row("Environment", health.env);
+  row("Last good backup", backups.last_good
+    ? new Date(backups.last_good.at).toLocaleString() + ", " + readable(backups.last_good.bytes)
+    : "none yet");
+  const folder = { ok: "connected", stale: "connected, but the last good backup is over 7 days old",
+                   failing: "connected, but the last two backups failed",
+                   unavailable: "not connected" };
+  row("Backup folder", folder[backups.status] || backups.status);
+  backups.warnings.forEach((text) => {
+    const box = document.createElement("div"); box.className = "warn"; box.textContent = text;
+    warnings.append(box);
+  });
+}
+load().catch(() => {
+  const box = document.createElement("div"); box.className = "warn";
+  box.textContent = "Could not read the status. Reload the page.";
+  warnings.append(box);
+});
+</script>
+</body>
+</html>
