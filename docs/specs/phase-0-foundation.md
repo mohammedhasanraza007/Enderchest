@@ -1,7 +1,7 @@
 # Phase 0 — Foundation and data safety
 
 **Read list (in this order):** `CLAUDE.md` sections 0, 3, 4, 5 · this file · `DATA_SAFETY.md` (all of it; it is the contract) · `ARCHITECTURE.md` 1–6, 8–10 · `API.md` 1, 2.1, 2.3, 2.17 · `DATA_MODEL.md` 1, 2.1–2.3, 2.14, 2.15.
-**Do not read:** `DESIGN.md`, `PAGES.md`, `PROJECT_PLAN.md`, the images. No screen is built in this phase.
+**Do not read:** `DESIGN.md`, `PAGES.md`, `PROJECT_PLAN.md`. The three visuals are still opened at every session start (`CLAUDE.md` section 0; D-070, amended 2026-10-21). No screen is built in this phase.
 **Owner supplies:** nothing. **Milestone:** A.
 
 ## Goal

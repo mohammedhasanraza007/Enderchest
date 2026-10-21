@@ -4,7 +4,8 @@ Do not read the whole pack. Find your task, open that file, open only that secti
 
 | I am about to… | Open | Section |
 |---|---|---|
-| start a session | `CLAUDE.md`, then `docs/logs/handoff.md` | 0 |
+| start, resume or end a chat (zip workflow) | `CLAUDE.md` section 0, then `docs/logs/handoff.md` (Resume here) and the last entry of `docs/logs/sessions.md` | 0 |
+| build the zip the next chat starts from | `docs/PROCESS.md` | 7 |
 | start a phase | `docs/specs/phase-N-*.md` (its Read list tells the rest) | all |
 | write or run Docker, scripts, backups, restore | `docs/DATA_SAFETY.md` | 3, 4, 7, 9, 11, 12 |
 | add a table, query, or any number on the dashboard | `docs/DATA_MODEL.md` | 2.x, 3.x |

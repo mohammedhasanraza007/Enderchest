@@ -2,7 +2,7 @@
 
 Settled decisions. Do not revert one without the owner's explicit approval. Add new entries at the bottom (ID, date, decision, reason, status). The owner mirrors this file into his Obsidian vault.
 
-Status values: **Owner** = stated by the owner; **Audit fix** = applied during the 2026-10-16 audit; **Review fix (v4)** = applied in the v4 plan review (`docs/PLAN_REVIEW.md`), proposed by Claude, the owner may change it; **Open** = needs an owner answer (a safe default applies meanwhile).
+Status values: **Owner** = stated by the owner; **Audit fix** = applied during the 2026-10-16 audit; **Review fix (v4)** = applied in the v4 plan review (`docs/PLAN_REVIEW.md`), proposed by Claude, the owner may change it; **Review fix (v5)** = applied in the zip-workflow change of 2026-10-21, proposed by Claude, the owner may change it; **Open** = needs an owner answer (a safe default applies meanwhile).
 
 > **Read when:** a rule feels ambiguous or you are about to change one. Search the topic; do not read top to bottom.
 
@@ -107,3 +107,17 @@ Status values: **Owner** = stated by the owner; **Audit fix** = applied during t
 | O-007 | Host-side Windows toast helper so reminders show while the browser is closed | Not built; revisit after Milestone C if the owner misses reminders |
 | O-008 | CSV export of the inventory | Not built (idea list in `docs/logs/evidence-log.md`) |
 | O-009 | OCR languages beyond English (for example Devanagari) | English only (D-063) |
+| O-010 | Where do Docker probes and the owner's acceptance runs happen? The chat sandbox has no Docker and no network; only the owner's laptop has Docker. | A chat that cannot run a step marks it NOT VERIFIED and lists the owner's commands in handoff (`PROCESS.md` 7). No gate is claimed from the sandbox. |
+| O-011 | `CLAUDE.md` section 0 and D-014 say to open the three visuals at every session start; `specs/phase-0-foundation.md` said "do not read the images". | **Answered by the owner, 2026-10-21: D-070.** The visuals are opened every chat, and the phase-0 spec line is removed. |
+
+## F. Owner decisions, zip workflow (2026-10-21)
+
+The owner asked for a zip-in, zip-out loop with no re-explaining per phase and compulsory resume. D-067 supersedes one step of D-058 by addition; D-058 stays as written.
+
+| ID | Decision | Reason | Status |
+|---|---|---|---|
+| D-067 | **Zip in, zip out.** Each chat works on one phase (or on the pack). It starts from the latest zip, unzipped into a new worktree and never edited in place, and ends with a zip named after the phase (`phase0.zip`) that includes `.git`. The starter line is fixed. This supersedes the "wait for go" step of D-058: each phase starts in its own chat without a separate go. | The owner wants continuity across chats with no re-explaining. `.git` inside the zip keeps the history, which replaces the manual `git init`. | Owner |
+| D-068 | **Resume is compulsory.** Every chat reads `handoff.md` "Resume here" and the last `sessions.md` entry, writes a RESUME block, checks the newest commit subject against it, and continues at the next task. Redoing finished work, or restarting a phase from its spec, is a defect. | The owner asked that Claude continue from earlier work and not only make changes. | Owner |
+| D-069 | **Verify first in the next chat.** A phase's fresh-session verification (`PROCESS.md` 4) is the first job of the next chat, and the next phase starts only after its PASS. | Keeps the fresh-session rule of D-058 without an extra chat, because each zip starts a fresh chat. | Review fix (v5) |
+| D-070 | **The three visuals are checked every chat.** `docs/design/reference-dashboard.jpg`, `docs/design/ux-states.png` and the logo preview are opened at every session start (`CLAUDE.md` section 0, step 3). The phase-0 spec line "do not read the images" is removed. No phase spec may exclude the visuals. This answers O-011. | The owner's standing rule (D-014) covers every phase, including backend-only ones, so the approved look is checked before any build. | Owner |
+| D-071 | **A chat starts on paste.** When a pack zip is attached, the chat starts `CLAUDE.md` section 0 at once, even if the message is only the zip. No confirmation step sits between the brief and the build: the owner reads the brief, it does not approve it. The rule lives in the one-time project instruction (`docs/OWNER_TASKS.md`, Once), because the chat cannot know it before it opens the zip. Results or hand edits in the message are recorded after the RESUME block. | The owner wants to paste the zip and have the work start, with nothing to type. | Owner |

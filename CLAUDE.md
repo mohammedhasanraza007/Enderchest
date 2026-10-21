@@ -1,18 +1,29 @@
-# CLAUDE.md — Enderchest Rulebook (v4)
+# CLAUDE.md — Enderchest Rulebook (v5.1)
 
-Loaded every session, so it is deliberately short. **Never read the whole pack.** This file routes you to the one file you need next.
+Loaded every session, so it is deliberately short. **Never read the whole pack** unless the owner asks for a full read. This file routes you to the one file you need next.
 
 ---
 
-## 0. Session start — do exactly this, in this order
+## 0. Zip workflow: how every chat starts and ends (compulsory, D-067 to D-071)
 
-1. **Open the three visuals** with the Read tool, before anything else:
-   `docs/design/reference-dashboard.jpg` (the approved style) · `docs/design/ux-states.png` (three dashboard states in sequence) · `assets/logo/enderchest-logo-preview.png` (the logo; the SVG beside it is the source, read it as text only to edit or embed it).
-   State in one line each what you actually see. If a file will not open, say so and stop; never describe a visual you did not open.
-2. **Read this file** (you are doing it), then **`docs/logs/handoff.md`** (the memory from the last session; it says the current phase and the next step).
-3. **Open the current phase spec** `docs/specs/phase-N-*.md`. Its **Read list** names every other file and section you may open for this phase. Open those sections and nothing else. `docs/INDEX.md` maps any other question to one file and one section.
-4. **Discipline:** at most three documents open per step; open a section, not a file (`grep -n "^## " <file>`, then view the range); do not read `docs/history/`, `docs/PLAN_REVIEW.md` or other phases' specs unless the owner asks. Reading the pack wastes the owner's limited Claude Pro usage and you will forget it anyway; the files are the memory.
-5. Reply with a **phase brief** (`docs/PROCESS.md` 3): what you will build, at most five real conflicts or gaps found, owner inputs needed (`docs/OWNER_TASKS.md`). Wait for "go". Do not rewrite specs; amend only for a real gap and record it in `docs/DECISIONS.md`.
+One phase per chat. The owner pastes the latest zip into a new chat, and the chat starts by itself (D-071; the one-time project instruction is in `docs/OWNER_TASKS.md`, Once). The zip carries everything across chats: code, docs, memory files and `.git`. The owner never needs to name the phase; `docs/logs/handoff.md` does.
+
+**Start. Begin at once when a pack zip is attached, even if the message is only the zip (D-071). Do these in order, before any build step.**
+1. **Work on a copy.** Unzip the attached zip into a new empty folder (the worktree, for example `/home/claude/work/phase1/`). The project folder inside is `Enderchest/`. Never edit the uploaded file.
+2. **Check the history.** In `Enderchest/`, run `git log --oneline -15` and `git status --short`. No `.git`: run `git init`, then commit everything as `baseline: <zip name>`. A dirty tree means the last chat did not close cleanly: list the files and stop.
+3. **Open the three visuals** with the Read tool: `docs/design/reference-dashboard.jpg`, `docs/design/ux-states.png`, `assets/logo/enderchest-logo-preview.png`. State in one line each what you actually see. If a file will not open, say so and stop (D-014, D-070).
+4. **Read the memory, nothing else yet:** `docs/logs/handoff.md` section "Resume here", then the last entry of `docs/logs/sessions.md`.
+5. **Write a RESUME block in your first reply, before any build step:** the last closed phase and its gate status; the subject of the newest commit (`git log -1 --format=%s`); the next task, quoted from handoff; owner-only blockers. If the commit subject and handoff disagree, or handoff names no next task, stop and ask one question. Otherwise continue at the next task. Never redo a finished task, and never restart a phase from its spec because the chat is new.
+6. **Verify first if pending.** If handoff says `Verification: pending for phase N`, your first job is the fresh-session verification of phase N (`docs/PROCESS.md` 4), written to `docs/reviews/`. Phase N+1 starts only after its PASS (or a PASS WITH NOTES the owner accepts). A FAIL is fixed in this chat before anything new.
+7. **Brief, then build.** In the same reply, give a short brief: what you will build, at most five real conflicts or gaps, and the owner inputs needed (`docs/OWNER_TASKS.md`). Then build straight away: the brief is for the owner to read, not to approve (D-067, D-071). Stop early only for an owner-only input that is BLOCKED, or a question that is costly to undo (section 9).
+8. **Reading discipline.** At most three documents open per step; open sections, not files; do not read `docs/history/`, `docs/PLAN_REVIEW.md` or other phases' specs unless the owner asks. Reading the pack costs the owner's Claude Pro usage, and the files are the memory. When the owner asks for a full read, read everything and say what you read.
+
+**End. Do these before the chat closes.**
+1. Finish the increment and commit it. Commit subjects start with `phase<N>:` or `pack:`. `git status --short` prints nothing.
+2. Rewrite `docs/logs/handoff.md` (under 60 lines), "Resume here" first, so a fresh chat can continue with no other context.
+3. Append one entry (at most 12 lines) to `docs/logs/sessions.md`.
+4. Make the zip (`docs/PROCESS.md` 7), named after the phase worked on (`phase0.zip`), check its listing, and present it.
+5. Tell the owner in one short message: the zip name, what passed, what failed, what is blocked on the owner, and what to paste next (the zip, into a new chat in the Enderchest project, which starts by itself). The owner then runs `/clear` or opens a new chat.
 
 ---
 
@@ -43,7 +54,7 @@ Owner: Mohammed, 2nd-year mechanical engineering student aiming at SAP QM/PM. A 
 | `docs/MISTAKES_TO_AVOID.md` | pitfalls by area |
 | `docs/PROJECT_PLAN.md` | product, theory, SAP mapping |
 | `docs/OWNER_TASKS.md` | what only the owner can provide, and when |
-| `docs/logs/handoff.md`, `evidence-log.md` | session memory and evidence |
+| `docs/logs/handoff.md`, `sessions.md`, `evidence-log.md` | memory: resume block, one entry per chat, evidence |
 
 **Authority when instructions conflict:** 1) the owner's latest chat instruction; 2) this file; 3) the specialist file for the area (`DATA_SAFETY.md` for data, `DATA_MODEL.md` for data shapes, `API.md` for endpoints, `PAGES.md` for behaviour, `DESIGN.md` for look); 4) `PROJECT_PLAN.md`; 5) `MISTAKES_TO_AVOID.md`. If two files disagree, say so and ask one question; do not pick silently.
 
@@ -116,16 +127,17 @@ Style is locked to the reference; `docs/DESIGN.md` is the full spec and `docs/PA
 
 ## 9. Process and communication
 
-- Each phase: brief and owner "go" → build in small increments (commit each) → evidence (≤ 15 lines, long output in `docs/logs/raw/`) → owner acceptance script → fresh-session verification (`docs/PROCESS.md`) → fix → close, then update `docs/logs/handoff.md`.
+- Each phase: brief in the first reply → build in small increments (commit each) → evidence (≤ 15 lines, long output in `docs/logs/raw/`) → owner acceptance script on the laptop, from the latest zip → fresh-session verification in the next chat (`docs/PROCESS.md` 3 and 4) → fix → close. The start and end of every chat are in section 0.
+
 - Default model Sonnet 5.5 high effort. Opus 5.5 only when stuck twice (`PROCESS.md` 1). Do not struggle silently past two failed attempts.
 - Direct and technically honest. Report failures plainly: what failed, why, what was tried, what is next. Never claim something works without running it; never fabricate output; read every file back after writing.
 - **Ask the owner only when** the answer is costly to undo and not already in the docs, or when an owner-only input is needed. Otherwise state the assumption and continue. Batch questions (at most five).
 - Do not expand scope. Worthwhile extras go in `docs/logs/evidence-log.md`.
 - Log decisions in `docs/DECISIONS.md` (the owner mirrors it into Obsidian).
-- End each session with: done, passed, failed, blocked, next step, and update `handoff.md`.
+- End each chat with the end steps of section 0: done, passed, failed, blocked, next step; then handoff, the sessions entry and the zip.
 
 ---
 
 ## 10. Definition of done (per phase)
 
-Brief approved; every gate check has recorded real evidence or is explicitly BLOCKED on the owner; owner acceptance run recorded; verification pass written to `docs/reviews/phase-N-verification.md` with verdict PASS (or owner-approved PASS WITH NOTES); nothing in `docs/MISTAKES_TO_AVOID.md` or `docs/DATA_SAFETY.md` violated; the owner can run `build.bat` then `run.bat`, restart, and find all data intact.
+Brief written in the build chat; every gate check has recorded real evidence or is explicitly BLOCKED or NOT VERIFIED (with the owner's commands in handoff); owner acceptance run recorded; verification pass, run in the next chat, written to `docs/reviews/phase-N-verification.md` with verdict PASS (or owner-approved PASS WITH NOTES); nothing in `docs/MISTAKES_TO_AVOID.md` or `docs/DATA_SAFETY.md` violated; the owner can run `build.bat` then `run.bat`, restart, and find all data intact.

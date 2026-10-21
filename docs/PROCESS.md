@@ -1,7 +1,7 @@
 # PROCESS.md — Phases, Gates, Model Roles, Verification
 
-> **Read when:** at the start of each phase (section 2 row + section 3) and before each verification (section 4). **Do not read when:** mid-build; the phase spec is your working document.
-> **Sections:** 1 Model roles · 2 Phases, milestones and gates · 3 The loop · 4 Phase Verification Gate · 5 Testing and evidence rules · 6 Reading discipline and handoff.
+> **Read when:** at the start of each phase (section 2 row + section 3) and before each verification (section 4), and at the end of each chat (section 7). **Do not read when:** mid-build; the phase spec is your working document.
+> **Sections:** 1 Model roles · 2 Phases, milestones and gates · 3 The loop · 4 Phase Verification Gate · 5 Testing and evidence rules · 6 Reading discipline and handoff · 7 Zip handoff.
 Scope: **laptop app only** (Phases 0 to 9). Phase 10 is locked (`CLAUDE.md` section 1).
 
 ---
@@ -43,13 +43,13 @@ A phase may not start until the previous gate has a recorded PASS **and** a PASS
 
 ## 3. The loop for every phase (lean, D-058)
 
-1. **Brief, not a new spec.** The spec already exists in `docs/specs/`. Read only what `CLAUDE.md` section 0 and the spec's Read list say. Reply to the owner with one short brief: what will be built, any real conflict or gap found in the docs (at most five, batched), and the owner inputs needed. The owner answers or says "go". Do not rewrite specs; amend them in place only for a real gap and note it in `docs/DECISIONS.md`.
+1. **Brief in the first reply, then build (D-067).** The spec already exists in `docs/specs/`. Read only what `CLAUDE.md` section 0 and the spec's Read list say. Write one short brief: what will be built, any real conflict or gap found in the docs (at most five, batched), and the owner inputs needed. Then build straight away; no confirmation step exists (D-067, D-071). Do not rewrite specs; amend them in place only for a real gap and note it in `docs/DECISIONS.md`.
 2. **Build** in small increments; run cheap checks first (lint, unit, integration, end-to-end, acceptance); commit after each working increment.
 3. **Evidence** in `docs/logs/evidence-log.md`: at most 15 lines per entry; long outputs go to `docs/logs/raw/phase-N/` and the entry links to them.
-4. **Owner acceptance run:** the short manual script at the end of the phase spec, performed by the owner, results recorded.
-5. **Verification pass** (section 4) in a fresh session, written to `docs/reviews/phase-N-verification.md`.
+4. **Owner acceptance run:** the short manual script at the end of the phase spec, performed by the owner on the laptop from the latest zip. The owner reports the result in the next chat's starter message, and that chat records it in the evidence log.
+5. **Verification pass** (section 4) in a fresh chat: the first job of the next chat (`CLAUDE.md` section 0, step 6), written to `docs/reviews/phase-N-verification.md`.
 6. **Fix and re-verify** until PASS (same failed probes, everything downstream, quick regression of earlier probes).
-7. **Close** only with a gate PASS and a PASS verdict. Update `docs/logs/handoff.md`.
+7. **Close** only with a gate PASS and a PASS verdict. Until then handoff says `Verification: pending for phase N`, or lists the failing items. Update `docs/logs/handoff.md` and `docs/logs/sessions.md` at the end of every chat.
 
 ---
 
@@ -98,5 +98,33 @@ Fresh sessions forget; files do not. Therefore:
 1. **Never read the whole pack.** `CLAUDE.md` section 0 gives the reading order; `docs/INDEX.md` maps a task to one file and one section. Read the phase spec first; it lists exactly which other files and sections to open.
 2. **Open sections, not files.** Find the heading with `grep -n "^## " <file>` or the section index in the file's header, then view only that line range.
 3. **At most three documents open per step.** Close the habit of "just checking" a fourth.
-4. **`docs/logs/handoff.md` is the memory.** Update it at the end of every session and whenever the context is about to be cleared: what is done (with commit ids), what is next, what is blocked and on whom, decisions made, commands that matter. A new session reads `handoff.md` right after the images, before anything else except `CLAUDE.md`.
-5. Use `/clear` between phases and `/compact` when a session grows long. Commit often so the repository, not the chat, holds the state.
+4. **`docs/logs/handoff.md` and `docs/logs/sessions.md` are the memory, and the zip carries them.** Update both at the end of every chat (`CLAUDE.md` section 0). A new chat reads the "Resume here" block of `handoff.md` and the last `sessions.md` entry right after the visuals, before anything else except `CLAUDE.md`.
+5. One phase per chat. A chat ends with a zip (section 7), then `/clear` or a new chat. `/compact` only inside a long chat. Commit often, so the repository and the zip, not the chat, hold the state.
+
+---
+
+## 7. Zip handoff (D-067)
+
+Each chat ends with one zip, and the next chat starts from it. The zip is the only carrier between chats, so it must hold the code, the docs, the memory files and the git history.
+
+**Name.** `phase<N>.zip` for the phase the chat worked on (`phase0.zip`, `phase1.zip`). `pack-v<N>.zip` when the chat changed the pack rather than a phase. A second chat on the same phase adds a suffix (`phase0-2.zip`).
+
+**Layout.** One root folder, `Enderchest/`, holding everything, including `.git/`.
+
+**What goes in.** The files git tracks or would track, plus every file under `.git/`. Git's ignore rules keep out `.env`, `secrets/`, `data/`, `backups/`, `.test-backups/`, `*.sqlite3*`, `node_modules/`, build output and **the owner's private photos** (`tests/fixtures/private/*`). Never force-add (`git add -f`) any of them.
+
+**Before zipping.** Commit everything. `git status --short` must print nothing.
+
+**Zip command (Linux container; run from the worktree folder that contains `Enderchest/`):**
+```
+cd Enderchest && { git ls-files -co --exclude-standard; find .git -type f; } | sed 's|^|Enderchest/|' > ../zip-list.txt && cd .. && zip -q <output-folder>/phase0.zip -@ < zip-list.txt
+```
+`<output-folder>` is `/mnt/user-data/outputs` in a chat, or the folder the owner named in a local session.
+
+**Windows (Claude Code in Git Bash or PowerShell).** The same list works with the built-in `tar`: from the folder above `Enderchest/`, run `tar -a -c -f phase0.zip -T zip-list.txt`. This route is unproven on the owner's laptop until the first laptop chat proves it. Record the tool used in `sessions.md`.
+
+**Verify before presenting.** List the archive (`unzip -l` or `tar -tf`). It must contain `Enderchest/.git/`, `Enderchest/CLAUDE.md` and `Enderchest/docs/logs/handoff.md`. It must not contain `.env` (`.env.example` is fine), anything under `secrets/`, `data/` or `backups/`, any `*.sqlite3*`, `node_modules/`, or any file under `tests/fixtures/private/` except `.gitkeep`. A failed check means fix and rebuild. Never present a zip that failed.
+
+**Present it.** In a chat, `present_files` on the zip. In a local session, give the full path. Then the end steps of `CLAUDE.md` section 0.
+
+**Gates that need Docker or owner hardware.** If the chat cannot run a step (no Docker, no webcam, no printer, no Gemini key, no network), record it in the evidence log as `NOT VERIFIED — owner runs`. Never write PASS. List the owner's exact commands under "Owner runs next" in handoff, set `Verification: pending`, and let the next chat read the output the owner pastes (saved under `docs/logs/raw/phase-N/`).
