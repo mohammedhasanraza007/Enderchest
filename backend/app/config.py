@@ -20,6 +20,7 @@ class Settings:
     app_version: str = APP_VERSION
     gemini_model_default: str = ""  # ENDERCHEST_GEMINI_MODEL; Phase 3 picks the real default
     frontend_dir: Path = DEFAULT_FRONTEND_DIR  # the built frontend, copied into the image
+    build_date: str | None = None  # ENDERCHEST_BUILD_DATE, set by build.bat; None if not recorded
 
     @property
     def db_path(self) -> Path:
@@ -64,4 +65,5 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
         backup_dir_hint=env.get("ENDERCHEST_BACKUP_DIR", str(backups_dir)),
         gemini_model_default=env.get("ENDERCHEST_GEMINI_MODEL", ""),
         frontend_dir=Path(env.get("ENDERCHEST_FRONTEND_DIR", str(DEFAULT_FRONTEND_DIR))),
+        build_date=(env.get("ENDERCHEST_BUILD_DATE") or None),
     )

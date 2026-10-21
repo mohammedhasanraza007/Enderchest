@@ -9,6 +9,7 @@ from ..backup.restore import RestoreError
 from ..boot.manager import BootManager, Status, WrongState
 from ..db import migrate
 from ..errors import AppError
+from ..schemas.backups import Health
 from ..services import backups as backup_service
 from .deps import get_manager
 
@@ -17,17 +18,18 @@ router = APIRouter(prefix="/api/v1/boot")
 
 
 @health_router.get("/health")
-def health(manager: BootManager = Depends(get_manager)) -> dict:
+def health(manager: BootManager = Depends(get_manager)) -> Health:
     """Answers 200 whenever the process runs, so Docker never restarts a locked app."""
     state = manager.state
-    return {
-        "status": state.status.value,
-        "reason": state.reason,
-        "app_version": manager.settings.app_version,
-        "schema_found": state.schema_found,
-        "schema_supported": migrate.supported_version(),
-        "env": manager.settings.env,
-    }
+    return Health(
+        status=state.status.value,
+        reason=state.reason,
+        app_version=manager.settings.app_version,
+        schema_found=state.schema_found,
+        schema_supported=migrate.supported_version(),
+        env=manager.settings.env,
+        build_date=manager.settings.build_date,
+    )
 
 
 @router.get("")

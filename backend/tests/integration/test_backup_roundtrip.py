@@ -28,6 +28,7 @@ def test_post_backups_makes_a_verified_file_and_logs_it(stack: Stack):
 
     listing = stack.client.get("/api/v1/backups").json()
     assert listing["status"] == "ok"
+    assert listing["folder_hint"] == "the backup folder"  # shown on the Settings page
     assert listing["last_good"]["name"] == body["name"]
     assert [i["name"] for i in listing["items"]] == [body["name"]]
     assert listing["items"][0]["kind"] == "manual"
