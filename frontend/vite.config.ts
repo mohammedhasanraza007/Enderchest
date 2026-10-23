@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [sharedStatic("dist")],
   build: { outDir: "dist", emptyOutDir: true, target: "es2022" },
   server: {
+    // dev.bat mounts the source from a Windows folder, whose file events never reach the
+    // container, so Vite must poll to see an edit (probe 18).
+    watch: { usePolling: true, interval: 300 },
     // dev.bat: Vite in front of the test app. The app only accepts local Host and Origin values,
     // so the proxy presents the app's own.
     proxy: {
