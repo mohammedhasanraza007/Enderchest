@@ -27,6 +27,7 @@ class Profile(BaseModel):
     timezone: str
     theme: Theme
     first_run_complete: bool
+    first_run_step: Literal["name", "categories", "done"]
 
 
 class ProfileUpdate(BaseModel):
@@ -77,6 +78,8 @@ class SettingsPatch(BaseModel):
     gemini_model: str | None = Field(default=None, max_length=100)
     share_images_with_gemini: bool | None = None
     assistant_share_item_text: bool | None = None
+    # P-01 step 2 is finished (Continue or Skip); the only value a client may write (D-093).
+    first_run_step: Literal["done"] | None = None
 
     @field_validator("*", mode="before")
     @classmethod

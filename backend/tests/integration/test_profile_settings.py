@@ -33,16 +33,41 @@ def problems(response) -> list[str]:
 
 def test_a_new_database_has_no_name_and_first_run_is_not_complete(stack: Stack):
     body = stack.client.get("/api/v1/profile").json()
-    assert body == {"name": None, "timezone": "UTC", "theme": "system", "first_run_complete": False}
+    assert body == {"name": None, "timezone": "UTC", "theme": "system", "first_run_complete": False,
+                    "first_run_step": "name"}
 
 
-def test_saving_the_profile_completes_first_run_and_survives_a_read(stack: Stack):
+def test_the_first_name_leads_to_step_2_and_survives_a_read(stack: Stack):
+    """D-093: saving the first name stores the step marker, so a reopened tab resumes at step 2."""
     response = put_profile(stack, {"name": "  Mohammed  ", "timezone": "Asia/Kolkata"})
     assert response.status_code == 200
     expected = {"name": "Mohammed", "timezone": "Asia/Kolkata", "theme": "system",
-                "first_run_complete": True}
+                "first_run_complete": False, "first_run_step": "categories"}
     assert response.json() == expected
     assert stack.client.get("/api/v1/profile").json() == expected
+
+
+def test_finishing_step_2_completes_first_run_and_a_later_save_keeps_it(stack: Stack):
+    put_profile(stack, {"name": "Mohammed", "timezone": "Asia/Kolkata"})
+    assert patch_settings(stack, {"first_run_step": "done"}).status_code == 200
+    profile = stack.client.get("/api/v1/profile").json()
+    assert (profile["first_run_complete"], profile["first_run_step"]) == (True, "done")
+    put_profile(stack, {"name": "Mo", "timezone": "Asia/Kolkata"})
+    assert stack.client.get("/api/v1/profile").json()["first_run_step"] == "done"
+    assert "first_run_step" not in stack.client.get("/api/v1/settings").json()
+
+
+@pytest.mark.parametrize("value", ["categories", "name", None, True])
+def test_only_done_can_be_written_as_the_first_run_step(stack: Stack, value):
+    assert patch_settings(stack, {"first_run_step": value}).status_code == 422
+
+
+def test_an_owner_named_before_the_marker_existed_is_not_sent_back(stack: Stack):
+    """A Phase 1 database: the name is set and there is no marker at all."""
+    conn = stack.manager.db()
+    conn.execute("UPDATE users SET name = 'Mohammed' WHERE id = 1")
+    profile = stack.client.get("/api/v1/profile").json()
+    assert (profile["first_run_complete"], profile["first_run_step"]) == (True, "done")
 
 
 def test_a_theme_is_stored_and_kept_when_a_later_save_leaves_it_out(stack: Stack):
