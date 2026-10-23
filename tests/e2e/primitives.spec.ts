@@ -91,12 +91,13 @@ test("shape rules: pills everywhere, soft capsules for tall boxes in light, 24 p
       return {
         pills: [
           ...pick(".pill"),
-          ...pick(".field__control"),
+          ...pick(".field__control:not(.field__control--area)"),
           ...pick(".chip"),
           ...pick(".toggle"),
           ...pick(".status-chip"),
           ...pick(".name-pill"),
         ],
+        area: pick(".field__control--area")[0],
         card: pick(".glass-card")[0],
         panel: pick(".inner-panel")[0],
         banner: pick(".banner")[0],
@@ -107,12 +108,14 @@ test("shape rules: pills everywhere, soft capsules for tall boxes in light, 24 p
   const dark = await radii();
   expect(dark.card?.radius).toBe(24);
   expect(dark.panel?.radius).toBe(18);
+  expect(dark.area?.radius).toBe(18); // a text area is a tall box: the panel radius
   for (const pill of dark.pills) expect(pill.radius).toBeGreaterThanOrEqual(pill.height / 2);
 
   await setTheme(page, "light");
   const light = await radii();
   expect(light.card?.radius).toBe(52);
   expect(light.panel?.radius).toBe(40);
+  expect(light.area?.radius).toBe(28);
   expect(light.banner?.radius).toBeGreaterThanOrEqual(32); // multi-line text never sits in a full pill
   for (const pill of light.pills) expect(pill.radius).toBeGreaterThanOrEqual(pill.height / 2);
 });

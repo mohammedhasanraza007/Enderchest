@@ -451,3 +451,6 @@
   border-radius: var(--radius-panel);
   resize: vertical;
 }
+:root[data-theme="light"] .field__control--area {
+  border-radius: 28px; /* a soft capsule, as for every tall box in light */
+}

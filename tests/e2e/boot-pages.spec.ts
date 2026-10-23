@@ -79,7 +79,7 @@ test("restoring through the page brings the app and the owner's name back", asyn
   await page.goto("/");
   await page.getByPlaceholder("Type RESTORE to confirm").fill("RESTORE");
   await page.getByRole("button", { name: "Restore this backup" }).click();
-  await expect(page).toHaveURL(/\/settings$/, { timeout: 20_000 });
+  await expect(page).toHaveURL(/\/inventory$/, { timeout: 20_000 });
   await expect(page.getByRole("button", { name: "Mohammed" })).toBeVisible();
 });
 

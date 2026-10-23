@@ -31,10 +31,16 @@ test("an empty or too long name is refused with a message and nothing is saved",
   expect(profile.name).toBeNull();
 });
 
-test("saving a name and time zone shows a greeting and then the app", async ({ page, request }) => {
+test("name, then starter categories, then a greeting and the app", async ({ page, request }) => {
   await page.goto("/welcome");
   await page.getByLabel("Your name").fill("Mohammed");
   await page.getByLabel("Time zone").selectOption("Asia/Kolkata");
+  await page.getByRole("button", { name: "Continue" }).click();
+
+  // Step 2 (P-01): six optional starter categories.
+  await expect(page.getByRole("heading", { name: "Start with some categories?" })).toBeVisible();
+  await page.getByRole("button", { name: "Tools" }).click();
+  await page.getByRole("button", { name: "Food and drink" }).click();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening|night), Mohammed$/ }),
@@ -44,14 +50,27 @@ test("saving a name and time zone shows a greeting and then the app", async ({ p
     name: "Mohammed",
     timezone: "Asia/Kolkata",
     first_run_complete: true,
+    first_run_step: "done",
   });
+  const categories = await (await request.get("/api/v1/categories")).json();
+  expect(categories.map((c: { name: string }) => c.name)).toEqual(["Food and drink", "Tools"]);
+  expect(categories[0]).toMatchObject({ expires_default: true, label_default: false });
 
-  await page.getByRole("link", { name: "Open settings" }).click();
-  await expect(page).toHaveURL(/\/settings$/);
+  await page.getByRole("link", { name: "Add your first item" }).click();
+  await expect(page).toHaveURL(/\/camera\?mode=add$/);
   await expect(page.getByRole("button", { name: "Mohammed" })).toBeVisible();
 });
 
-test("closing the tab after the name step and reopening resumes in the app", async ({
+test("Skip on step 2 makes no categories", async ({ page, request }) => {
+  await page.goto("/welcome");
+  await page.getByLabel("Your name").fill("Mohammed");
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByRole("button", { name: "Skip" }).click();
+  await expect(page.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
+  expect(await (await request.get("/api/v1/categories")).json()).toEqual([]);
+});
+
+test("closing the tab on step 2 and reopening resumes at step 2 with the name kept", async ({
   browser,
 }) => {
   const first = await browser.newContext({ baseURL: "http://127.0.0.1:8470" });
@@ -59,16 +78,22 @@ test("closing the tab after the name step and reopening resumes in the app", asy
   await tab.goto("/welcome");
   await tab.getByLabel("Your name").fill("Mohammed");
   await tab.getByRole("button", { name: "Continue" }).click();
-  await expect(tab.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
+  await expect(tab.getByRole("heading", { name: "Start with some categories?" })).toBeVisible();
   await first.close(); // the tab is gone
 
   const second = await browser.newContext({ baseURL: "http://127.0.0.1:8470" });
   const reopened = await second.newPage();
+  await reopened.goto("/inventory");
+  await expect(reopened).toHaveURL(/\/welcome$/);
+  await expect(
+    reopened.getByRole("heading", { name: "Start with some categories?" }),
+  ).toBeVisible();
+  await reopened.getByRole("button", { name: "Skip" }).click();
+  await expect(reopened.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
   await reopened.goto("/");
-  await expect(reopened).toHaveURL(/\/settings$/);
-  await expect(reopened.getByRole("button", { name: "Mohammed" })).toBeVisible();
+  await expect(reopened).toHaveURL(/\/inventory$/);
   await reopened.goto("/welcome"); // first run cannot be repeated
-  await expect(reopened).toHaveURL(/\/settings$/);
+  await expect(reopened).toHaveURL(/\/inventory$/);
   await second.close();
 });
 
@@ -113,7 +138,7 @@ test("a failed first-run save keeps the typed name, says why, and the button wor
 
   await page.unrouteAll();
   await button.click();
-  await expect(page.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Start with some categories?" })).toBeVisible();
 });
 
 test("a failed save in Settings keeps the change, says why, and changes nothing", async ({

@@ -11,7 +11,7 @@ export async function resetApp(request: APIRequestContext): Promise<void> {
   if (!response.ok()) throw new Error(`reset failed: ${response.status()}`);
 }
 
-/** Complete first run through the API, so a spec can start on a normal page. */
+/** Complete first run through the API (name, then step 2 skipped), so a spec starts in the app. */
 export async function saveProfile(
   request: APIRequestContext,
   body: { name: string; timezone: string; theme?: "system" | "light" | "dark" },
@@ -21,6 +21,59 @@ export async function saveProfile(
     data: body,
   });
   if (!response.ok()) throw new Error(`profile save failed: ${response.status()}`);
+  const done = await request.patch("/api/v1/settings", {
+    headers: { "X-Enderchest": "1" },
+    data: { first_run_step: "done" },
+  });
+  if (!done.ok()) throw new Error(`first-run step failed: ${done.status()}`);
+}
+
+const WRITE = { "X-Enderchest": "1" };
+
+/** POST JSON to the test app and return the body; throws on any refusal. */
+export async function post<T>(request: APIRequestContext, path: string, data?: unknown): Promise<T> {
+  const response = await request.post(path, { headers: WRITE, data });
+  if (!response.ok()) {
+    throw new Error(`${path} failed: ${response.status()} ${await response.text()}`);
+  }
+  return (await response.json()) as T;
+}
+
+/** Load the named test fixture (API 2.17), for example items-1000. Test stack only. */
+export async function loadFixture(request: APIRequestContext, name: string): Promise<void> {
+  await post(request, `/api/v1/test/fixtures/${name}`);
+}
+
+/** Make one item through the API and return its public id. */
+export async function makeItem(
+  request: APIRequestContext,
+  fields: Record<string, unknown> = {},
+): Promise<string> {
+  const item = await post<{ public_id: string }>(request, "/api/v1/items", {
+    name: "Torch",
+    ...fields,
+  });
+  return item.public_id;
+}
+
+/** A small real JPEG drawn by the browser's own canvas (test data, never gate evidence). */
+export async function jpegBytes(page: Page, colour = "#a0522d"): Promise<Buffer> {
+  const base64 = await page.evaluate(async (fill) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 320;
+    canvas.height = 240;
+    const context = canvas.getContext("2d")!;
+    context.fillStyle = fill;
+    context.fillRect(0, 0, 320, 240);
+    const blob = await new Promise<Blob>((resolve) =>
+      canvas.toBlob((made) => resolve(made!), "image/jpeg"),
+    );
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    let text = "";
+    for (const byte of bytes) text += String.fromCharCode(byte);
+    return btoa(text);
+  }, colour);
+  return Buffer.from(base64, "base64");
 }
 
 export async function setTheme(page: Page, theme: "light" | "dark"): Promise<void> {

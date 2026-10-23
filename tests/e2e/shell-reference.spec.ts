@@ -84,8 +84,9 @@ test("the navigation capsule matches the reference frame within 12 px", async ({
   expect(logoStyle).toEqual({ filter: "none", transform: "none", src: "/enderchest-logo.svg" });
   // No star or sparkle anywhere (DESIGN.md 2.2).
   expect(star).toBe(0);
-  // The centre of the capsule is empty: no nav item exists yet (PAGES.md 1).
-  await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(2); // brand, name pill
+  // After Phase 2 the centre holds Inventory and Camera only (PAGES.md 1, D-034).
+  await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(4); // + brand, name
+  await expect(page.locator(".nav__item")).toHaveText(["Inventory", "Camera"]);
   await page.screenshot({ path: `${SHOTS}/settings-dark-1376x768.png` });
 });
 

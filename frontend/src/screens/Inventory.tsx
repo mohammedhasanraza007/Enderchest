@@ -178,9 +178,9 @@ function Filters({
     <div className="filters" role="search">
       <label className="search-pill">
         <Search size={18} strokeWidth={1.5} aria-hidden="true" />
-        <span className="visually-hidden">Search items</span>
         <input
           type="search"
+          aria-label="Search items"
           value={text}
           placeholder="Search by name, size, model or ID"
           onChange={(event) => setText(event.target.value)}
