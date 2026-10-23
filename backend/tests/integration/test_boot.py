@@ -7,6 +7,7 @@ import pytest
 
 from app.boot.manager import Status
 from app.config import Settings
+from app.db.migrate import supported_version
 from tests.conftest import Stack, make_database, put_marker_row, state_keys
 
 pytestmark = pytest.mark.integration
@@ -24,7 +25,7 @@ def test_a_brand_new_volume_gets_a_database_with_marker_and_one_user(settings: S
         users = conn.execute("SELECT id, name FROM users").fetchall()
         conn.close()
     assert meta["env_marker"] == "test"
-    assert meta["schema_version"] == "1"
+    assert meta["schema_version"] == str(supported_version())  # every migration applied
     assert {"created_at", "instance_id"} <= meta.keys()
     assert users == [(1, None)]
 
@@ -193,22 +194,31 @@ def test_health_answers_200_in_every_state(settings: Settings):
         assert response.json()["status"] == "locked"
 
 
-def test_a_pending_migration_makes_a_verified_backup_then_migrates(
-        settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def v1_database(settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Build a database at version 1 from a migrations folder holding only the real 0001.
+
+    Returns that folder, still in use, so a test can add its own version 2 beside 0001.
+    """
     from app.db import migrate
 
-    # Build a realistic database at version 1 with a row in it.
-    make_database(settings)
-    put_marker_row(settings, "kept-through-migration")
-
-    # Add a version 2 migration (in a temporary folder beside the real 0001).
     folder = tmp_path / "migrations"
     folder.mkdir()
     (folder / "0001_foundation.sql").write_text(
         (migrate.MIGRATIONS_DIR / "0001_foundation.sql").read_text())
+    monkeypatch.setattr(migrate, "MIGRATIONS_DIR", folder)
+    make_database(settings)
+    return folder
+
+
+def test_a_pending_migration_makes_a_verified_backup_then_migrates(
+        settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    # Build a realistic database at version 1 with a row in it.
+    folder = v1_database(settings, tmp_path, monkeypatch)
+    put_marker_row(settings, "kept-through-migration")
+
+    # Add a version 2 migration (in the temporary folder beside the real 0001).
     (folder / "0002_add_note.sql").write_text(
         "CREATE TABLE note (id INTEGER PRIMARY KEY, body TEXT NOT NULL);")
-    monkeypatch.setattr(migrate, "MIGRATIONS_DIR", folder)
 
     with Stack(settings) as stack:
         assert health(stack)["status"] == "ok"
@@ -225,17 +235,10 @@ def test_a_pending_migration_makes_a_verified_backup_then_migrates(
 
 def test_a_failing_migration_leaves_the_data_and_reports_the_backup(
         settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    from app.db import migrate
-
-    make_database(settings)
+    folder = v1_database(settings, tmp_path, monkeypatch)
     put_marker_row(settings, "kept")
-    folder = tmp_path / "migrations"
-    folder.mkdir()
-    (folder / "0001_foundation.sql").write_text(
-        (migrate.MIGRATIONS_DIR / "0001_foundation.sql").read_text())
     (folder / "0002_bad.sql").write_text(
         "CREATE TABLE half (x INTEGER);\nINSERT INTO missing_table VALUES (1);")
-    monkeypatch.setattr(migrate, "MIGRATIONS_DIR", folder)
 
     with Stack(settings) as stack:
         body = stack.client.get("/api/v1/boot").json()
@@ -251,15 +254,8 @@ def test_a_failing_migration_leaves_the_data_and_reports_the_backup(
 
 def test_migration_without_a_backup_folder_is_refused_and_changes_nothing(
         settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    from app.db import migrate
-
-    make_database(settings)
-    folder = tmp_path / "migrations"
-    folder.mkdir()
-    (folder / "0001_foundation.sql").write_text(
-        (migrate.MIGRATIONS_DIR / "0001_foundation.sql").read_text())
+    folder = v1_database(settings, tmp_path, monkeypatch)
     (folder / "0002_add_note.sql").write_text("CREATE TABLE note (id INTEGER PRIMARY KEY);")
-    monkeypatch.setattr(migrate, "MIGRATIONS_DIR", folder)
 
     with Stack(settings, is_mount=lambda p: p == settings.data_dir) as stack:
         body = health(stack)
@@ -271,3 +267,33 @@ def test_migration_without_a_backup_folder_is_refused_and_changes_nothing(
 
 def test_status_enum_is_what_the_contract_lists():
     assert {s.value for s in Status} == {"starting", "ok", "recovery", "locked", "failed"}
+
+
+def test_the_real_inventory_migration_upgrades_a_named_v1_database(
+        settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """Phase 2: a Phase 1 database (owner named, a setting stored) gains the inventory tables."""
+    from app.db import migrate
+
+    real = migrate.MIGRATIONS_DIR
+    folder = v1_database(settings, tmp_path, monkeypatch)
+    conn = sqlite3.connect(settings.db_path)
+    conn.execute("UPDATE users SET name = 'Mohammed', timezone = 'Asia/Kolkata' WHERE id = 1")
+    conn.execute("INSERT INTO settings VALUES (1, 'lead_days', '5', '2026-10-01T00:00:00Z')")
+    conn.commit()
+    conn.close()
+    (folder / "0002_inventory.sql").write_text((real / "0002_inventory.sql").read_text())
+
+    with Stack(settings) as stack:
+        assert health(stack)["status"] == "ok"
+        profile = stack.client.get("/api/v1/profile").json()
+        assert (profile["name"], profile["first_run_complete"]) == ("Mohammed", True)
+        assert stack.client.get("/api/v1/settings").json()["lead_days"] == 5
+        assert stack.client.get("/api/v1/items").json() == {"items": [], "next_cursor": None,
+                                                            "total": 0}
+    conn = sqlite3.connect(settings.db_path)
+    tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    assert {"categories", "locations", "items", "photos", "drafts", "events"} <= tables
+    assert conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "2"
+    assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
+    conn.close()
+    assert any(p.name.startswith("pre-migration-v1-to-v2-") for p in settings.backups_dir.iterdir())

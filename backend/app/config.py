@@ -43,6 +43,11 @@ class Settings:
         return self.data_dir / "backup-staging"
 
     @property
+    def upload_tmp_dir(self) -> Path:
+        """Uploads are written here first, then renamed into `photos/` (same volume)."""
+        return self.data_dir / "upload-tmp"
+
+    @property
     def lock_path(self) -> Path:
         return self.data_dir / "lock"
 

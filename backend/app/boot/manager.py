@@ -136,10 +136,12 @@ class BootManager:
 
     def _prepare_folders(self) -> None:
         s = self.settings
-        for folder in (s.db_path.parent, s.photos_dir, s.thumbs_dir, s.secrets_dir, s.staging_dir):
+        for folder in (s.db_path.parent, s.photos_dir, s.thumbs_dir, s.secrets_dir, s.staging_dir,
+                       s.upload_tmp_dir):
             folder.mkdir(parents=True, exist_ok=True)
         os.chmod(s.secrets_dir, 0o700)
         remove_partials(s.staging_dir)
+        remove_partials(s.upload_tmp_dir)  # an upload cut short; no row ever pointed at it
         if self.backups_mounted:
             remove_partials(s.backups_dir)
             remove_partials(s.backup_photos_dir)

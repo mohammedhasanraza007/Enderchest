@@ -47,3 +47,8 @@ def reset() -> None:
     global _set_base
     with _lock:
         _set_base = None
+
+
+def stamp() -> str:
+    """Now as ISO-8601 UTC with `Z`, the shape of every stored moment (DATA_MODEL 1)."""
+    return now().strftime("%Y-%m-%dT%H:%M:%SZ")
