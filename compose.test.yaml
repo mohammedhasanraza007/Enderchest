@@ -1,11 +1,13 @@
-# The TEST stack (docs/DATA_SAFETY.md 8). Never shares a volume, folder or port with the live stack.
+# The TEST stack (docs/DATA_SAFETY.md 8). Never shares a volume, folder, port or image tag with the live
+# stack: run.bat starts enderchest-app:latest without building, so a test build must never retag it
+# (probe 19).
 # Remove its containers with:  docker compose -p enderchest-test -f compose.test.yaml rm -sf
 # Reset its data with POST /api/v1/test/reset, never by deleting the volume.
 name: enderchest-test
 
 services:
   app:
-    image: enderchest-app:latest
+    image: enderchest-app-test:latest
     build:
       context: .
       target: runtime
@@ -37,7 +39,7 @@ services:
   # tests can show the real "backup folder not connected" banner (Phase 1 gate 5). Never published.
   app-nobackups:
     profiles: ["e2e-nobackups"]
-    image: enderchest-app:latest
+    image: enderchest-app-test:latest
     init: true
     security_opt:
       - no-new-privileges:true
@@ -90,7 +92,7 @@ services:
   # dev.bat: the same test app with the source mounted and uvicorn --reload. Never the live volume.
   dev:
     profiles: ["dev"]
-    image: enderchest-app:latest
+    image: enderchest-app-test:latest
     build:
       context: .
       target: runtime

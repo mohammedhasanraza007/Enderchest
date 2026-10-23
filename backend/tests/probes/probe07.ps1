@@ -5,7 +5,7 @@ $ok = $false
 $name = 'enderchest-probe7'
 $port = 8472
 [void](Dk rm -f $name)
-[void](Dk run -d --name $name -p "127.0.0.1:${port}:8470" -e ENDERCHEST_ENV=test -e "ENDERCHEST_PORT=$port" enderchest-app:latest)
+[void](Dk run -d --name $name -p "127.0.0.1:${port}:8470" -e ENDERCHEST_ENV=test -e "ENDERCHEST_PORT=$port" enderchest-app-test:latest)
 if ($script:LastExit -eq 0) {
     $health = Wait-State 'locked' -P $port -Timeout 40
     $listing = (Dk exec $name ls -A /data)

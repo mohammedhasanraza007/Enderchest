@@ -19,7 +19,7 @@ if (Reset-TestData) {
         [void](Dk kill $script:Container)
         Stop-Job $job -ErrorAction SilentlyContinue; Remove-Job $job -Force -ErrorAction SilentlyContinue
         if (Get-ChildItem $hostBackups -Filter '*.partial' -ErrorAction SilentlyContinue) { $seenPartial = $true }
-        $stagePartial = Dk run --rm -v enderchest_test_data:/data enderchest-app:latest sh -c 'ls /data/backup-staging'
+        $stagePartial = Dk run --rm -v enderchest_test_data:/data enderchest-app-test:latest sh -c 'ls /data/backup-staging'
         if ($stagePartial -match 'partial') { $seenPartial = $true }
         [void](Start-TestStack)
         [void](Wait-State 'ok')

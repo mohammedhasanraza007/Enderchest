@@ -1,0 +1,7 @@
+== Read-only look at the LIVE app (GET only; nothing written). 2026-10-23T14:15:57Z
+container: enderchest-app-1 5b68108ec1e9 Up 20 minutes (healthy) 127.0.0.1:8470->8470/tcp
+image id of the running container: sha256:5b68108ec1e9; current enderchest-app:latest: sha256:a1ed582b415f
+GET /health: {"status":"ok","reason":null,"app_version":"0.1.0","schema_found":1,"schema_supported":1,"env":"live","build_date":null}
+GET /api/v1/test/clock (test routes must not exist on live): {"error":{"code":"not_found","message":"That does not exist.","details":{}}} [404]
+GET /api/v1/boot (state and backups list): {"state":"ok","reason":null,"message":null,"data_mounted":true,"backups_mounted":true,"schema_found":1,"schema_supported":1,"backups":[{"name":"auto-20261023T135603Z","kind":"auto","at":"2026-10-23T13:56:03Z","bytes":45056,"item_count":null,"ok":true},{"name":"auto-20261021T180657Z","kind":"auto","at":"2026-10-21T18:06:57Z","bytes":45056,"item_count":null,"ok":true},{"name":"auto-20261021T170636Z","kind":"auto","at":"2026-10-21T17:06:36Z","bytes":45056,"item_count":null,"ok":true},{"name":"auto-20261021T160636Z","kind":"auto","at":"2026-10-21T16:06:36Z","bytes":45056,"item_count":null,"ok":tru
+GET /api/v1/profile (Phase 1 route; the old image may not have it): {"name":"mohammed hasan raza","timezone":"Asia/Kolkata","theme":"dark","first_run_complete":true} [200]

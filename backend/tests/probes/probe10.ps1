@@ -17,7 +17,7 @@ $script:Project = 'enderchest-test-p10'
 $script:Container = 'enderchest-test-p10-app-1'
 $port = 8474
 
-function Hash-Db { return ((Dk run --rm -v "${vol}:/data" enderchest-app:latest sha256sum /data/db/enderchest.sqlite3) -split '\s+')[0] }
+function Hash-Db { return ((Dk run --rm -v "${vol}:/data" enderchest-app-test:latest sha256sum /data/db/enderchest.sqlite3) -split '\s+')[0] }
 
 [void](Dc up -d --wait --wait-timeout 120)
 if ((Wait-State 'ok' -P $port)) {

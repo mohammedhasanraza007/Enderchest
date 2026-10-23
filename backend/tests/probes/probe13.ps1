@@ -9,7 +9,7 @@ $portA = 8475; $portB = 8476
 
 function Hash-Db {
     param([string]$Volume)
-    return ((Dk run --rm -v "${Volume}:/data" enderchest-app:latest sha256sum /data/db/enderchest.sqlite3) -split '\s+')[0]
+    return ((Dk run --rm -v "${Volume}:/data" enderchest-app-test:latest sha256sum /data/db/enderchest.sqlite3) -split '\s+')[0]
 }
 
 if (Reset-TestData) {
@@ -18,18 +18,18 @@ if (Reset-TestData) {
 
     # Direction 1: LIVE config on the TEST-marked volume.
     [void](Dk rm -f $a)
-    [void](Dk run -d --name $a -p "127.0.0.1:${portA}:8470" -e ENDERCHEST_ENV=live -e "ENDERCHEST_PORT=$portA" -v enderchest_test_data:/data enderchest-app:latest)
+    [void](Dk run -d --name $a -p "127.0.0.1:${portA}:8470" -e ENDERCHEST_ENV=live -e "ENDERCHEST_PORT=$portA" -v enderchest_test_data:/data enderchest-app-test:latest)
     $h1 = Wait-State 'locked' -P $portA -Timeout 40
     [void](Dk rm -f $a)
     $hashTest2 = Hash-Db 'enderchest_test_data'
 
     # Direction 2: make a LIVE-marked database on a throwaway volume, then start TEST config on it.
     [void](Dk rm -f $b $c)
-    [void](Dk run -d --name $b -p "127.0.0.1:${portB}:8470" -e ENDERCHEST_ENV=live -e "ENDERCHEST_PORT=$portB" -v enderchest_test_data_p13:/data enderchest-app:latest)
+    [void](Dk run -d --name $b -p "127.0.0.1:${portB}:8470" -e ENDERCHEST_ENV=live -e "ENDERCHEST_PORT=$portB" -v enderchest_test_data_p13:/data enderchest-app-test:latest)
     $made = Wait-State 'ok' -P $portB -Timeout 40
     [void](Dk stop $b); [void](Dk rm -f $b)
     $hashLive1 = Hash-Db 'enderchest_test_data_p13'
-    [void](Dk run -d --name $c -p "127.0.0.1:${portB}:8470" -e ENDERCHEST_ENV=test -e "ENDERCHEST_PORT=$portB" -v enderchest_test_data_p13:/data enderchest-app:latest)
+    [void](Dk run -d --name $c -p "127.0.0.1:${portB}:8470" -e ENDERCHEST_ENV=test -e "ENDERCHEST_PORT=$portB" -v enderchest_test_data_p13:/data enderchest-app-test:latest)
     $h2 = Wait-State 'locked' -P $portB -Timeout 40
     [void](Dk rm -f $c)
     $hashLive2 = Hash-Db 'enderchest_test_data_p13'
