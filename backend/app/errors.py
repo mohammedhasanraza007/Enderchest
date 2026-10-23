@@ -27,6 +27,12 @@ def error_response(code: str, status: int, message: str,
     )
 
 
+def problems_from(errors: list) -> list[dict]:
+    """Pydantic errors as the `{field, problem}` list of a `validation_error` (API 1)."""
+    return [{"field": ".".join(str(p) for p in err["loc"] if p != "body"), "problem": err["msg"]}
+            for err in errors]
+
+
 def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(AppError)
     async def _app_error(_: Request, exc: AppError) -> JSONResponse:
@@ -34,12 +40,8 @@ def install_error_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def _validation(_: Request, exc: RequestValidationError) -> JSONResponse:
-        problems = [
-            {"field": ".".join(str(p) for p in err["loc"] if p != "body"), "problem": err["msg"]}
-            for err in exc.errors()
-        ]
         return error_response("validation_error", 422, "Some values are not valid.",
-                              {"problems": problems})
+                              {"problems": problems_from(exc.errors())})
 
     @app.exception_handler(StarletteHTTPException)
     async def _http(_: Request, exc: StarletteHTTPException) -> JSONResponse:

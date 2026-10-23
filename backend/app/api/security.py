@@ -4,6 +4,7 @@ A local app is still a web server: any web page the owner visits can try to call
 These checks refuse such calls before any route runs. No CORS headers are ever sent.
 """
 
+import re
 from collections.abc import Mapping
 
 from starlette.types import ASGIApp, Receive, Scope, Send
@@ -13,8 +14,23 @@ from ..errors import error_response
 
 SAFE_METHODS = {"GET", "HEAD"}
 LOCAL_HOSTS = {"localhost", "127.0.0.1", "[::1]"}
-# Paths allowed to receive multipart bodies (photo upload arrives in Phase 2).
-MULTIPART_PATHS: set[str] = set()
+MB = 1024 * 1024
+JSON_BODY_MAX = 1 * MB
+_ONE_IMAGE = 12 * MB + 64 * 1024  # one 12 MB photo plus the multipart framing
+# Paths allowed to receive multipart bodies, each with the largest body it takes (D-095).
+MULTIPART_PATHS: tuple[tuple[re.Pattern[str], int], ...] = (
+    (re.compile(r"^/api/v1/items/[^/]+/photos$"), _ONE_IMAGE),
+    (re.compile(r"^/api/v1/drafts$"), 20 * 12 * MB + MB),
+    (re.compile(r"^/api/v1/drafts/[^/]+/photos$"), _ONE_IMAGE),
+)
+
+
+def multipart_limit(path: str) -> int | None:
+    """The body cap for a path that takes uploads, or None when it takes JSON only."""
+    for pattern, limit in MULTIPART_PATHS:
+        if pattern.match(path):
+            return limit
+    return None
 
 
 def _split_host(host_header: str) -> tuple[str, str]:
@@ -45,13 +61,20 @@ def check_request(method: str, path: str, headers: Mapping[str, str],
         return ("forbidden_host", 403, "Requests from other web pages are not allowed.")
 
     content_type = headers.get("content-type")
-    has_body = headers.get("content-length", "0") not in ("", "0") or "transfer-encoding" in headers
+    length = headers.get("content-length", "")
+    has_body = length not in ("", "0") or "transfer-encoding" in headers
     if content_type is not None or has_body:
         media = (content_type or "").split(";")[0].strip().lower()
-        if media == "multipart/form-data" and path in MULTIPART_PATHS:
-            return None
-        if media != "application/json":
+        limit = multipart_limit(path) if media == "multipart/form-data" else None
+        if limit is None and media != "application/json":
             return ("validation_error", 422, "Requests must be JSON.")
+        if has_body and not length.isdigit():
+            # Browsers always send the length; without it the cap below could not be checked.
+            return ("validation_error", 422, "The request must state its length.")
+        if has_body and int(length) > (limit or JSON_BODY_MAX):
+            return ("payload_too_large", 413,
+                    "That upload is too large. Each photo can be up to 12 MB."
+                    if limit else "That request is too large.")
     return None
 
 

@@ -102,7 +102,24 @@ def restore_backup(settings: Settings, name: str) -> RestoreResult:
         conn.close()
 
     log_event("info", "restore_done", name=name, safety=safety, photos_copied=restored_photos)
-    return RestoreResult(name, after.item_count, 0, safety)
+    missing = _missing_photos(settings)
+    if missing:
+        log_event("warning", "restore_photos_missing", count=missing)
+    return RestoreResult(name, after.item_count, missing, safety)
+
+
+def _missing_photos(settings: Settings) -> int:
+    """Photos the restored database names that are in neither /data nor the backup folder
+    (DATA_SAFETY 12, step 7): reported to the owner, never fatal."""
+    conn = connect(settings.db_path, read_only=True)
+    try:
+        has_photos = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='photos'").fetchone()
+        rows = conn.execute("SELECT path FROM photos").fetchall() if has_photos else []
+        paths = [row["path"] for row in rows]
+    finally:
+        conn.close()
+    return sum(1 for path in paths if not (settings.photos_dir / path).is_file())
 
 
 def _safety_backup(settings: Settings) -> str | None:

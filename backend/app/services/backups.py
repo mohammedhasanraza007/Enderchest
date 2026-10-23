@@ -62,3 +62,20 @@ def status(conn: sqlite3.Connection, settings: Settings, mounted: bool,
         return "ok"
     finished = datetime.strptime(good["at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
     return "stale" if (now or datetime.now(UTC)) - finished > STALE_AFTER else "ok"
+
+
+RECENT_FOR_PURGE = timedelta(hours=24)
+
+
+def has_recent_good(conn: sqlite3.Connection, mounted: bool, now: datetime) -> bool:
+    """A verified backup under 24 hours old, so a permanent delete can still be undone from
+    the backup folder (CLAUDE.md 6). No folder, no permanent delete (DATA_SAFETY 4)."""
+    if not mounted:
+        return False
+    row = conn.execute(
+        "SELECT finished_at FROM backup_log WHERE ok = 1 AND verified = 1 AND kind != 'restore' "
+        "ORDER BY id DESC LIMIT 1").fetchone()
+    if row is None:
+        return False
+    finished = datetime.strptime(row["finished_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
+    return now - finished <= RECENT_FOR_PURGE

@@ -8,11 +8,24 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-from .api import backups, boot, pages, profile, security, test_support
+from .api import (
+    backups,
+    boot,
+    catalog,
+    drafts,
+    items,
+    labels,
+    pages,
+    photos,
+    profile,
+    security,
+    test_support,
+)
 from .boot.manager import BootManager
 from .boot.mounts import is_mount_point
 from .config import Settings, load_settings
 from .errors import install_error_handlers
+from .idempotency import IdempotencyStore
 from .scheduler.backups import BackupScheduler
 from .services.test_support import WriteLoop
 
@@ -41,6 +54,7 @@ def create_app(settings: Settings | None = None,
                   lifespan=lifespan)
     app.state.manager = manager
     app.state.write_loop = write_loop
+    app.state.idempotency = IdempotencyStore()
     install_error_handlers(app)
     app.add_middleware(security.SecurityMiddleware, app_port=settings.port)
 
@@ -48,6 +62,11 @@ def create_app(settings: Settings | None = None,
     app.include_router(boot.router)
     app.include_router(backups.router)
     app.include_router(profile.router)
+    app.include_router(catalog.router)
+    app.include_router(labels.router)
+    app.include_router(items.router)
+    app.include_router(photos.router)
+    app.include_router(drafts.router)
     if settings.env == "test":
         app.include_router(test_support.router)
     app.include_router(pages.router)  # last: its catch-all must never shadow an API route
