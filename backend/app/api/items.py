@@ -92,7 +92,7 @@ def purge_item(public_id: str, body: PermanentDelete,
                conn: sqlite3.Connection = Depends(get_db),
                user_id: int = Depends(current_user_id)) -> Response:
     items_service.purge_item(
-        conn, user_id, public_id,
+        conn, manager.settings, user_id, public_id,
         lambda: backup_service.has_recent_good(conn, manager.backups_mounted, clock.now()))
     return Response(status_code=204)
 

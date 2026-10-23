@@ -169,15 +169,20 @@ def reassign(conn: sqlite3.Connection, user_id: int, column: str, from_id: int,
                  f"AND {column} = ?", (to_id, now, user_id, from_id))
 
 
-def purge(conn: sqlite3.Connection, user_id: int, item_id: int) -> None:
+def purge(conn: sqlite3.Connection, user_id: int, item_id: int) -> list[tuple[str, str]]:
     """Remove the item row and what points at it. The caller records `item_purged` first.
 
-    Photo rows go (their files stay on disk and in backups); drafts that made the item keep
-    their history without the link; the item's own events go, except `item_purged`.
+    Returns the (photo, thumbnail) paths of its photo rows, hidden ones too, so the caller can
+    remove the files after the commit. Drafts that made the item keep their history without the
+    link; the item's own events go, except `item_purged`.
     """
+    rows = conn.execute("SELECT path, thumb_path FROM photos WHERE user_id = ? AND item_id = ?",
+                        (user_id, item_id)).fetchall()
+    files = [(row["path"], row["thumb_path"]) for row in rows]
     conn.execute("DELETE FROM photos WHERE user_id = ? AND item_id = ?", (user_id, item_id))
     conn.execute("UPDATE drafts SET committed_item_id = NULL WHERE user_id = ? "
                  "AND committed_item_id = ?", (user_id, item_id))
     conn.execute("DELETE FROM events WHERE user_id = ? AND item_id = ? AND kind != 'item_purged'",
                  (user_id, item_id))
     conn.execute("DELETE FROM items WHERE user_id = ? AND id = ?", (user_id, item_id))
+    return files

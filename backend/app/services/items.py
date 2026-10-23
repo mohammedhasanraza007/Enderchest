@@ -11,9 +11,11 @@ from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 
 from .. import clock, ids
+from ..config import Settings
 from ..db.connection import write_transaction
 from ..derived import expiry_view
 from ..errors import AppError
+from ..logs import log_event
 from ..repositories import categories as categories_repo
 from ..repositories import events as events_repo
 from ..repositories import items as items_repo
@@ -298,9 +300,13 @@ def undo(conn: sqlite3.Connection, user_id: int, event_id: int) -> None:
     restore_item(conn, user_id, row["public_id"], undo_of=event_id)
 
 
-def purge_item(conn: sqlite3.Connection, user_id: int, public_id: str,
+def purge_item(conn: sqlite3.Connection, settings: Settings, user_id: int, public_id: str,
                has_recent_backup: Callable[[], bool]) -> None:
-    """Permanent delete: only from Trash, only with a good backup under 24 hours old."""
+    """Permanent delete: only from Trash, only with a good backup under 24 hours old.
+
+    The item's photo files go too, after the commit (D-096): the backup holds them, and a file
+    no row names would otherwise be reported by the start-up sweep for ever.
+    """
     now = clock.stamp()
     with write_transaction(conn):
         row = item_row(conn, user_id, public_id)
@@ -311,7 +317,12 @@ def purge_item(conn: sqlite3.Connection, user_id: int, public_id: str,
                            "a good backup from the last 24 hours.")
         _event(conn, user_id, "item_purged", row["id"],
                {"name": row["name"], "public_id": row["public_id"]}, now)
-        items_repo.purge(conn, user_id, row["id"])
+        files = items_repo.purge(conn, user_id, row["id"])
+    for photo, thumb in files:
+        (settings.photos_dir / photo).unlink(missing_ok=True)
+        (settings.thumbs_dir / thumb).unlink(missing_ok=True)
+    if files:
+        log_event("info", "item_purged_photos", count=len(files))
 
 
 def mark_labels_printed(conn: sqlite3.Connection, user_id: int, public_ids: list[str]) -> int:

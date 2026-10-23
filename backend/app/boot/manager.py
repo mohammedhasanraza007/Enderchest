@@ -25,6 +25,7 @@ from ..logs import log_event
 from . import marker
 from .lock import InstanceLock
 from .mounts import is_mount_point, is_writable
+from .sweep import orphan_photos
 
 
 class Status(StrEnum):
@@ -58,6 +59,7 @@ class BootManager:
         self._connections: ThreadConnections | None = None
         self.data_mounted = False
         self.backups_mounted = False
+        self._orphans: list[str] = []
 
     # ----- reading the state -------------------------------------------------------------
 
@@ -81,6 +83,13 @@ class BootManager:
         found = []
         if self.data_mounted and not self.backups_mounted:
             found.append("The backup folder is not connected. Nothing is being backed up.")
+        if self._orphans:
+            count = len(self._orphans)
+            found.append(
+                "1 photo file in the data folder belongs to no item (an upload was cut short). "
+                "It is kept, not deleted." if count == 1 else
+                f"{count} photo files in the data folder belong to no item (an upload was cut "
+                "short). They are kept, not deleted.")
         return found
 
     # ----- the startup sequence ----------------------------------------------------------
@@ -132,6 +141,9 @@ class BootManager:
 
         # 7. Open for business. The scheduler reads this state and starts its own work.
         self._connections = ThreadConnections(s.db_path)
+        self._orphans = orphan_photos(self._connections.get(), s.photos_dir)
+        if self._orphans:
+            log_event("warning", "orphan_photos", count=len(self._orphans))
         self._set(Status.OK, schema_found=migrate.supported_version())
 
     def _prepare_folders(self) -> None:

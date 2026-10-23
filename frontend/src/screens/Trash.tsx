@@ -151,8 +151,8 @@ function PurgeDialog({ item, onClose }: { item: ItemSummary; onClose: () => void
     <Dialog open onClose={onClose} title="Delete permanently?">
       <div className="stack">
         <p>
-          {item.name} will be removed from Enderchest for good. Older backups still contain it, and
-          its photo files stay on disk.
+          {item.name} and its photos will be removed from Enderchest for good. Older backups still
+          contain them.
         </p>
         {recentBackup ? null : folderMissing ? (
           <p className="form-failure">

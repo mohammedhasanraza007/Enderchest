@@ -289,3 +289,30 @@ def test_a_backup_counts_items_and_mirrors_photos(stack: Stack):
     listed = stack.client.get("/api/v1/backups").json()["items"][0]
     assert listed["item_count"] == 1
     assert f"{photo['id']}.jpg" in files_in(stack.settings.backup_photos_dir)
+
+
+# ---- permanent delete takes the photo files; the start-up sweep reports strays (D-096) --------
+
+def test_permanent_delete_removes_the_items_photo_files(stack: Stack):
+    item = create(stack)
+    photo = upload(stack, item["public_id"], imagekit.jpeg()).json()
+    stack.client.delete(f"/api/v1/items/{item['public_id']}", headers=HEADERS)
+    stack.client.post("/api/v1/backups", headers=HEADERS)
+    response = stack.client.request("DELETE", f"/api/v1/items/{item['public_id']}/permanent",
+                                    json={"confirm": "DELETE"}, headers=HEADERS)
+    assert response.status_code == 204
+    assert files_in(stack.settings.photos_dir) == files_in(stack.settings.thumbs_dir) == set()
+    assert f"{photo['id']}.jpg" in files_in(stack.settings.backup_photos_dir)  # the backup has it
+
+
+def test_a_stray_photo_file_is_reported_at_start_and_kept(settings):
+    with Stack(settings) as stack:
+        upload(stack, create(stack)["public_id"], imagekit.jpeg())
+        assert stack.client.get("/api/v1/backups").json()["warnings"] == []
+    stray = settings.photos_dir / "cut-short.jpg"
+    stray.write_bytes(imagekit.jpeg(32, 32))
+    with Stack(settings) as stack:
+        warnings = stack.client.get("/api/v1/backups").json()["warnings"]
+        assert warnings == ["1 photo file in the data folder belongs to no item (an upload was "
+                            "cut short). It is kept, not deleted."]
+    assert stray.is_file()
