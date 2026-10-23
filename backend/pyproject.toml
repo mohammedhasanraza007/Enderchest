@@ -9,6 +9,9 @@ dependencies = [
   "fastapi",
   "uvicorn",
   "tzdata",
+  "python-multipart",
+  "pillow",
+  "segno",
 ]
 
 [project.optional-dependencies]
@@ -27,7 +30,7 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.flake8-bugbear]
 # FastAPI's dependency-injection idiom: Depends(...) as a parameter default is intended.
-extend-immutable-calls = ["fastapi.Depends"]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.File"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
