@@ -73,6 +73,390 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Categories */
+        get: operations["list_categories_api_v1_categories_get"];
+        put?: never;
+        /** Create Category */
+        post: operations["create_category_api_v1_categories_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/categories/{category_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Category */
+        delete: operations["delete_category_api_v1_categories__category_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change Category */
+        patch: operations["change_category_api_v1_categories__category_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Drafts */
+        get: operations["list_drafts_api_v1_drafts_get"];
+        put?: never;
+        /** Create Drafts */
+        post: operations["create_drafts_api_v1_drafts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/drafts/{draft_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Draft */
+        get: operations["get_draft_api_v1_drafts__draft_id__get"];
+        put?: never;
+        post?: never;
+        /** Discard Draft */
+        delete: operations["discard_draft_api_v1_drafts__draft_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change Draft */
+        patch: operations["change_draft_api_v1_drafts__draft_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/drafts/{draft_id}/commit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Commit Draft */
+        post: operations["commit_draft_api_v1_drafts__draft_id__commit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/drafts/{draft_id}/photos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Draft Photo */
+        post: operations["add_draft_photo_api_v1_drafts__draft_id__photos_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/events/{event_id}/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Undo */
+        post: operations["undo_api_v1_events__event_id__undo_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Items */
+        get: operations["list_items_api_v1_items_get"];
+        put?: never;
+        /** Create Item */
+        post: operations["create_item_api_v1_items_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/label-printed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Label Printed */
+        post: operations["label_printed_api_v1_items_label_printed_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Item */
+        get: operations["get_item_api_v1_items__public_id__get"];
+        put?: never;
+        post?: never;
+        /** Delete Item */
+        delete: operations["delete_item_api_v1_items__public_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change Item */
+        patch: operations["change_item_api_v1_items__public_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Item Events */
+        get: operations["item_events_api_v1_items__public_id__events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/permanent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Purge Item */
+        delete: operations["purge_item_api_v1_items__public_id__permanent_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/photos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Photo */
+        post: operations["add_photo_api_v1_items__public_id__photos_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/primary-photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Set Primary */
+        put: operations["set_primary_api_v1_items__public_id__primary_photo_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/qr.svg": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Qr */
+        get: operations["qr_api_v1_items__public_id__qr_svg_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Item */
+        post: operations["restore_item_api_v1_items__public_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/locations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Locations */
+        get: operations["list_locations_api_v1_locations_get"];
+        put?: never;
+        /** Create Location */
+        post: operations["create_location_api_v1_locations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/locations/{location_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Location */
+        delete: operations["delete_location_api_v1_locations__location_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change Location */
+        patch: operations["change_location_api_v1_locations__location_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/lookup/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lookup */
+        get: operations["lookup_api_v1_lookup__code__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/photos/{photo_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Hide Photo */
+        delete: operations["hide_photo_api_v1_photos__photo_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/photos/{photo_id}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Photo File */
+        get: operations["photo_file_api_v1_photos__photo_id__file_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/photos/{photo_id}/thumb": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Photo Thumb */
+        get: operations["photo_thumb_api_v1_photos__photo_id__thumb_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/profile": {
         parameters: {
             query?: never;
@@ -177,6 +561,195 @@ export interface components {
             /** Warnings */
             warnings: string[];
         };
+        /** Body_add_draft_photo_api_v1_drafts__draft_id__photos_post */
+        Body_add_draft_photo_api_v1_drafts__draft_id__photos_post: {
+            /** Image */
+            image: string;
+        };
+        /** Body_add_photo_api_v1_items__public_id__photos_post */
+        Body_add_photo_api_v1_items__public_id__photos_post: {
+            /** Image */
+            image: string;
+        };
+        /** Body_create_drafts_api_v1_drafts_post */
+        Body_create_drafts_api_v1_drafts_post: {
+            /** Images[] */
+            "images[]": string[];
+        };
+        /** Category */
+        Category: {
+            /** Expires Default */
+            expires_default: boolean;
+            /** Id */
+            id: number;
+            /** Item Count */
+            item_count: number;
+            /** Label Default */
+            label_default: boolean;
+            /** Maintenance Default */
+            maintenance_default: boolean;
+            /** Name */
+            name: string;
+        };
+        /** CategoryCreate */
+        CategoryCreate: {
+            /**
+             * Expires Default
+             * @default false
+             */
+            expires_default: boolean;
+            /**
+             * Label Default
+             * @default true
+             */
+            label_default: boolean;
+            /**
+             * Maintenance Default
+             * @default false
+             */
+            maintenance_default: boolean;
+            /** Name */
+            name: string;
+        };
+        /** CategoryPatch */
+        CategoryPatch: {
+            /** Expires Default */
+            expires_default?: boolean | null;
+            /** Label Default */
+            label_default?: boolean | null;
+            /** Maintenance Default */
+            maintenance_default?: boolean | null;
+            /** Name */
+            name?: string | null;
+        };
+        /** DeletedItem */
+        DeletedItem: {
+            /** Event Id */
+            event_id: number;
+        };
+        /** Draft */
+        Draft: {
+            /** Created At */
+            created_at: string;
+            fields: components["schemas"]["DraftFields"];
+            /**
+             * Gemini Status
+             * @enum {string}
+             */
+            gemini_status: "none" | "pending" | "done" | "failed" | "skipped";
+            /** Id */
+            id: string;
+            /**
+             * Ocr Status
+             * @enum {string}
+             */
+            ocr_status: "none" | "pending" | "done" | "failed";
+            /** Photos */
+            photos: components["schemas"]["DraftPhoto"][];
+            /** Proposed */
+            proposed: {
+                [key: string]: unknown;
+            };
+            /** Raw Text */
+            raw_text: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "committed" | "discarded";
+        };
+        /** DraftBatch */
+        DraftBatch: {
+            /** Drafts */
+            drafts: components["schemas"]["Draft"][];
+        };
+        /**
+         * DraftFields
+         * @description Keys as in POST /items plus `expiry_confirmed`. A name may be empty while typing.
+         */
+        DraftFields: {
+            /** Attributes */
+            attributes?: {
+                [key: string]: string | number | (string | number)[];
+            } | null;
+            /** Category Id */
+            category_id?: number | null;
+            /** Expiry Confirmed */
+            expiry_confirmed?: boolean | null;
+            /** Expiry Date */
+            expiry_date?: string | null;
+            /** Expiry Mode */
+            expiry_mode?: ("unknown" | "none" | "date") | null;
+            /** Location Id */
+            location_id?: number | null;
+            /** Name */
+            name?: string | null;
+            /** No Label Needed */
+            no_label_needed?: boolean | null;
+            /** Notes */
+            notes?: string | null;
+            /** Price Paise */
+            price_paise?: number | null;
+            /** Quantity */
+            quantity?: number | null;
+        };
+        /** DraftList */
+        DraftList: {
+            /** Items */
+            items: components["schemas"]["Draft"][];
+        };
+        /** DraftPatch */
+        DraftPatch: {
+            fields: components["schemas"]["DraftFields"];
+        };
+        /** DraftPhoto */
+        DraftPhoto: {
+            /** Height */
+            height: number;
+            /** Id */
+            id: string;
+            /** Width */
+            width: number;
+        };
+        /** EventPage */
+        EventPage: {
+            /** Items */
+            items: components["schemas"]["EventView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** EventView */
+        EventView: {
+            /** At */
+            at: string;
+            /** Kind */
+            kind: string;
+            /** Local Date */
+            local_date: string;
+            /** Payload */
+            payload: {
+                [key: string]: unknown;
+            };
+        };
+        /** ExpiryView */
+        ExpiryView: {
+            /** Date */
+            date: string | null;
+            /** Days Left */
+            days_left: number | null;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "unknown" | "none" | "date";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "no_expiry" | "unknown" | "expired" | "today" | "soon" | "ok";
+            /** Word */
+            word: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -205,6 +778,154 @@ export interface components {
              */
             status: "starting" | "ok" | "recovery" | "locked" | "failed";
         };
+        /** ItemCreate */
+        ItemCreate: {
+            /** Attributes */
+            attributes?: {
+                [key: string]: string | number | (string | number)[];
+            } | null;
+            /** Category Id */
+            category_id?: number | null;
+            /** Expiry Date */
+            expiry_date?: string | null;
+            /** Expiry Mode */
+            expiry_mode?: ("unknown" | "none" | "date") | null;
+            /** Location Id */
+            location_id?: number | null;
+            /** Name */
+            name: string;
+            /** No Label Needed */
+            no_label_needed?: boolean | null;
+            /** Notes */
+            notes?: string | null;
+            /** Price Paise */
+            price_paise?: number | null;
+            /** Quantity */
+            quantity?: number | null;
+        };
+        /** ItemDetail */
+        ItemDetail: {
+            /** Attributes */
+            attributes: {
+                [key: string]: string | number | (string | number)[];
+            };
+            category: components["schemas"]["Ref"] | null;
+            /** Category Name */
+            category_name: string | null;
+            /** Created At */
+            created_at: string;
+            /** Deleted At */
+            deleted_at: string | null;
+            expiry: components["schemas"]["ExpiryView"];
+            /** Has Photo */
+            has_photo: boolean;
+            label: components["schemas"]["LabelView"];
+            location: components["schemas"]["Ref"] | null;
+            /** Location Path */
+            location_path: string[];
+            /** Maintenance */
+            maintenance?: null;
+            /** Name */
+            name: string;
+            /** Notes */
+            notes: string;
+            /** Photos */
+            photos: components["schemas"]["PhotoView"][];
+            /** Price Paise */
+            price_paise: number | null;
+            /** Primary Photo Id */
+            primary_photo_id: string | null;
+            /** Public Id */
+            public_id: string;
+            /** Quantity */
+            quantity: number;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "active" | "used" | "expired" | "discarded";
+            /** Updated At */
+            updated_at: string;
+        };
+        /** ItemPage */
+        ItemPage: {
+            /** Items */
+            items: components["schemas"]["ItemSummary"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+            /** Total */
+            total: number;
+        };
+        /**
+         * ItemPatch
+         * @description Any editable field; never `state`. `null` clears category, location, price or date.
+         */
+        ItemPatch: {
+            /** Attributes */
+            attributes?: {
+                [key: string]: string | number | (string | number)[];
+            } | null;
+            /** Category Id */
+            category_id?: number | null;
+            /** Expiry Date */
+            expiry_date?: string | null;
+            /** Expiry Mode */
+            expiry_mode?: ("unknown" | "none" | "date") | null;
+            /** Location Id */
+            location_id?: number | null;
+            /** Name */
+            name?: string | null;
+            /** No Label Needed */
+            no_label_needed?: boolean | null;
+            /** Notes */
+            notes?: string | null;
+            /** Price Paise */
+            price_paise?: number | null;
+            /** Quantity */
+            quantity?: number | null;
+        };
+        /** ItemSummary */
+        ItemSummary: {
+            /** Category Name */
+            category_name: string | null;
+            /** Deleted At */
+            deleted_at: string | null;
+            expiry: components["schemas"]["ExpiryView"];
+            /** Has Photo */
+            has_photo: boolean;
+            /** Location Path */
+            location_path: string[];
+            /** Name */
+            name: string;
+            /** Primary Photo Id */
+            primary_photo_id: string | null;
+            /** Public Id */
+            public_id: string;
+            /** Quantity */
+            quantity: number;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "active" | "used" | "expired" | "discarded";
+        };
+        /** LabelPrinted */
+        LabelPrinted: {
+            /** Public Ids */
+            public_ids: string[];
+        };
+        /** LabelPrintedDone */
+        LabelPrintedDone: {
+            /** Updated */
+            updated: number;
+        };
+        /** LabelView */
+        LabelView: {
+            /** No Label Needed */
+            no_label_needed: boolean;
+            /** Printed At */
+            printed_at: string | null;
+        };
         /** LastGoodBackup */
         LastGoodBackup: {
             /** At */
@@ -214,10 +935,69 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** Location */
+        Location: {
+            /** Id */
+            id: number;
+            /** Item Count */
+            item_count: number;
+            /** Name */
+            name: string;
+            /** Parent Id */
+            parent_id: number | null;
+            /** Path */
+            path: string[];
+        };
+        /** LocationCreate */
+        LocationCreate: {
+            /** Name */
+            name: string;
+            /** Parent Id */
+            parent_id?: number | null;
+        };
+        /**
+         * LocationPatch
+         * @description `parent_id: null` moves the location to the top level; leaving it out keeps it.
+         */
+        LocationPatch: {
+            /** Name */
+            name?: string | null;
+            /** Parent Id */
+            parent_id?: number | null;
+        };
+        /** PermanentDelete */
+        PermanentDelete: {
+            /**
+             * Confirm
+             * @constant
+             */
+            confirm: "DELETE";
+        };
+        /** PhotoView */
+        PhotoView: {
+            /** Height */
+            height: number;
+            /** Id */
+            id: string;
+            /** Is Primary */
+            is_primary: boolean;
+            /** Width */
+            width: number;
+        };
+        /** PrimaryPhoto */
+        PrimaryPhoto: {
+            /** Photo Id */
+            photo_id: string;
+        };
         /** Profile */
         Profile: {
             /** First Run Complete */
             first_run_complete: boolean;
+            /**
+             * First Run Step
+             * @enum {string}
+             */
+            first_run_step: "name" | "categories" | "done";
             /** Name */
             name: string | null;
             /**
@@ -236,6 +1016,13 @@ export interface components {
             theme?: ("system" | "light" | "dark") | null;
             /** Timezone */
             timezone: string;
+        };
+        /** Ref */
+        Ref: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
         };
         /** RestoreBody */
         RestoreBody: {
@@ -258,6 +1045,8 @@ export interface components {
             assistant_share_item_text?: boolean | null;
             /** Coach Enabled */
             coach_enabled?: boolean | null;
+            /** First Run Step */
+            first_run_step?: "done" | null;
             /** Gemini Mode */
             gemini_mode?: ("off" | "ask" | "auto") | null;
             /** Gemini Model */
@@ -292,6 +1081,11 @@ export interface components {
              * @constant
              */
             confirm: "START EMPTY";
+        };
+        /** UndoDone */
+        UndoDone: {
+            /** Ok */
+            ok: boolean;
         };
         /** ValidationError */
         ValidationError: {
@@ -435,6 +1229,1022 @@ export interface operations {
                         [key: string]: unknown;
                     };
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_categories_api_v1_categories_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Category"][];
+                };
+            };
+        };
+    };
+    create_category_api_v1_categories_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CategoryCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Category"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_category_api_v1_categories__category_id__delete: {
+        parameters: {
+            query?: {
+                reassign_to?: string | null;
+            };
+            header?: never;
+            path: {
+                category_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_category_api_v1_categories__category_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                category_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CategoryPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Category"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_drafts_api_v1_drafts_get: {
+        parameters: {
+            query?: {
+                status?: "open" | "committed" | "discarded";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_drafts_api_v1_drafts_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_create_drafts_api_v1_drafts_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftBatch"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_draft_api_v1_drafts__draft_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Draft"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    discard_draft_api_v1_drafts__draft_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_draft_api_v1_drafts__draft_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Draft"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    commit_draft_api_v1_drafts__draft_id__commit_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "idempotency-key"?: string | null;
+            };
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_draft_photo_api_v1_drafts__draft_id__photos_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_add_draft_photo_api_v1_drafts__draft_id__photos_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Draft"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    undo_api_v1_events__event_id__undo_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UndoDone"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_items_api_v1_items_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                category_id?: number | null;
+                location_id?: number | null;
+                state?: "active" | "used" | "expired" | "discarded" | "all";
+                expiry?: "soon" | "today" | "past" | "none" | "unknown" | "any";
+                has_photo?: boolean | null;
+                sort?: "created_desc" | "name_asc" | "expiry_asc";
+                deleted?: "exclude" | "only";
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_item_api_v1_items_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "idempotency-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ItemCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    label_printed_api_v1_items_label_printed_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabelPrinted"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabelPrintedDone"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_item_api_v1_items__public_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_item_api_v1_items__public_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletedItem"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_item_api_v1_items__public_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ItemPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    item_events_api_v1_items__public_id__events_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    purge_item_api_v1_items__public_id__permanent_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PermanentDelete"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_photo_api_v1_items__public_id__photos_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_add_photo_api_v1_items__public_id__photos_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PhotoView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_primary_api_v1_items__public_id__primary_photo_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PrimaryPhoto"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    qr_api_v1_items__public_id__qr_svg_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_item_api_v1_items__public_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_locations_api_v1_locations_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Location"][];
+                };
+            };
+        };
+    };
+    create_location_api_v1_locations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LocationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Location"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_location_api_v1_locations__location_id__delete: {
+        parameters: {
+            query?: {
+                reassign_to?: string | null;
+            };
+            header?: never;
+            path: {
+                location_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_location_api_v1_locations__location_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                location_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LocationPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Location"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    lookup_api_v1_lookup__code__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    hide_photo_api_v1_photos__photo_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                photo_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    photo_file_api_v1_photos__photo_id__file_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                photo_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    photo_thumb_api_v1_photos__photo_id__thumb_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                photo_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {

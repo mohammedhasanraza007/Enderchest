@@ -15,9 +15,11 @@ from .items import get_idempotency
 from .photos import read_upload
 
 router = APIRouter(prefix="/api/v1")
+# A draft shows only the fields filled in so far, not every field as null.
+SET_ONLY = {"response_model_exclude_unset": True}
 
 
-@router.post("/drafts", status_code=201)
+@router.post("/drafts", status_code=201, **SET_ONLY)
 def create_drafts(images: list[UploadFile] = File(..., alias="images[]"),
                   manager: BootManager = Depends(require_ok),
                   conn: sqlite3.Connection = Depends(get_db),
@@ -27,27 +29,27 @@ def create_drafts(images: list[UploadFile] = File(..., alias="images[]"),
     return DraftBatch(drafts=[Draft(**draft) for draft in drafts])
 
 
-@router.get("/drafts")
+@router.get("/drafts", **SET_ONLY)
 def list_drafts(status: Literal["open", "committed", "discarded"] = "open",
                 conn: sqlite3.Connection = Depends(get_db),
                 user_id: int = Depends(current_user_id)) -> DraftList:
     return DraftList(items=[Draft(**d) for d in drafts_service.list_drafts(conn, user_id, status)])
 
 
-@router.get("/drafts/{draft_id}")
+@router.get("/drafts/{draft_id}", **SET_ONLY)
 def get_draft(draft_id: str, conn: sqlite3.Connection = Depends(get_db),
               user_id: int = Depends(current_user_id)) -> Draft:
     return Draft(**drafts_service.get_draft(conn, user_id, draft_id))
 
 
-@router.patch("/drafts/{draft_id}")
+@router.patch("/drafts/{draft_id}", **SET_ONLY)
 def change_draft(draft_id: str, body: DraftPatch, conn: sqlite3.Connection = Depends(get_db),
                  user_id: int = Depends(current_user_id)) -> Draft:
     fields = body.fields.model_dump(exclude_unset=True)
     return Draft(**drafts_service.change_draft(conn, user_id, draft_id, fields))
 
 
-@router.post("/drafts/{draft_id}/photos")
+@router.post("/drafts/{draft_id}/photos", **SET_ONLY)
 def add_draft_photo(draft_id: str, image: UploadFile = File(...),
                     manager: BootManager = Depends(require_ok),
                     conn: sqlite3.Connection = Depends(get_db),
