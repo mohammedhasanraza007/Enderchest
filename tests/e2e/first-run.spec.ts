@@ -2,7 +2,7 @@
 // correctly. (That the name survives stop.bat then run.bat is probe 17, which restarts the
 // container; a browser test cannot.)
 
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page, type Route } from "@playwright/test";
 import { resetApp, saveProfile } from "./helpers";
 
 test.beforeEach(async ({ request }) => {
@@ -82,4 +82,59 @@ test("the name can be changed later in Settings and shows in the capsule", async
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Profile saved.")).toBeVisible();
   await expect(page.getByRole("button", { name: "Mo", exact: true })).toBeVisible();
+});
+
+/** Make only PUT /profile fail, the way `fail` says; every other request goes through. */
+async function breakSaving(page: Page, fail: (route: Route) => Promise<void>): Promise<void> {
+  await page.unrouteAll();
+  await page.route("**/api/v1/profile", (route) =>
+    route.request().method() === "PUT" ? fail(route) : route.continue(),
+  );
+}
+
+test("a failed first-run save keeps the typed name, says why, and the button works again", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/welcome");
+  await page.getByLabel("Your name").fill("Mohammed");
+  const button = page.getByRole("button", { name: "Continue" });
+
+  await breakSaving(page, (route) => route.fulfill({ status: 500, body: "not json" }));
+  await button.click();
+  await expect(page.getByText("Something went wrong. Nothing was lost.")).toBeVisible();
+  await expect(page.getByLabel("Your name")).toHaveValue("Mohammed");
+
+  await breakSaving(page, (route) => route.abort("connectionrefused"));
+  await button.click();
+  await expect(page.getByText(/Enderchest is not answering/)).toBeVisible();
+  await expect(page.getByLabel("Your name")).toHaveValue("Mohammed");
+  expect((await (await request.get("/api/v1/profile")).json()).name).toBeNull();
+
+  await page.unrouteAll();
+  await button.click();
+  await expect(page.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
+});
+
+test("a failed save in Settings keeps the change, says why, and changes nothing", async ({
+  page,
+  request,
+}) => {
+  await saveProfile(request, { name: "Mohammed", timezone: "UTC" });
+  await page.goto("/settings");
+  await page.getByLabel("Your name").fill("Mo");
+  const error = { error: { code: "internal_error", message: "The disk is full.", details: {} } };
+  await breakSaving(page, (route) => route.fulfill({ status: 500, json: error }));
+  await page.getByRole("button", { name: "Save" }).click();
+
+  await expect(page.getByText("The disk is full.")).toBeVisible();
+  await expect(page.getByLabel("Your name")).toHaveValue("Mo");
+  await expect(page.getByText("Profile saved.")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Mohammed", exact: true })).toBeVisible();
+  expect((await (await request.get("/api/v1/profile")).json()).name).toBe("Mohammed");
+
+  await page.unrouteAll();
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByText("Profile saved.")).toBeVisible();
+  await expect(page.getByText("The disk is full.")).toHaveCount(0);
 });

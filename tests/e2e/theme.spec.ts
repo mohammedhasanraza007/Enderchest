@@ -1,7 +1,7 @@
 // Gate 6 of Phase 1: a theme switch persists across reload with no flash; reduced motion is
 // honoured.
 
-import { expect, test } from "@playwright/test";
+import { expect, test, type Route } from "@playwright/test";
 import { resetApp, saveProfile } from "./helpers";
 
 const DARK_BASE = "rgb(22, 17, 13)"; // --bg-base, dark
@@ -68,6 +68,38 @@ test("there is no flash: the theme is on the page before any script of the app r
   }));
   expect(earlyLight.appDrawn).toBe(false);
   expect(earlyLight.background).toBe(LIGHT_BASE);
+});
+
+test("on a slow load nothing is painted before the stylesheets, and System is already resolved", async ({
+  page,
+  request,
+}) => {
+  await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata", theme: "system" });
+  for (const scheme of ["dark", "light"] as const) {
+    await page.emulateMedia({ colorScheme: scheme });
+    // Every stylesheet and every script of the app arrives 2 s late, as on a slow first load.
+    const late = async (route: Route) => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await route.continue();
+    };
+    await page.route("**/*.css", late);
+    await page.route("**/assets/*.js", late);
+    await page.goto("/settings", { waitUntil: "commit" });
+    await page.waitForSelector("html[data-theme]", { state: "attached" });
+    expect(await page.locator("html").getAttribute("data-theme")).toBe(scheme);
+    await page.waitForFunction(() => performance.getEntriesByType("paint").length > 0);
+    const timing = await page.evaluate(() => ({
+      paints: performance.getEntriesByType("paint").map((entry) => entry.startTime),
+      sheets: performance
+        .getEntriesByType("resource")
+        .filter((entry) => entry.name.endsWith(".css"))
+        .map((entry) => (entry as PerformanceResourceTiming).responseEnd),
+    }));
+    // A paint before the last stylesheet arrived would show an unstyled (white) page: a flash.
+    expect(timing.sheets.length).toBeGreaterThan(0);
+    expect(Math.min(...timing.paints)).toBeGreaterThanOrEqual(Math.max(...timing.sheets));
+    await page.unrouteAll();
+  }
 });
 
 test("System follows the operating system, live", async ({ page }) => {
