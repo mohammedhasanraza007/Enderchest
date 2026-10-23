@@ -1,0 +1,274 @@
+Starting the TEST stack: the app at http://127.0.0.1:8471, the frontend at http://127.0.0.1:5173 (Ctrl+C to stop).
+ Image enderchest-tools:latest Building 
+ Image enderchest-app:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.07kB done
+#1 DONE 0.0s
+
+#2 [dev internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB 0.0s done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [vite] resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.4s
+
+#5 [vite] docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [vite internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 ...
+
+#7 [auth] library/node:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/python:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#6 [dev internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 1.2s
+
+#9 [dev internal] load metadata for docker.io/library/node:22-bookworm-slim
+#9 DONE 1.2s
+
+#10 [vite internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [dev internal] load build context
+#11 DONE 0.0s
+
+#12 [dev python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#12 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#12 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#12 DONE 0.0s
+
+#13 [dev frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#13 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#13 DONE 0.0s
+
+#14 [vite internal] load build context
+#14 transferring context: 214.53kB 0.0s done
+#14 DONE 0.0s
+
+#15 [vite tools  7/10] COPY assets/logo /assets/logo
+#15 CACHED
+
+#16 [vite tools  1/10] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#16 CACHED
+
+#17 [vite tools  6/10] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#17 CACHED
+
+#18 [vite frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#18 CACHED
+
+#19 [vite tools  8/10] COPY frontend/ /frontend/
+#19 CACHED
+
+#20 [vite tools  4/10] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#20 CACHED
+
+#21 [vite frontend-deps 2/4] WORKDIR /frontend
+#21 CACHED
+
+#22 [vite python-base 5/5] RUN pip install -r requirements.lock
+#22 CACHED
+
+#23 [vite frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#23 CACHED
+
+#24 [vite tools  2/10] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#24 CACHED
+
+#25 [vite tools  9/10] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#25 CACHED
+
+#26 [vite tools  5/10] RUN pip install -r requirements-dev.lock
+#26 CACHED
+
+#27 [vite python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#27 CACHED
+
+#28 [vite tools  3/10] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#28 CACHED
+
+#29 [vite python-base 3/5] WORKDIR /app
+#29 CACHED
+
+#30 [vite python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#30 CACHED
+
+#31 [vite tools 10/10] COPY backend/ ./
+#31 CACHED
+
+#32 [vite] exporting to image
+#32 exporting layers done
+#32 exporting manifest sha256:d65808ab1eaf328638f9bf10d9af1663be647f73c30fe51a9faa0a73cee913fd 0.0s done
+#32 exporting config sha256:4a31bed48cf20587111b510e17c68a77d5b8e4d0df4300b20f202f49d7f5d667
+#32 ...
+
+#11 [dev internal] load build context
+#11 transferring context: 682.51kB 0.1s done
+#11 DONE 0.1s
+
+#30 [dev python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#30 CACHED
+
+#33 [dev python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#33 CACHED
+
+#34 [dev frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#34 CACHED
+
+#35 [dev runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#35 CACHED
+
+#36 [dev frontend-build 1/3] COPY assets/logo /assets/logo
+#36 CACHED
+
+#37 [dev frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#37 CACHED
+
+#29 [dev python-base 3/5] WORKDIR /app
+#29 CACHED
+
+#38 [dev frontend-build 2/3] COPY frontend/ ./
+#38 CACHED
+
+#21 [dev frontend-deps 2/4] WORKDIR /frontend
+#21 CACHED
+
+#39 [dev python-base 5/5] RUN pip install -r requirements.lock
+#39 CACHED
+
+#40 [dev frontend-build 3/3] RUN npm run build
+#40 CACHED
+
+#41 [dev runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#41 CACHED
+
+#32 [vite] exporting to image
+#32 exporting config sha256:4a31bed48cf20587111b510e17c68a77d5b8e4d0df4300b20f202f49d7f5d667 0.0s done
+#32 exporting attestation manifest sha256:0732fa115dd3cf91c3785f076e3b4e58536cc4566b9673c9796c144626a753b8 0.0s done
+#32 exporting manifest list sha256:b525d43365a7aec3c1258a5739be291a86ef97cb2d71bc36be7273a555d3710d 0.0s done
+#32 naming to docker.io/library/enderchest-tools:latest done
+#32 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#32 DONE 0.2s
+
+#42 [dev] exporting to image
+#42 exporting layers done
+#42 exporting manifest sha256:43bd4a2d8ded00e9dfdf3ee13f4f78c123a99ba4c80efdef375d7cac0dd0a34e 0.0s done
+#42 exporting config sha256:ef334a0d1ea3e19ad375137f1b12f428c841ca31fdcb557e56b0aaab53c6ea18 0.0s done
+#42 exporting attestation manifest sha256:60b7b4d25d61b27610df4b5e9f7367f01e9fa7ae841b4f2843b39e199495f17e 0.0s done
+#42 exporting manifest list sha256:be245fb368727c62e736c70b33501fbf0aa6c1b7efbba9dd47340a700fc28522 0.0s done
+#42 naming to docker.io/library/enderchest-app:latest done
+#42 unpacking to docker.io/library/enderchest-app:latest 0.0s done
+#42 DONE 0.1s
+
+#43 [dev] resolving provenance for metadata file
+#43 DONE 0.0s
+
+#44 [vite] resolving provenance for metadata file
+#44 DONE 0.0s
+ Image enderchest-app:latest Built 
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-dev-1 Creating 
+ Container enderchest-test-dev-1 Created 
+ Container enderchest-test-vite-1 Creating 
+ Container enderchest-test-vite-1 Created 
+Attaching to dev-1, vite-1
+ Container enderchest-test-dev-1 Starting 
+ Container enderchest-test-dev-1 Started 
+ Container enderchest-test-vite-1 Starting 
+ Container enderchest-test-vite-1 Started 
+dev-1  | INFO:     Will watch for changes in these directories: ['/app/app']
+dev-1  | INFO:     Uvicorn running on http://0.0.0.0:8470 (Press CTRL+C to quit)
+dev-1  | INFO:     Started reloader process [7] using StatReload
+vite-1  | 
+vite-1  | > enderchest-frontend@0.1.0 dev
+vite-1  | > vite --host 0.0.0.0 --port 5173
+vite-1  | 
+vite-1  | 
+vite-1  |   VITE v8.3.5  ready in 301 ms
+vite-1  | 
+vite-1  |   ➜  Local:   http://localhost:5173/
+vite-1  |   ➜  Network: http://172.18.0.3:5173/  eth0
+dev-1   | INFO:     Started server process [9]
+dev-1   | INFO:     Waiting for application startup.
+dev-1   | {"ts": "2026-10-23T14:07:59Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+dev-1   | INFO:     Application startup complete.
+dev-1   | {"ts": "2026-10-23T14:07:59Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+dev-1   | INFO:     172.18.0.3:58986 - "GET /health HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:58988 - "GET /api/v1/profile HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:59002 - "PUT /api/v1/profile HTTP/1.1" 200 OK
+dev-1   | WARNING:  StatReload detected changes in 'app/clock.py'. Reloading...
+dev-1   | INFO:     Shutting down
+dev-1   | INFO:     Waiting for application shutdown.
+dev-1   | INFO:     Application shutdown complete.
+dev-1   | INFO:     Finished server process [9]
+dev-1   | INFO:     Started server process [13]
+dev-1   | INFO:     Waiting for application startup.
+dev-1   | {"ts": "2026-10-23T14:08:18Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+dev-1   | INFO:     Application startup complete.
+dev-1   | {"ts": "2026-10-23T14:08:18Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+dev-1   | WARNING:  StatReload detected changes in 'app/clock.py'. Reloading...
+dev-1   | INFO:     Shutting down
+dev-1   | INFO:     Waiting for application shutdown.
+dev-1   | INFO:     Application shutdown complete.
+dev-1   | INFO:     Finished server process [13]
+dev-1   | INFO:     Started server process [16]
+dev-1   | INFO:     Waiting for application startup.
+dev-1   | {"ts": "2026-10-23T14:08:26Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+dev-1   | INFO:     Application startup complete.
+dev-1   | {"ts": "2026-10-23T14:08:27Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+dev-1   | INFO:     172.18.0.3:39450 - "GET /api/v1/profile HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:39460 - "GET /api/v1/backups HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:39464 - "GET /health HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:57038 - "GET /api/v1/profile HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:57042 - "GET /api/v1/backups HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:57048 - "GET /health HTTP/1.1" 200 OK
+[Kvite-1 has been recreated
+vite-1  | npm error path /frontend
+vite-1  | npm error command failed
+vite-1  | npm error signal SIGTERM
+vite-1  | npm error command sh -c vite --host 0.0.0.0 --port 5173
+vite-1  | npm notice
+vite-1  | npm notice New major version of npm available! 10.9.9 -> 12.2.1
+vite-1  | npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+vite-1  | npm notice To update run: npm install -g npm@12.2.1
+vite-1  | npm notice
+vite-1  | npm error A complete log of this run can be found in: /root/.npm/_logs/2026-10-23T14_07_58_163Z-debug-0.log
+[Kvite-1 exited with code 1
+vite-1  | 
+vite-1  | > enderchest-frontend@0.1.0 dev
+vite-1  | > vite --host 0.0.0.0 --port 5173
+vite-1  | 
+vite-1  | 
+vite-1  |   VITE v8.3.5  ready in 233 ms
+vite-1  | 
+vite-1  |   ➜  Local:   http://localhost:5173/
+vite-1  |   ➜  Network: http://172.18.0.3:5173/  eth0
+dev-1   | INFO:     172.18.0.3:34368 - "GET /api/v1/profile HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:34370 - "GET /api/v1/backups HTTP/1.1" 200 OK
+dev-1   | INFO:     172.18.0.3:34374 - "GET /health HTTP/1.1" 200 OK
+vite-1  | npm error path /frontend
+vite-1  | npm error command failed
+vite-1  | npm error signal SIGTERM
+vite-1  | npm error command sh -c vite --host 0.0.0.0 --port 5173
+vite-1  | npm notice
+vite-1  | npm notice New major version of npm available! 10.9.9 -> 12.2.1
+vite-1  | npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+vite-1  | npm notice To update run: npm install -g npm@12.2.1
+vite-1  | npm notice
+vite-1  | npm error A complete log of this run can be found in: /root/.npm/_logs/2026-10-23T14_10_07_565Z-debug-0.log
+[Kvite-1 exited with code 1
+dev-1   | INFO:     Shutting down
+dev-1   | INFO:     Waiting for application shutdown.
+dev-1   | INFO:     Application shutdown complete.
+dev-1   | INFO:     Finished server process [16]
+dev-1   | INFO:     Stopping reloader process [7]
+[Kdev-1 exited with code 0

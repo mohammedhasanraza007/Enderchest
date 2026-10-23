@@ -1,0 +1,9 @@
+== Q5 dev.bat: requests through Vite (5173) to the dev app (8471)
+GET / (Vite index)                           200 text/html 1 vite-client tag
+GET /tokens.css                              200 text/css 5913B
+GET /enderchest-logo.svg                     200 image/svg+xml
+GET /src/main.tsx (transformed)              200 text/javascript
+GET /health via proxy                        {"status":"ok","reason":null,"app_version":"0.1.0","schema_found":1,"schema_supported":1,"env":"test","build_date":null}
+GET /api/v1/profile via proxy                {"name":"Mohammed","timezone":"Asia/Kolkata","theme":"light","first_run_complete":true}
+PUT /api/v1/profile via proxy                {"name":"Dev","timezone":"Asia/Kolkata","theme":"light","first_run_complete":true}
+GET /settings (client route)                 200

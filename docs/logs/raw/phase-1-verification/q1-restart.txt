@@ -1,0 +1,11 @@
+﻿volume enderchest_test_data_q1_20261023193440, backup folder D:\Projects\Enderchest-phase-1b\Enderchest\test-results\q1-backups (2 files)
+seconds for 'docker compose stop' (SIGTERM to exit): 0.9
+exit code after stop: 143
+last log lines:
+  INFO:     Shutting down
+  INFO:     Waiting for application shutdown.
+  INFO:     Application shutdown complete.
+  INFO:     Finished server process [7]
+seconds from 'start' to state ok (existing database): 1.2
+health: status=ok reason= schema=1
+profile: {"name":"Mohammed","timezone":"Asia/Kolkata","theme":"system","first_run_complete":true}

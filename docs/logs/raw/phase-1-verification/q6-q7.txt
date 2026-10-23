@@ -1,0 +1,36 @@
+== Q6: PUT /profile
+no safety header -> 403                                    403  {"error":{"code":"forbidden_host","message":"The safety header is missing.","details":{}}}
+foreign Origin -> 403                                      403  {"error":{"code":"forbidden_host","message":"Requests from other web pages are not allowed.","details":{}}}
+Origin: null -> 403                                        403  {"error":{"code":"forbidden_host","message":"Requests from other web pages are not allowed.","details":{}}}
+text/plain body -> 422                                     422  {"error":{"code":"validation_error","message":"Requests must be JSON.","details":{}}}
+41 characters -> 422                                       422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"name","problem":"Enter a name of 1 to 40 characters.
+spaces only -> 422                                         422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"name","problem":"Enter a name of 1 to 40 characters.
+a number -> 422                                            422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"name","problem":"Input should be a valid string"}]}}
+extra field -> 422                                         422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"admin","problem":"Extra inputs are not permitted"}]}
+unknown zone -> 422                                        422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"timezone","problem":"Choose a time zone from the lis
+control character -> 422                                   422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"name","problem":"A name cannot contain control chara
+not JSON at all -> 422                                     422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"8","problem":"JSON decode error"}]}}}
+after all refusals: profile unchanged (name null)          200  {"name":null,"timezone":"UTC","theme":"system","first_run_complete":false}
+valid, 40 characters plus spaces -> 200                    200  {"name":"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy","timezone":"Asia/Kolkata","theme":"system","first_run_complete":true}
+valid -> 200                                               200  {"name":"Mohammed","timezone":"Asia/Kolkata","theme":"light","first_run_complete":true}
+== Q6: PATCH /settings
+before                                                     200  {"lead_days":3,"coach_enabled":true,"gemini_mode":"off","gemini_model":"","share_images_with_gemini":false,"assistant_share_item_text":false}
+one good key and one unknown key -> 422                    422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"bogus","problem":"Extra inputs are not permitted"}]}
+one good key and one bad value -> 422                      422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"gemini_mode","problem":"Input should be 'off', 'ask'
+string for a number -> 422                                 422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"lead_days","problem":"Input should be a valid intege
+null value -> 422                                          422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"coach_enabled","problem":"This setting needs a value
+out of range 15 -> 422                                     422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"lead_days","problem":"Input should be less than or e
+no safety header -> 403                                    403  {"error":{"code":"forbidden_host","message":"The safety header is missing.","details":{}}}
+after refusals: unchanged                                  200  {"lead_days":3,"coach_enabled":true,"gemini_mode":"off","gemini_model":"","share_images_with_gemini":false,"assistant_share_item_text":false}
+valid -> 200                                               200  {"lead_days":9,"coach_enabled":true,"gemini_mode":"off","gemini_model":"","share_images_with_gemini":false,"assistant_share_item_text":false}
+== Q7: routing
+unknown /api path -> JSON 404                              404  {"error":{"code":"not_found","message":"That does not exist.","details":{}}}
+unknown /api path, POST -> JSON 404                        404  {"error":{"code":"not_found","message":"That does not exist.","details":{}}}
+DELETE on /profile -> 404 or 405, never the shell          404  {"error":{"code":"not_found","message":"That does not exist.","details":{}}}
+gallery is not shipped -> 404                              404  {"error":{"code":"not_found","message":"That does not exist.","details":{}}}
+missing asset -> JSON 404                                  404  {"error":{"code":"not_found","message":"That does not exist.","details":{}}}
+deep link /settings carries the stored theme               data-theme-pref="light"
+/ after first run                                          200 
+/ is the app shell (client-side redirect)                  1 root element(s)
+look-alike host -> 403                                     403
+no CORS header on any answer                               0 access-control headers

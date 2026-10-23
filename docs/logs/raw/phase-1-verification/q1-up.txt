@@ -1,0 +1,16 @@
+﻿volume enderchest_test_data_q1_20261023193440, backup folder D:\Projects\Enderchest-phase-1b\Enderchest\test-results\q1-backups (0 files)
+   Network enderchest-test-q1_default Creating 
+   Volume enderchest_test_data_q1_20261023193440 Creating 
+   Volume enderchest_test_data_q1_20261023193440 Creating 
+   Network enderchest-test-q1_default Creating 
+   Volume enderchest_test_data_q1_20261023193440 Created 
+   Volume enderchest_test_data_q1_20261023193440 Created 
+   Network enderchest-test-q1_default Created 
+   Network enderchest-test-q1_default Created 
+   Container enderchest-test-q1-app-1 Creating 
+   Container enderchest-test-q1-app-1 Created 
+   Container enderchest-test-q1-app-1 Starting 
+   Container enderchest-test-q1-app-1 Started 
+seconds from 'up' to state ok (new database): -1
+health: state= reason= schema=
+profile: {"name":null,"timezone":"UTC","theme":"system","first_run_complete":false}
