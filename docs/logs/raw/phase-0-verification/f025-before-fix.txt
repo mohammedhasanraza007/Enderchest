@@ -1,0 +1,49 @@
+ Container enderchest-test-tools-run-54c984715ed0 Creating 
+ Container enderchest-test-tools-run-54c984715ed0 Created 
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_____________ test_a_failing_backup_waits_before_the_next_attempt ______________
+
+stack = <tests.conftest.Stack object at 0x72b0033de270>, real_clock = None
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72b003795ba0>
+
+    def test_a_failing_backup_waits_before_the_next_attempt(stack: Stack, real_clock, monkeypatch):
+        conn = stack.manager.db()
+        conn.execute("UPDATE users SET timezone = ? WHERE id = 1",
+                     (_zone_where_it_is_ten_in_the_morning(),))
+        attempts: list[str] = []
+    
+        def refuse(settings, kind, **_):
+            attempts.append(kind)
+            raise BackupError("the backup folder refused the copy")
+    
+        monkeypatch.setattr(scheduler_module, "create_backup", refuse)
+        clock.set_now(datetime.now(UTC))
+        scheduler = BackupScheduler(stack.manager)
+    
+        assert scheduler.tick() == "startup"  # the first attempt fails
+        for _ in range(5):  # 2.5 minutes of ticks: still due ("daily"), but no new attempt
+            clock.advance(30)
+>           assert scheduler.tick() is None
+E           AssertionError: assert 'daily' is None
+E            +  where 'daily' = tick()
+E            +    where tick = <app.scheduler.backups.BackupScheduler object at 0x72b0038374d0>.tick
+
+tests/integration/test_backup_retry.py:47: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+{"ts": "2026-10-23T14:20:33Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+{"ts": "2026-10-23T14:20:33Z", "level": "info", "event": "database_created", "env": "test"}
+{"ts": "2026-10-23T14:20:33Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+----------------------------- Captured stdout call -----------------------------
+{"ts": "2026-10-23T14:20:33Z", "level": "info", "event": "backup_due", "reason": "startup"}
+{"ts": "2026-10-23T14:20:33Z", "level": "info", "event": "backup_due", "reason": "daily"}
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_backup_retry.py::test_a_failing_backup_waits_before_the_next_attempt
+1 failed, 1 passed, 1 warning in 0.14s
+

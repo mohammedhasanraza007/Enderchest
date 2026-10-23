@@ -1,0 +1,22 @@
+== Cold start and SIGTERM, measured on the owner's laptop (Docker Desktop 29.8.2, 12 CPUs), test project enderchest-test-q1, volume enderchest_test_data_q1_20261023193440
+-- 1. first start on a brand-new volume (new database). Container StartedAt and the app's own log:
+   StartedAt 2026-10-23T14:04:41.223Z (docker inspect, recorded at the time)
+   {"ts": "2026-10-23T14:04:42Z", "level": "info", "event": "boot_state", "state": "starting", "reason": null}
+   {"ts": "2026-10-23T14:04:42Z", "level": "info", "event": "database_created", "env": "test"}
+   {"ts": "2026-10-23T14:04:42Z", "level": "info", "event": "boot_state", "state": "ok", "reason": null}
+   => state ok within ~1.8 s of the container starting (log has 1 s resolution). Budget: 20 s.
+-- 2. stop then start (existing database), from q1-restart.txt:
+   seconds for 'docker compose stop' (SIGTERM to exit): 0.9
+   exit code after stop: 143
+     INFO:     Shutting down
+     INFO:     Waiting for application shutdown.
+     INFO:     Application shutdown complete.
+     INFO:     Finished server process [7]
+   seconds from 'start' to state ok (existing database): 1.2
+   Exit code 143 (128 + SIGTERM) with a completed lifespan shutdown in the log matches uvicorn re-raising the signal after a clean shutdown (explanation, not separately verified).
+-- 3. database files after the SIGTERM stop (read-only mount of the stopped test volume):
+   total 52
+   drwxr-xr-x 2 enderchest enderchest  4096 Oct 23 14:07 .
+   drwxr-xr-x 7 enderchest enderchest  4096 Oct 23 14:04 ..
+   -rw-r--r-- 1 enderchest enderchest 45056 Oct 23 14:06 enderchest.sqlite3
+   => no -wal and no -shm left: the shutdown checkpoint (TRUNCATE) ran and every connection closed.

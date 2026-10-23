@@ -3,14 +3,14 @@
 # Probes 15 to 18 are not DATA_SAFETY gate probes (D-083): 15 runs the real backup.bat helper
 # script, 16 moves the test clock and checks an idle database is not backed up again, 17 checks
 # that the first-run name survives a stop and a start (Phase 1 gate 4), 18 checks that dev.bat's
-# Vite sees an edit made on Windows.
-#   run-probes.ps1                run probes 1 to 18
+# Vite sees an edit made on Windows, 19 checks that a test build never retags the live image.
+#   run-probes.ps1                run probes 1 to 19
 #   run-probes.ps1 -Only "6,12"   run only those
 #   run-probes.ps1 -Live          probes 4 and 9 use the live build.bat/run.bat (the owner's choice)
 param([string]$Only = '', [switch]$Live)   # -Only is a string: "6,12" (powershell -File does not build arrays)
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
-$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..18 }
+$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..19 }
 $out = Join-Path $root 'test-results'
 New-Item -ItemType Directory -Force $out | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $root '.test-backups') | Out-Null

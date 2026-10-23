@@ -1,0 +1,41 @@
+== setup: reset, a name, one manual backup
+backup made: manual-20261023T141853Z
+== restore while the state is ok
+restore in state ok -> 409 conflict                          409  {"error":{"code":"conflict","message":"Restore is only possible on the recovery page.","details":{"reason":"not allowed while the state is ok"}}}
+start-empty in state ok -> 409 conflict                      409  {"error":{"code":"conflict","message":"Starting empty is only possible on the recovery page.","details":{"reason":"not allowed while the state is ok"}
+== into recovery: delete only the test database file
+delete-db -> recovery                                        200  {"state":"recovery","reason":"database_missing"}
+wrong confirmation (lower case) -> 422                       422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"confirm","problem":"Input should be 'RESTO
+no confirmation -> 422                                       422  {"error":{"code":"validation_error","message":"Some values are not valid.","details":{"problems":[{"field":"confirm","problem":"Field required"}]}}}
+unknown backup name -> 409                                   409  {"error":{"code":"conflict","message":"backup manual-20000101T000000Z was not found in the backup folder","details":{"reason":"restore_refused"}}}
+path in the name -> 409                                      409  {"error":{"code":"conflict","message":"that is not a backup name","details":{"reason":"restore_refused"}}}
+still recovery after the refusals                            200  {"status":"recovery","reason":"database_missing","app_version":"0.1.0","schema_found":null,"schema_supported":1,"env":"test","build_date":null}
+== double submit: two restores of the same backup at the same moment
+restore request 1                                            200  {"restored":"manual-20261023T141853Z","items":null,"photos_missing":0}
+restore request 2                                            409  {"error":{"code":"conflict","message":"Restore is only possible on the recovery page.","details":{"reason":"not allowed while the state is ok"}}}
+state after the double submit                                200  {"status":"ok","reason":null,"app_version":"0.1.0","schema_found":1,"schema_supported":1,"env":"test","build_date":null}
+the owner's name came back                                   200  {"name":"Restore Probe","timezone":"Asia/Kolkata","theme":"system","first_run_complete":true}
+restore-safety backups made (one per restore that ran)             2 "name":"manual- 
+== hardening extras
+Host: localhost.evil.example:8471                            403
+Host: 127.0.0.1.nip.io:8471                                  403
+Host: evil.example                                           403
+Host: localhost                                              403
+Host: 127.0.0.1:9999                                         403
+Host: [::1]:9999                                             403
+Host: LOCALHOST:8471                                         200
+OPTIONS preflight (no safety header) -> 403, no CORS         403  {"error":{"code":"forbidden_host","message":"The safety header is missing.","details":{}}}
+  Access-Control headers on that answer                      0
+multipart on a non-upload path -> 422                        422  {"error":{"code":"validation_error","message":"Requests must be JSON.","details":{}}}
+form-urlencoded -> 422                                       422  {"error":{"code":"validation_error","message":"Requests must be JSON.","details":{}}}
+chunked body with no content type -> 422                     422  {"error":{"code":"validation_error","message":"Requests must be JSON.","details":{}}}
+curl: option --data-binary: error encountered when reading a file
+curl: try 'curl --help' or 'curl --manual' for more information
+20 MB JSON string as the name -> 422 (no size cap yet)         
+  seconds for that request                                   n/a
+app still answers after it                                   200  {"status":"ok","reason":null,"app_version":"0.1.0","schema_found":1,"schema_supported":1,"env":"test","build_date":null}
+== clarification: the backups after the double submit (one restore ran; no safety copy because the database was already gone)
+  auto-20261023T141855Z auto True
+  manual-20261023T141853Z manual True
+{"ts": "2026-10-23T14:18:54Z", "level": "info", "event": "restore_done", "name": "manual-20261023T141853Z", "safety": null, "photos_copied": 0}
+== 20 MB body, re-run from a file: 422 in 273 ms, app still ok, memory 83 MiB
