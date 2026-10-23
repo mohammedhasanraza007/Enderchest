@@ -1,0 +1,12 @@
+﻿== scripts/check_docs.py (repo mounted read-only into the tools image)
+34 md files, 81 endpoints in API.md, 81 referenced
+ERROR docs/CODE_MAP.md:30: path tests/integration/test_boot.py does not exist
+ERROR docs/CODE_MAP.md:70: path tests/conftest.py does not exist
+
+2 errors, 0 warnings
+exit=1
+== scripts/check_docs.py after fixing the two CODE_MAP paths
+34 md files, 81 endpoints in API.md, 81 referenced
+
+0 errors, 0 warnings
+exit=0
