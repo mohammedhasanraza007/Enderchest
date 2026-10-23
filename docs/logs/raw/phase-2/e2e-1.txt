@@ -1,0 +1,910 @@
+ Image enderchest-app-test:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 579B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.5s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/node:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 1.2s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 1.3s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#11 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#11 DONE 0.0s
+
+#12 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#12 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#12 DONE 0.0s
+
+#13 [internal] load build context
+#13 transferring context: 135.53kB 0.0s done
+#13 DONE 0.0s
+
+#14 [frontend-deps 2/4] WORKDIR /frontend
+#14 CACHED
+
+#15 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#15 CACHED
+
+#16 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#16 CACHED
+
+#17 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#17 CACHED
+
+#18 [python-base 3/5] WORKDIR /app
+#18 CACHED
+
+#19 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#19 CACHED
+
+#20 [python-base 5/5] RUN pip install -r requirements.lock
+#20 CACHED
+
+#21 [frontend-build 1/3] COPY assets/logo /assets/logo
+#21 DONE 0.1s
+
+#22 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#22 DONE 0.1s
+
+#23 [frontend-build 2/3] COPY frontend/ ./
+#23 DONE 0.0s
+
+#24 [frontend-build 3/3] RUN npm run build
+#24 0.278 
+#24 0.278 > enderchest-frontend@0.1.0 build
+#24 0.278 > tsc --noEmit && vite build
+#24 0.278 
+#24 3.390 vite v8.3.5 building client environment for production...
+#24 3.402 transforming...
+#24 3.420 
+#24 3.420 /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+#24 3.630 ✓ 2056 modules transformed.
+#24 3.790 rendering chunks...
+#24 3.898 computing gzip size...
+#24 3.906 dist/index.html                                                     1.12 kB │ gzip:   0.58 kB
+#24 3.906 dist/assets/jetbrains-mono-vietnamese-wght-normal-Bt-aOZkq.woff2    7.50 kB
+#24 3.906 dist/assets/jetbrains-mono-greek-wght-normal-Bw9x6K1M.woff2         9.00 kB
+#24 3.906 dist/assets/jetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2     12.10 kB
+#24 3.906 dist/assets/jetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2    15.19 kB
+#24 3.906 dist/assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2           18.22 kB
+#24 3.906 dist/assets/newsreader-vietnamese-opsz-normal-BjhtXyW2.woff2       27.24 kB
+#24 3.906 dist/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2               36.93 kB
+#24 3.906 dist/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2        40.40 kB
+#24 3.906 dist/assets/newsreader-latin-ext-opsz-normal-BQn1nviT.woff2        86.60 kB
+#24 3.906 dist/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2           132.00 kB
+#24 3.906 dist/assets/index-iBoJB1G3.css                                     30.33 kB │ gzip:   8.04 kB
+#24 3.906 dist/assets/index-DEtEcKZg.js                                     559.26 kB │ gzip: 178.61 kB
+#24 3.906 
+#24 3.907 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+#24 3.907     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/index.mjs:11:1 [38;5;246m][0m
+#24 3.907     [38;5;246m│[0m
+#24 3.907  [38;5;246m11 │[0m "use client";
+#24 3.907  [38;5;240m   │[0m ──────┬──────  
+#24 3.907  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#24 3.907  [38;5;240m   │[0m 
+#24 3.907  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.907 [38;5;246m────╯[0m
+#24 3.907 
+#24 3.907 [plugin builtin:vite-reporter] 
+#24 3.907 (!) Some chunks are larger than 500 kB after minification. Consider:
+#24 3.907 - Using dynamic import() to code-split the application
+#24 3.907 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#24 3.907 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#24 3.907 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+#24 3.907    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+#24 3.907    [38;5;246m│[0m
+#24 3.907  [38;5;246m1 │[0m "use client";
+#24 3.907  [38;5;240m  │[0m ──────┬──────  
+#24 3.907  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.907  [38;5;240m  │[0m 
+#24 3.907  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.907 [38;5;246m───╯[0m
+#24 3.907 
+#24 3.908 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+#24 3.908    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+#24 3.908    [38;5;246m│[0m
+#24 3.908  [38;5;246m1 │[0m "use client";
+#24 3.908  [38;5;240m  │[0m ──────┬──────  
+#24 3.908  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.908  [38;5;240m  │[0m 
+#24 3.908  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.908 [38;5;246m───╯[0m
+#24 3.908 
+#24 3.908 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+#24 3.908     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/dom-export.mjs:11:1 [38;5;246m][0m
+#24 3.908     [38;5;246m│[0m
+#24 3.908  [38;5;246m11 │[0m "use client";
+#24 3.908  [38;5;240m   │[0m ──────┬──────  
+#24 3.908  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#24 3.908  [38;5;240m   │[0m 
+#24 3.908  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.908 [38;5;246m────╯[0m
+#24 3.908 
+#24 3.908 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+#24 3.908    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+#24 3.908    [38;5;246m│[0m
+#24 3.908  [38;5;246m1 │[0m "use client";
+#24 3.908  [38;5;240m  │[0m ──────┬──────  
+#24 3.908  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.908  [38;5;240m  │[0m 
+#24 3.908  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.908 [38;5;246m───╯[0m
+#24 3.908 
+#24 3.909 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+#24 3.909    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+#24 3.909    [38;5;246m│[0m
+#24 3.909  [38;5;246m1 │[0m "use client";
+#24 3.909  [38;5;240m  │[0m ──────┬──────  
+#24 3.909  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.909  [38;5;240m  │[0m 
+#24 3.909  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.909 [38;5;246m───╯[0m
+#24 3.909 
+#24 3.909 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+#24 3.909    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+#24 3.909    [38;5;246m│[0m
+#24 3.909  [38;5;246m1 │[0m "use client";
+#24 3.909  [38;5;240m  │[0m ──────┬──────  
+#24 3.909  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.909  [38;5;240m  │[0m 
+#24 3.909  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.909 [38;5;246m───╯[0m
+#24 3.909 
+#24 3.909 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+#24 3.909    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+#24 3.909    [38;5;246m│[0m
+#24 3.909  [38;5;246m1 │[0m "use client";
+#24 3.909  [38;5;240m  │[0m ──────┬──────  
+#24 3.909  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.909  [38;5;240m  │[0m 
+#24 3.909  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.909 [38;5;246m───╯[0m
+#24 3.909 
+#24 3.910 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+#24 3.910    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+#24 3.910    [38;5;246m│[0m
+#24 3.910  [38;5;246m1 │[0m "use client";
+#24 3.910  [38;5;240m  │[0m ──────┬──────  
+#24 3.910  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.910  [38;5;240m  │[0m 
+#24 3.910  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.910 [38;5;246m───╯[0m
+#24 3.910 
+#24 3.910 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+#24 3.910    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+#24 3.910    [38;5;246m│[0m
+#24 3.910  [38;5;246m1 │[0m "use client";
+#24 3.910  [38;5;240m  │[0m ──────┬──────  
+#24 3.910  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.910  [38;5;240m  │[0m 
+#24 3.910  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.910 [38;5;246m───╯[0m
+#24 3.910 
+#24 3.910 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+#24 3.910    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+#24 3.910    [38;5;246m│[0m
+#24 3.910  [38;5;246m1 │[0m "use client";
+#24 3.910  [38;5;240m  │[0m ──────┬──────  
+#24 3.910  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.910  [38;5;240m  │[0m 
+#24 3.910  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.910 [38;5;246m───╯[0m
+#24 3.910 
+#24 3.910 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+#24 3.910    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+#24 3.910    [38;5;246m│[0m
+#24 3.910  [38;5;246m1 │[0m "use client";
+#24 3.910  [38;5;240m  │[0m ──────┬──────  
+#24 3.910  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.910  [38;5;240m  │[0m 
+#24 3.910  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.910 [38;5;246m───╯[0m
+#24 3.910 
+#24 3.911 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+#24 3.911    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+#24 3.911    [38;5;246m│[0m
+#24 3.911  [38;5;246m1 │[0m "use client";
+#24 3.911  [38;5;240m  │[0m ──────┬──────  
+#24 3.911  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.911  [38;5;240m  │[0m 
+#24 3.911  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.911 [38;5;246m───╯[0m
+#24 3.911 
+#24 3.911 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+#24 3.911    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+#24 3.911    [38;5;246m│[0m
+#24 3.911  [38;5;246m1 │[0m "use client";
+#24 3.911  [38;5;240m  │[0m ──────┬──────  
+#24 3.911  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.911  [38;5;240m  │[0m 
+#24 3.911  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.911 [38;5;246m───╯[0m
+#24 3.911 
+#24 3.911 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+#24 3.911    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+#24 3.911    [38;5;246m│[0m
+#24 3.911  [38;5;246m1 │[0m "use client";
+#24 3.911  [38;5;240m  │[0m ──────┬──────  
+#24 3.911  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.911  [38;5;240m  │[0m 
+#24 3.911  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.911 [38;5;246m───╯[0m
+#24 3.911 
+#24 3.911 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+#24 3.911    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+#24 3.911    [38;5;246m│[0m
+#24 3.911  [38;5;246m1 │[0m "use client";
+#24 3.911  [38;5;240m  │[0m ──────┬──────  
+#24 3.911  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.911  [38;5;240m  │[0m 
+#24 3.911  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.911 [38;5;246m───╯[0m
+#24 3.911 
+#24 3.912 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+#24 3.912    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+#24 3.912    [38;5;246m│[0m
+#24 3.912  [38;5;246m1 │[0m "use client";
+#24 3.912  [38;5;240m  │[0m ──────┬──────  
+#24 3.912  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.912  [38;5;240m  │[0m 
+#24 3.912  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.912 [38;5;246m───╯[0m
+#24 3.912 
+#24 3.912 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+#24 3.912    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/context.mjs:2:1 [38;5;246m][0m
+#24 3.912    [38;5;246m│[0m
+#24 3.912  [38;5;246m2 │[0m "use client";
+#24 3.912  [38;5;240m  │[0m ──────┬──────  
+#24 3.912  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.912  [38;5;240m  │[0m 
+#24 3.912  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.912 [38;5;246m───╯[0m
+#24 3.912 
+#24 3.912 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+#24 3.912    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/Icon.mjs:2:1 [38;5;246m][0m
+#24 3.912    [38;5;246m│[0m
+#24 3.912  [38;5;246m2 │[0m "use client";
+#24 3.912  [38;5;240m  │[0m ──────┬──────  
+#24 3.912  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 3.912  [38;5;240m  │[0m 
+#24 3.912  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 3.912 [38;5;246m───╯[0m
+#24 3.912 
+#24 3.913 ✓ built in 521ms
+#24 DONE 4.0s
+
+#25 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#25 DONE 0.1s
+
+#26 exporting to image
+#26 exporting layers 0.1s done
+#26 exporting manifest sha256:685afc5a1ebda22b9fa8cb2ab7d0ed3709f44b0b5ba316c3135876f98648d1cb 0.0s done
+#26 exporting config sha256:478ca01a37c83d9caf1877e74a808f8a44992cf2bc489c81c1f49e6e51c446f8 done
+#26 exporting attestation manifest sha256:b1c17faa7fbeac3fb0ceddc59a50455520f75356581b8b0cda79f9580e7f618b 0.0s done
+#26 exporting manifest list sha256:c4e2bd3d60cb7c42f400f9d97e1a3d5b541feab3470117e6c5ed84c7d3465881 0.0s done
+#26 naming to docker.io/library/enderchest-app-test:latest done
+#26 unpacking to docker.io/library/enderchest-app-test:latest 0.1s done
+#26 DONE 0.2s
+
+#27 resolving provenance for metadata file
+#27 DONE 0.0s
+ Image enderchest-app-test:latest Built 
+ Image enderchest-e2e:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.05kB done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for mcr.microsoft.com/playwright:v1.64.1-noble
+#5 DONE 0.1s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 320B done
+#6 DONE 0.0s
+
+#7 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea
+#7 resolve mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea 0.0s done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 94.55kB 0.0s done
+#8 DONE 0.0s
+
+#9 [e2e 2/8] WORKDIR /frontend
+#9 CACHED
+
+#10 [e2e 3/8] COPY frontend/package.json frontend/package-lock.json ./
+#10 DONE 0.0s
+
+#11 [e2e 4/8] RUN npm ci --ignore-scripts --no-audit --no-fund
+#11 9.821 
+#11 9.821 added 181 packages in 9s
+#11 9.825 npm notice
+#11 9.825 npm notice New major version of npm available! 11.19.1 -> 12.2.1
+#11 9.825 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#11 9.825 npm notice To update run: npm install -g npm@12.2.1
+#11 9.825 npm notice
+#11 DONE 9.9s
+
+#12 [e2e 5/8] COPY assets/logo /assets/logo
+#12 DONE 0.1s
+
+#13 [e2e 6/8] COPY frontend/ ./
+#13 DONE 0.0s
+
+#14 [e2e 7/8] COPY tests/e2e /tests/e2e
+#14 DONE 0.0s
+
+#15 [e2e 8/8] RUN ln -s /frontend/node_modules /tests/node_modules
+#15 DONE 0.2s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 7.0s done
+#16 exporting manifest sha256:875bde80aba3c783e1eba42f9233d2ccf8869d1cc84dd768e5a5d384e47d20d6 0.0s done
+#16 exporting config sha256:3864bb824a71d4a02ab6b42fcb421f4f9bb77e6fc74814c62af4679ff63432b1 0.0s done
+#16 exporting attestation manifest sha256:2c935532bf63e9e42006325e5964beecb6665582ee51734650489ecbef25ba1f 0.0s done
+#16 exporting manifest list sha256:9e7278e0fd138683f6668cd29cca2e02e2f8f30ca1775b2b58ccf6faaf943510 0.0s done
+#16 naming to docker.io/library/enderchest-e2e:latest done
+#16 unpacking to docker.io/library/enderchest-e2e:latest
+#16 unpacking to docker.io/library/enderchest-e2e:latest 4.3s done
+#16 DONE 11.4s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-e2e:latest Built 
+ Container enderchest-test-app-1 Recreate 
+ Container enderchest-test-app-1 Recreated 
+ Container enderchest-test-app-1 Starting 
+ Container enderchest-test-app-1 Started 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-app-1 Running 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-e2e-run-014aef910da9 Creating 
+ Container enderchest-test-e2e-run-014aef910da9 Created 
+[WebServer] 
+[WebServer] /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/dom-export.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+Running 58 tests using 1 worker
+
+  ✓   1 ../tests/e2e/backups.spec.ts:15:5 › Back up now makes a real file in the backup folder and lists it (981ms)
+  ✓   2 ../tests/e2e/backups.spec.ts:44:5 › a double click makes one backup, not two (1.9s)
+  ✓   3 ../tests/e2e/backups.spec.ts:56:5 › no backup banner shows while backups are healthy (300ms)
+  ✓   4 ../tests/e2e/boot-pages.spec.ts:35:7 › the recovery page uses the shared tokens and passes contrast (dark) (374ms)
+  ✓   5 ../tests/e2e/boot-pages.spec.ts:35:7 › the recovery page uses the shared tokens and passes contrast (light) (342ms)
+  ✓   6 ../tests/e2e/boot-pages.spec.ts:61:5 › a wrong confirmation is refused with a message and nothing changes (307ms)
+  ✘   7 ../tests/e2e/boot-pages.spec.ts:74:5 › restoring through the page brings the app and the owner's name back (20.3s)
+  ✓   8 ../tests/e2e/boot-pages.spec.ts:86:5 › every other address shows the same boot page while the app is not ready (420ms)
+  ✓   9 ../tests/e2e/contrast.spec.ts:77:9 › dark theme › every piece of text on every primitive passes WCAG AA (391ms)
+  ✓  10 ../tests/e2e/contrast.spec.ts:111:9 › dark theme › the ratios match the tables in DESIGN.md (214ms)
+  ✓  11 ../tests/e2e/contrast.spec.ts:77:9 › light theme › every piece of text on every primitive passes WCAG AA (344ms)
+  ✓  12 ../tests/e2e/contrast.spec.ts:111:9 › light theme › the ratios match the tables in DESIGN.md (164ms)
+  ✓  13 ../tests/e2e/contrast.spec.ts:133:5 › light theme text on its surfaces also clears 4.5:1 (no table exists for these) (181ms)
+  ✓  14 ../tests/e2e/dead-controls.spec.ts:129:7 › dead-control crawler › /welcome has no dead controls (1.9s)
+  ✘  15 ../tests/e2e/dead-controls.spec.ts:136:7 › dead-control crawler › /settings has no dead controls (1.0m)
+  ✓  16 ../tests/e2e/dead-controls.spec.ts:144:7 › dead-control crawler › the not-found page has no dead controls (7.1s)
+  ✘  17 ../tests/e2e/dead-controls.spec.ts:152:7 › dead-control crawler › every inventory route has no dead controls (1.0m)
+  ✓  18 ../tests/e2e/dead-controls.spec.ts:207:7 › dead-control crawler › the skip link moves to the main content (303ms)
+  ✓  19 ../tests/e2e/first-run.spec.ts:12:5 › a new database sends the owner to the welcome screen from any address (356ms)
+  ✓  20 ../tests/e2e/first-run.spec.ts:20:5 › an empty or too long name is refused with a message and nothing is saved (322ms)
+  ✓  21 ../tests/e2e/first-run.spec.ts:34:5 › name, then starter categories, then a greeting and the app (514ms)
+  ✓  22 ../tests/e2e/first-run.spec.ts:64:5 › Skip on step 2 makes no categories (340ms)
+  ✓  23 ../tests/e2e/first-run.spec.ts:73:5 › closing the tab on step 2 and reopening resumes at step 2 with the name kept (690ms)
+  ✓  24 ../tests/e2e/first-run.spec.ts:100:5 › the name can be changed later in Settings and shows in the capsule (386ms)
+  ✓  25 ../tests/e2e/first-run.spec.ts:120:5 › a failed first-run save keeps the typed name, says why, and the button works again (512ms)
+  ✓  26 ../tests/e2e/first-run.spec.ts:144:5 › a failed save in Settings keeps the change, says why, and changes nothing (500ms)
+  ✘  27 ../tests/e2e/inventory.spec.ts:26:5 › an item added by hand shows in Inventory with its category, location and details (622ms)
+  ✓  28 ../tests/e2e/inventory.spec.ts:63:5 › Save stays disabled with the reason while the form is wrong; closing with edits asks (702ms)
+  ✓  29 ../tests/e2e/inventory.spec.ts:81:5 › a server problem on a field the form does not show becomes a general message (F-024) (716ms)
+  ✓  30 ../tests/e2e/inventory.spec.ts:110:5 › search and filters live in the URL, Back restores them, and 1,000 items stay light (5.2s)
+  ✘  31 ../tests/e2e/inventory.spec.ts:167:5 › photos on the item page: add, make main, hide; the file stays on disk (475ms)
+  ✓  32 ../tests/e2e/inventory.spec.ts:197:5 › delete from the item page, then Undo brings it back (731ms)
+  ✘  33 ../tests/e2e/inventory.spec.ts:209:5 › select mode deletes several items with one Undo, and moves them (1.0m)
+  ✓  34 ../tests/e2e/inventory.spec.ts:238:5 › Trash: restore, then permanent delete after a fresh backup (685ms)
+  ✓  35 ../tests/e2e/inventory.spec.ts:263:5 › labels render at their physical sizes, print, and are marked printed only on Yes (714ms)
+  ✓  36 ../tests/e2e/inventory.spec.ts:305:5 › categories: a delete in use asks where the items go; locations refuse a cycle (987ms)
+  ✓  37 ../tests/e2e/name-menu.spec.ts:23:5 › the name menu works by keyboard alone (395ms)
+  ✓  38 ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the dark theme (787ms)
+  ✓  39 ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the light theme (675ms)
+  ✘  40 ../tests/e2e/primitives.spec.ts:75:5 › shape rules: pills everywhere, soft capsules for tall boxes in light, 24 px cards in dark (193ms)
+  ✓  41 ../tests/e2e/primitives.spec.ts:120:5 › the rupee sign renders from a real font in every family (gate 7) (198ms)
+  ✘  42 ../tests/e2e/routes-contrast.spec.ts:12:7 › text on every inventory route passes WCAG AA (dark) (6.8s)
+  ✓  43 ../tests/e2e/routes-contrast.spec.ts:12:7 › text on every inventory route passes WCAG AA (light) (6.7s)
+  ✘  44 ../tests/e2e/shell-reference.spec.ts:25:5 › the navigation capsule matches the reference frame within 12 px (10.4s)
+  ✓  45 ../tests/e2e/shell-reference.spec.ts:92:5 › screenshots of the shell for the owner to approve (2.0s)
+  ✓  46 ../tests/e2e/theme.spec.ts:19:5 › the choice is saved on the server and survives a reload (524ms)
+  ✓  47 ../tests/e2e/theme.spec.ts:30:5 › there is no flash: the theme is on the page before any script of the app runs (724ms)
+  ✓  48 ../tests/e2e/theme.spec.ts:73:5 › on a slow load nothing is painted before the stylesheets, and System is already resolved (4.9s)
+  ✓  49 ../tests/e2e/theme.spec.ts:105:5 › System follows the operating system, live (454ms)
+  ✓  50 ../tests/e2e/theme.spec.ts:115:5 › the name menu changes the theme too (378ms)
+  ✓  51 ../tests/e2e/theme.spec.ts:122:5 › reduced motion is honoured: no crossfade, no transitions, no running animations (715ms)
+  ✓  52 ../tests/e2e/theme.spec.ts:153:5 › without reduced motion the theme change crossfades briefly (331ms)
+  ✓  53 ../tests/e2e/camera.spec.ts:18:5 › Add mode: the shutter makes a draft, confirm saves the item with its photo; LIVE only while streaming (1.5s)
+  ✓  54 ../tests/e2e/camera.spec.ts:39:5 › a hidden tab stops the stream and showing it starts it again (387ms)
+  ✓  55 ../tests/e2e/camera.spec.ts:55:5 › several uploads make a review queue; drafts count nowhere until saved (954ms)
+  ✓  56 ../tests/e2e/camera.spec.ts:83:5 › HEIC and oversize files get a clear refusal and add nothing (3.1s)
+  ✓  57 ../tests/e2e/camera.spec.ts:107:5 › Scan mode opens the item whose QR is in front of the camera (513ms)
+  ✓  58 ../tests/e2e/camera.spec.ts:134:5 › typed IDs: lowercase and look-alikes open the item, an unknown code says so (556ms)
+
+
+  1) ../tests/e2e/boot-pages.spec.ts:74:5 › restoring through the page brings the app and the owner's name back 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/settings$/
+    Received string:  "http://127.0.0.1:8470/inventory"
+    Timeout: 20000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 20000ms
+        2 × locator resolved to <html lang="en" data-theme="light">…</html>
+          - unexpected value "http://127.0.0.1:8470/"
+        - locator resolved to <html lang="en" data-theme="light" data-theme-pref="system">…</html>
+        - unexpected value "http://127.0.0.1:8470/"
+        40 × locator resolved to <html lang="en" data-theme="light" data-theme-pref="system">…</html>
+           - unexpected value "http://127.0.0.1:8470/inventory"
+
+
+      80 |   await page.getByPlaceholder("Type RESTORE to confirm").fill("RESTORE");
+      81 |   await page.getByRole("button", { name: "Restore this backup" }).click();
+    > 82 |   await expect(page).toHaveURL(/\/settings$/, { timeout: 20_000 });
+         |                      ^
+      83 |   await expect(page.getByRole("button", { name: "Mohammed" })).toBeVisible();
+      84 | });
+      85 |
+        at /tests/e2e/boot-pages.spec.ts:82:22
+
+    Error Context: ../test-results/playwright/boot-pages-restoring-throu-5b387-p-and-the-owner-s-name-back/error-context.md
+
+  2) ../tests/e2e/dead-controls.spec.ts:136:7 › dead-control crawler › /settings has no dead controls 
+
+    Test timeout of 60000ms exceeded.
+
+    Error Context: ../test-results/playwright/dead-controls-dead-control-dc1a6-ttings-has-no-dead-controls/error-context.md
+
+  3) ../tests/e2e/dead-controls.spec.ts:152:7 › dead-control crawler › every inventory route has no dead controls 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.getAttribute: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for locator('button:not(.skip-link), a[href]:not(.skip-link), [role="radio"], [role="switch"], [role="tab"], summary').nth(16)
+
+
+      116 |       known.add(extra.key);
+      117 |       const revealed = page.locator(CONTROLS).nth(extra.index);
+    > 118 |       if ((await revealed.getAttribute("aria-checked")) === "true") continue;
+          |                           ^
+      119 |       tested += 1;
+      120 |       const result = await activate(page, revealed);
+      121 |       if (result === null) dead.push(`${extra.key} (inside ${control.key}) did nothing`);
+        at crawl (/tests/e2e/dead-controls.spec.ts:118:27)
+        at /tests/e2e/dead-controls.spec.ts:199:23
+
+    Error Context: ../test-results/playwright/dead-controls-dead-control-8cac4--route-has-no-dead-controls/error-context.md
+
+  4) ../tests/e2e/inventory.spec.ts:26:5 › an item added by hand shows in Inventory with its category, location and details 
+
+    Error: expect(locator).not.toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Add an item' }).getByLabel('Category')
+    Expected: not ""
+    Error: strict mode violation: getByRole('dialog', { name: 'Add an item' }).getByLabel('Category') resolved to 2 elements:
+        1) <select id="_r_e_" class="field__control">…</select> aka getByLabel('Category', { exact: true })
+        2) <input id="_r_u_" value="Tools" class="field__control"/> aka getByRole('textbox', { name: 'New category name' })
+
+    Call log:
+      - Expect "not toHaveValue" getByRole('dialog', { name: 'Add an item' }).getByLabel('Category') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Add an item' }).getByLabel('Category')
+
+
+      38 |   await sheet.getByLabel("New category name").fill("Tools");
+      39 |   await sheet.getByRole("button", { name: "Add", exact: true }).click();
+    > 40 |   await expect(sheet.getByLabel("Category")).not.toHaveValue("");
+         |                                                  ^
+      41 |   await sheet.getByRole("button", { name: "New location" }).click();
+      42 |   await sheet.getByLabel("New location name").fill("Garage");
+      43 |   await sheet.getByRole("button", { name: "Add", exact: true }).click();
+        at /tests/e2e/inventory.spec.ts:40:50
+
+    Error Context: ../test-results/playwright/inventory-an-item-added-by-18db3-tegory-location-and-details/error-context.md
+
+  5) ../tests/e2e/inventory.spec.ts:167:5 › photos on the item page: add, make main, hide; the file stays on disk 
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator: getByRole('button', { name: 'Main photo' })
+    Expected: disabled
+    Error: strict mode violation: getByRole('button', { name: 'Main photo' }) resolved to 2 elements:
+        1) <button type="button" class="pill pill--ghost">…</button> aka getByRole('button', { name: 'Make main photo' })
+        2) <button type="button" aria-pressed="false" class="photo-strip__thumb" aria-label="Photo 1, main photo">…</button> aka getByRole('button', { name: 'Photo 1, main photo' })
+
+    Call log:
+      - Expect "toBeDisabled" getByRole('button', { name: 'Main photo' }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Main photo' })
+
+
+      182 |   await page.getByRole("button", { name: /^Photo 2/ }).click();
+      183 |   await page.getByRole("button", { name: "Make main photo" }).click();
+    > 184 |   await expect(page.getByRole("button", { name: "Main photo" })).toBeDisabled();
+          |                                                                  ^
+      185 |   const before = await item(page, id);
+      186 |   const main = before.photos.find((photo) => photo.is_primary)!;
+      187 |   expect(before.photos[1]!.id).toBe(main.id);
+        at /tests/e2e/inventory.spec.ts:184:66
+
+    Error Context: ../test-results/playwright/inventory-photos-on-the-it-373cb-hide-the-file-stays-on-disk/error-context.md
+
+  6) ../tests/e2e/inventory.spec.ts:209:5 › select mode deletes several items with one Undo, and moves them 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Browser logs:
+
+    <launching> /ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-ieJuux --remote-debugging-pipe --no-startup-window
+    <launched> pid=1097
+    [pid=1097][err] [1023/153355.341797:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=1097][err] [1023/153355.341905:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+    [pid=1097][err] [1023/153355.348283:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=1097][err] [1023/153355.348542:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=1097][err] [1023/153355.352444:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+    [pid=1097][err] [1023/153355.352563:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+    [pid=1097][err] [1023/153355.352672:WARNING:device/bluetooth/dbus/bluez_dbus_manager.cc:209] Floss manager service not available, cannot set Floss enable/disable.
+    [pid=1097][err] [1023/153355.354723:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: 
+    [pid=1097][err] [1023/153355.367058:WARNING:media/gpu/vaapi/vaapi_wrapper.cc:1655] drmGetDevices2() has not found any devices
+    [pid=1097][err] [1023/153355.368619:WARNING:sandbox/policy/linux/sandbox_linux.cc:405] InitializeSandbox() called with multiple threads in process gpu-process.
+    [pid=1097] <gracefully close start>
+    Call log:
+      - waiting for getByText('Select Alpha')
+        - locator resolved to <span class="visually-hidden">Select Alpha</span>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <label class="item-tile">…</label> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <label class="item-tile">…</label> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        115 × waiting for element to be visible, enabled and stable
+            - element is visible, enabled and stable
+            - scrolling into view if needed
+            - done scrolling
+            - <label class="item-tile">…</label> intercepts pointer events
+          - retrying click action
+            - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      215 |   await page.goto("/inventory");
+      216 |   await page.getByRole("button", { name: "Print labels" }).click();
+    > 217 |   await page.getByText("Select Alpha").click();
+          |                                        ^
+      218 |   await page.getByText("Select Beta").click();
+      219 |   await page.getByRole("button", { name: "Move to location" }).click();
+      220 |   const dialog = page.getByRole("dialog", { name: "Move to location" });
+        at /tests/e2e/inventory.spec.ts:217:40
+
+    Error Context: ../test-results/playwright/inventory-select-mode-dele-a93d3-ith-one-Undo-and-moves-them/error-context.md
+
+  7) ../tests/e2e/primitives.spec.ts:75:5 › shape rules: pills everywhere, soft capsules for tall boxes in light, 24 px cards in dark 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 48
+    Received:    18
+
+      108 |   expect(dark.card?.radius).toBe(24);
+      109 |   expect(dark.panel?.radius).toBe(18);
+    > 110 |   for (const pill of dark.pills) expect(pill.radius).toBeGreaterThanOrEqual(pill.height / 2);
+          |                                                      ^
+      111 |
+      112 |   await setTheme(page, "light");
+      113 |   const light = await radii();
+        at /tests/e2e/primitives.spec.ts:110:54
+
+    Error Context: ../test-results/playwright/primitives-shape-rules-pil-64fa1-n-light-24-px-cards-in-dark/error-context.md
+
+  8) ../tests/e2e/routes-contrast.spec.ts:12:7 › text on every inventory route passes WCAG AA (dark) 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "/inventory span.visually-hidden \"Search items\" 3.99",
+    + ]
+
+      76 |     );
+      77 |     expect(checked).toBeGreaterThan(100);
+    > 78 |     expect(failures).toEqual([]);
+         |                      ^
+      79 |   });
+      80 | }
+      81 |
+        at /tests/e2e/routes-contrast.spec.ts:78:22
+
+    Error Context: ../test-results/playwright/routes-contrast-text-on-ev-725a0--route-passes-WCAG-AA-dark-/error-context.md
+
+  9) ../tests/e2e/shell-reference.spec.ts:25:5 › the navigation capsule matches the reference frame within 12 px 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.nav__capsule a, .nav__capsule button')
+    Expected: 2
+    Received: 4
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.nav__capsule a, .nav__capsule button') with timeout 10000ms
+      - waiting for locator('.nav__capsule a, .nav__capsule button')
+        24 × locator resolved to 4 elements
+           - unexpected value "4"
+
+
+      86 |   expect(star).toBe(0);
+      87 |   // The centre of the capsule is empty: no nav item exists yet (PAGES.md 1).
+    > 88 |   await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(2); // brand, name pill
+         |                                                                       ^
+      89 |   await page.screenshot({ path: `${SHOTS}/settings-dark-1376x768.png` });
+      90 | });
+      91 |
+        at /tests/e2e/shell-reference.spec.ts:88:71
+
+    Error Context: ../test-results/playwright/shell-reference-the-naviga-e5dc7-eference-frame-within-12-px/error-context.md
+
+  9 failed
+    ../tests/e2e/boot-pages.spec.ts:74:5 › restoring through the page brings the app and the owner's name back 
+    ../tests/e2e/dead-controls.spec.ts:136:7 › dead-control crawler › /settings has no dead controls 
+    ../tests/e2e/dead-controls.spec.ts:152:7 › dead-control crawler › every inventory route has no dead controls 
+    ../tests/e2e/inventory.spec.ts:26:5 › an item added by hand shows in Inventory with its category, location and details 
+    ../tests/e2e/inventory.spec.ts:167:5 › photos on the item page: add, make main, hide; the file stays on disk 
+    ../tests/e2e/inventory.spec.ts:209:5 › select mode deletes several items with one Undo, and moves them 
+    ../tests/e2e/primitives.spec.ts:75:5 › shape rules: pills everywhere, soft capsules for tall boxes in light, 24 px cards in dark 
+    ../tests/e2e/routes-contrast.spec.ts:12:7 › text on every inventory route passes WCAG AA (dark) 
+    ../tests/e2e/shell-reference.spec.ts:25:5 › the navigation capsule matches the reference frame within 12 px 
+  49 passed (4.7m)
+

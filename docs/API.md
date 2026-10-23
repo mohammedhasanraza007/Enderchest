@@ -62,10 +62,10 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 ### 2.2 Profile and settings
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 1 | GET | /profile | none | `{name\|null, timezone, theme, first_run_complete}` | `locked` |
+| 1 | GET | /profile | none | `{name\|null, timezone, theme, first_run_complete, first_run_step}`; `first_run_step` is `name`, `categories` or `done`, and `first_run_complete` is true only at `done` (D-084, D-093) | `locked` |
 | 1 | PUT | /profile | `{name, timezone, theme?}`; name 1 to 40 characters after trimming, no control characters; timezone from the IANA list; a theme left out stays as it is (D-085) | profile | `validation_error` |
 | 1 | GET | /settings | none | all keys of `DATA_MODEL.md` 2.3 with defaults filled | |
-| 1 | PATCH | /settings | partial settings | settings | `validation_error` |
+| 1 | PATCH | /settings | partial settings; from Phase 2 also `first_run_step: "done"` (P-01 step 2 finished; the only value a client may write, never returned by `GET /settings`, D-093) | settings | `validation_error` |
 
 ### 2.3 Backups
 | Ph | Method | Path | Request | Success | Errors |
@@ -140,7 +140,7 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | 4 | POST | /items/{public_id}/mark-expired | none | `{item, event_id}` | `conflict` |
 | 4 | POST | /items/{public_id}/discard | none | `{item, event_id}` | `conflict` |
 | 4 | POST | /items/{public_id}/reactivate | `{quantity?:1}` | ItemDetail | `conflict` |
-| 4 | POST | /events/{id}/undo | none | `{ok:true}` | `undo_expired`, `not_found` |
+| 2 | POST | /events/{id}/undo | none; Phase 2 undoes `item_deleted`, later phases add their kinds (D-092) | `{ok:true}` | `undo_expired`, `not_found` |
 
 ### 2.11 Tasks, maintenance and inspections
 | Ph | Method | Path | Request | Success | Errors |
@@ -198,4 +198,4 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | 0 | GET | /test/write-loop | none | `{running, rows, counter, consistent, quick_check}`: the loop's records must be 1..N with the counter equal to N (probes 1 to 6, 8, 11; D-075) | |
 | 0 | GET | /test/clock | none | `{now, local_date}` | |
 | 0 | POST | /test/clock | `{now?, advance_seconds?, local_date?}` | `{now, local_date}` | |
-| 5 | POST | /test/fixtures/{name} | none | loads a named fixture set (for example `storyboard-1`, `items-1000`) into the **test** database | `not_found` |
+| 2 | POST | /test/fixtures/{name} | none | loads a named fixture set into the **test** database: `items-1000` from Phase 2 (D-092), `storyboard-1` in Phase 5 | `not_found` |

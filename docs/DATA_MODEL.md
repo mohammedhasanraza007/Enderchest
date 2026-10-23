@@ -42,6 +42,7 @@ The single source for the database. Read before any schema, repository, API or d
 | `gemini_model` | string | from env `ENDERCHEST_GEMINI_MODEL` |
 | `share_images_with_gemini` | bool | false |
 | `assistant_share_item_text` | bool | false |
+| `first_run_step` | `categories` or `done` (Phase 2, D-093) | not stored until the first name is saved; read through `GET /profile`, never returned by `GET /settings` |
 
 The Gemini API key is **not** here (`DATA_SAFETY.md` section 2).
 
