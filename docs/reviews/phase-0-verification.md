@@ -1,4 +1,6 @@
-# Phase 0 — Verification (fresh session): INCOMPLETE, two defects found
+# Phase 0 — Verification (fresh session): complete for Claude's part, PASS; owner's live checks pending
+
+> **Current verdict (2026-10-23, final pass at the end of this file):** every item Claude can verify has now been run and passes; six defects in all were found and fixed test-first (F-1 to F-4 on 2026-10-21; F-5 the 30 s retry and F-6 the shared image tag on 2026-10-23). Phase 0 closes as **PASS WITH NOTES** when the owner has run the live checks listed in "Final pass". The sections below are the 2026-10-21 record, kept as written.
 
 - Date: 2026-10-21 (same day as the build).
 - Verifier: Sonnet 5.5 in a fresh chat. **The builder was also Sonnet 5.5**, so builder and verifier are the same model; this review is deliberately sceptical and reads the evidence rather than trusting it.
@@ -66,3 +68,31 @@ Each fix was written test-first: the new test or probe was seen to FAIL on the o
 **Still NOT VERIFIED:** the restore HTTP cases (wrong confirmation, state `ok`, double submit), the hardening extras (look-alike hosts, `Origin: null`, preflight, multipart, oversized body), a GET on the live app, `scripts/check_docs.py`, cold start against the 20 s budget, SIGTERM shutdown time. Hypothesis not tested: after repeated failures `tick()` retries every 30 s while no good backup exists. **Owner-only, after this fix pass:** run `backup.bat` once and look for a `manual-` file in `%USERPROFILE%\Enderchest-Backups`; the `-Live` probes 4 and 9; `restore.bat`. Note that `run.bat` after this chat recreates the live container on the new image.
 
 **Verdict after the fix pass:** the four defects are fixed and the regression is green, but the verification is **not complete** (items above) and the owner has not repeated the live checks, so this file does **not** record a PASS. Phase 0 stays `Verification: pending for phase 0` in `handoff.md` (D-082). It can close with a short fresh-session pass over the NOT VERIFIED items plus the owner's live checks.
+
+---
+
+## Final pass (2026-10-23, fresh session, `phase1.1.zip` unzipped into `D:\Projects\Enderchest-phase-1b`)
+
+Verifier: Opus 5.5, a fresh chat; the builder was also a Claude model, so the same scepticism applies. Every item the 2026-10-21 record left NOT VERIFIED, run on the TEST stack (or read-only on live):
+
+| Item | Result | Real output |
+|---|---|---|
+| Restore over HTTP: state `ok` | **PASS** | `POST /boot/restore` and `/boot/start-empty` in state `ok`: 409 `conflict`, "only possible on the recovery page" (`raw/phase-0-verification/restore-hardening.txt`) |
+| Restore over HTTP: wrong confirmation | **PASS** | in recovery: `confirm: "restore"` and no `confirm` both 422 naming `confirm`; an unknown name and `../db/enderchest` 409 `restore_refused`; the state stays `recovery`. The browser test "a wrong confirmation is refused" also passes |
+| Restore over HTTP: double submit | **PASS** | two restores of the same backup sent at once: one 200 (`restored manual-20261023T141853Z`), one 409 (state already `ok`); the log shows one `restore_done`; the owner's name came back |
+| Hardening extras | **PASS** | Host `localhost.evil.example:8471`, `127.0.0.1.nip.io:8471`, `evil.example`, `localhost` (no port), `127.0.0.1:9999`, `[::1]:9999`: all 403 (`LOCALHOST:8471` is 200: host names are case-blind). `Origin: null` 403. An `OPTIONS` preflight: 403, no `Access-Control-*` header. Multipart and form bodies on `/profile`, and a chunked body with no type: 422 "Requests must be JSON." A 20 MB JSON body: 422 in 273 ms, app still `ok`, 83 MiB memory (no size cap exists; Phase 2 adds the 12 MB upload cap) |
+| GET on the live app | **PASS** (read-only) | `/health`: `ok`, `env live`; `/api/v1/test/clock` on live: 404 (test routes absent). Also seen: the live app already runs a Phase 1 image and the welcome screen was completed on it (`raw/phase-0-verification/live-readonly.txt`) |
+| `scripts/check_docs.py` | **PASS after a doc fix** | first run: 2 errors, `CODE_MAP.md` named `tests/...` paths that live under `backend/tests/`; fixed; second run: 34 md files, 81 endpoints, 0 errors, 0 warnings (`check-docs.txt`) |
+| Cold start against 20 s | **PASS** | new database: state `ok` about 1.8 s after the container started; existing database: 1.2 s from `docker compose start` (`coldstart-sigterm.txt`) |
+| SIGTERM shutdown | **PASS** | `docker compose stop`: 0.9 s; log "Application shutdown complete"; afterwards only `enderchest.sqlite3` in `/data/db` (no `-wal`, no `-shm`). Exit code 143 matches uvicorn re-raising SIGTERM after a clean shutdown (explanation, not separately verified) |
+| 30 s retry hypothesis | **CONFIRMED, fixed (F-5, minor)** | integration test: after a failed automatic backup the next tick (30 s later) attempted again (`assert 'daily' is None` failed, `f025-before-fix.txt`). Fix: a 15-minute pause after a failure, cleared by a success (D-090); 3 tests pass (`f025-after-fix.txt`) |
+| New: test builds retag the live image | **FOUND, fixed (F-6, major for the automated workflow)** | `run.bat` starts `enderchest-app:latest` without building, and the test stack built the same tag, so any test run in any worktree chose what the next `run.bat` put on the owner's data (the live app runs a test-built image with no build date). Probe 19: FAIL before (live tag `a1ed582b` became `a73eb8a1` after one test build), PASS after; the test stack now builds `enderchest-app-test` (D-089) |
+
+**Regression on the final code:** `test.bat all` clean (lint; 68 pytest unit, 44 vitest; 93 integration; Playwright 38 plus 3 with no `/backups`) and probes 1 to 19 ALL PASSED on the test stack; the live container and the live image tag were unchanged throughout (`raw/phase-1/p11-final-all.txt`, `p11-final-probes.txt`).
+
+**Owner runs next (Phase 0 closes when these are done):**
+1. `build.bat`, then `run.bat`. Since D-089 only `build.bat` makes the image `run.bat` starts; the tag currently points at a test build from this session (same Phase 1 code, build date `probe19-…`), so build first.
+2. `backup.bat` once, and press Back up now in Settings: a `manual-` file must appear in `%USERPROFILE%\Enderchest-Backups` (the live folder still holds only `auto-` files).
+3. The `-Live` probes 4 and 9: `.\test.bat probes -Only "4,9" -Live` (they run the real `build.bat` and `run.bat`), then `restore.bat` once on a backup you choose.
+
+**Notes (minor):** no request body cap yet (Phase 2's upload cap is 12 MB); the deny rules do not cover deleting files in the host backup folder with `Remove-Item`/`del` or `docker exec … rm` (2026-10-21 note, unchanged); `restore.bat` does not say the app is still stopped when it fails (2026-10-21 note, unchanged).

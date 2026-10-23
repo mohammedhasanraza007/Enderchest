@@ -48,3 +48,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed on the way: double click made two backups; Chrome's `Asia/Calcutta`; selected chip invisible in light; misleading "Working" chip; menu link that did nothing. Docker Desktop stopped once mid-run; the owner restarted it.
 - Not done: Phase 1 and Phase 0 fresh-session verification, owner approval of screenshots, `dev.bat` run, live `run.bat`.
 - Next: see `handoff.md` "Next steps".
+
+## 2026-10-23 · phase1.1 → phase1.2 · Phase 1 verification, Phase 0 final pass, chain hand-off to Phase 2
+- Zip in: `phase1.1.zip` (unzipped into `D:\Projects\Enderchest-phase-1b`, branch `phase-1`). Zip out: `D:\Projects\phase1.2.zip`, unzipped into `D:\Projects\Enderchest-phase-2` on branch `phase-2` for the next session (D-091). Windows `tar` zip route, from a fresh clone.
+- Docker Desktop would not start from Claude (missing registry key); the owner fixed it, then work went on.
+- Checks: `test.bat lint`, `unit`, `integration`, `e2e` re-run (all pass); Phase 1 probes Q1 to Q8 (`docs/reviews/phase-1-verification.md`); every open Phase 0 item (`docs/reviews/phase-0-verification.md`, "Final pass"); final regression: 68 + 44 unit, 93 integration, 38 + 3 browser, probes 1 to 19 ALL PASSED.
+- Failed and fixed (test-first): `dev.bat` Vite never served a Windows edit (probe 18); test builds retagged the live image (D-089, probe 19); failed automatic backups retried every 30 s (D-090); two wrong CODE_MAP paths (`check_docs.py`).
+- Blocked on owner: gate 1 screenshot approval; `build.bat` then `run.bat`; Back up now and `backup.bat` on live; `-Live` probes 4 and 9; `restore.bat`.
+- Next: Phase 2 build (`D:\Projects\phase2-next-prompt.txt`), started by this chat as a new session.
