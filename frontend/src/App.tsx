@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ApiError } from "./api/client";
 import { useProfile } from "./api/queries";
 import { useThemeSync } from "./hooks/useThemeSync";
+import { CameraLiveProvider } from "./patterns/CameraLive";
 import { ErrorBoundary } from "./patterns/ErrorBoundary";
 import { ToastProvider } from "./primitives/Toast";
 import { AppRoutes } from "./routes";
@@ -30,8 +31,10 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ToastProvider>
-            <ThemeSync />
-            <AppRoutes />
+            <CameraLiveProvider>
+              <ThemeSync />
+              <AppRoutes />
+            </CameraLiveProvider>
           </ToastProvider>
         </BrowserRouter>
       </QueryClientProvider>

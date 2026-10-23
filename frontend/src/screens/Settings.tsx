@@ -3,6 +3,9 @@ import { useProfile } from "../api/queries";
 import { AboutSection } from "./settings/AboutSection";
 import { AppearanceSection } from "./settings/AppearanceSection";
 import { BackupSection } from "./settings/BackupSection";
+import { CategoriesSection } from "./settings/CategoriesSection";
+import { DataSection } from "./settings/DataSection";
+import { LocationsSection } from "./settings/LocationsSection";
 import { ProfileSection } from "./settings/ProfileSection";
 
 // P-02, Settings (PAGES.md): one column of frosted cards, each a section. A section appears
@@ -20,7 +23,10 @@ export function Settings() {
       <div className="settings__column">
         <ProfileSection profile={profile} />
         <AppearanceSection profile={named} />
+        <CategoriesSection />
+        <LocationsSection />
         <BackupSection timeZone={profile.timezone} />
+        <DataSection />
         <AboutSection />
       </div>
     </div>

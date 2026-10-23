@@ -1,23 +1,41 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Navigate } from "react-router-dom";
-import { fieldProblems } from "../api/client";
-import { useProfile, useSaveProfile } from "../api/queries";
+import { useQueryClient } from "@tanstack/react-query";
+import { ApiError, fieldProblems } from "../api/client";
+import { api } from "../api/endpoints";
+import { keys, useProfile, useSaveProfile } from "../api/queries";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useSingleFlight } from "../hooks/useSingleFlight";
 import { dayPart, localHour } from "../lib/format";
 import { browserTimeZone, timeZoneOptions } from "../lib/timezones";
 import { Button, LinkButton } from "../primitives/Button";
+import { Chip } from "../primitives/Chip";
 import { GlassCard } from "../primitives/Glass";
 import { BrandMark } from "../primitives/BrandMark";
 import { Input, Select } from "../primitives/Input";
 
 // P-01, the first-run screen (PAGES.md). Step 1 asks for a name and a time zone and saves them.
-// Step 2 (starter categories) arrives with categories in Phase 2. The last step greets the owner
-// and offers the one real thing to do next. First run counts as complete once a name is saved
-// (D-084), so closing the tab after step 1 and coming back goes straight to the app.
+// Step 2 offers six starter categories, all optional. The last step greets the owner and offers
+// the one real thing to do next. The server remembers the step (D-093), so closing the tab on
+// step 2 and coming back resumes at step 2.
 
 const NAME_ERROR = "Enter a name of 1 to 40 characters.";
+
+// DATA_MODEL 2.4: created only when ticked here, never seeded.
+const STARTERS = [
+  { name: "Tools", expires_default: false, maintenance_default: true, label_default: true },
+  { name: "Electronics", expires_default: false, maintenance_default: true, label_default: true },
+  {
+    name: "Food and drink",
+    expires_default: true,
+    maintenance_default: false,
+    label_default: false,
+  },
+  { name: "Cosmetics", expires_default: true, maintenance_default: false, label_default: false },
+  { name: "Household", expires_default: false, maintenance_default: false, label_default: true },
+  { name: "Other", expires_default: false, maintenance_default: false, label_default: true },
+];
 
 export function Welcome() {
   usePageTitle();
@@ -26,7 +44,9 @@ export function Welcome() {
   const once = useSingleFlight();
   // Decided once, on arrival: saving the name below must not bounce this page away mid-way.
   const [alreadyDone] = useState(() => profile.data?.first_run_complete ?? false);
-  const [step, setStep] = useState<"name" | "done">("name");
+  const [step, setStep] = useState<"name" | "categories" | "done">(() =>
+    profile.data?.first_run_step === "categories" ? "categories" : "name",
+  );
   const [name, setName] = useState("");
   const [timeZone, setTimeZone] = useState(browserTimeZone());
   const [problems, setProblems] = useState<Record<string, string>>({});
@@ -47,7 +67,7 @@ export function Welcome() {
       save.mutate(
         { name: trimmed, timezone: timeZone },
         {
-          onSuccess: () => setStep("done"),
+          onSuccess: () => setStep("categories"),
           onError: (error) => {
             const found = fieldProblems(error);
             setProblems(found);
@@ -94,6 +114,8 @@ export function Welcome() {
               Continue
             </Button>
           </form>
+        ) : step === "categories" ? (
+          <StarterCategories onDone={() => setStep("done")} />
         ) : (
           <div className="stack">
             <h1 className="welcome-card__title">
@@ -102,10 +124,81 @@ export function Welcome() {
             <p className="welcome-card__intro">
               You are set up. Everything stays on this computer.
             </p>
-            <LinkButton to="/settings">Open settings</LinkButton>
+            <LinkButton to="/camera?mode=add">Add your first item</LinkButton>
           </div>
         )}
       </GlassCard>
     </main>
+  );
+}
+
+/** Step 2: tick any starter categories; Continue makes them, Skip makes none. */
+function StarterCategories({ onDone }: { onDone: () => void }) {
+  const client = useQueryClient();
+  const [ticked, setTicked] = useState<Set<string>>(new Set());
+  const [busy, setBusy] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+
+  async function finish(names: Set<string>) {
+    if (busy) return;
+    setBusy(true);
+    setFailure(null);
+    try {
+      for (const starter of STARTERS.filter((s) => names.has(s.name))) {
+        try {
+          await api.createCategory(starter);
+        } catch (error) {
+          // Already made on an earlier try (the tab was closed half way): that is fine.
+          if (!(error instanceof ApiError && error.code === "conflict")) throw error;
+        }
+      }
+      await api.patchSettings({ first_run_step: "done" });
+      await client.invalidateQueries({ queryKey: keys.profile });
+      await client.invalidateQueries({ queryKey: keys.categories });
+      onDone();
+    } catch (error) {
+      setFailure(error instanceof Error ? error.message : "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="stack">
+      <h1 className="welcome-card__title">Start with some categories?</h1>
+      <p className="welcome-card__intro">
+        Tick the ones you want. Each sets sensible defaults, such as an expiry date for food. You
+        can change or add categories later in Settings.
+      </p>
+      <div className="chip-row">
+        {STARTERS.map((starter) => (
+          <Chip
+            key={starter.name}
+            selected={ticked.has(starter.name)}
+            onSelect={() => {
+              const next = new Set(ticked);
+              if (next.has(starter.name)) next.delete(starter.name);
+              else next.add(starter.name);
+              setTicked(next);
+            }}
+          >
+            {starter.name}
+          </Chip>
+        ))}
+      </div>
+      {failure ? (
+        <p role="alert" className="form-failure">
+          {failure}
+        </p>
+      ) : null}
+      <div className="sheet-actions">
+        <Button loading={busy} onClick={() => void finish(ticked)}>
+          Continue
+        </Button>
+        <Button variant="ghost" onClick={() => void finish(new Set())}>
+          Skip
+        </Button>
+      </div>
+    </div>
   );
 }

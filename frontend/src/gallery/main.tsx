@@ -19,7 +19,7 @@ import { BrandMark } from "../primitives/BrandMark";
 import { Button, LinkButton } from "../primitives/Button";
 import { Chip } from "../primitives/Chip";
 import { GlassCard, InnerPanel } from "../primitives/Glass";
-import { Input, Select } from "../primitives/Input";
+import { Input, Select, TextArea } from "../primitives/Input";
 import { LiveBadge } from "../primitives/LiveBadge";
 import { Dialog, Sheet } from "../primitives/Overlay";
 import { Skeleton } from "../primitives/Skeleton";
@@ -37,6 +37,7 @@ const SAMPLE_PROFILE: Profile & { name: string } = {
   timezone: "Asia/Kolkata",
   theme: "system",
   first_run_complete: true,
+  first_run_step: "done",
 };
 
 const SAMPLE_BACKUPS: BackupsView = {
@@ -115,6 +116,7 @@ function Gallery() {
               error="Enter a name of 1 to 40 characters."
             />
             <Select label="Time zone" options={ZONES} defaultValue="Asia/Kolkata" />
+            <TextArea label="Notes" defaultValue={"Two lines\nof notes."} rows={3} />
             <Toggle label="A switch" checked={on} onChange={setOn} />
             <Toggle
               label="A disabled switch"

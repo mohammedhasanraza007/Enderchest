@@ -33,18 +33,10 @@ function showBootPage(): void {
   window.location.reload();
 }
 
-export async function request<T>(method: Method, path: string, body?: unknown): Promise<T> {
-  const headers: Record<string, string> = {};
-  if (method !== "GET") headers["X-Enderchest"] = "1";
-  if (body !== undefined) headers["Content-Type"] = "application/json";
-
+async function send<T>(method: Method, path: string, init: RequestInit): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(path, {
-      method,
-      headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
-    });
+    response = await fetch(path, { ...init, method });
   } catch {
     throw new ApiError(
       0,
@@ -66,6 +58,32 @@ export async function request<T>(method: Method, path: string, body?: unknown): 
   );
   if (apiError.code === "locked") showBootPage();
   throw apiError;
+}
+
+/** JSON in and out. `headers` carries extras such as an Idempotency-Key (API 1). */
+export function request<T>(
+  method: Method,
+  path: string,
+  body?: unknown,
+  headers: Record<string, string> = {},
+): Promise<T> {
+  const all: Record<string, string> = { ...headers };
+  if (method !== "GET") all["X-Enderchest"] = "1";
+  if (body !== undefined) all["Content-Type"] = "application/json";
+  return send<T>(method, path, {
+    headers: all,
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+}
+
+/** A multipart upload (photos). The browser writes the Content-Type with its boundary. */
+export function upload<T>(path: string, form: FormData): Promise<T> {
+  return send<T>("POST", path, { headers: { "X-Enderchest": "1" }, body: form });
+}
+
+/** A fresh key per create, so a double click or a retry never makes two (API 1). */
+export function idempotencyKey(): Record<string, string> {
+  return { "Idempotency-Key": crypto.randomUUID() };
 }
 
 /** Field-level problems from a `validation_error`, keyed by field name. */

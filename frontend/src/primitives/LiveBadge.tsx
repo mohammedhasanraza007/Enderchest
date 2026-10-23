@@ -1,5 +1,5 @@
-// The LIVE badge (DESIGN.md 6.4). It exists now so the nav is complete, and stays unused until
-// the camera page (Phase 2): it may only be shown while a camera stream is actually running.
+// The LIVE badge (DESIGN.md 6.4) on the Camera nav item. It may only be shown while a camera
+// stream is actually running (useCamera sets that state).
 
 export function LiveBadge() {
   return (

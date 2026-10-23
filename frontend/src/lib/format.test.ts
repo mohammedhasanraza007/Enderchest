@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dayPart, formatBytes, formatMoment, localHour } from "./format";
+import { dayPart, formatBytes, formatDay, formatMoment, localHour } from "./format";
 
 describe("formatBytes", () => {
   it("rounds to KB below a megabyte and never says 0 KB", () => {
@@ -40,5 +40,13 @@ describe("localHour", () => {
   it("reads the hour in the given zone", () => {
     expect(localHour("Asia/Kolkata", new Date("2026-10-21T16:36:00Z"))).toBe(22);
     expect(localHour("UTC", new Date("2026-10-21T00:10:00Z"))).toBe(0);
+  });
+});
+
+describe("formatDay", () => {
+  it("shows a calendar date as it is, with the year only when it differs", () => {
+    const now = new Date("2026-10-23T12:00:00Z");
+    expect(formatDay("2026-10-16", now)).toBe("16 Oct");
+    expect(formatDay("2027-03-14", now)).toBe("14 Mar 2027");
   });
 });

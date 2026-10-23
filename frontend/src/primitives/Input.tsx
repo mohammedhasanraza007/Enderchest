@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { InputHTMLAttributes, SelectHTMLAttributes } from "react";
+import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { ChevronDown, CircleAlert } from "lucide-react";
 
 // Text input and select (DESIGN.md 6.12): a pill with the label above in muted text.
@@ -47,6 +47,34 @@ export function Input({
         {...rest}
         id={id}
         className="field__control"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error || hint ? messageId : undefined}
+      />
+      <FieldMessage id={messageId} error={error} hint={hint} />
+    </div>
+  );
+}
+
+/** A multi-line field (notes), same label and message rules as Input. */
+export function TextArea({
+  label,
+  hint,
+  error,
+  className,
+  ...rest
+}: FieldProps &
+  Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "className"> & { className?: string }) {
+  const id = useId();
+  const messageId = `${id}-message`;
+  return (
+    <div className={["field", className ?? ""].filter(Boolean).join(" ")}>
+      <label className="field__label" htmlFor={id}>
+        {label}
+      </label>
+      <textarea
+        {...rest}
+        id={id}
+        className="field__control field__control--area"
         aria-invalid={error ? true : undefined}
         aria-describedby={error || hint ? messageId : undefined}
       />

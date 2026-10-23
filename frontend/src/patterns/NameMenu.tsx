@@ -6,8 +6,8 @@ import { useChooseTheme } from "../hooks/useChooseTheme";
 import { statusLine } from "../lib/backupText";
 import { Chip } from "../primitives/Chip";
 
-// The name pill and its menu (PAGES.md 1): Settings, the theme in three small pills, and the
-// backup status line. It is a disclosure (a button that shows a panel), so Tab walks through it
+// The name pill and its menu (PAGES.md 1): Settings, Trash, the theme in three small pills, and
+// the backup status line. It is a disclosure (a button that shows a panel), so Tab walks through it
 // in order; Escape closes it and puts focus back on the pill.
 
 const THEMES: Array<{ value: ThemePref; label: string }> = [
@@ -64,6 +64,9 @@ export function NameMenu({ profile }: { profile: Profile & { name: string } }) {
         <div id={panelId} className="name-menu__panel">
           <Link to="/settings" className="name-menu__link" onClick={() => setOpen(false)}>
             Settings
+          </Link>
+          <Link to="/trash" className="name-menu__link" onClick={() => setOpen(false)}>
+            Trash
           </Link>
           <div className="name-menu__group" role="radiogroup" aria-label="Theme">
             {THEMES.map((theme) => (

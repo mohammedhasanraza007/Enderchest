@@ -48,3 +48,18 @@ export function localHour(timeZone: string, now: Date = new Date()): number {
     .find((part) => part.type === "hour")?.value;
   return Number(hour) % 24;
 }
+
+/**
+ * A calendar date (an expiry, YYYY-MM-DD) as "16 Oct", or "14 Mar 2027" in another year. It has
+ * no time zone, so it is formatted as the date it names, never shifted.
+ */
+export function formatDay(day: string, now: Date = new Date()): string {
+  const moment = new Date(`${day}T00:00:00Z`);
+  const shown = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "short",
+  });
+  const sameYear = moment.getUTCFullYear() === now.getFullYear();
+  return sameYear ? shown.format(moment) : `${shown.format(moment)} ${moment.getUTCFullYear()}`;
+}

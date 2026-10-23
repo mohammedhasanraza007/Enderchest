@@ -5,12 +5,20 @@ import { ErrorState } from "./patterns/ErrorState";
 import { BrandMark } from "./primitives/BrandMark";
 import { GlassCard } from "./primitives/Glass";
 import { Skeleton } from "./primitives/Skeleton";
+import { AddQueue } from "./screens/AddQueue";
+import { Camera } from "./screens/Camera";
+import { ConfirmDraft } from "./screens/ConfirmDraft";
+import { Inventory } from "./screens/Inventory";
+import { Item } from "./screens/Item";
+import { Labels } from "./screens/Labels";
 import { NotFound } from "./screens/NotFound";
 import { Settings } from "./screens/Settings";
+import { Trash } from "./screens/Trash";
 import { Welcome } from "./screens/Welcome";
 
-// Every route of the app (PAGES.md 1). After this phase that is the first-run screen, Settings
-// and the not-found card; `/` goes to Settings until the dashboard exists.
+// Every route of the app (PAGES.md 1). After Phase 2: first run, Inventory, Item, Camera, the
+// review queue and confirm, Labels, Trash, Settings and the not-found card. `/` goes to Inventory
+// until the dashboard exists (Phase 5).
 
 /**
  * Loads the profile once for every page and sends a first-time owner to /welcome. Everything
@@ -56,7 +64,14 @@ export function AppRoutes() {
       <Route element={<FirstRunGate />}>
         <Route path="/welcome" element={<Welcome />} />
         <Route element={<AppShell />}>
-          <Route index element={<Navigate to="/settings" replace />} />
+          <Route index element={<Navigate to="/inventory" replace />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/items/:publicId" element={<Item />} />
+          <Route path="/camera" element={<Camera />} />
+          <Route path="/add" element={<AddQueue />} />
+          <Route path="/add/:draftId" element={<ConfirmDraft />} />
+          <Route path="/labels" element={<Labels />} />
+          <Route path="/trash" element={<Trash />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Route>

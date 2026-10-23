@@ -443,3 +443,11 @@
     transition: none;
   }
 }
+
+/* ------------------------------------------------------------------ text area */
+.field__control--area {
+  min-height: 96px;
+  padding-block: var(--space-3);
+  border-radius: var(--radius-panel);
+  resize: vertical;
+}

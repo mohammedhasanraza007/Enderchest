@@ -10,7 +10,7 @@ import { BrandMark } from "./BrandMark";
 import { Button, LinkButton } from "./Button";
 import { Chip } from "./Chip";
 import { GlassCard, InnerPanel } from "./Glass";
-import { Input, Select } from "./Input";
+import { Input, Select, TextArea } from "./Input";
 import { LiveBadge } from "./LiveBadge";
 import { Skeleton } from "./Skeleton";
 import { StatusChip } from "./StatusChip";
@@ -51,6 +51,15 @@ describe("Button", () => {
     );
     expect(markup).toContain('href="/settings"');
     expect(markup).toContain("pill--primary");
+  });
+});
+
+describe("TextArea", () => {
+  it("ties the label to the field and links its error", () => {
+    const markup = html(<TextArea label="Notes" error="Too long." />);
+    expect(markup).toMatch(/<label[^>]*for="([^"]+)"[\s\S]*<textarea[^>]*id="\1"/);
+    expect(markup).toContain('aria-invalid="true"');
+    expect(markup).toContain("Too long.");
   });
 });
 

@@ -48,6 +48,10 @@
   --chip-danger: #e07a6c;
   --chip-info: #7fb0bc;
 
+  /* Printed labels: black on white paper in every theme, so a scanner reads them. */
+  --print-ink: #000000;
+  --print-paper: #ffffff;
+
   /* Layout */
   --page-margin: clamp(16px, 5.1vw, 70px);
   --content-max: 1240px;
