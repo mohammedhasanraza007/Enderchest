@@ -863,6 +863,10 @@
 .road__pill--lifted::after {
   height: 46px;
 }
+/* On the truck's own day the stem stops at its roof instead of crossing it. */
+.road__pill--on-truck::after {
+  height: 6px;
+}
 .road__day-list {
   display: flex;
   flex-direction: column;

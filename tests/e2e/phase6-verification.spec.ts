@@ -160,6 +160,9 @@ test("the savings pill and the truck on today do not overlap each other or the t
         other!.y + other!.height <= p!.y;
       expect(apart, `pill ${JSON.stringify(p)} vs ${JSON.stringify(other)} at ${width}px`).toBe(true);
     }
+    // The pill's stem stops at the truck's roof instead of crossing the truck.
+    const stem = await pill.evaluate((el) => parseFloat(getComputedStyle(el, "::after").height));
+    expect(p!.y + p!.height + stem).toBeLessThanOrEqual(t!.y + 1);
     await page.screenshot({ path: `/test-results/shots-phase-6v/pill-and-truck-${width}.png` });
   }
 });

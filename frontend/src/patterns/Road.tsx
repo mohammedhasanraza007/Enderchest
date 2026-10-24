@@ -55,7 +55,9 @@ export function Road({ road, title, emptyText, savings }: RoadProps) {
         {pill !== null ? (
           <Link
             to="/savings"
-            className={`road__pill${truckAtStart ? " road__pill--lifted" : ""}`}
+            className={`road__pill${truckAtStart ? " road__pill--lifted" : ""}${
+              road.truck_date === road.start ? " road__pill--on-truck" : ""
+            }`}
             style={{ left: at(road.start) }}
           >
             {formatRupees(pill)} saved
