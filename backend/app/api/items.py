@@ -1,4 +1,5 @@
-"""Items, their history and undo (API 2.5; undo from 2.10 is built early for delete, D-092)."""
+"""Items, their history and undo (API 2.5, 2.10; D-092). Writes that can change what is due are
+followed by a reconcile (D-107)."""
 
 import sqlite3
 from typing import Literal
@@ -20,6 +21,8 @@ from ..schemas.items import (
 )
 from ..services import backups as backup_service
 from ..services import items as items_service
+from ..services import notifications as notifications_service
+from ..services import undo as undo_service
 from .deps import current_user_id, get_db, require_ok
 
 router = APIRouter(prefix="/api/v1")
@@ -57,8 +60,12 @@ def create_item(body: ItemCreate, conn: sqlite3.Connection = Depends(get_db),
                 store: IdempotencyStore = Depends(get_idempotency),
                 idempotency_key: str | None = Header(default=None)) -> ItemDetail:
     fields = body.model_dump(exclude_unset=True)
-    return store.run("POST /items", idempotency_key,
-                     lambda: ItemDetail(**items_service.create_item(conn, user_id, fields)))
+
+    def work() -> ItemDetail:
+        item = ItemDetail(**items_service.create_item(conn, user_id, fields))
+        notifications_service.after_write(conn, user_id)
+        return item
+    return store.run("POST /items", idempotency_key, work)
 
 
 @router.get("/items/{public_id}")
@@ -71,19 +78,25 @@ def get_item(public_id: str, conn: sqlite3.Connection = Depends(get_db),
 def change_item(public_id: str, body: ItemPatch, conn: sqlite3.Connection = Depends(get_db),
                 user_id: int = Depends(current_user_id)) -> ItemDetail:
     changes = body.model_dump(exclude_unset=True)
-    return ItemDetail(**items_service.change_item(conn, user_id, public_id, changes))
+    item = ItemDetail(**items_service.change_item(conn, user_id, public_id, changes))
+    notifications_service.after_write(conn, user_id)
+    return item
 
 
 @router.delete("/items/{public_id}")
 def delete_item(public_id: str, conn: sqlite3.Connection = Depends(get_db),
                 user_id: int = Depends(current_user_id)) -> DeletedItem:
-    return DeletedItem(event_id=items_service.delete_item(conn, user_id, public_id))
+    event_id = items_service.delete_item(conn, user_id, public_id)
+    notifications_service.after_write(conn, user_id)
+    return DeletedItem(event_id=event_id)
 
 
 @router.post("/items/{public_id}/restore")
 def restore_item(public_id: str, conn: sqlite3.Connection = Depends(get_db),
                  user_id: int = Depends(current_user_id)) -> ItemDetail:
-    return ItemDetail(**items_service.restore_item(conn, user_id, public_id))
+    item = ItemDetail(**items_service.restore_item(conn, user_id, public_id))
+    notifications_service.after_write(conn, user_id)
+    return item
 
 
 @router.delete("/items/{public_id}/permanent", status_code=204)
@@ -108,5 +121,6 @@ def item_events(public_id: str, limit: int = Query(default=50, ge=1, le=200),
 @router.post("/events/{event_id}/undo")
 def undo(event_id: int, conn: sqlite3.Connection = Depends(get_db),
          user_id: int = Depends(current_user_id)) -> UndoDone:
-    items_service.undo(conn, user_id, event_id)
+    undo_service.undo(conn, user_id, event_id)
+    notifications_service.after_write(conn, user_id)
     return UndoDone(ok=True)

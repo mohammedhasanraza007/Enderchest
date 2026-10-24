@@ -8,7 +8,7 @@ import base64
 import json
 import sqlite3
 from collections.abc import Callable
-from datetime import UTC, datetime, timedelta
+from datetime import timedelta
 
 from .. import clock, ids
 from ..config import Settings
@@ -23,9 +23,8 @@ from ..repositories import locations as locations_repo
 from ..repositories import photos as photos_repo
 from . import catalog
 from . import profile as profile_service
+from . import tasks as tasks_service
 
-UNDO_WINDOW = timedelta(seconds=60)
-UNDOABLE = {"item_deleted"}
 _ID_ATTEMPTS = 20
 
 
@@ -78,7 +77,8 @@ def _detail(conn: sqlite3.Connection, user_id: int, row: sqlite3.Row) -> dict:
                   "no_label_needed": bool(row["no_label_needed"])},
         "photos": [{"id": p["id"], "is_primary": p["id"] == row["primary_photo_id"],
                     "width": p["width"], "height": p["height"]} for p in photos],
-        "maintenance": None,
+        "maintenance": tasks_service.maintenance_view(conn, user_id, row["id"]),
+        "maintenance_suggestion": tasks_service.maintenance_suggestion(conn, user_id, row["id"]),
         "created_at": row["created_at"], "updated_at": row["updated_at"],
     }
 
@@ -284,20 +284,14 @@ def restore_item(conn: sqlite3.Connection, user_id: int, public_id: str,
     return get_item(conn, user_id, public_id)
 
 
-def undo(conn: sqlite3.Connection, user_id: int, event_id: int) -> None:
-    """POST /events/{id}/undo (D-092): only `item_deleted`, within 60 seconds."""
-    event = events_repo.get(conn, user_id, event_id)
-    if event is None or event["kind"] not in UNDOABLE:
-        raise AppError("not_found", 404, "There is nothing to undo.")
-    at = datetime.strptime(event["at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
-    if clock.now() - at > UNDO_WINDOW:
-        raise AppError("undo_expired", 409, "It is too late to undo. Restore the item from Trash.")
+def undo_delete(conn: sqlite3.Connection, user_id: int, event: sqlite3.Row) -> None:
+    """Undo `item_deleted` (D-092): the item comes back from Trash."""
     row = items_repo.get_by_id(conn, user_id, event["item_id"])
     if row is None:
         raise _not_found()
-    if row["deleted_at"] is None or events_repo.undone(conn, user_id, event_id):
-        return  # already back: a second Undo click changes nothing
-    restore_item(conn, user_id, row["public_id"], undo_of=event_id)
+    if row["deleted_at"] is None:
+        return  # already back
+    restore_item(conn, user_id, row["public_id"], undo_of=event["id"])
 
 
 def purge_item(conn: sqlite3.Connection, settings: Settings, user_id: int, public_id: str,

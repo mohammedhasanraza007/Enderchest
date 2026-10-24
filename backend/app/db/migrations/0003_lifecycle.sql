@@ -70,3 +70,6 @@ CREATE TABLE notifications (
 CREATE INDEX notifications_status ON notifications (user_id, status, due_date);
 CREATE INDEX notifications_item ON notifications (item_id);
 CREATE INDEX notifications_task ON notifications (task_id);
+
+-- Task history and undo look events up by task.
+CREATE INDEX events_task ON events (user_id, task_id, id);

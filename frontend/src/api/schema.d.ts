@@ -323,6 +323,23 @@ export interface paths {
         patch: operations["change_item_api_v1_items__public_id__patch"];
         trace?: never;
     };
+    "/api/v1/items/{public_id}/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Discard Item */
+        post: operations["discard_item_api_v1_items__public_id__discard_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/items/{public_id}/events": {
         parameters: {
             query?: never;
@@ -334,6 +351,58 @@ export interface paths {
         get: operations["item_events_api_v1_items__public_id__events_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/inspections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Inspections */
+        get: operations["list_inspections_api_v1_items__public_id__inspections_get"];
+        put?: never;
+        /** Add Inspection */
+        post: operations["add_inspection_api_v1_items__public_id__inspections_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/maintenance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Put Maintenance */
+        put: operations["put_maintenance_api_v1_items__public_id__maintenance_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/mark-expired": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark Expired */
+        post: operations["mark_expired_api_v1_items__public_id__mark_expired_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -408,6 +477,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/items/{public_id}/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reactivate Item */
+        post: operations["reactivate_item_api_v1_items__public_id__reactivate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/items/{public_id}/restore": {
         parameters: {
             query?: never;
@@ -419,6 +505,23 @@ export interface paths {
         put?: never;
         /** Restore Item */
         post: operations["restore_item_api_v1_items__public_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/items/{public_id}/use": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Use Item */
+        post: operations["use_item_api_v1_items__public_id__use_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -472,6 +575,125 @@ export interface paths {
         get: operations["lookup_api_v1_lookup__code__get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Notifications */
+        get: operations["list_notifications_api_v1_notifications_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Count */
+        get: operations["count_api_v1_notifications_count_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/read-all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read All */
+        post: operations["read_all_api_v1_notifications_read_all_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/{notification_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dismiss */
+        post: operations["dismiss_api_v1_notifications__notification_id__dismiss_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/{notification_id}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read */
+        post: operations["read_api_v1_notifications__notification_id__read_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/{notification_id}/shown": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Shown */
+        post: operations["shown_api_v1_notifications__notification_id__shown_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/{notification_id}/snooze": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Snooze */
+        post: operations["snooze_api_v1_notifications__notification_id__snooze_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -563,6 +785,76 @@ export interface paths {
         head?: never;
         /** Patch Settings */
         patch: operations["patch_settings_api_v1_settings_patch"];
+        trace?: never;
+    };
+    "/api/v1/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Tasks */
+        get: operations["list_tasks_api_v1_tasks_get"];
+        put?: never;
+        /** Create Task */
+        post: operations["create_task_api_v1_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Task */
+        delete: operations["delete_task_api_v1_tasks__task_id__delete"];
+        options?: never;
+        head?: never;
+        /** Change Task */
+        patch: operations["change_task_api_v1_tasks__task_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/tasks/{task_id}/done": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Task Done */
+        post: operations["task_done_api_v1_tasks__task_id__done_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tasks/{task_id}/skip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Task Skip */
+        post: operations["task_skip_api_v1_tasks__task_id__skip_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/health": {
@@ -909,6 +1201,51 @@ export interface components {
              */
             status: "starting" | "ok" | "recovery" | "locked" | "failed";
         };
+        /** InspectionCreate */
+        InspectionCreate: {
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /** Photo Id */
+            photo_id?: string | null;
+            /**
+             * Result
+             * @enum {string}
+             */
+            result: "ok" | "worn" | "defective";
+        };
+        /** InspectionDone */
+        InspectionDone: {
+            /** Event Id */
+            event_id: number;
+            inspection: components["schemas"]["InspectionView"];
+            task: components["schemas"]["TaskView"] | null;
+        };
+        /** InspectionList */
+        InspectionList: {
+            /** Items */
+            items: components["schemas"]["InspectionView"][];
+        };
+        /** InspectionView */
+        InspectionView: {
+            /** Id */
+            id: number;
+            /** Local Date */
+            local_date: string;
+            /** Note */
+            note: string;
+            /** Performed At */
+            performed_at: string;
+            /** Photo Id */
+            photo_id: string | null;
+            /**
+             * Result
+             * @enum {string}
+             */
+            result: "ok" | "worn" | "defective";
+        };
         /** ItemCreate */
         ItemCreate: {
             /** Attributes */
@@ -954,8 +1291,8 @@ export interface components {
             location: components["schemas"]["Ref"] | null;
             /** Location Path */
             location_path: string[];
-            /** Maintenance */
-            maintenance?: null;
+            maintenance: components["schemas"]["MaintenanceView"] | null;
+            maintenance_suggestion: components["schemas"]["MaintenanceSuggestion"] | null;
             /** Name */
             name: string;
             /** Notes */
@@ -1014,6 +1351,13 @@ export interface components {
             price_paise?: number | null;
             /** Quantity */
             quantity?: number | null;
+        };
+        /** ItemRefShort */
+        ItemRefShort: {
+            /** Name */
+            name: string;
+            /** Public Id */
+            public_id: string;
         };
         /** ItemSummary */
         ItemSummary: {
@@ -1076,6 +1420,12 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** LifecycleDone */
+        LifecycleDone: {
+            /** Event Id */
+            event_id: number;
+            item: components["schemas"]["ItemDetail"];
+        };
         /** Location */
         Location: {
             /** Id */
@@ -1105,6 +1455,128 @@ export interface components {
             name?: string | null;
             /** Parent Id */
             parent_id?: number | null;
+        };
+        /**
+         * MaintenanceBody
+         * @description Creates or updates the item's maintenance task (API 2.11).
+         */
+        MaintenanceBody: {
+            /** Enabled */
+            enabled: boolean;
+            /** First Due */
+            first_due?: string | null;
+            /** Interval Days */
+            interval_days?: number | null;
+            /** Source */
+            source?: ("user" | "gemini") | null;
+        };
+        /**
+         * MaintenanceSuggestion
+         * @description Gemini's inspection interval from the draft that made the item (D-102): shown as
+         *     "suggested, unverified", never applied without the owner.
+         */
+        MaintenanceSuggestion: {
+            /** Interval Days */
+            interval_days: number;
+        };
+        /**
+         * MaintenanceView
+         * @description The item's maintenance task (API 1, ItemDetail); `enabled` is the per-item toggle.
+         */
+        MaintenanceView: {
+            /** Enabled */
+            enabled: boolean;
+            /** Interval Days */
+            interval_days: number | null;
+            /** Last Done */
+            last_done: string | null;
+            /** Next Due */
+            next_due: string;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "user" | "gemini";
+            /** Task Id */
+            task_id: number;
+        };
+        /** NotificationAction */
+        NotificationAction: {
+            /**
+             * Key
+             * @enum {string}
+             */
+            key: "use" | "mark_expired" | "discard" | "snooze" | "inspect" | "skip" | "done" | "keep";
+            /** Label */
+            label: string;
+            /** Primary */
+            primary: boolean;
+        };
+        /** NotificationCount */
+        NotificationCount: {
+            /** Open */
+            open: number;
+            /** Unread */
+            unread: number;
+            /** Unshown */
+            unshown: components["schemas"]["NotificationView"][];
+        };
+        /** NotificationItem */
+        NotificationItem: {
+            /** Name */
+            name: string;
+            /** Primary Photo Id */
+            primary_photo_id: string | null;
+            /** Public Id */
+            public_id: string;
+        };
+        /** NotificationPage */
+        NotificationPage: {
+            /** Items */
+            items: components["schemas"]["NotificationView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** NotificationTask */
+        NotificationTask: {
+            /** Id */
+            id: number;
+            /** Title */
+            title: string;
+        };
+        /** NotificationView */
+        NotificationView: {
+            /** Actions */
+            actions: components["schemas"]["NotificationAction"][];
+            /** Due Date */
+            due_date: string;
+            /** Id */
+            id: number;
+            item: components["schemas"]["NotificationItem"] | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "expiry_soon" | "expired" | "inspection_due" | "task_due" | "inspection_finding";
+            /** Read At */
+            read_at: string | null;
+            /** Resolution */
+            resolution: string | null;
+            /** Snoozed Until */
+            snoozed_until: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "open" | "snoozed" | "resolved";
+            task: components["schemas"]["NotificationTask"] | null;
+            /**
+             * Urgency
+             * @enum {string}
+             */
+            urgency: "overdue" | "today" | "upcoming";
+            /** Word */
+            word: string;
         };
         /** PermanentDelete */
         PermanentDelete: {
@@ -1182,6 +1654,16 @@ export interface components {
             /** Value */
             value: string | number;
         };
+        /** ReactivateBody */
+        ReactivateBody: {
+            /** Quantity */
+            quantity?: number | null;
+        };
+        /** ReadAllDone */
+        ReadAllDone: {
+            /** Updated */
+            updated: number;
+        };
         /** ReadingInfo */
         ReadingInfo: {
             /** Engine */
@@ -1248,6 +1730,19 @@ export interface components {
             /** Share Images With Gemini */
             share_images_with_gemini: boolean;
         };
+        /** ShownResult */
+        ShownResult: {
+            /** Claimed */
+            claimed: boolean;
+        };
+        /** SnoozeBody */
+        SnoozeBody: {
+            /**
+             * Option
+             * @enum {string}
+             */
+            option: "tomorrow" | "3days" | "week";
+        };
         /** StartEmptyBody */
         StartEmptyBody: {
             /**
@@ -1255,6 +1750,110 @@ export interface components {
              * @constant
              */
             confirm: "START EMPTY";
+        };
+        /** TaskCreate */
+        TaskCreate: {
+            /**
+             * Enabled
+             * @default true
+             */
+            enabled: boolean;
+            /** First Due */
+            first_due: string;
+            /** Interval Days */
+            interval_days?: number | null;
+            /** Item Public Id */
+            item_public_id?: string | null;
+            /**
+             * Kind
+             * @default chore
+             * @enum {string}
+             */
+            kind: "maintenance" | "chore";
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /**
+             * Schedule Mode
+             * @default from_completion
+             * @enum {string}
+             */
+            schedule_mode: "from_completion" | "fixed";
+            /** Title */
+            title: string;
+        };
+        /** TaskDeleted */
+        TaskDeleted: {
+            /** Event Id */
+            event_id: number;
+        };
+        /** TaskDone */
+        TaskDone: {
+            /** Event Id */
+            event_id: number;
+            task: components["schemas"]["TaskView"];
+        };
+        /** TaskList */
+        TaskList: {
+            /** Items */
+            items: components["schemas"]["TaskView"][];
+        };
+        /**
+         * TaskPatch
+         * @description Any of these; `null` clears the repeat (one-off) or the item link.
+         */
+        TaskPatch: {
+            /** Enabled */
+            enabled?: boolean | null;
+            /** Interval Days */
+            interval_days?: number | null;
+            /** Item Public Id */
+            item_public_id?: string | null;
+            /** Next Due */
+            next_due?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Schedule Mode */
+            schedule_mode?: ("from_completion" | "fixed") | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** TaskView */
+        TaskView: {
+            /** Enabled */
+            enabled: boolean;
+            /** Id */
+            id: number;
+            /** Interval Days */
+            interval_days: number | null;
+            item: components["schemas"]["ItemRefShort"] | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "maintenance" | "chore";
+            /** Last Done */
+            last_done: string | null;
+            /** Next Due */
+            next_due: string;
+            /** Notes */
+            notes: string;
+            /**
+             * Schedule Mode
+             * @enum {string}
+             */
+            schedule_mode: "from_completion" | "fixed";
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "user" | "gemini";
+            /** Title */
+            title: string;
+            /** Word */
+            word: string;
         };
         /** TestResult */
         TestResult: {
@@ -1269,6 +1868,14 @@ export interface components {
         UndoDone: {
             /** Ok */
             ok: boolean;
+        };
+        /** UseBody */
+        UseBody: {
+            /**
+             * Amount
+             * @default 1
+             */
+            amount: number;
         };
         /** ValidationError */
         ValidationError: {
@@ -2132,6 +2739,37 @@ export interface operations {
             };
         };
     };
+    discard_item_api_v1_items__public_id__discard_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LifecycleDone"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     item_events_api_v1_items__public_id__events_get: {
         parameters: {
             query?: {
@@ -2153,6 +2791,138 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EventPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_inspections_api_v1_items__public_id__inspections_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_inspection_api_v1_items__public_id__inspections_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InspectionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InspectionDone"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    put_maintenance_api_v1_items__public_id__maintenance_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintenanceBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mark_expired_api_v1_items__public_id__mark_expired_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LifecycleDone"];
                 };
             };
             /** @description Validation Error */
@@ -2298,6 +3068,41 @@ export interface operations {
             };
         };
     };
+    reactivate_item_api_v1_items__public_id__reactivate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ReactivateBody"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     restore_item_api_v1_items__public_id__restore_post: {
         parameters: {
             query?: never;
@@ -2316,6 +3121,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ItemDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    use_item_api_v1_items__public_id__use_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                public_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["UseBody"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LifecycleDone"];
                 };
             };
             /** @description Validation Error */
@@ -2466,6 +3306,205 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ItemSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_notifications_api_v1_notifications_get: {
+        parameters: {
+            query?: {
+                status?: "open" | "snoozed" | "resolved" | "all";
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    count_api_v1_notifications_count_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationCount"];
+                };
+            };
+        };
+    };
+    read_all_api_v1_notifications_read_all_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReadAllDone"];
+                };
+            };
+        };
+    };
+    dismiss_api_v1_notifications__notification_id__dismiss_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_api_v1_notifications__notification_id__read_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    shown_api_v1_notifications__notification_id__shown_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShownResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    snooze_api_v1_notifications__notification_id__snooze_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SnoozeBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotificationView"];
                 };
             };
             /** @description Validation Error */
@@ -2659,6 +3698,201 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SettingsView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_tasks_api_v1_tasks_get: {
+        parameters: {
+            query?: {
+                scope?: "open" | "due" | "all" | "done";
+                item?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_task_api_v1_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "idempotency-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_task_api_v1_tasks__task_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDeleted"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_task_api_v1_tasks__task_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    task_done_api_v1_tasks__task_id__done_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDone"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    task_skip_api_v1_tasks__task_id__skip_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDone"];
                 };
             };
             /** @description Validation Error */

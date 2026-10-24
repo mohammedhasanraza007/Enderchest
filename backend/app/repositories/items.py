@@ -142,6 +142,15 @@ def set_deleted(conn: sqlite3.Connection, user_id: int, item_id: int, deleted_at
                  (deleted_at, now, user_id, item_id))
 
 
+def set_state(conn: sqlite3.Connection, user_id: int, item_id: int, *, state: str,
+              quantity: int, state_changed_at: str, now: str) -> None:
+    """Lifecycle changes (API 2.10); `state` is never an editable field."""
+    conn.execute(
+        "UPDATE items SET state = ?, quantity = ?, state_changed_at = ?, updated_at = ? "
+        "WHERE user_id = ? AND id = ?",
+        (state, quantity, state_changed_at, now, user_id, item_id))
+
+
 def set_primary_photo(conn: sqlite3.Connection, user_id: int, item_id: int,
                       photo_id: str | None, now: str) -> None:
     conn.execute(

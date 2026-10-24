@@ -52,3 +52,13 @@ def set_status(conn: sqlite3.Connection, user_id: int, draft_id: str, status: st
         "UPDATE drafts SET status = ?, committed_item_id = ?, updated_at = ? "
         "WHERE user_id = ? AND id = ?",
         (status, committed_item_id, now, user_id, draft_id))
+
+
+def gemini_interval_for_item(conn: sqlite3.Connection, user_id: int, item_id: int) -> int | None:
+    """Gemini's suggested inspection interval from the draft that made the item (D-102)."""
+    row = conn.execute(
+        "SELECT json_extract(gemini_result, '$.values.inspection_interval_days') AS days "
+        "FROM drafts WHERE user_id = ? AND committed_item_id = ? AND gemini_status = 'done' "
+        "ORDER BY updated_at DESC LIMIT 1", (user_id, item_id)).fetchone()
+    days = row["days"] if row else None
+    return days if isinstance(days, int) and 1 <= days <= 3650 else None

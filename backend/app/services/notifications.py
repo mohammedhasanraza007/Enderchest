@@ -270,3 +270,12 @@ def resolve_for_task(conn: sqlite3.Connection, user_id: int, task_id: int, resol
     """Inside the caller's transaction: a task was done, skipped or inspected."""
     ids = notifications_repo.unresolved_for(conn, user_id, task_id=task_id)
     notifications_repo.resolve(conn, user_id, ids, resolution, now)
+
+
+def after_write(conn: sqlite3.Connection, user_id: int) -> None:
+    """Reconcile after a change that can alter what is due (D-107). The change is already
+    committed, so a failure here is logged and left to the loop's next tick."""
+    try:
+        reconcile(conn, user_id)
+    except sqlite3.Error as exc:
+        log_event("warning", "reconcile_failed", error=type(exc).__name__)

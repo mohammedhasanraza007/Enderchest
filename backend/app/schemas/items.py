@@ -140,6 +140,24 @@ class PhotoView(BaseModel):
     height: int
 
 
+class MaintenanceView(BaseModel):
+    """The item's maintenance task (API 1, ItemDetail); `enabled` is the per-item toggle."""
+
+    task_id: int
+    enabled: bool
+    interval_days: int | None
+    next_due: str
+    last_done: str | None
+    source: Literal["user", "gemini"]
+
+
+class MaintenanceSuggestion(BaseModel):
+    """Gemini's inspection interval from the draft that made the item (D-102): shown as
+    "suggested, unverified", never applied without the owner."""
+
+    interval_days: int
+
+
 class ItemDetail(ItemSummary):
     category: Ref | None
     location: Ref | None
@@ -148,7 +166,8 @@ class ItemDetail(ItemSummary):
     attributes: dict[str, AttrValue]
     label: LabelView
     photos: list[PhotoView]
-    maintenance: None = None  # the maintenance plan arrives in Phase 4
+    maintenance: MaintenanceView | None
+    maintenance_suggestion: MaintenanceSuggestion | None
     created_at: str
     updated_at: str
 

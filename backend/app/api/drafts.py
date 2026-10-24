@@ -18,6 +18,7 @@ from ..schemas.drafts import (
 from ..schemas.items import ItemDetail
 from ..services import drafts as drafts_service
 from ..services import gemini as gemini_service
+from ..services import notifications as notifications_service
 from ..services import reading as reading_service
 from .deps import current_user_id, get_db, require_ok
 from .items import get_idempotency
@@ -75,8 +76,11 @@ def commit_draft(draft_id: str, conn: sqlite3.Connection = Depends(get_db),
                  user_id: int = Depends(current_user_id),
                  store: IdempotencyStore = Depends(get_idempotency),
                  idempotency_key: str | None = Header(default=None)) -> ItemDetail:
-    return store.run(f"POST /drafts/{draft_id}/commit", idempotency_key,
-                     lambda: ItemDetail(**drafts_service.commit(conn, user_id, draft_id)))
+    def work() -> ItemDetail:
+        item = ItemDetail(**drafts_service.commit(conn, user_id, draft_id))
+        notifications_service.after_write(conn, user_id)
+        return item
+    return store.run(f"POST /drafts/{draft_id}/commit", idempotency_key, work)
 
 
 @router.delete("/drafts/{draft_id}", status_code=204)

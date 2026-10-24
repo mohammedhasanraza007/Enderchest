@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends
 
 from ..boot.manager import BootManager
 from ..schemas.profile import Profile, ProfileUpdate, SettingsPatch, SettingsView
+from ..services import notifications as notifications_service
 from ..services import profile as profile_service
 from .deps import current_user_id, get_db, require_ok
 
@@ -23,6 +24,7 @@ def put_profile(body: ProfileUpdate, conn: sqlite3.Connection = Depends(get_db),
                 user_id: int = Depends(current_user_id)) -> Profile:
     saved = profile_service.save_profile(conn, user_id, name=body.name, timezone=body.timezone,
                                          theme=body.theme)
+    notifications_service.after_write(conn, user_id)  # the time zone moves "today"
     return Profile(**saved)
 
 
@@ -40,4 +42,6 @@ def patch_settings(body: SettingsPatch, manager: BootManager = Depends(require_o
                    user_id: int = Depends(current_user_id)) -> SettingsView:
     values = profile_service.change_settings(
         conn, user_id, body.model_dump(exclude_unset=True), manager.settings.gemini_model_default)
+    if body.lead_days is not None:
+        notifications_service.after_write(conn, user_id)  # lead days move "expiring soon"
     return SettingsView(**values)
