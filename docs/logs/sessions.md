@@ -114,3 +114,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed: aria-busy left by the closed sheet; 50 px page scroll from margin collapse; brand link aria-current; card row padding; truck over the road title; 30-day label collisions.
 - Blocked on owner: Phase 5 acceptance and screenshot approval; earlier phases' owner items.
 - Next: Phase 5 verification (`D:\Projects\phase5v-next-prompt.txt`).
+
+## 2026-10-25 · phase5v · Phase 5 verification, chain hand-off to the Phase 6 build
+- Zip in: `phase5.zip` (folder `D:\Projects\Enderchest-phase-5v`, branch `phase-5-verify`). Zip out: `D:\Projects\phase5v.zip`, unzipped into `D:\Projects\Enderchest-phase-6` on branch `phase-6`.
+- Probe list first (13 probes), then re-ran lint, unit 207 + 83, integration 255, e2e 107 + 3, probes 1 to 23: all green.
+- Added 20 integration probes (Kolkata midnight, greeting hours, road window and validation, degenerate data, breakdown cap) and a keyboard e2e spec: all pass; no product defect found.
+- Looked at 8 screenshots against the reference: notes N1 to N3 (minor).
+- Verdict: PASS WITH NOTES. Blocked on owner: Phase 5 acceptance and screenshot approval; earlier owner items.
+- Next: Phase 6 build (`D:\Projects\phase6-next-prompt.txt`).

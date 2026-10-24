@@ -3,20 +3,20 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase5.zip`. The Phase 5 build session unzipped it into `D:\Projects\Enderchest-phase-5v\Enderchest` and made branch `phase-5-verify` there (D-091). Never unzip over an existing repo or worktree (D-067).
+- Zip: `phase5v.zip`. The Phase 5 verification session unzipped it into `D:\Projects\Enderchest-phase-6\Enderchest` and made branch `phase-6` there (D-091). Never unzip over an existing repo or worktree (D-067).
 - **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Do not wait for "go". Keep `D:\Projects\enderchest-chain-state.txt` current (running at start; handing-off with the next step before `start_session`). UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. Copy the rules into every next prompt. If `start_session` is refused, message the top session "Enderchest phase 0 foundation".
-- Last built phase: **Phase 5 (Dashboard)**, Verification: **pending** (prompt `D:\Projects\phase5v-next-prompt.txt`). Phase 4: PASS WITH NOTES; Phases 0 to 3: PASS for Claude's part. Owner checks pending for all.
-- Resume check: `git log --oneline -3` shows `pack: phase 5 checkpoint (phase5 zip)` on top.
+- Last built phase: **Phase 5 (Dashboard)**, Verification: **done for phase 5: PASS WITH NOTES** (N1 to N3 minor, `docs/reviews/phase-5-verification.md`). Next: Phase 6 build (prompt `D:\Projects\phase6-next-prompt.txt`). Phase 4: PASS WITH NOTES; Phases 0 to 3: PASS for Claude's part. Owner checks pending for all.
+- Resume check: `git log --oneline -3` shows `pack: phase 5 verification (phase5v zip)` on top.
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it. Time-box bugs: fix once, simply, with a test; a second failure goes to the evidence log.
 
 ## Next steps, in this order
-1. **Phase 5 verification** (fresh session, branch `phase-5-verify`, probe list first).
-2. Then the Phase 6 build (Do I own this?, `docs/specs/phase-6-ownership.md`); it fills the dashboard's `savings` pill.
-3. Small TODOs any session may take: Phase 4 notes N1 (snooze dialog corner), N2 (item actions at 1024 px); make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5 to N7; Phase 3 notes N1 to N3.
+1. **Phase 6 build** (Do I own this?, `docs/specs/phase-6-ownership.md`, branch `phase-6`); it fills the dashboard's `savings` pill.
+2. Then the Phase 6 verification (fresh session).
+3. Small TODOs any session may take: Phase 5 notes N1 to N3 (truck label "+1", 1024 px balance, truck on an empty road); Phase 4 notes N1 (snooze dialog corner), N2 (item actions at 1024 px); make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5 to N7; Phase 3 notes N1 to N3.
 
 ## Current state (facts)
 - Phase 5 built: `GET /dashboard`, `/dashboard/rings/{ring}`, `/dashboard/road?days=` from one service (`services/dashboard.py`, formulas in `derived.py`); the dashboard at `/` (greeting, rings, Needs attention reusing `ReminderList`, 14-day road with truck, breakdown sheet, empty/loading/error); the 30-day road on Tasks; storyboard fixtures 1 to 3 (test stack only); body `flow-root` fix for a 50 px page scroll on every page.
-- Results on the final code: lint clean; unit 207 + 83; integration 255; Playwright 107 + 3; probes 1 to 23 ALL PASSED; contrast 0 failures (14 routes, 515 pieces per theme); crawler 0 dead controls incl. `/`; dashboard 12.4 ms median on 1,000 items; reference frame within 7 px except the last road tick (−17 px, noted).
+- Verification re-run (2026-10-25): all suites green again, plus 20 new integration probes (`test_phase5_verification.py`) and `dashboard-keyboard.spec.ts`. Build results: lint clean; unit 207 + 83; integration 255; Playwright 107 + 3; probes 1 to 23 ALL PASSED; contrast 0 failures (14 routes, 515 pieces per theme); crawler 0 dead controls incl. `/`; dashboard 12.4 ms median on 1,000 items; reference frame within 7 px except the last road tick (−17 px, noted).
 - Decisions up to D-113. Failure kinds up to F-039 (none added).
 - Schema 3 (no migration in Phase 5). The live stack is untouched (still Phase 1 code until the owner runs `build.bat`).
 
