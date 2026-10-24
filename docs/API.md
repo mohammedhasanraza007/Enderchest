@@ -178,10 +178,10 @@ Phase 3: `POST /drafts` also queues one local reading per new draft (`ocr_status
 ### 2.14 Ownership and savings
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 6 | POST | /ownership/check | multipart: `image?` and form `text?` (at least one) | `{query:{lines:[string], fields:{}}, candidates:[{public_id,name,primary_photo_id,location_path,quantity,score,level:'high'\|'medium'\|'low',reasons:[string]}], engine:{ocr, gemini_used}}` (max 5, never certain) | `validation_error`, `unsupported_media` |
-| 6 | POST | /savings | `{item_public_id?, item_name?, price_paise*, note?}` | 201 `{id, event_id}` | `validation_error` |
-| 6 | GET | /savings | query `period` (`month` default, `all`), `limit`, `cursor` | `{total_paise, month_paise, items:[{id,item_name,item_public_id\|null,price_paise,local_date,note}], next_cursor}` | |
-| 6 | DELETE | /savings/{id} | none | `{event_id}` | `not_found` |
+| 6 | POST | /ownership/check | multipart (always, even words only): `image?` and `text?` (at most 200 characters; at least one) | `{query:{lines:[string], fields:{name?,model?,size?}}, candidates:[{public_id,name,primary_photo_id,location_path:[string],quantity,price_paise\|null,score,level:'high'\|'medium'\|'low',reasons:[string]}], engine:{ocr\|null, gemini_used:false}}` (max 5, active items only, never certain; `low` shows as Possible, D-114; writes nothing; Gemini not called, D-117) | `validation_error`, `unsupported_media`, `payload_too_large` |
+| 6 | POST | /savings | `{item_public_id?, item_name?, price_paise*, note?}` (price an integer > 0, typed by the owner; with `item_public_id` the name is the item's; `Idempotency-Key` honoured) | 201 `{id, event_id}` (event `saving_added`, undoable 60 s) | `validation_error`, `not_found` |
+| 6 | GET | /savings | query `period` (`month` default, `all`), `limit` (1 to 200, default 50), `cursor`; this month is the profile time zone's | `{total_paise, month_paise, items:[{id,item_name,item_public_id\|null,price_paise,local_date,note}], next_cursor}` | |
+| 6 | DELETE | /savings/{id} | none (soft delete) | `{event_id}` (event `saving_removed`, undoable 60 s) | `not_found` |
 
 ### 2.15 Camera coach
 | Ph | Method | Path | Request | Success | Errors |
