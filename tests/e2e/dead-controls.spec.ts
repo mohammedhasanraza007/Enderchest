@@ -234,6 +234,8 @@ async function seed(page: Page): Promise<Record<string, string>> {
     request,
     await labelBytes(page, ["OAT MILK BARISTA", "MODEL AB-1234X", "EXP 03/04/2027"]),
   );
+  // Phase 6: a confirmed saving, so Savings has a row with Remove and the road its pill.
+  await post(request, "/api/v1/savings", { item_public_id: second, price_paise: 24000 });
   await readingSettled(request, draft);
   return { first, second, trashed, draft, blade };
 }
@@ -280,12 +282,14 @@ test.describe("dead-control crawler", () => {
     ["an item in Trash", (ids) => `/items/${ids["trashed"]}`],
     ["Camera, add", () => "/camera?mode=add"],
     ["Camera, scan", () => "/camera?mode=scan"],
+    ["Camera, do I own this", () => "/camera?mode=own"],
     ["the review queue", () => "/add"],
     ["a draft", (ids) => `/add/${ids["draft"]}`],
     ["Labels", (ids) => `/labels?ids=${ids["first"]},${ids["second"]}`],
     ["Trash", () => "/trash"],
     ["Tasks", () => "/tasks"],
     ["Notifications", () => "/notifications"],
+    ["Savings", () => "/savings"],
     ["an item with a worn inspection", (ids) => `/items/${ids["blade"]}`],
     ["Settings with data", () => "/settings"],
   ];

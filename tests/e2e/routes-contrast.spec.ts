@@ -73,6 +73,8 @@ for (const theme of ["dark", "light"] as const) {
       data: { enabled: true, interval_days: 30, first_due: today, source: "gemini" },
     });
     await post(request, `/api/v1/items/${expired}/inspections`, { result: "worn" });
+    // Phase 6: a confirmed saving (the Savings list and the road pill are measured).
+    await post(request, "/api/v1/savings", { item_public_id: milk, price_paise: 124000 });
 
     const routes = [
       "/",
@@ -82,6 +84,7 @@ for (const theme of ["dark", "light"] as const) {
       `/items/${trashed}`,
       "/camera?mode=add",
       "/camera?mode=scan",
+      "/camera?mode=own",
       "/add",
       `/add/${draft}`,
       `/labels?ids=${milk},${expired}`,
@@ -89,6 +92,7 @@ for (const theme of ["dark", "light"] as const) {
       "/settings",
       "/tasks",
       "/notifications",
+      "/savings",
     ];
     const failures: string[] = [];
     let checked = 0;
