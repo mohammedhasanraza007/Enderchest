@@ -1,0 +1,4 @@
+Phase 5 gate 4: GET /dashboard on the items-1000 fixture plus 40 tasks (in-process TestClient, tools image, 2026-10-24)
+items active=940 score=58 tasks den=40
+first call (with reconcile) 21.0 ms; then 20 calls: median 12.4 ms, max 14.3 ms
+script: scratch dashboard_perf.py (Stack on temporary folders; test data only)

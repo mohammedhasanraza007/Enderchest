@@ -105,3 +105,12 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Verdict: PASS WITH NOTES (N1 snooze dialog corner, N2 1024 px action wrap, N3 DATA_MODEL 2.9 wording for done early). Failure kinds F-036 to F-039 added.
 - Blocked on owner: Phase 4 acceptance, screenshot approval, `build.bat`/`run.bat`; earlier phases' owner items.
 - Next: Phase 5 build (`D:\Projects\phase5-next-prompt.txt`).
+
+
+## 2026-10-24 · phase5 · Phase 5 build (dashboard), chain hand-off to the Phase 5 verification
+- Zip in: `phase4v.zip` (unzipped into `D:\Projects\Enderchest-phase-5`, branch `phase-5`). Zip out: `D:\Projects\phase5.zip`, unzipped into `D:\Projects\Enderchest-phase-5v` on branch `phase-5-verify`.
+- Built: dashboard service and endpoints, rings, score, road and truck (D-110), breakdown sheet, Needs attention card, 30-day Tasks road, storyboard fixtures (D-109, D-111). Brief `docs/reviews/phase-5-brief.md`; decisions D-109 to D-113.
+- Checks: lint clean; unit 207 + 83; integration 255; Playwright 107 + 3; probes 1 to 23 ALL PASSED; contrast 0; crawler 0; 25 screenshots reviewed, several look fixes.
+- Failed and fixed: aria-busy left by the closed sheet; 50 px page scroll from margin collapse; brand link aria-current; card row padding; truck over the road title; 30-day label collisions.
+- Blocked on owner: Phase 5 acceptance and screenshot approval; earlier phases' owner items.
+- Next: Phase 5 verification (`D:\Projects\phase5v-next-prompt.txt`).
