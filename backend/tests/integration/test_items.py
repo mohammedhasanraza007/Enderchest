@@ -299,6 +299,18 @@ def test_expiry_sort_puts_dated_items_first(stack: Stack):
     assert dated == sorted(dated) and dates[: len(dated)] == dated
 
 
+def test_search_matches_attribute_values_but_never_their_keys(stack: Stack):
+    # Found by the Phase 2 verification: "size" matched every item that had a size.
+    drill = create(stack, name="Drill", attributes={"brand": "Bosch", "sizes": [8, 10]})
+    create(stack, name="Hammer")
+
+    def found(q: str) -> list[str]:
+        return [entry["public_id"] for entry in listing(stack, f"?q={q}")["items"]]
+
+    assert found("bosch") == found("10") == [drill["public_id"]]
+    assert found("brand") == found("sizes") == found("%7B") == found("%22") == []
+
+
 def test_the_first_page_is_within_the_150_ms_budget(stack: Stack):
     load_1000(stack)
     listing(stack)  # warm up
