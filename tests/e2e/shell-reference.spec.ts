@@ -84,9 +84,11 @@ test("the navigation capsule matches the reference frame within 12 px", async ({
   expect(logoStyle).toEqual({ filter: "none", transform: "none", src: "/enderchest-logo.svg" });
   // No star or sparkle anywhere (DESIGN.md 2.2).
   expect(star).toBe(0);
-  // After Phase 2 the centre holds Inventory and Camera only (PAGES.md 1, D-034).
-  await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(4); // + brand, name
-  await expect(page.locator(".nav__item")).toHaveText(["Inventory", "Camera"]);
+  // After Phase 4 the centre holds Inventory, Camera and Tasks; the bell sits beside the name
+  // pill (PAGES.md 1, D-034).
+  await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(6); // + brand, bell, name
+  await expect(page.locator(".nav__item")).toHaveText(["Inventory", "Camera", "Tasks"]);
+  await expect(page.getByRole("link", { name: "Notifications" })).toBeVisible();
   await page.screenshot({ path: `${SHOTS}/settings-dark-1376x768.png` });
 });
 

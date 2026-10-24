@@ -64,6 +64,15 @@ for (const theme of ["dark", "light"] as const) {
       data: { gemini_mode: "ask" },
     });
     await readingSettled(request, draft);
+    // Phase 4: a task due today, a maintenance plan with a Gemini source and a worn inspection,
+    // so Tasks, Notifications and the maintenance card are measured with real rows.
+    const today = new Date().toISOString().slice(0, 10);
+    await post(request, "/api/v1/tasks", { title: "Clean PC", first_due: today });
+    await request.put(`/api/v1/items/${milk}/maintenance`, {
+      headers: { "X-Enderchest": "1" },
+      data: { enabled: true, interval_days: 30, first_due: today, source: "gemini" },
+    });
+    await post(request, `/api/v1/items/${expired}/inspections`, { result: "worn" });
 
     const routes = [
       "/inventory",
@@ -77,6 +86,8 @@ for (const theme of ["dark", "light"] as const) {
       `/labels?ids=${milk},${expired}`,
       "/trash",
       "/settings",
+      "/tasks",
+      "/notifications",
     ];
     const failures: string[] = [];
     let checked = 0;

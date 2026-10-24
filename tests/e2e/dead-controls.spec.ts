@@ -2,7 +2,8 @@
 // switch is activated, and it must cause a navigation, a request to the app, an opened dialog, a
 // file picker, or a visible change. A disabled control must show why. Zero dead controls.
 // Phase 1 covered /welcome, /settings and the 404 page; Phase 2 adds every inventory route, each
-// with real data made through the API first (gate 7).
+// with real data made through the API first (gate 7); Phase 4 adds Tasks, Notifications and an
+// item with a maintenance plan and a worn inspection (gate 9).
 //
 // Not clicked, by design: text boxes and selects (they are typed into, not activated), the
 // already-chosen option of a radio group and the nav tab of the page you are on (choosing them
@@ -217,13 +218,24 @@ async function seed(page: Page): Promise<Record<string, string>> {
       multipart: { image: { name: "a.jpg", mimeType: "image/jpeg", buffer: photo } },
     });
   }
+  // Phase 4: a task due today, a repeating one, a maintenance plan and a worn inspection, so
+  // Tasks, Notifications and the item's maintenance card have real rows and actions.
+  const today = new Date().toISOString().slice(0, 10);
+  await post(request, "/api/v1/tasks", { title: "Clean PC", first_due: today });
+  await post(request, "/api/v1/tasks", { title: "Water plants", interval_days: 7, first_due: today });
+  await request.put(`/api/v1/items/${first}/maintenance`, {
+    headers: { "X-Enderchest": "1" },
+    data: { enabled: true, interval_days: 30, first_due: today },
+  });
+  const blade = await makeItem(request, { name: "Saw blade" });
+  await post(request, `/api/v1/items/${blade}/inspections`, { result: "worn" });
   // A read label (Phase 3), so the confirm screen has its tags, date pills and drawer.
   const draft = await makeDraft(
     request,
     await labelBytes(page, ["OAT MILK BARISTA", "MODEL AB-1234X", "EXP 03/04/2027"]),
   );
   await readingSettled(request, draft);
-  return { first, second, trashed, draft };
+  return { first, second, trashed, draft, blade };
 }
 
 test.describe("dead-control crawler", () => {
@@ -263,6 +275,9 @@ test.describe("dead-control crawler", () => {
     ["a draft", (ids) => `/add/${ids["draft"]}`],
     ["Labels", (ids) => `/labels?ids=${ids["first"]},${ids["second"]}`],
     ["Trash", () => "/trash"],
+    ["Tasks", () => "/tasks"],
+    ["Notifications", () => "/notifications"],
+    ["an item with a worn inspection", (ids) => `/items/${ids["blade"]}`],
     ["Settings with data", () => "/settings"],
   ];
   for (const [name, route] of ROUTES) {
