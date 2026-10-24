@@ -10,7 +10,7 @@ Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end 
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it. Time-box bugs: fix once, simply, with a test; a second failure goes to the evidence log.
 
 ## Next steps, in this order
-1. **Phase 2 verification** (fresh session, `PROCESS.md` 4, probe list first; prompt `D:\Projects\phase2v-next-prompt.txt`). Brief: `docs/reviews/phase-2-brief.md`. Screenshots to judge: `test-results/shots-phase-2/` (regenerate with `tests/e2e/inventory-shots.spec.ts`).
+1. **Phase 2 verification** (fresh session, `PROCESS.md` 4, probe list first; prompt `D:\Projects\phase2v-next-prompt.txt`). Brief: `docs/reviews/phase-2-brief.md`. Screenshots to judge: `docs/logs/raw/phase-2/shots/` (regenerate into `test-results/shots-phase-2/` with `tests/e2e/inventory-shots.spec.ts`).
 2. Then the Phase 3 build (`docs/specs/phase-3-capture.md`).
 3. Small TODO any session may take: make `test.bat lint` cover `tests/e2e` (tsc and Prettier).
 
@@ -23,7 +23,7 @@ Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end 
 ## Owner runs next
 1. `build.bat`, then `run.bat`: the live app migrates to schema 2 after a verified pre-migration backup (a `pre-migration-v1-to-v2-…` file appears in `%USERPROFILE%\Enderchest-Backups`).
 2. Phase 2 acceptance (5 minutes, real hardware): add two items with your webcam; print one label on paper; hold it to the webcam in Scan mode and see the item open; delete an item, find it in Trash, restore it; stop and start the app and check everything is still there.
-3. Look at `test-results/shots-phase-2/*.png` (and Phase 1's `docs/logs/raw/phase-1/shots/*.png`) and say "approved" or what looks wrong.
+3. Look at `docs/logs/raw/phase-2/shots/*.png` (and Phase 1's `docs/logs/raw/phase-1/shots/*.png`) and say "approved" or what looks wrong.
 4. Still open from earlier phases: Back up now and `backup.bat` on live (a `manual-` file appears); `.\test.bat probes -Only "4,9" -Live`; `restore.bat` once on a backup you choose; optional: delete stray container `great_gagarin`.
 
 ## Known issues to carry
