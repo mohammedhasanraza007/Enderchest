@@ -13,6 +13,9 @@ html {
 
 /* The base colour lives on <html> only: a body background would paint over the glow layer below. */
 body {
+  /* flow-root keeps the nav's top margin inside the body, so a page that fits the window does
+     not scroll by that margin */
+  display: flow-root;
   margin: 0;
   min-height: 100vh;
   color: var(--text);

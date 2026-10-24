@@ -720,16 +720,18 @@
   background: none;
   cursor: pointer;
 }
+/* A stop on the road's centre line where something is due */
 .road__notch::before {
   content: "";
   position: absolute;
-  top: 8px;
+  top: 50%;
   left: 50%;
-  width: 4px;
-  height: 27px;
-  border-radius: var(--radius-pill);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
   background: var(--road-notch);
-  transform: translateX(-50%);
+  box-shadow: 0 0 0 3px var(--surface-road);
+  transform: translate(-50%, -50%);
 }
 .road__notch:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -759,11 +761,12 @@
 .road__notch:focus-visible .road__tip {
   opacity: 1;
 }
+/* The rear wheel sits over the day's tick, the cab pointing on along the road (reference). */
 .road__truck {
   position: absolute;
   top: -36px;
   z-index: 1;
-  transform: translateX(-50%);
+  transform: translateX(-20%);
   pointer-events: none;
 }
 .road__tick {

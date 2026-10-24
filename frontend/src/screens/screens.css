@@ -736,6 +736,10 @@
 body:has(.road) {
   overflow-x: clip;
 }
+/* The reference frame fits one laptop screen (1376 x 768): less space under the road. */
+.page:has(> .dashboard) {
+  padding-bottom: var(--space-4);
+}
 .dashboard {
   display: flex;
   flex-direction: column;
@@ -747,7 +751,7 @@ body:has(.road) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 400px minmax(0, 1fr);
   align-items: start;
-  margin-top: var(--space-6);
+  margin-top: calc(var(--space-6) + var(--space-2));
   padding-inline: 17px;
 }
 .greeting {
@@ -782,8 +786,17 @@ body:has(.road) {
   flex-wrap: nowrap;
 }
 .attention-card .reminder__actions > .pill {
-  flex: 1 1 0;
+  flex: 0 1 calc(50% - var(--space-2) / 2);
   min-width: 0;
+  padding-inline: var(--space-3);
+}
+.attention-card .overflow-menu__button {
+  min-width: 38px;
+  padding-inline: 0;
+}
+.attention-card .reminder {
+  gap: var(--space-2);
+  padding-block: var(--space-3);
 }
 .attention-card__empty {
   display: flex;

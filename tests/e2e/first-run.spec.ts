@@ -91,9 +91,9 @@ test("closing the tab on step 2 and reopening resumes at step 2 with the name ke
   await reopened.getByRole("button", { name: "Skip" }).click();
   await expect(reopened.getByRole("heading", { name: /Mohammed$/ })).toBeVisible();
   await reopened.goto("/");
-  await expect(reopened).toHaveURL(/\/inventory$/);
+  await expect(reopened.getByRole("heading", { name: /Mohammed$/ })).toBeVisible(); // dashboard
   await reopened.goto("/welcome"); // first run cannot be repeated
-  await expect(reopened).toHaveURL(/\/inventory$/);
+  await expect(reopened).toHaveURL(/:\d+\/$/);
   await second.close();
 });
 

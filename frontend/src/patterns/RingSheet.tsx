@@ -33,7 +33,7 @@ export function RingSheet({ ring, rings, onChoose, onClose }: RingSheetProps) {
           ))}
         </div>
         {words ? <p className="section-note">{words.rule}</p> : null}
-        {sheet.isPending ? (
+        {ring === null ? null : sheet.isPending ? (
           <div className="stack" aria-busy="true">
             <Skeleton height={24} width="60%" />
             <Skeleton height={44} />

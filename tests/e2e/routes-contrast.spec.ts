@@ -75,6 +75,7 @@ for (const theme of ["dark", "light"] as const) {
     await post(request, `/api/v1/items/${expired}/inspections`, { result: "worn" });
 
     const routes = [
+      "/",
       "/inventory",
       `/items/${milk}`,
       `/items/${expired}`,

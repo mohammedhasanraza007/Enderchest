@@ -265,7 +265,16 @@ test.describe("dead-control crawler", () => {
     expect(result.dead).toEqual([]);
   });
 
+  test("the empty dashboard has no dead controls", async ({ page, request }) => {
+    await resetApp(request);
+    await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata" });
+    const result = await crawl(page, "/");
+    expect(result.tested).toBeGreaterThan(1);
+    expect(result.dead).toEqual([]);
+  });
+
   const ROUTES: Array<[string, (ids: Record<string, string>) => string]> = [
+    ["the dashboard", () => "/"],
     ["Inventory", () => "/inventory"],
     ["an item", (ids) => `/items/${ids["first"]}`],
     ["an item in Trash", (ids) => `/items/${ids["trashed"]}`],
