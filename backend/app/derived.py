@@ -85,7 +85,9 @@ def notification_word(kind: str, due_date: date, today: date,
     if kind == "expired":
         return "expired"
     if kind == "inspection_finding":
-        return f"inspection suggested: {finding or 'worn'}"
+        # A later "ok" inspection supersedes the row; the Resolved tab then shows no result.
+        return f"inspection suggested: {finding}" if finding in ("worn", "defective") else (
+            "inspection suggested")
     late = f"{_plural_days(-days)} overdue" if days < 0 else None
     if kind == "inspection_due":
         return f"inspect, {late}" if late else "inspect"

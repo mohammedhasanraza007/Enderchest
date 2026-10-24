@@ -73,6 +73,7 @@ def test_finding_words_never_say_replacement():
         "inspection suggested: worn")
     assert notification_word("inspection_finding", TODAY, TODAY, "defective") == (
         "inspection suggested: defective")
+    assert notification_word("inspection_finding", TODAY, TODAY, "ok") == "inspection suggested"
 
 
 @pytest.mark.parametrize("kind, due, value", [
