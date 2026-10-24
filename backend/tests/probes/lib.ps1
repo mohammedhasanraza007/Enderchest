@@ -91,6 +91,36 @@ function Write-Records {
 
 function Get-Report { return (Api -Path '/api/v1/test/write-loop').Json }
 
+function Get-PhotoSha {
+    # SHA-256 of a photo file as the app serves it.
+    param([string]$Id)
+    $tmp = [IO.Path]::GetTempFileName()
+    & curl.exe -s -m 60 -o $tmp "http://127.0.0.1:$($script:Port)/api/v1/photos/$Id/file"
+    $hash = (Get-FileHash $tmp -Algorithm SHA256).Hash
+    Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+    return $hash
+}
+
+function Write-ItemWithPhoto {
+    # Phase 2 (DATA_SAFETY 10, probe 1): one item with one photo, through the API. The photo is
+    # the supplied app icon, a real PNG that the upload pipeline re-encodes as JPEG.
+    $item = Api -Method POST -Path '/api/v1/items' -Body @{ name = 'Probe drill'; quantity = 2 }
+    if ($item.Status -ne 201) { return $null }
+    $png = Join-Path $script:Root 'assets\logo\icon-192.png'
+    $photo = Api -Method POST -Path "/api/v1/items/$($item.Json.public_id)/photos" -Extra @('-F', "image=@$png;type=image/png")
+    if ($photo.Status -ne 201) { return $null }
+    return [pscustomobject]@{ PublicId = $item.Json.public_id; PhotoId = $photo.Json.id; Sha = (Get-PhotoSha $photo.Json.id) }
+}
+
+function Test-ItemIntact {
+    # The item, its one photo and the photo's bytes are exactly as written.
+    param($Before)
+    if (-not $Before) { return $false }
+    $item = Api -Path "/api/v1/items/$($Before.PublicId)"
+    return ($item.Status -eq 200 -and @($item.Json.photos).Count -eq 1 -and
+            $item.Json.photos[0].id -eq $Before.PhotoId -and (Get-PhotoSha $Before.PhotoId) -eq $Before.Sha)
+}
+
 function Same-Data {
     param($Before, $After)
     return ($After -and $After.consistent -and $After.quick_check -eq 'ok' -and
