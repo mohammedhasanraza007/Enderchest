@@ -113,7 +113,7 @@ Append-only. `id`, `user_id`, `item_id` NULL, `task_id` NULL, `kind`, `payload` 
 `id`, `user_id`, `item_id` NULL, `item_name` TEXT NOT NULL (snapshot), `price_paise` INTEGER NOT NULL CHECK (> 0), `confirmed_at`, `local_date`, `note`, `deleted_at`.
 
 ### 2.14 `scheduler_state` (0001, instance-level)
-`key` TEXT PK, `value` TEXT. Keys: `last_reconcile_at`, `last_local_date`.
+`key` TEXT PK, `value` TEXT. Keys: `last_reconcile_at`, `last_local_date` (written only beside a reconcile that changed rows; the timing itself is kept in memory, D-108).
 
 ### 2.15 `backup_log` (0001, instance-level)
 `id`, `kind` (`auto`,`manual`,`pre-migration`,`safety`,`restore`), `name`, `started_at`, `finished_at`, `ok` 0/1, `error` TEXT NULL, `bytes`, `item_count` NULL, `verified` 0/1.
