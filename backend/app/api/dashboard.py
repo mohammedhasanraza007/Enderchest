@@ -1,9 +1,8 @@
 """The dashboard (API 2.13, PAGES P-12, D-113)."""
 
 import sqlite3
-from typing import Literal
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from ..schemas.dashboard import Dashboard, RingBreakdown, Road
 from ..services import dashboard as dashboard_service
@@ -25,6 +24,6 @@ def ring_breakdown(ring: str, conn: sqlite3.Connection = Depends(get_db),
 
 
 @router.get("/road")
-def road(days: Literal[14, 30] = 14, conn: sqlite3.Connection = Depends(get_db),
+def road(days: int = Query(default=14, ge=1, le=30), conn: sqlite3.Connection = Depends(get_db),
          user_id: int = Depends(current_user_id)) -> Road:
     return Road(**dashboard_service.road_for(conn, user_id, days))

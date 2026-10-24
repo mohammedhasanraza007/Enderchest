@@ -15,9 +15,11 @@ from ..db.connection import connect, write_transaction
 from ..db.create import create_database
 from ..repositories import items as items_repo
 from . import profile as profile_service
+from . import storyboard
 
 COUNTER_KEY = "test_write_loop:counter"
 SEQ_PREFIX = "test_write_loop:seq:"
+STORYBOARD = {"storyboard-1": 1, "storyboard-2": 2, "storyboard-3": 3}  # D-111
 
 
 class WriteLoop:
@@ -133,7 +135,10 @@ _PLACES = (("Garage", None), ("Shelf 1", "Garage"), ("Shelf 2", "Garage"),
            ("Fridge", "Kitchen"), ("Bedroom", None), ("Wardrobe", "Bedroom"))
 
 
-def load_fixture(conn: sqlite3.Connection, name: str, user_id: int = 1) -> dict:
+def load_fixture(conn: sqlite3.Connection, settings: Settings, name: str,
+                 user_id: int = 1) -> dict:
+    if name in STORYBOARD:
+        return storyboard.build(conn, settings, STORYBOARD[name], user_id)
     if name != "items-1000":
         raise KeyError(name)
     rng = random.Random(1000)  # the same 1,000 items every time, so tests can count them

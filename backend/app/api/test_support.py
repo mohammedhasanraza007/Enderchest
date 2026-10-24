@@ -96,6 +96,6 @@ def set_clock(body: ClockBody, manager: BootManager = Depends(require_test_marke
 @router.post("/fixtures/{name}")
 def load_fixture(name: str, manager: BootManager = Depends(require_test_marker)) -> dict:
     try:
-        return test_support.load_fixture(manager.db(), name)
+        return test_support.load_fixture(manager.db(), manager.settings, name)
     except KeyError:
         raise AppError("not_found", 404, "There is no fixture with that name.") from None
