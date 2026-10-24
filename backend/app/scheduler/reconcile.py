@@ -12,6 +12,8 @@ from ..logs import log_event
 from ..services import notifications as notifications_service
 
 TICK_SECONDS = 30
+# Until the start-up reconcile has run (the boot checks may still be working), look every second.
+STARTUP_TICK_SECONDS = 1
 USER_ID = 1  # the one user of this laptop app (DATA_MODEL 1)
 
 
@@ -24,8 +26,9 @@ class Reconciler:
     async def run(self) -> None:
         while not self._stop.is_set():
             await asyncio.to_thread(self.tick)
+            wait = STARTUP_TICK_SECONDS if self._startup_pending else TICK_SECONDS
             try:
-                await asyncio.wait_for(self._stop.wait(), TICK_SECONDS)
+                await asyncio.wait_for(self._stop.wait(), wait)
             except TimeoutError:
                 pass
 

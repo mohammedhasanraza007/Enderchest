@@ -5,14 +5,16 @@
 # that the first-run name survives a stop and a start (Phase 1 gate 4), 18 checks that dev.bat's
 # Vite sees an edit made on Windows, 19 checks that a test build never retags the live image.
 # Probes 20 and 21 are Phase 3 gates: 20 reads a photo with the network disabled (gate 3), 21
-# times /health while readings queue (gate 5).
-#   run-probes.ps1                run probes 1 to 21
+# times /health while readings queue (gate 5). Probes 22 and 23 are Phase 4 gates: 22 restarts the
+# container and moves the test clock forward and back (no duplicate or lost reminder), 23 sends ten
+# browser-notification claims at once (exactly one wins).
+#   run-probes.ps1                run probes 1 to 23
 #   run-probes.ps1 -Only "6,12"   run only those
 #   run-probes.ps1 -Live          probes 4 and 9 use the live build.bat/run.bat (the owner's choice)
 param([string]$Only = '', [switch]$Live)   # -Only is a string: "6,12" (powershell -File does not build arrays)
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
-$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..21 }
+$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..23 }
 $out = Join-Path $root 'test-results'
 New-Item -ItemType Directory -Force $out | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $root '.test-backups') | Out-Null
