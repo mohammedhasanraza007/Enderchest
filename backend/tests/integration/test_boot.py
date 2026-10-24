@@ -297,3 +297,38 @@ def test_the_real_inventory_migration_upgrades_a_named_v1_database(
     assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
     conn.close()
     assert any(p.name.startswith("pre-migration-v1-to-v2-") for p in settings.backups_dir.iterdir())
+
+
+def test_the_lifecycle_migration_upgrades_a_v2_database_with_items(
+        settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """Phase 4: a Phase 2/3 database (an item expiring soon) gains tasks, inspections and
+    notifications after a verified pre-migration backup, and the item is kept."""
+    from app.db import migrate
+
+    real = migrate.MIGRATIONS_DIR
+    folder = v1_database(settings, tmp_path, monkeypatch)
+    (folder / "0002_inventory.sql").write_text((real / "0002_inventory.sql").read_text())
+    with Stack(settings) as stack:  # migrates to version 2
+        assert health(stack)["status"] == "ok"
+    conn = sqlite3.connect(settings.db_path)
+    conn.execute("UPDATE users SET name = 'Mohammed' WHERE id = 1")
+    conn.execute(
+        "INSERT INTO items (user_id, public_id, name, expiry_mode, expiry_date, created_at, "
+        "updated_at, state_changed_at) VALUES (1, 'ENDR-7K2M9QXA', 'Oat milk', 'date', "
+        "'2030-01-01', '2026-10-01T00:00:00Z', '2026-10-01T00:00:00Z', '2026-10-01T00:00:00Z')")
+    conn.commit()
+    conn.close()
+    (folder / "0003_lifecycle.sql").write_text((real / "0003_lifecycle.sql").read_text())
+
+    with Stack(settings) as stack:
+        assert health(stack)["status"] == "ok"
+        item = stack.client.get("/api/v1/items/ENDR-7K2M9QXA").json()
+        assert (item["name"], item["maintenance"]) == ("Oat milk", None)
+        assert stack.client.get("/api/v1/tasks").json() == {"items": []}
+    conn = sqlite3.connect(settings.db_path)
+    tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    assert {"tasks", "inspections", "notifications"} <= tables
+    assert conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "3"
+    assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
+    conn.close()
+    assert any(p.name.startswith("pre-migration-v2-to-v3-") for p in settings.backups_dir.iterdir())

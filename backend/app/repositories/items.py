@@ -182,6 +182,16 @@ def purge(conn: sqlite3.Connection, user_id: int, item_id: int) -> list[tuple[st
     rows = conn.execute("SELECT path, thumb_path FROM photos WHERE user_id = ? AND item_id = ?",
                         (user_id, item_id)).fetchall()
     files = [(row["path"], row["thumb_path"]) for row in rows]
+    # Phase 4 rows that point at the item: its reminders, inspections and maintenance task go;
+    # a chore that only mentioned it keeps going without the link.
+    conn.execute("DELETE FROM notifications WHERE user_id = ? AND (item_id = ? OR task_id IN "
+                 "(SELECT id FROM tasks WHERE item_id = ? AND kind = 'maintenance'))",
+                 (user_id, item_id, item_id))
+    conn.execute("DELETE FROM inspections WHERE user_id = ? AND item_id = ?", (user_id, item_id))
+    conn.execute("DELETE FROM tasks WHERE user_id = ? AND item_id = ? AND kind = 'maintenance'",
+                 (user_id, item_id))
+    conn.execute("UPDATE tasks SET item_id = NULL WHERE user_id = ? AND item_id = ?",
+                 (user_id, item_id))
     conn.execute("DELETE FROM photos WHERE user_id = ? AND item_id = ?", (user_id, item_id))
     conn.execute("UPDATE drafts SET committed_item_id = NULL WHERE user_id = ? "
                  "AND committed_item_id = ?", (user_id, item_id))
