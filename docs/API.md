@@ -43,7 +43,7 @@ Data shapes live in `DATA_MODEL.md`. Page behaviour lives in `PAGES.md`. Every e
   - `ItemSummary`: `{public_id, name, category_name|null, location_path:[string], quantity, state, expiry:{mode, date|null, status, days_left|null, word}, primary_photo_id|null, has_photo, deleted_at|null}`.
   - `ItemDetail`: `ItemSummary` plus `{category:{id,name}|null, location:{id,name}|null, price_paise|null, notes, attributes, label:{printed_at|null, no_label_needed}, photos:[{id, is_primary, width, height}], maintenance:{task_id, enabled, interval_days|null, next_due, last_done|null, source}|null, created_at, updated_at}`.
   - `NotificationView`: `{id, kind, item:{public_id,name,primary_photo_id}|null, task:{id,title}|null, due_date, word, urgency, status, snoozed_until|null, read_at|null, actions:[{key,label,primary}]}`.
-  - `Draft`: `{id, status, fields, photos:[{id,width,height}], ocr_status, gemini_status, proposed:{<field>:{value, source:'ocr'|'gemini', confidence:'high'|'medium'|'low', flags:[…]}}, raw_text|null, created_at}`.
+  - `Draft`: `{id, status, fields, photos:[{id,width,height}], ocr_status, gemini_status, proposed:{<field>:{value, source:'ocr'|'gemini', confidence:'high'|'medium'|'low', flags:[…], text?, alternatives?}}, raw_text|null, ocr_error|null, gemini_error|null, read_notes:[string], ocr_info:{engine, ms, photos}|null, gemini_values:{name, brand, model, size, category, expiry_text, inspection_interval_days}|null, created_at}` (Phase 3, D-100). `proposed` keys: `name`, `model`, `size`, `brand`, `expiry_date`, `category_id`, `inspection_interval_days`; `text` is the line the value came from, `alternatives` the other reading of an ambiguous date. Proposals never change `fields`; the confirm screen fills the owner's untouched fields from them. A reading queued before a restart shows as `failed` with an "interrupted" `ocr_error` or `gemini_error`.
 
 Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it starts with `/health`), Request, Success, Errors.
 
@@ -123,13 +123,15 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | 2 | POST | /drafts/{id}/photos | multipart `image` | Draft | `limit_reached`, `unsupported_media` |
 | 2 | POST | /drafts/{id}/commit | none | 201 ItemDetail | `validation_error`, `expiry_unconfirmed` |
 | 2 | DELETE | /drafts/{id} | none | 204 (status `discarded`, photos untouched) | `not_found` |
-| 3 | POST | /drafts/{id}/extract | `{engine:'local'\|'gemini'}` | 202 `{ocr_status\|gemini_status:'pending'}`; the client polls `GET /drafts/{id}` | `gemini_disabled`, `upstream_unavailable` |
+| 3 | POST | /drafts/{id}/extract | `{engine:'local'\|'gemini'}` | 202 `{ocr_status\|gemini_status:'pending'}`; the client polls `GET /drafts/{id}`. A reading already queued for the draft is not queued twice. Gemini failures (offline, refused key, timeout) arrive through the poll as `gemini_status: failed` with `gemini_error` | `not_found`, `conflict` (not open), `gemini_disabled` |
+
+Phase 3: `POST /drafts` also queues one local reading per new draft (`ocr_status: pending`, D-100).
 
 ### 2.9 Gemini settings
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
 | 3 | GET | /gemini | none | `{key_set, model, mode, share_images}` (never the key) | |
-| 3 | PUT | /gemini/key | `{key}` | `{key_set:true}` | `validation_error` |
+| 3 | PUT | /gemini/key | `{key}` (20 to 200 letters, digits, `-`, `_`; spaces trimmed) | `{key_set:true}` | `validation_error` |
 | 3 | DELETE | /gemini/key | none | 204 | |
 | 3 | POST | /gemini/test | none | `{ok:true, model, latency_ms}` (a real call) | `gemini_disabled`, `upstream_unavailable` |
 

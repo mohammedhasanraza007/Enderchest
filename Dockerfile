@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# Targets (docs/ARCHITECTURE.md 3): frontend-build, runtime, tools, e2e.
+# Targets (docs/ARCHITECTURE.md 3): frontend-build, runtime, tools, e2e; bakeoff (Phase 3, on demand).
 # Base images are pinned by tag; bump them deliberately and record it in docs/logs/evidence-log.md.
 
 ARG PYTHON_IMAGE=python:3.13-slim-bookworm
@@ -88,3 +88,20 @@ COPY tests/e2e /tests/e2e
 # The specs sit outside /frontend, so give them the same node_modules (same files, same modules).
 RUN ln -s /frontend/node_modules /tests/node_modules
 CMD ["npx", "playwright", "test"]
+
+# ---- bakeoff: the Phase 3 OCR engine measurement (D-099), built only by "test.bat bakeoff" ------
+# All four candidates: RapidOCR (as in the app), EasyOCR (PyTorch, CPU wheels), docTR (onnxtr)
+# and Tesseract (Debian package). Never used by the app. The engines' models are fetched while
+# the image is built, so the measurement itself runs with no network (test.bat uses --network none).
+FROM python-base AS bakeoff
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-eng \
+    && rm -rf /var/lib/apt/lists/*
+COPY backend/requirements-bakeoff.txt ./requirements-bakeoff.txt
+RUN pip install -c requirements.lock --extra-index-url https://download.pytorch.org/whl/cpu \
+    -r requirements-bakeoff.txt
+ENV PYTHONPATH=/app
+COPY backend/app ./app
+COPY scripts/ocr_bakeoff.py ./scripts/ocr_bakeoff.py
+RUN python scripts/ocr_bakeoff.py --warm
+CMD ["python", "scripts/ocr_bakeoff.py", "--photos", "/photos", "--out", "/results"]

@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-REM test.bat [unit|integration|lint|probes|e2e|types|all]   (default: all)
+REM test.bat [unit|integration|lint|probes|e2e|types|format|bakeoff|all]   (default: all)
 REM Everything here uses the TEST stack (compose.test.yaml) or temporary folders in a container.
 REM It never touches the live stack or the live volume.
 REM   lint         ruff (Python), then tsc, eslint and prettier (frontend)
@@ -11,6 +11,8 @@ REM   probes       the Docker probes of docs/DATA_SAFETY.md 10 (and 15, 16) agai
 REM   e2e          Playwright: contrast, dead controls, theme, first run, backups (test stack)
 REM   types        rewrite frontend/openapi.json and frontend/src/api/schema.d.ts from the backend
 REM   format       rewrite the frontend files with prettier (lint only checks them)
+REM   bakeoff      the Phase 3 OCR engine measurement on the owner's photos (D-099): builds the
+REM                bakeoff image (four engines, models baked in) and runs it with no network
 
 set "WHAT=%~1"
 if "%WHAT%"=="" set "WHAT=all"
@@ -32,8 +34,9 @@ if /I "%WHAT%"=="probes" goto probes
 if /I "%WHAT%"=="e2e" goto e2e
 if /I "%WHAT%"=="types" goto types
 if /I "%WHAT%"=="format" goto format
+if /I "%WHAT%"=="bakeoff" goto bakeoff
 if /I "%WHAT%"=="all" goto all
-echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|all]
+echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|bakeoff^|all]
 exit /b 2
 
 :build
@@ -95,6 +98,19 @@ REM pre-migration backup that this app can never make.
 %E2E% --profile e2e-nobackups up -d --wait --renew-anon-volumes app-nobackups
 if errorlevel 1 exit /b 1
 %E2E% --profile e2e-nobackups run --rm e2e-nobackups
+exit /b %errorlevel%
+
+:bakeoff
+REM The photos are mounted read-only and never enter an image; the table lands in
+REM docs\logs\raw\phase-3\bakeoff. Folders are made first: bind-mount folders only (F-028).
+if not exist "tests\fixtures\private\phase3\labels.csv" (
+  echo No photos yet: put the 20 photos and labels.csv in tests\fixtures\private\phase3 first.
+  exit /b 2
+)
+if not exist "docs\logs\raw\phase-3\bakeoff" mkdir "docs\logs\raw\phase-3\bakeoff"
+docker build --target bakeoff -t enderchest-bakeoff:latest .
+if errorlevel 1 exit /b 1
+docker run --rm --network none -v "%~dp0tests\fixtures\private\phase3:/photos:ro" -v "%~dp0docs\logs\raw\phase-3\bakeoff:/results" enderchest-bakeoff:latest
 exit /b %errorlevel%
 
 :all
