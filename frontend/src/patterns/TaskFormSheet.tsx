@@ -10,7 +10,7 @@ import { localToday } from "../lib/format";
 import { splitProblems } from "../lib/formErrors";
 import {
   emptyTask,
-  TASK_FIELDS,
+  shownTaskFields,
   taskValues,
   toCreate,
   toPatch,
@@ -92,7 +92,10 @@ function OpenSheet({ onClose, editing }: TaskFormSheetProps) {
           onClose();
         })
         .catch((error: unknown) => {
-          const found = splitProblems(error, TASK_FIELDS);
+          const found = splitProblems(
+            error,
+            shownTaskFields(values, editing !== undefined, maintenance),
+          );
           setServerProblems(found.fields);
           setGeneral(found.general);
         })

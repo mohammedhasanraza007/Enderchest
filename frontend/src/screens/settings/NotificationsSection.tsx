@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { fieldProblems } from "../../api/client";
 import { api } from "../../api/endpoints";
 import { keys, useRefreshInventory, useSettings } from "../../api/queries";
 import { useSingleFlight } from "../../hooks/useSingleFlight";
+import { splitProblems } from "../../lib/formErrors";
 import { browserPermission, PERMISSION_WORDS } from "../../lib/notifications";
 import type { BrowserPermission } from "../../lib/notifications";
 import { ErrorState } from "../../patterns/ErrorState";
@@ -65,10 +65,9 @@ function LeadDays({ saved }: { saved: number }) {
           toast({ message: `You will be warned ${days} ${days === 1 ? "day" : "days"} before.` });
         })
         .catch((error: unknown) => {
-          const found = fieldProblems(error);
-          setProblem(found["lead_days"] ?? null);
-          if (!found["lead_days"])
-            setFailure(error instanceof Error ? error.message : "Not saved.");
+          const found = splitProblems(error, ["lead_days"]);
+          setProblem(found.fields["lead_days"] ?? null);
+          setFailure(found.general);
         })
         .finally(() => {
           setSaving(false);

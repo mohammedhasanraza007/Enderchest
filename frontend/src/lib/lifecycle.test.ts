@@ -115,3 +115,22 @@ describe("dates for forms", () => {
     expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
   });
 });
+
+describe("task form problems (F-024)", () => {
+  it("lists only the fields on screen, so any other problem becomes the general message", async () => {
+    const { shownTaskFields } = await import("./taskForm");
+    const values = emptyTask("2026-10-24");
+    expect(shownTaskFields(values, false, false)).toEqual([
+      "title",
+      "item_public_id",
+      "first_due",
+      "notes",
+    ]);
+    expect(shownTaskFields({ ...values, repeats: true }, true, true)).toEqual([
+      "title",
+      "interval_days",
+      "next_due",
+      "notes",
+    ]);
+  });
+});

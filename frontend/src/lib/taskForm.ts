@@ -14,16 +14,19 @@ export interface TaskFormValues {
   notes: string;
 }
 
-/** Fields the form shows, for splitProblems (F-024). */
-export const TASK_FIELDS = [
-  "title",
-  "item_public_id",
-  "interval_days",
-  "schedule_mode",
-  "first_due",
-  "next_due",
-  "notes",
-] as const;
+/**
+ * The request fields the form shows right now, for splitProblems: a problem on any other field
+ * becomes the general message, never a hidden one (F-024).
+ */
+export function shownTaskFields(values: TaskFormValues, editing: boolean, maintenance: boolean) {
+  return [
+    "title",
+    ...(maintenance ? [] : ["item_public_id"]),
+    ...(values.repeats ? ["interval_days"] : []),
+    editing ? "next_due" : "first_due",
+    "notes",
+  ];
+}
 
 export function emptyTask(today: string): TaskFormValues {
   return {
