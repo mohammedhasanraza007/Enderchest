@@ -128,17 +128,19 @@ def _remember(conn: sqlite3.Connection, now: str, today: date) -> None:
                      "ON CONFLICT(key) DO UPDATE SET value = excluded.value", (key, value))
 
 
-def is_stale(conn: sqlite3.Connection, user_id: int) -> bool:
-    """True when the local date moved or the last run is 15 minutes old (or never ran here)."""
+def is_stale(conn: sqlite3.Connection, user_id: int,
+             every: timedelta = RECONCILE_EVERY) -> bool:
+    """True when the local date moved or the last run is `every` old (or never ran here)."""
     last = _last_runs.get(_database(conn))
     if last is None or last[1] != profile_service.local_today(conn, user_id).isoformat():
         return True
-    return not timedelta(0) <= clock.now() - last[0] < RECONCILE_EVERY  # a clock moved back counts
+    return not timedelta(0) <= clock.now() - last[0] < every  # a clock moved back counts
 
 
-def refresh(conn: sqlite3.Connection, user_id: int) -> None:
-    """Reconcile only if stale: what reads and the loop's tick call."""
-    if is_stale(conn, user_id):
+def refresh(conn: sqlite3.Connection, user_id: int, every: timedelta = RECONCILE_EVERY) -> None:
+    """Reconcile only if stale: what reads and the loop's tick call. The dashboard asks for a
+    run at most 60 seconds old (DATA_MODEL 3.8)."""
+    if is_stale(conn, user_id, every):
         reconcile(conn, user_id)
 
 

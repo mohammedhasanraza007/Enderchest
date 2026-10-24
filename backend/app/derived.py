@@ -119,3 +119,91 @@ def dedupe_key(kind: str, item_id: int | None, task_id: int | None, due_date: da
     item = str(item_id) if item_id is not None else "-"
     task = str(task_id) if task_id is not None else "-"
     return f"{kind}|{item}|{task}|{due_date.isoformat()}"
+
+
+# ---- the dashboard (DATA_MODEL 3.3 to 3.6; Phase 5) ---------------------------------------------
+
+RINGS = ("documented", "located", "fresh", "on_time")
+# Default score weights (DATA_MODEL 3.5, open question O-004).
+RING_WEIGHTS = {"documented": 25, "located": 20, "fresh": 35, "on_time": 20}
+
+
+def round_half_up(value: float) -> int:
+    """Rounding as people expect it (82.5 → 83); Python's round() would give 82."""
+    return int(value + 0.5)
+
+
+def ring_value(num: int, den: int) -> dict:
+    """One ring: `value = round(100 × num / den)`, or None when not applicable (den 0, D-044)."""
+    return {"value": round_half_up(100 * num / den) if den else None, "num": num, "den": den}
+
+
+def health_score(rings: dict[str, dict]) -> int | None:
+    """The weighted average over applicable rings only (3.5); None when no ring applies."""
+    applicable = [name for name in RINGS if rings[name]["value"] is not None]
+    if not applicable:
+        return None
+    total = sum(RING_WEIGHTS[name] * rings[name]["value"] for name in applicable)
+    return round_half_up(total / sum(RING_WEIGHTS[name] for name in applicable))
+
+
+def is_documented(has_photo: bool, label_printed: bool, no_label_needed: bool) -> bool:
+    """A live photo, and a printed label or no label needed (3.4)."""
+    return has_photo and (label_printed or no_label_needed)
+
+
+def is_fresh(mode: str, expiry_date: str | None, today: date) -> bool:
+    """No expiry, or a date not yet past; an unknown date is not fresh (3.4)."""
+    if mode == "none":
+        return True
+    return mode == "date" and expiry_date is not None and date.fromisoformat(expiry_date) >= today
+
+
+def greeting_part(hour: int) -> str:
+    """The greeting word by the owner's local hour (DESIGN 6.7, D-113)."""
+    if 5 <= hour <= 11:
+        return "morning"
+    if 12 <= hour <= 16:
+        return "afternoon"
+    if 17 <= hour <= 20:
+        return "evening"
+    return "night"
+
+
+def dashboard_subtitle(item_count: int, attention_total: int) -> str:
+    """One real fact about today (DESIGN 6.7, PAGES P-12); never a slogan."""
+    if attention_total == 1:
+        return "1 thing needs you today"
+    if attention_total > 1:
+        return f"{attention_total} things need you today"
+    if item_count == 0:
+        return "Add items to see your overview"
+    return "Everything is on track"
+
+
+def road(today: date, days: int, expiries: list[dict], tasks: list[dict]) -> dict:
+    """The road (3.6, D-110): one event per date in `today … today + days - 1`, and the truck.
+
+    `expiries`: `{date, label, public_id}` of active items with a date; `tasks`: `{date, label,
+    task_id, public_id}` of the tasks On time counts. Anything before today is not on the road.
+    """
+    end = today + timedelta(days=days - 1)
+    by_date: dict[str, list[dict]] = {}
+    for kind, source, key in (("task", tasks, "task_id"), ("expiry", expiries, None)):
+        for entry in source:
+            on = date.fromisoformat(entry["date"])
+            if today <= on <= end:
+                by_date.setdefault(entry["date"], []).append({
+                    "kind": kind, "label": entry["label"], "public_id": entry.get("public_id"),
+                    "task_id": entry.get(key) if key else None})
+    events = []
+    for on in sorted(by_date):
+        entries = by_date[on]  # tasks first, so a mixed day is named after its task
+        kinds = {entry["kind"] for entry in entries}
+        events.append({"date": on, "kind": kinds.pop() if len(kinds) == 1 else "mixed",
+                       "label": entries[0]["label"], "count": len(entries), "entries": entries})
+    later = [event for event in events if event["date"] > today.isoformat()]
+    next_task = next((e for e in later if e["kind"] in ("task", "mixed")), None)
+    truck = next_task or (later[0] if later else None)
+    return {"start": today.isoformat(), "end": end.isoformat(), "events": events,
+            "truck_date": truck["date"] if truck else today.isoformat()}
