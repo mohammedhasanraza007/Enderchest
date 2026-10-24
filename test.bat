@@ -89,7 +89,10 @@ if errorlevel 1 exit /b 1
 %E2E% --profile e2e run --rm e2e
 if errorlevel 1 exit /b 1
 REM The second run needs an app without a /backups mount (the "folder not connected" banner).
-%E2E% --profile e2e-nobackups up -d --wait app-nobackups
+REM Its data is a throwaway anonymous volume: a new one each run (--renew-anon-volumes makes a
+REM new volume and deletes nothing), or a database from an older phase would wait for a
+REM pre-migration backup that this app can never make.
+%E2E% --profile e2e-nobackups up -d --wait --renew-anon-volumes app-nobackups
 if errorlevel 1 exit /b 1
 %E2E% --profile e2e-nobackups run --rm e2e-nobackups
 exit /b %errorlevel%
