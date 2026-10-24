@@ -1,0 +1,565 @@
+ Image enderchest-app-test:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 579B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB 0.0s done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.4s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/node:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 1.2s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 1.2s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#11 DONE 0.0s
+
+#12 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#12 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#12 DONE 0.0s
+
+#13 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#13 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#13 DONE 0.0s
+
+#14 [internal] load build context
+#14 transferring context: 467.18kB 0.0s done
+#14 DONE 0.0s
+
+#15 [frontend-deps 2/4] WORKDIR /frontend
+#15 CACHED
+
+#16 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#16 CACHED
+
+#17 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#17 CACHED
+
+#18 [frontend-build 1/3] COPY assets/logo /assets/logo
+#18 CACHED
+
+#19 [frontend-build 2/3] COPY frontend/ ./
+#19 DONE 0.0s
+
+#20 [frontend-build 3/3] RUN npm run build
+#20 0.265 
+#20 0.265 > enderchest-frontend@0.1.0 build
+#20 0.265 > tsc --noEmit && vite build
+#20 0.265 
+#20 4.212 vite v8.3.5 building client environment for production...
+#20 4.225 transforming...
+#20 4.241 
+#20 4.241 /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+#20 4.499 ✓ 2079 modules transformed.
+#20 4.676 rendering chunks...
+#20 4.779 computing gzip size...
+#20 4.787 dist/index.html                                                     1.12 kB │ gzip:   0.58 kB
+#20 4.787 dist/assets/jetbrains-mono-vietnamese-wght-normal-Bt-aOZkq.woff2    7.50 kB
+#20 4.787 dist/assets/jetbrains-mono-greek-wght-normal-Bw9x6K1M.woff2         9.00 kB
+#20 4.787 dist/assets/jetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2     12.10 kB
+#20 4.787 dist/assets/jetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2    15.19 kB
+#20 4.787 dist/assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2           18.22 kB
+#20 4.787 dist/assets/newsreader-vietnamese-opsz-normal-BjhtXyW2.woff2       27.24 kB
+#20 4.787 dist/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2               36.93 kB
+#20 4.787 dist/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2        40.40 kB
+#20 4.787 dist/assets/newsreader-latin-ext-opsz-normal-BQn1nviT.woff2        86.60 kB
+#20 4.787 dist/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2           132.00 kB
+#20 4.787 dist/assets/index-BP0vv8kk.css                                     43.50 kB │ gzip:  10.32 kB
+#20 4.787 dist/assets/index-Bw_7IC1z.js                                     630.86 kB │ gzip: 197.32 kB
+#20 4.787 
+#20 4.788 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+#20 4.788    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+#20 4.788    [38;5;246m│[0m
+#20 4.788  [38;5;246m1 │[0m "use client";
+#20 4.788  [38;5;240m  │[0m ──────┬──────  
+#20 4.788  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.788  [38;5;240m  │[0m 
+#20 4.788  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.788 [38;5;246m───╯[0m
+#20 4.788 
+#20 4.788 [plugin builtin:vite-reporter] 
+#20 4.788 (!) Some chunks are larger than 500 kB after minification. Consider:
+#20 4.788 - Using dynamic import() to code-split the application
+#20 4.788 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#20 4.788 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#20 4.789 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+#20 4.789    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+#20 4.789    [38;5;246m│[0m
+#20 4.789  [38;5;246m1 │[0m "use client";
+#20 4.789  [38;5;240m  │[0m ──────┬──────  
+#20 4.789  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.789  [38;5;240m  │[0m 
+#20 4.789  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.789 [38;5;246m───╯[0m
+#20 4.789 
+#20 4.789 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+#20 4.789    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+#20 4.789    [38;5;246m│[0m
+#20 4.789  [38;5;246m1 │[0m "use client";
+#20 4.789  [38;5;240m  │[0m ──────┬──────  
+#20 4.789  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.789  [38;5;240m  │[0m 
+#20 4.789  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.789 [38;5;246m───╯[0m
+#20 4.789 
+#20 4.789 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+#20 4.789    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+#20 4.789    [38;5;246m│[0m
+#20 4.789  [38;5;246m1 │[0m "use client";
+#20 4.789  [38;5;240m  │[0m ──────┬──────  
+#20 4.789  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.789  [38;5;240m  │[0m 
+#20 4.789  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.789 [38;5;246m───╯[0m
+#20 4.789 
+#20 4.789 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+#20 4.789    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+#20 4.789    [38;5;246m│[0m
+#20 4.789  [38;5;246m1 │[0m "use client";
+#20 4.789  [38;5;240m  │[0m ──────┬──────  
+#20 4.789  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.789  [38;5;240m  │[0m 
+#20 4.789  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.789 [38;5;246m───╯[0m
+#20 4.789 
+#20 4.790 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+#20 4.790    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+#20 4.790    [38;5;246m│[0m
+#20 4.790  [38;5;246m1 │[0m "use client";
+#20 4.790  [38;5;240m  │[0m ──────┬──────  
+#20 4.790  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.790  [38;5;240m  │[0m 
+#20 4.790  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.790 [38;5;246m───╯[0m
+#20 4.790 
+#20 4.790 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+#20 4.790    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+#20 4.790    [38;5;246m│[0m
+#20 4.790  [38;5;246m1 │[0m "use client";
+#20 4.790  [38;5;240m  │[0m ──────┬──────  
+#20 4.790  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.790  [38;5;240m  │[0m 
+#20 4.790  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.790 [38;5;246m───╯[0m
+#20 4.790 
+#20 4.790 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+#20 4.790    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+#20 4.790    [38;5;246m│[0m
+#20 4.790  [38;5;246m1 │[0m "use client";
+#20 4.790  [38;5;240m  │[0m ──────┬──────  
+#20 4.790  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.790  [38;5;240m  │[0m 
+#20 4.790  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.790 [38;5;246m───╯[0m
+#20 4.790 
+#20 4.791 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+#20 4.791    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+#20 4.791    [38;5;246m│[0m
+#20 4.791  [38;5;246m1 │[0m "use client";
+#20 4.791  [38;5;240m  │[0m ──────┬──────  
+#20 4.791  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.791  [38;5;240m  │[0m 
+#20 4.791  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.791 [38;5;246m───╯[0m
+#20 4.791 
+#20 4.791 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+#20 4.791    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+#20 4.791    [38;5;246m│[0m
+#20 4.791  [38;5;246m1 │[0m "use client";
+#20 4.791  [38;5;240m  │[0m ──────┬──────  
+#20 4.791  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.791  [38;5;240m  │[0m 
+#20 4.791  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.791 [38;5;246m───╯[0m
+#20 4.791 
+#20 4.791 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+#20 4.791    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+#20 4.791    [38;5;246m│[0m
+#20 4.791  [38;5;246m1 │[0m "use client";
+#20 4.791  [38;5;240m  │[0m ──────┬──────  
+#20 4.791  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.791  [38;5;240m  │[0m 
+#20 4.791  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.791 [38;5;246m───╯[0m
+#20 4.791 
+#20 4.792 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+#20 4.792    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+#20 4.792    [38;5;246m│[0m
+#20 4.792  [38;5;246m1 │[0m "use client";
+#20 4.792  [38;5;240m  │[0m ──────┬──────  
+#20 4.792  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.792  [38;5;240m  │[0m 
+#20 4.792  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.792 [38;5;246m───╯[0m
+#20 4.792 
+#20 4.792 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+#20 4.792    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+#20 4.792    [38;5;246m│[0m
+#20 4.792  [38;5;246m1 │[0m "use client";
+#20 4.792  [38;5;240m  │[0m ──────┬──────  
+#20 4.792  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.792  [38;5;240m  │[0m 
+#20 4.792  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.792 [38;5;246m───╯[0m
+#20 4.792 
+#20 4.792 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+#20 4.792    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+#20 4.792    [38;5;246m│[0m
+#20 4.792  [38;5;246m1 │[0m "use client";
+#20 4.792  [38;5;240m  │[0m ──────┬──────  
+#20 4.792  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.792  [38;5;240m  │[0m 
+#20 4.792  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.792 [38;5;246m───╯[0m
+#20 4.792 
+#20 4.792 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+#20 4.792    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+#20 4.792    [38;5;246m│[0m
+#20 4.792  [38;5;246m1 │[0m "use client";
+#20 4.792  [38;5;240m  │[0m ──────┬──────  
+#20 4.792  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.792  [38;5;240m  │[0m 
+#20 4.792  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.792 [38;5;246m───╯[0m
+#20 4.792 
+#20 4.792 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+#20 4.792     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/index.mjs:11:1 [38;5;246m][0m
+#20 4.792     [38;5;246m│[0m
+#20 4.792  [38;5;246m11 │[0m "use client";
+#20 4.792  [38;5;240m   │[0m ──────┬──────  
+#20 4.792  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#20 4.792  [38;5;240m   │[0m 
+#20 4.792  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.792 [38;5;246m────╯[0m
+#20 4.792 
+#20 4.793 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+#20 4.793     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/dom-export.mjs:11:1 [38;5;246m][0m
+#20 4.793     [38;5;246m│[0m
+#20 4.793  [38;5;246m11 │[0m "use client";
+#20 4.793  [38;5;240m   │[0m ──────┬──────  
+#20 4.793  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#20 4.793  [38;5;240m   │[0m 
+#20 4.793  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.793 [38;5;246m────╯[0m
+#20 4.793 
+#20 4.793 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+#20 4.793    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/context.mjs:2:1 [38;5;246m][0m
+#20 4.793    [38;5;246m│[0m
+#20 4.793  [38;5;246m2 │[0m "use client";
+#20 4.793  [38;5;240m  │[0m ──────┬──────  
+#20 4.793  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.793  [38;5;240m  │[0m 
+#20 4.793  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.793 [38;5;246m───╯[0m
+#20 4.793 
+#20 4.793 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+#20 4.793    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/Icon.mjs:2:1 [38;5;246m][0m
+#20 4.793    [38;5;246m│[0m
+#20 4.793  [38;5;246m2 │[0m "use client";
+#20 4.793  [38;5;240m  │[0m ──────┬──────  
+#20 4.793  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#20 4.793  [38;5;240m  │[0m 
+#20 4.793  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#20 4.793 [38;5;246m───╯[0m
+#20 4.793 
+#20 4.794 ✓ built in 580ms
+#20 DONE 4.8s
+
+#21 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#21 CACHED
+
+#22 [python-base 3/7] WORKDIR /app
+#22 CACHED
+
+#23 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#23 CACHED
+
+#24 [python-base 5/7] RUN pip install -r requirements.lock
+#24 CACHED
+
+#25 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#25 CACHED
+
+#26 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#26 CACHED
+
+#27 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#27 CACHED
+
+#28 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#28 DONE 0.1s
+
+#29 exporting to image
+#29 exporting layers 0.1s done
+#29 exporting manifest sha256:60be695f4cf46fdcc683783a64a6623219d48d36b486f0f4e2966d7622d31af8 0.0s done
+#29 exporting config sha256:4694c2027d0b8ee595426d58213e1c6b4f77608b76ce7e10659ac1a25ff166d5 0.0s done
+#29 exporting attestation manifest sha256:e7ba25001fd7d31180eb39a5e5d8543debc0a57d9f808dc190bf2d5fa18bc89b 0.0s done
+#29 exporting manifest list sha256:44da92c3492014939deb79013d28e5bc394815c7ce40062980db59ed094ba0da 0.0s done
+#29 naming to docker.io/library/enderchest-app-test:latest done
+#29 unpacking to docker.io/library/enderchest-app-test:latest 0.0s done
+#29 DONE 0.2s
+
+#30 resolving provenance for metadata file
+#30 DONE 0.0s
+ Image enderchest-app-test:latest Built 
+ Container enderchest-test-app-1 Recreate 
+ Container enderchest-test-app-1 Recreated 
+ Container enderchest-test-app-1 Starting 
+ Container enderchest-test-app-1 Started 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-app-1 Running 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-e2e-run-dfeccaec1a21 Creating 
+ Container enderchest-test-e2e-run-dfeccaec1a21 Created 
+[WebServer] 
+[WebServer] /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/dom-export.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+
+Running 7 tests using 1 worker
+
+[1/7] ../tests/e2e/ownership-shots.spec.ts:14:7 › ownership screens (dark)
+[2/7] ../tests/e2e/ownership-shots.spec.ts:14:7 › ownership screens (light)
+[3/7] ../tests/e2e/ownership.spec.ts:30:5 › words find the right size, never say certain, and Not the same hides it
+[4/7] ../tests/e2e/ownership.spec.ts:58:5 › I didn't buy it needs a typed price, records it, and Undo takes it back
+[5/7] ../tests/e2e/ownership.spec.ts:80:5 › None of these: words open the new-item form, a photo makes a draft
+[6/7] ../tests/e2e/ownership.spec.ts:107:5 › Savings: totals equal the list, Remove asks, and Undo brings it back
+[7/7] ../tests/e2e/ownership.spec.ts:137:5 › the dashboard road shows the savings pill only on the day of a saving
+  7 passed (12.9s)

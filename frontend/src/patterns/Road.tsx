@@ -43,7 +43,7 @@ export function Road({ road, title, emptyText, savings }: RoadProps) {
 
   return (
     <section
-      className={`road${truckAtStart ? " road--truck-start" : ""}`}
+      className={`road${truckAtStart ? " road--truck-start" : ""}${pill !== null ? " road--pill" : ""}`}
       aria-labelledby={titleId}
     >
       <h2 id={titleId} className="road__title">

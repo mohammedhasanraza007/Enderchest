@@ -896,7 +896,7 @@ body:has(.road) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 .savings-total__amount {
   margin: 0;

@@ -211,6 +211,18 @@
   background: var(--surface-nav-active);
   color: var(--text);
 }
+/* Five tabs since Phase 6: below 1200 px the tabs sit closer so the name pill stays inside. */
+@media (max-width: 1199px) {
+  .nav__capsule {
+    gap: var(--space-3);
+  }
+  .nav__items {
+    gap: var(--space-1);
+  }
+  .nav__item {
+    padding: 0 var(--space-3);
+  }
+}
 
 /* ------------------------------------------------------------------ overflow menu */
 .overflow-menu {
@@ -672,6 +684,13 @@
 }
 .road--truck-start {
   --road-title-gap: var(--space-7);
+}
+/* The savings pill stands on today, under the title: the title moves up to make room for it. */
+.road--pill {
+  --road-title-gap: 52px;
+}
+.road--pill.road--truck-start {
+  --road-title-gap: 96px;
 }
 .road__title {
   margin: 0 0 var(--road-title-gap);

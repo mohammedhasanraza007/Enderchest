@@ -76,5 +76,9 @@ for (const theme of ["dark", "light"] as const) {
     await page.goto("/");
     await expect(page.locator(".road__pill")).toBeVisible();
     await page.screenshot({ path: `${SHOTS}/dashboard-pill-${theme}-1280.png` });
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.screenshot({ path: `${SHOTS}/dashboard-pill-${theme}-1024.png` });
+    await page.goto("/savings");
+    await page.screenshot({ path: `${SHOTS}/savings-${theme}-1024.png`, fullPage: true });
   });
 }
