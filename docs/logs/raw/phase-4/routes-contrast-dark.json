@@ -1,0 +1,19 @@
+{
+  "routes": [
+    "/inventory",
+    "/items/ENDR-V8VJD547",
+    "/items/ENDR-6ZS8EZ36",
+    "/items/ENDR-JTFRN5ZP",
+    "/camera?mode=add",
+    "/camera?mode=scan",
+    "/add",
+    "/add/5eaedb88-67b8-4f59-8f19-4a53c8abfa23",
+    "/labels?ids=ENDR-V8VJD547,ENDR-6ZS8EZ36",
+    "/trash",
+    "/settings",
+    "/tasks",
+    "/notifications"
+  ],
+  "checked": 441,
+  "failures": []
+}

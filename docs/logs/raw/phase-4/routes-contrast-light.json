@@ -1,0 +1,19 @@
+{
+  "routes": [
+    "/inventory",
+    "/items/ENDR-E2NZMQ9F",
+    "/items/ENDR-WP9996J9",
+    "/items/ENDR-BEDGVCX2",
+    "/camera?mode=add",
+    "/camera?mode=scan",
+    "/add",
+    "/add/f4092b0a-6347-40b4-8412-eb573fe3c749",
+    "/labels?ids=ENDR-E2NZMQ9F,ENDR-WP9996J9",
+    "/trash",
+    "/settings",
+    "/tasks",
+    "/notifications"
+  ],
+  "checked": 442,
+  "failures": []
+}
