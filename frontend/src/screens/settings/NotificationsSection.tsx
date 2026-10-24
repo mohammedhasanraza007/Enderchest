@@ -90,7 +90,7 @@ function LeadDays({ saved }: { saved: number }) {
       />
       {changed ? (
         <Button type="submit" loading={saving}>
-          Save
+          Save days
         </Button>
       ) : (
         <Button
@@ -98,7 +98,7 @@ function LeadDays({ saved }: { saved: number }) {
           disabled
           disabledReason={valid ? "Change the number of days to save." : "Choose 1 to 14 days."}
         >
-          Save
+          Save days
         </Button>
       )}
       {failure ? (

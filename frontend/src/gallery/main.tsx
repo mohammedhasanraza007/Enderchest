@@ -51,6 +51,8 @@ const SAMPLE_BACKUPS: BackupsView = {
 // The sample data is fresh for ever, so nothing tries to fetch it from a server that is not there.
 const client = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } });
 client.setQueryData(keys.backups, SAMPLE_BACKUPS);
+// The bell's count, so the capsule shows its badge without asking a server.
+client.setQueryData(keys.notificationCount, { open: 3, unread: 3, unshown: [] });
 
 const ZONES = [
   { value: "Asia/Kolkata", label: "Asia/Kolkata" },
