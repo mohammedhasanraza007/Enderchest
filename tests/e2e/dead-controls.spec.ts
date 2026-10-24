@@ -4,9 +4,14 @@
 // Phase 1 covered /welcome, /settings and the 404 page; Phase 2 adds every inventory route, each
 // with real data made through the API first (gate 7).
 //
-// Not clicked, by design: text boxes and the time zone select (they are typed into, not
-// activated), the already-chosen option of a radio group (choosing it again changes nothing, by
-// nature), and the skip link (tested on its own below).
+// Not clicked, by design: text boxes and selects (they are typed into, not activated), the
+// already-chosen option of a radio group and the nav tab of the page you are on (choosing them
+// again changes nothing, by nature), the skip
+// link (tested on its own below), and the controls in SKIP, which empty the page under test and
+// are exercised on purpose in inventory.spec.ts.
+//
+// Each control is found again BY ITS NAME after every reload (never by position: sections load
+// at different speeds), and only once nothing on the page is still loading.
 
 import { expect, test } from "@playwright/test";
 import type { Locator, Page, Request } from "@playwright/test";
@@ -14,6 +19,17 @@ import { jpegBytes, makeItem, post, resetApp, saveProfile } from "./helpers";
 
 const CONTROLS =
   'button:not(.skip-link), a[href]:not(.skip-link), [role="radio"], [role="switch"], [role="tab"], summary';
+const SKIP = /\|(Delete|Discard|Discard draft|Hide photo|Move and delete|Delete permanently)(#\d+)?$/;
+
+// The browser's print dialog is not part of the app (inventory.spec.ts tests Print and its
+// question); a leave-page prompt is answered "leave" so a walk never stops on it.
+test.use({ actionTimeout: 15_000, navigationTimeout: 30_000 });
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    window.print = () => undefined;
+  });
+  page.on("dialog", (dialog) => void dialog.accept());
+});
 
 interface Found {
   key: string;
@@ -28,16 +44,37 @@ async function keyOf(control: Locator): Promise<string> {
   });
 }
 
+/** The controls a person can reach: inside the top open dialog when one is open (it is modal). */
+async function reachable(page: Page): Promise<Locator> {
+  const dialogs = page.locator("dialog[open]");
+  return (await dialogs.count()) > 0 ? dialogs.last().locator(CONTROLS) : page.locator(CONTROLS);
+}
+
+/** Every visible control, keyed by kind and name; repeats get #2, #3 … in page order. */
 async function list(page: Page): Promise<Found[]> {
-  const controls = page.locator(CONTROLS);
+  const controls = await reachable(page);
   const count = await controls.count();
+  const seen = new Map<string, number>();
   const found: Found[] = [];
   for (let index = 0; index < count; index++) {
-    if (await controls.nth(index).isVisible()) {
-      found.push({ key: await keyOf(controls.nth(index)), index });
-    }
+    if (!(await controls.nth(index).isVisible())) continue;
+    const base = await keyOf(controls.nth(index));
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    found.push({ key: n > 1 ? `${base}#${n}` : base, index });
   }
   return found;
+}
+
+async function find(page: Page, key: string): Promise<Locator | null> {
+  const match = (await list(page)).find((entry) => entry.key === key);
+  return match ? (await reachable(page)).nth(match.index) : null;
+}
+
+async function open(page: Page, path: string): Promise<void> {
+  await page.goto(path);
+  await page.waitForLoadState("networkidle");
+  await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
 }
 
 async function snapshot(page: Page) {
@@ -75,12 +112,22 @@ async function activate(page: Page, control: Locator): Promise<string | null> {
   return null;
 }
 
-// Controls that empty the page under test; inventory.spec.ts covers them on purpose.
-const SKIP = /\|(Delete|Discard|Discard draft|Hide photo|Move and delete|Delete permanently)$/;
+/** The chosen radio, or the link to the page already open (`aria-current="page"`). */
+async function alreadyChosen(control: Locator): Promise<boolean> {
+  return control.evaluate(
+    (el) => el.getAttribute("aria-checked") === "true" || el.getAttribute("aria-current") === "page",
+  );
+}
+
+async function disabledReason(control: Locator): Promise<string> {
+  return control.evaluate((el) => {
+    const id = el.getAttribute("aria-describedby");
+    return id ? (document.getElementById(id)?.textContent?.trim() ?? "") : "";
+  });
+}
 
 async function crawl(page: Page, path: string): Promise<{ dead: string[]; tested: number }> {
-  await page.goto(path);
-  await page.waitForLoadState("networkidle");
+  await open(page, path);
   const first = await list(page);
   const known = new Set(first.map((f) => f.key));
   const dead: string[] = [];
@@ -88,20 +135,16 @@ async function crawl(page: Page, path: string): Promise<{ dead: string[]; tested
 
   for (const control of first) {
     if (SKIP.test(control.key)) continue;
-    await page.goto(path);
-    await page.waitForLoadState("networkidle");
-    const target = page.locator(CONTROLS).nth(control.index);
+    await open(page, path);
+    const target = await find(page, control.key);
+    if (target === null) continue; // gone after an earlier click changed the data
     if (!(await target.isEnabled())) {
       // A disabled control has to say why: it is described by visible text.
-      const reason = await target.evaluate((el) => {
-        const id = el.getAttribute("aria-describedby");
-        return id ? (document.getElementById(id)?.textContent?.trim() ?? "") : "";
-      });
       tested += 1;
-      if (!reason) dead.push(`${control.key} is disabled and does not say why`);
+      if (!(await disabledReason(target))) dead.push(`${control.key} is disabled and does not say why`);
       continue;
     }
-    if ((await target.getAttribute("aria-checked")) === "true") continue; // already chosen
+    if (await alreadyChosen(target)) continue;
     tested += 1;
     const did = await activate(page, target);
     if (did === null) {
@@ -110,25 +153,72 @@ async function crawl(page: Page, path: string): Promise<{ dead: string[]; tested
     }
     if (did === "navigated") continue;
 
-    // It revealed more (a menu, for example): try the controls that were not there before.
-    for (const extra of await list(page)) {
-      if (known.has(extra.key) || SKIP.test(extra.key)) continue;
+    // It revealed more (a menu, for example): try each control that was not there before, from a
+    // fresh page with the same control opened again first.
+    const extras = (await list(page)).filter((e) => !known.has(e.key) && !SKIP.test(e.key));
+    for (const extra of extras) {
       known.add(extra.key);
-      if (extra.index >= (await page.locator(CONTROLS).count())) continue; // gone after a click
-      const revealed = page.locator(CONTROLS).nth(extra.index);
-      if ((await revealed.getAttribute("aria-checked")) === "true") continue;
+      await open(page, path);
+      const parent = await find(page, control.key);
+      if (parent === null || !(await parent.isEnabled())) continue; // the data changed
+      await parent.click();
+      await page.waitForTimeout(300);
+      const revealed = await find(page, extra.key);
+      if (revealed === null) continue;
+      if (!(await revealed.isEnabled())) {
+        tested += 1;
+        if (!(await disabledReason(revealed))) {
+          dead.push(`${extra.key} (inside ${control.key}) is disabled and does not say why`);
+        }
+        continue;
+      }
+      if (await alreadyChosen(revealed)) continue;
       tested += 1;
       const result = await activate(page, revealed);
       if (result === null) dead.push(`${extra.key} (inside ${control.key}) did nothing`);
-      if (result === "navigated") break; // left the page; the next control starts fresh
     }
   }
   return { dead, tested };
 }
 
+/** Real data for the inventory routes: categories, a location tree, items, photos, a draft. */
+async function seed(page: Page): Promise<Record<string, string>> {
+  const request = page.request;
+  await resetApp(request);
+  await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata" });
+  const tools = await post<{ id: number }>(request, "/api/v1/categories", { name: "Tools" });
+  const garage = await post<{ id: number }>(request, "/api/v1/locations", { name: "Garage" });
+  await post(request, "/api/v1/locations", { name: "Shelf", parent_id: garage.id });
+  const first = await makeItem(request, {
+    name: "Drill",
+    category_id: tools.id,
+    location_id: garage.id,
+    expiry_mode: "date",
+    expiry_date: "2026-01-01",
+    attributes: { size: [8, 10] },
+  });
+  const second = await makeItem(request, { name: "Glue" });
+  const trashed = await makeItem(request, { name: "Old tape" });
+  await request.delete(`/api/v1/items/${trashed}`, { headers: { "X-Enderchest": "1" } });
+  await page.goto("/settings");
+  const photo = await jpegBytes(page);
+  for (let n = 0; n < 2; n++) {
+    await request.post(`/api/v1/items/${first}/photos`, {
+      headers: { "X-Enderchest": "1" },
+      multipart: { image: { name: "a.jpg", mimeType: "image/jpeg", buffer: photo } },
+    });
+  }
+  const drafts = await request.post("/api/v1/drafts", {
+    headers: { "X-Enderchest": "1" },
+    multipart: { "images[]": { name: "b.jpg", mimeType: "image/jpeg", buffer: photo } },
+  });
+  const draft = ((await drafts.json()) as { drafts: Array<{ id: string }> }).drafts[0]!.id;
+  return { first, second, trashed, draft };
+}
+
 test.describe("dead-control crawler", () => {
   // Each control is tried from a fresh page load, so a page with many controls takes minutes.
-  test.setTimeout(600_000);
+  test.setTimeout(300_000);
 
   test("/welcome has no dead controls", async ({ page, request }) => {
     await resetApp(request);
@@ -153,60 +243,26 @@ test.describe("dead-control crawler", () => {
     expect(result.dead).toEqual([]);
   });
 
-  test("every inventory route has no dead controls", async ({ page, request }) => {
-    await resetApp(request);
-    await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata" });
-    const tools = await post<{ id: number }>(request, "/api/v1/categories", { name: "Tools" });
-    const garage = await post<{ id: number }>(request, "/api/v1/locations", { name: "Garage" });
-    await post(request, "/api/v1/locations", { name: "Shelf", parent_id: garage.id });
-    const first = await makeItem(request, {
-      name: "Drill",
-      category_id: tools.id,
-      location_id: garage.id,
-      expiry_mode: "date",
-      expiry_date: "2026-01-01",
-      attributes: { size: [8, 10] },
+  const ROUTES: Array<[string, (ids: Record<string, string>) => string]> = [
+    ["Inventory", () => "/inventory"],
+    ["an item", (ids) => `/items/${ids["first"]}`],
+    ["an item in Trash", (ids) => `/items/${ids["trashed"]}`],
+    ["Camera, add", () => "/camera?mode=add"],
+    ["Camera, scan", () => "/camera?mode=scan"],
+    ["the review queue", () => "/add"],
+    ["a draft", (ids) => `/add/${ids["draft"]}`],
+    ["Labels", (ids) => `/labels?ids=${ids["first"]},${ids["second"]}`],
+    ["Trash", () => "/trash"],
+    ["Settings with data", () => "/settings"],
+  ];
+  for (const [name, route] of ROUTES) {
+    test(`${name} has no dead controls`, async ({ page }) => {
+      const path = route(await seed(page));
+      const result = await crawl(page, path);
+      expect(result.tested, `${path} tested`).toBeGreaterThan(0);
+      expect(result.dead, path).toEqual([]);
     });
-    const second = await makeItem(request, { name: "Glue" });
-    const trashed = await makeItem(request, { name: "Old tape" });
-    await request.delete(`/api/v1/items/${trashed}`, { headers: { "X-Enderchest": "1" } });
-    await page.goto("/settings");
-    const photo = await jpegBytes(page);
-    for (const id of [first, first]) {
-      await request.post(`/api/v1/items/${id}/photos`, {
-        headers: { "X-Enderchest": "1" },
-        multipart: { image: { name: "a.jpg", mimeType: "image/jpeg", buffer: photo } },
-      });
-    }
-    const drafts = await request.post("/api/v1/drafts", {
-      headers: { "X-Enderchest": "1" },
-      multipart: { "images[]": { name: "b.jpg", mimeType: "image/jpeg", buffer: photo } },
-    });
-    const draft = ((await drafts.json()) as { drafts: Array<{ id: string }> }).drafts[0]!.id;
-
-    // Delete and discard are left out of these walks: they would empty the very page under test.
-    // They are exercised on purpose in inventory.spec.ts.
-    const routes = [
-      "/inventory",
-      `/items/${first}`,
-      "/camera?mode=add",
-      "/camera?mode=scan",
-      "/add",
-      `/add/${draft}`,
-      `/labels?ids=${first},${second}`,
-      "/trash",
-      `/items/${trashed}`, // after /trash: Restore on either page takes it out of Trash
-      "/settings",
-    ];
-    const report: Record<string, { tested: number; dead: string[] }> = {};
-    for (const route of routes) {
-      report[route] = await crawl(page, route);
-    }
-    for (const [route, result] of Object.entries(report)) {
-      expect(result.tested, `${route} tested`).toBeGreaterThan(0);
-      expect(result.dead, route).toEqual([]);
-    }
-  });
+  }
 
   test("the skip link moves to the main content", async ({ page, request }) => {
     await resetApp(request);

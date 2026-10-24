@@ -61,6 +61,8 @@ export function Camera() {
   const mode = params.get("mode") === "scan" ? "scan" : "add";
   const camera = useCamera();
   const live = camera.state === "live";
+  // Each Try again is counted, so a second failure says so instead of looking like nothing.
+  const [retries, setRetries] = useState(0);
 
   return (
     <div className="camera-page">
@@ -96,8 +98,20 @@ export function Camera() {
             <div className="camera-view__message" role="status">
               <h2>{CAMERA_TEXT[camera.state].title}</h2>
               <p>{CAMERA_TEXT[camera.state].body}</p>
+              {retries > 0 && camera.state !== "starting" ? (
+                <p className="section-note">
+                  Tried again {retries === 1 ? "once" : `${retries} times`}; it is still not
+                  working.
+                </p>
+              ) : null}
               {camera.state === "starting" || camera.state === "paused" ? null : (
-                <Button variant="secondary" onClick={camera.retry}>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setRetries((count) => count + 1);
+                    camera.retry();
+                  }}
+                >
                   Try again
                 </Button>
               )}
