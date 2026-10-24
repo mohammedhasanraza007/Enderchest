@@ -1,0 +1,1 @@
+No photos yet: put the 20 photos and labels.csv in tests\fixtures\private\phase3 first.

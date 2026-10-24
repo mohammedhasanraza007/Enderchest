@@ -80,3 +80,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed: old settings tests expected an empty model default; the test reset kept the Gemini key; two test races or wrong expectations; `test.bat` edited while running (a second suite started); Python wrote control characters into `test.bat` paths (caught and repaired before commit).
 - Blocked on owner: gate 2 (20 photos, labels.csv, `test.bat bakeoff`), gate 4 (Gemini key), acceptance run, screenshot approval, `build.bat`/`run.bat`.
 - Next: Phase 3 verification (`D:\Projects\phase3v-next-prompt.txt`).
+
+## 2026-10-24 · phase3v · Phase 3 verification, chain hand-off to the Phase 4 build
+- Zip in: `phase3.zip` (already unzipped into `D:\Projects\Enderchest-phase-3v`, branch `phase-3-verify`). Zip out: `D:\Projects\phase3v.zip` (clone, `zip-list.txt`, Windows `tar`), unzipped into `D:\Projects\Enderchest-phase-4` on branch `phase-4`.
+- Probe list first (P1 to P10), then re-ran everything: lint clean; unit 160 + 65; integration 198; Playwright 82 + 3; probes 1 to 21 ALL PASSED; 13 adversarial parser inputs; `test.bat bakeoff` refuses without photos (exit 2).
+- Failed and fixed test-first (minor): a read value the owner cleared came back after a reload (F-032); the draft now keeps `owned`. After the fix: unit 160 + 66, integration 199, Playwright 82 + 3.
+- Added failure kinds F-032 to F-035 (the build's: key left by the test reset, batch edited while running, control characters from Python strings; the last one recurred while writing its own row).
+- Verdict: PASS for Claude's part; gates 2 and 4 and the acceptance run BLOCKED on the owner; notes N1 to N3.
+- Next: Phase 4 build (`D:\Projects\phase4-next-prompt.txt`).

@@ -3,22 +3,22 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase3.zip`. The Phase 3 build session unzipped it into `D:\Projects\Enderchest-phase-3v\Enderchest` and made branch `phase-3-verify` there (D-091). Never unzip over an existing repo or worktree (D-067).
-- **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Do not wait for "go". Keep `D:\Projects\enderchest-chain-state.txt` current (running at start; handing-off with the next step before `start_session`). UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. Copy the rules into every next prompt. If `start_session` is refused, message the top session "Enderchest phase 0 foundation" (the owner's instruction, 2026-10-24).
-- Last closed phase: none formally. Phases 0 to 2: verification PASS for Claude's part, owner checks pending. **Phase 3 (Capture) is built: Verification: pending for phase 3.**
-- **Next task: the Phase 3 verification** (fresh session, `docs/PROCESS.md` 4, probe list first; prompt `D:\Projects\phase3v-next-prompt.txt`).
-- Resume check: `git log --oneline -3` shows `phase3: checkpoint (phase3 zip)` on top.
+- Zip: `phase3v.zip`. The Phase 3 verification session unzipped it into `D:\Projects\Enderchest-phase-4\Enderchest` and made branch `phase-4` there (D-091). Never unzip over an existing repo or worktree (D-067).
+- **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Do not wait for "go". Keep `D:\Projects\enderchest-chain-state.txt` current (running at start; handing-off with the next step before `start_session`). UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. Copy the rules into every next prompt. If `start_session` is refused, message the top session "Enderchest phase 0 foundation".
+- Last closed phase: none formally. Phases 0 to 3: verification PASS for Claude's part, owner checks pending. **Phase 3 verification: PASS for Claude's part** (`docs/reviews/phase-3-verification.md`; one minor D-100 defect fixed, F-032).
+- **Next task: the Phase 4 build (Lifecycle)**, `docs/specs/phase-4-lifecycle.md`; prompt `D:\Projects\phase4-next-prompt.txt`.
+- Resume check: `git log --oneline -3` shows `phase3v: checkpoint (phase3v zip)` on top.
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it. Time-box bugs: fix once, simply, with a test; a second failure goes to the evidence log.
 
 ## Next steps, in this order
-1. **Phase 3 verification** (fresh session; re-run everything, probes 1 to 21; add the build's failure kinds to `docs/reviews/failure-checklist.md`, see MISTAKES_TO_AVOID section O).
-2. Then the Phase 4 build (Lifecycle), `docs/specs/phase-4-lifecycle.md`: it reads Gemini's suggested inspection interval from `drafts.gemini_result` through `committed_item_id` (D-102).
-3. Small TODOs any session may take: make `test.bat lint` cover `tests/e2e` (tsc and Prettier; several older spec files are not Prettier-formatted); unload the OCR model after 10 idle minutes (ARCHITECTURE 6 allows it; about 410 MB stays resident); the Phase 2 notes N5, N6, N7.
+1. **Phase 4 build** (Lifecycle): it reads Gemini's suggested inspection interval from `drafts.gemini_result` through `committed_item_id` (D-102). Draft fields now carry `owned` (dropped on commit).
+2. Then the Phase 4 verification (fresh session).
+3. Small TODOs any session may take: make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5, N6, N7; Phase 3 notes N1 to N3.
 
 ## Current state (facts)
 - Phase 3 built: expiry parser (35/35 supplied cases plus 10 more), local OCR (RapidOCR 3.10 on ONNX Runtime, provisional, D-099) in the shared size-1 `heavy` worker, field extraction (name, model, size, expiry), readings queued on draft creation and by Re-read (D-100), Gemini over REST with the key file, modes off/ask/auto, photos only when shared (D-101, D-102), the confirm screen with source tags, confidence dots, the "What was read" drawer, expiry confirmation and date pills, the queue's read names, Settings → Gemini. Bake-off harness `scripts/ocr_bakeoff.py` and image target `bakeoff` (`test.bat bakeoff`; all four engines load, models baked in).
 - Results on the final code: lint clean; unit 160 pytest + 65 vitest; integration 198; Playwright main 82 + no-backups 3; probes 1 to 21 ALL PASSED (20: a photo read with no network, Gemini "could not be reached"; 21: `/health` median 3.4 ms, max 75.5 ms while three readings queued, readings 0.4 to 1.4 s).
-- Decisions up to D-102. Failure kinds up to F-031 (the verification adds the build's).
+- Decisions up to D-102. Failure kinds up to F-035. Phase 3 verification re-runs: unit 160 + 66, integration 199, Playwright 82 + 3, probes 1 to 21 ALL PASSED.
 - No migration in Phase 3 (the drafts table already had the reading columns). Live stack untouched (still Phase 1 code, schema 1, until the owner runs `build.bat`).
 
 ## Owner runs next
@@ -26,7 +26,7 @@ Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end 
 2. **Gate 4 (optional):** Settings → Gemini: paste your key (Google AI Studio), choose "Ask each time", press "Test connection"; then on a confirm screen press "Improve with Gemini". Or write that you waive it.
 3. `build.bat`, then `run.bat` (the live app moves to the Phase 3 code; schema 2 migration from Phase 2 runs first if not done yet, after a verified pre-migration backup).
 4. Phase 3 acceptance (5 minutes): add three real items with the webcam; open "What was read"; correct a wrong field; confirm a date; check the saved item.
-5. Look at `docs/logs/raw/phase-3/shots/*.png` (and the Phase 1 and 2 shots) and say "approved" or what looks wrong.
+5. Look at `docs/logs/raw/phase-3/shots/*.png` and agree (or not) to the Phase 3 notes N1 to N3 in `docs/reviews/phase-3-verification.md`. Look (and the Phase 1 and 2 shots) and say "approved" or what looks wrong.
 6. Still open from earlier phases: Phase 2 acceptance (webcam, printed label), Back up now and `backup.bat` on live, `.\test.bat probes -Only "4,9" -Live`, `restore.bat` once; optional: delete stray container `great_gagarin`.
 
 ## Known issues to carry
