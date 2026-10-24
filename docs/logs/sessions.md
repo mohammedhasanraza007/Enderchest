@@ -64,3 +64,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed (test-first where code): shared DB connection across requests (500 on Labels); an empty committed script file; stale throwaway volumes in `test.bat e2e` and probe 13; crawler flaws (index-based, modal-blind, print and leave-page dialogs).
 - Blocked on owner: webcam and printed-label acceptance run, screenshot approval, `build.bat`/`run.bat` (live migration to schema 2), earlier live checks.
 - Next: Phase 2 verification (`D:\Projects\phase2v-next-prompt.txt`), started by this session as a new session.
+
+## 2026-10-24 · phase2v · Phase 2 fresh-session verification, chain hand-off to the Phase 3 build
+- Zip in: `phase2.zip` (already unzipped into `D:\Projects\Enderchest-phase-2v`, branch `phase-2-verify`). Zip out: `D:\Projects\phase2v.zip` (clone, `zip-list.txt`, Windows `tar`), unzipped into `D:\Projects\Enderchest-phase-3` on branch `phase-3` (D-091).
+- Probe list first (V1 to V15), then re-ran everything: lint clean; unit 87 + 58; integration 182 then 184; Playwright 69 + 3 (+ new labels-print 3); probes 1 to 19 ALL PASSED.
+- V1 rehearsed the owner's live upgrade on a volume made by the Phase 1 image: pre-migration backup, schema 2, name and settings kept. V2 to V14: uploads, concurrency, permanent delete, undo, filters on items-1000, tree rules, lookup, print PDF, security, local-date expiry, survival, reality audit, screenshots.
+- Failed and fixed test-first (minor): search matched attribute keys (F-029); duplicate names case-insensitive for ASCII only (F-030); D-098. New failure kinds F-026 to F-031.
+- Verdict: no blocker or major; PASS for Claude's part; PASS WITH NOTES needs the owner's acceptance run, screenshot approval, live build/run, and agreement to notes N3 to N9.
+- Next: Phase 3 build (`D:\Projects\phase3-next-prompt.txt`), started by this session as a new session.
