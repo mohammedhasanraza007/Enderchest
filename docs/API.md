@@ -41,8 +41,8 @@ Data shapes live in `DATA_MODEL.md`. Page behaviour lives in `PAGES.md`. Every e
 - **Idempotency:** `POST /items`, `POST /drafts/{id}/commit`, `POST /tasks`, `POST /savings` accept `Idempotency-Key`; a repeat within 10 minutes returns the first result (in-memory, single worker).
 - **Shared shapes.**
   - `ItemSummary`: `{public_id, name, category_name|null, location_path:[string], quantity, state, expiry:{mode, date|null, status, days_left|null, word}, primary_photo_id|null, has_photo, deleted_at|null}`.
-  - `ItemDetail`: `ItemSummary` plus `{category:{id,name}|null, location:{id,name}|null, price_paise|null, notes, attributes, label:{printed_at|null, no_label_needed}, photos:[{id, is_primary, width, height}], maintenance:{task_id, enabled, interval_days|null, next_due, last_done|null, source}|null, created_at, updated_at}`.
-  - `NotificationView`: `{id, kind, item:{public_id,name,primary_photo_id}|null, task:{id,title}|null, due_date, word, urgency, status, snoozed_until|null, read_at|null, actions:[{key,label,primary}]}`.
+  - `ItemDetail`: `ItemSummary` plus `{category:{id,name}|null, location:{id,name}|null, price_paise|null, notes, attributes, label:{printed_at|null, no_label_needed}, photos:[{id, is_primary, width, height}], maintenance:{task_id, enabled, interval_days|null, next_due, last_done|null, source}|null, maintenance_suggestion:{interval_days}|null, created_at, updated_at}`. `maintenance_suggestion` is Gemini's interval from the draft that made the item (D-102), shown "suggested, unverified" (Phase 4).
+  - `NotificationView`: `{id, kind, item:{public_id,name,primary_photo_id}|null, task:{id,title}|null, due_date, word, urgency, status, snoozed_until|null, read_at|null, resolution|null, actions:[{key,label,primary}]}`. `kind` adds `inspection_finding` (D-104); `urgency` is `overdue`, `today` or `upcoming` and `word` follows D-106. `actions` keys: `use`, `mark_expired`, `discard`, `snooze`, `inspect`, `skip`, `done`, `keep`; the first two show as pills, the rest in the row's More menu; `snooze` is left out where it cannot move the row; a resolved row has none.
   - `Draft`: `{id, status, fields, photos:[{id,width,height}], ocr_status, gemini_status, proposed:{<field>:{value, source:'ocr'|'gemini', confidence:'high'|'medium'|'low', flags:[…], text?, alternatives?}}, raw_text|null, ocr_error|null, gemini_error|null, read_notes:[string], ocr_info:{engine, ms, photos}|null, gemini_values:{name, brand, model, size, category, expiry_text, inspection_interval_days}|null, created_at}` (Phase 3, D-100). `proposed` keys: `name`, `model`, `size`, `brand`, `expiry_date`, `category_id`, `inspection_interval_days`; `text` is the line the value came from, `alternatives` the other reading of an ambiguous date. Proposals never change `fields`; the confirm screen fills the owner's untouched fields from them. A reading queued before a restart shows as `failed` with an "interrupted" `ocr_error` or `gemini_error`.
 
 Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it starts with `/health`), Request, Success, Errors.
@@ -138,34 +138,35 @@ Phase 3: `POST /drafts` also queues one local reading per new draft (`ocr_status
 ### 2.10 Lifecycle
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 4 | POST | /items/{public_id}/use | `{amount?:1}` (quantity minus amount; at 0 the state becomes `used`) | `{item:ItemDetail, event_id}` | `conflict`, `not_found` |
+| 4 | POST | /items/{public_id}/use | `{amount?:1}` (quantity minus amount; at 0 the state becomes `used` and the item's reminders resolve as `used`, D-105) | `{item:ItemDetail, event_id}` | `conflict` (`not_active`, `in_trash`), `validation_error` (`amount` above the quantity), `not_found` |
 | 4 | POST | /items/{public_id}/mark-expired | none | `{item, event_id}` | `conflict` |
 | 4 | POST | /items/{public_id}/discard | none | `{item, event_id}` | `conflict` |
-| 4 | POST | /items/{public_id}/reactivate | `{quantity?:1}` | ItemDetail | `conflict` |
-| 2 | POST | /events/{id}/undo | none; Phase 2 undoes `item_deleted`, later phases add their kinds (D-092) | `{ok:true}` | `undo_expired`, `not_found` |
+| 4 | POST | /items/{public_id}/reactivate | `{quantity?}` (default: the kept quantity, else 1) | ItemDetail | `conflict` (`already_active`, `in_trash`) |
+| 2 | POST | /events/{id}/undo | none; undoes `item_deleted` (Phase 2), `item_used`, `item_expired_marked`, `item_discarded`, `task_done`, `task_skipped`, `task_deleted` (Phase 4); a second call changes nothing | `{ok:true}` | `undo_expired`, `not_found`, `conflict` (`changed`: the item or task changed after it) |
 
 ### 2.11 Tasks, maintenance and inspections
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 4 | GET | /tasks | query `scope` (`open` default, `due`, `all`), `item` (public_id) | `{items:[{id,title,kind,item:{public_id,name}\|null,interval_days,schedule_mode,next_due,last_done,enabled,source,word}]}` | |
-| 4 | POST | /tasks | `{title*, item_public_id?, kind?, interval_days?, schedule_mode?, first_due*, notes?, enabled?}` | 201 task | `validation_error` |
+| 4 | GET | /tasks | query `scope` (`open` default: enabled; `due`: enabled and overdue or due within 7 days; `all`: not deleted; `done`: has `last_done`, newest first; D-106), `item` (public_id) | `{items:[{id,title,kind,item:{public_id,name}\|null,interval_days,schedule_mode,next_due,last_done,enabled,source,notes,word}]}` | |
+| 4 | POST | /tasks | `{title*, item_public_id?, kind?, interval_days?, schedule_mode?, first_due*, notes?, enabled?}` | 201 task | `validation_error`, `conflict` (`has_maintenance`) |
 | 4 | PATCH | /tasks/{id} | partial | task | `not_found` |
 | 4 | DELETE | /tasks/{id} | none | `{event_id}` | `not_found` |
-| 4 | POST | /tasks/{id}/done | none | `{task, event_id}` | `not_found` |
-| 4 | POST | /tasks/{id}/skip | none | `{task, event_id}` | `not_found` |
+| 4 | POST | /tasks/{id}/done | none | `{task, event_id}` | `not_found`, `conflict` (`disabled`) |
+| 4 | POST | /tasks/{id}/skip | none (moves the schedule, no `last_done`) | `{task, event_id}` | `not_found`, `conflict` (`disabled`) |
 | 4 | PUT | /items/{public_id}/maintenance | `{enabled, interval_days?, first_due?, source?}` (creates or updates the item's maintenance task) | task | `validation_error` |
-| 4 | POST | /items/{public_id}/inspections | `{result:'ok'\|'worn'\|'defective', note?, photo_id?}` | `{inspection, task\|null, event_id}` | `validation_error` |
+| 4 | POST | /items/{public_id}/inspections | `{result:'ok'\|'worn'\|'defective', note?, photo_id?}` (`photo_id`: one of the item's live photos) | 201 `{inspection, task\|null, event_id}` | `validation_error`, `conflict` (`in_trash`) |
 | 4 | GET | /items/{public_id}/inspections | none | `{items:[inspection]}` | `not_found` |
 
 ### 2.12 Notifications
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
 | 4 | GET | /notifications | query `status` (`open` default, `snoozed`, `resolved`, `all`), `limit`, `cursor` | `{items:[NotificationView], next_cursor}` | |
-| 4 | GET | /notifications/count | none | `{open, unread}` | |
+| 4 | GET | /notifications/count | none | `{open, unread, unshown:[NotificationView]}` (`unshown`: up to 5 open rows never shown as a browser notification, D-107) | |
 | 4 | POST | /notifications/{id}/read | none | 204 | `not_found` |
 | 4 | POST | /notifications/read-all | none | `{updated:n}` | |
-| 4 | POST | /notifications/{id}/snooze | `{option:'tomorrow'\|'3days'\|'week'}` | NotificationView | `not_found` |
-| 4 | POST | /notifications/{id}/shown | none | 204 (records `os_notified_at` so a browser alert shows once) | `not_found` |
+| 4 | POST | /notifications/{id}/snooze | `{option:'tomorrow'\|'3days'\|'week'}` (capped at the due date for `expiry_soon`) | NotificationView | `not_found`, `conflict` (`cannot_snooze`, `resolved`) |
+| 4 | POST | /notifications/{id}/dismiss | none ("Keep using" on an `inspection_finding`; resolution `dismissed`, never reopened, D-104) | NotificationView | `not_found`, `conflict` (`not_a_finding`) |
+| 4 | POST | /notifications/{id}/shown | none | `{claimed}`: true only for the first call, which sets `os_notified_at`; a tab fires the browser notification only when it claimed the row (D-107) | `not_found` |
 
 ### 2.13 Dashboard
 | Ph | Method | Path | Request | Success | Errors |

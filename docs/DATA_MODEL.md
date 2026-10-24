@@ -106,8 +106,8 @@ At most one live maintenance task per item (unique index on `item_id` where `kin
 Append-only. `id`, `user_id`, `item_id` NULL, `task_id` NULL, `kind`, `payload` TEXT (JSON), `at`, `local_date`. Kinds: `item_created`, `item_updated`, `item_deleted`, `item_restored`, `item_purged` (kept after permanent delete; holds name and `public_id` only), `item_used`, `item_expired_marked`, `item_discarded`, `item_reactivated`, `label_printed`, `photo_added`, `photo_removed`, `draft_committed`, `task_created`, `task_updated`, `task_deleted`, `task_done`, `task_skipped`, `inspection_done`, `notification_resolved`, `savings_added`, `savings_removed`. Reversible kinds store `payload.before` (the changed fields' old values); `POST /api/v1/events/{id}/undo` applies it.
 
 ### 2.12 `notifications` (0003)
-`id`, `user_id`, `kind` (`expiry_soon`,`expired`,`inspection_due`,`task_due`), `item_id` NULL, `task_id` NULL, `due_date` TEXT, `dedupe_key` TEXT NOT NULL UNIQUE, `status` (`open`,`snoozed`,`resolved`), `snoozed_until` TEXT NULL (date), `read_at` NULL, `os_notified_at` NULL, `created_at`, `resolved_at` NULL, `resolution` TEXT NULL (`used`,`expired_marked`,`discarded`,`done`,`skipped`,`inspected`,`dismissed`,`superseded`).
-`dedupe_key = kind|item_id-or-dash|task_id-or-dash|due_date` (D-022). The scheduler **reconciles**; it does not fire events (section 3.8).
+`id`, `user_id`, `kind` (`expiry_soon`,`expired`,`inspection_due`,`task_due`,`inspection_finding` (D-104)), `item_id` NULL, `task_id` NULL, `due_date` TEXT, `dedupe_key` TEXT NOT NULL UNIQUE, `status` (`open`,`snoozed`,`resolved`), `snoozed_until` TEXT NULL (date), `read_at` NULL, `os_notified_at` NULL, `created_at`, `resolved_at` NULL, `resolution` TEXT NULL (`used`,`expired_marked`,`discarded`,`done`,`skipped`,`inspected`,`dismissed`,`superseded`).
+`dedupe_key = kind|item_id-or-dash|task_id-or-dash|due_date` (D-022). The scheduler **reconciles**; it does not fire events (section 3.8). An `inspection_finding` row belongs to an active item whose latest inspection is `worn` or `defective` (due date = that inspection's local date). Lifecycle actions resolve the item's rows with their own resolution (D-105).
 
 ### 2.13 `savings` (0004)
 `id`, `user_id`, `item_id` NULL, `item_name` TEXT NOT NULL (snapshot), `price_paise` INTEGER NOT NULL CHECK (> 0), `confirmed_at`, `local_date`, `note`, `deleted_at`.
@@ -165,7 +165,8 @@ Run at start-up, every 15 minutes, when the local date changes, and before `GET 
 1. For each active item with `expiry_mode='date'`: `0 ≤ days_left ≤ lead_days` → ensure `expiry_soon` (due = `expiry_date`); `days_left < 0` → ensure `expired` and resolve any `expiry_soon` for that item as `superseded`.
 2. For each enabled task with `next_due <= today` → ensure `inspection_due` (maintenance) or `task_due` (chore), due = `next_due`.
 3. Re-open `snoozed` rows whose `snoozed_until <= today`.
-4. Resolve as `superseded` any open row whose item is not active or is deleted, or whose task is disabled or deleted.
+4. Resolve as `superseded` any open row whose item is not active or is deleted, or whose task is disabled or deleted; in general any open or snoozed row that is no longer desired (a date edited, a task moved) (D-104).
+5. A resolved row whose key is desired again (undo, restore, reactivate) reopens unless the owner dismissed it, and keeps `os_notified_at` (D-104). The reconcile also runs after every write that changes what is due, and before notification reads when the date moved (D-107).
 Snooze options: `tomorrow`, `3days`, `week`, always capped at the due date for `expiry_soon` (a snooze cannot hide an item past its date) (D-047).
 
 ---
