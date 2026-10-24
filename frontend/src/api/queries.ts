@@ -10,7 +10,14 @@ import {
 } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { api } from "./endpoints";
-import type { Draft, ItemFilters, NotificationStatus, ProfileUpdate, TaskScope } from "./endpoints";
+import type {
+  Draft,
+  ItemFilters,
+  NotificationStatus,
+  ProfileUpdate,
+  RingName,
+  TaskScope,
+} from "./endpoints";
 
 export const keys = {
   health: ["health"] as const,
@@ -29,6 +36,9 @@ export const keys = {
   inspections: (publicId: string) => ["inspections", publicId] as const,
   notifications: (status: NotificationStatus) => ["notifications", status] as const,
   notificationCount: ["notification-count"] as const,
+  dashboard: ["dashboard"] as const,
+  ring: (ring: RingName) => ["dashboard", "ring", ring] as const,
+  road: (days: number) => ["dashboard", "road", days] as const,
 };
 
 // The bell is read every minute and whenever the window gets focus (PAGES.md P-11).
@@ -167,6 +177,25 @@ export function useNotificationCount() {
   });
 }
 
+/** The whole home screen in one request (PAGES.md P-12); read again on focus. */
+export function useDashboard() {
+  return useQuery({ queryKey: keys.dashboard, queryFn: api.dashboard, refetchOnWindowFocus: true });
+}
+
+/** What counts in one ring and what does not (the breakdown sheet). */
+export function useRing(ring: RingName | null) {
+  return useQuery({
+    queryKey: keys.ring(ring ?? "documented"),
+    queryFn: () => api.ring(ring ?? "documented"),
+    enabled: ring !== null,
+  });
+}
+
+/** The road over `days` days (the Tasks page uses 30, D-103). */
+export function useRoad(days: number) {
+  return useQuery({ queryKey: keys.road(days), queryFn: () => api.road(days) });
+}
+
 /** Gemini key state, model, mode and photo sharing (P-02, P-07). */
 export function useGemini() {
   return useQuery({ queryKey: keys.gemini, queryFn: api.gemini });
@@ -192,6 +221,7 @@ export function useRefreshInventory(): () => Promise<void> {
         ["inspections"],
         ["notifications"],
         keys.notificationCount,
+        keys.dashboard,
       ].map((queryKey) => client.invalidateQueries({ queryKey })),
     );
   }, [client]);

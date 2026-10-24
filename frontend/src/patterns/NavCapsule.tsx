@@ -8,11 +8,13 @@ import { useCameraLive } from "./CameraLive";
 import { NameMenu } from "./NameMenu";
 
 // The floating navigation capsule (DESIGN.md 6.2): the logo and wordmark on the left, the pages
-// that work in the centre (after Phase 4: Inventory, Camera and Tasks, PAGES.md 1, D-034), the
-// bell and the name pill on the right. The LIVE badge sits on Camera only while a stream runs.
+// that work in the centre (after Phase 5: Dashboard, Inventory, Camera and Tasks, PAGES.md 1,
+// D-034), the bell and the name pill on the right. The LIVE badge sits on Camera only while a
+// stream runs.
 
 // Each tab also stands for the pages reached from it, so exactly one tab is lit (DESIGN.md 6.3).
 const PAGES = [
+  { to: "/", label: "Dashboard", section: [] },
   { to: "/inventory", label: "Inventory", section: ["/items/", "/labels", "/trash"] },
   { to: "/camera", label: "Camera", section: ["/add"] },
   { to: "/tasks", label: "Tasks", section: [] },

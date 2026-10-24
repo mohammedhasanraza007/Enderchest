@@ -730,3 +730,96 @@
 .lead-days .field {
   width: min(100%, 360px);
 }
+
+/* ------------------------------------------------------------------ dashboard (P-12) */
+/* A road bar spans the window, so a page with one clips sideways overflow instead of scrolling. */
+body:has(.road) {
+  overflow-x: clip;
+}
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+/* Reference frame: greeting at the content inset, rings centred on the page, the card against
+   the right inset (DESIGN.md 4.7). */
+.dashboard__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px minmax(0, 1fr);
+  align-items: start;
+  margin-top: var(--space-6);
+  padding-inline: 17px;
+}
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-top: 6px;
+}
+.greeting__title {
+  font-size: clamp(2.5rem, 4.4vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+.greeting__subtitle {
+  margin: 0;
+  color: var(--text-muted-page);
+  font-size: 1.0625rem;
+}
+.attention-card {
+  justify-self: end;
+  width: 323px;
+  max-width: 100%;
+  padding: 17px;
+}
+.attention-card__title {
+  margin: 6px 0 14px;
+  font-family: var(--font-sans);
+  font-size: 1.1875rem;
+  font-weight: 400;
+}
+.attention-card .reminder__actions {
+  flex-wrap: nowrap;
+}
+.attention-card .reminder__actions > .pill {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.attention-card__empty {
+  display: flex;
+  min-height: 102px;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-1);
+}
+.attention-card__empty p {
+  margin: 0;
+}
+.attention-card__more {
+  display: flex;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--hairline-panel);
+}
+.attention-card__more .pill {
+  flex: 1;
+}
+:root[data-theme="light"] .attention-card {
+  padding: var(--space-5);
+}
+:root[data-theme="light"] .attention-card .inner-panel {
+  padding: var(--space-4) var(--space-5);
+}
+/* Narrow laptop windows: the greeting takes its own row; the rings and the card share one. */
+@media (max-width: 1199px) {
+  .dashboard__hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    row-gap: var(--space-5);
+    padding-inline: 0;
+  }
+  .greeting {
+    grid-column: 1 / -1;
+  }
+  .dashboard__hero .rings {
+    width: 360px;
+  }
+}

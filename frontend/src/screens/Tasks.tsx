@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/endpoints";
 import type { TaskScope, TaskView } from "../api/endpoints";
-import { useRefreshInventory, useTasks } from "../api/queries";
+import { useRefreshInventory, useRoad, useTasks } from "../api/queries";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { formatDay } from "../lib/format";
 import { repeatText } from "../lib/notifications";
 import { ErrorState } from "../patterns/ErrorState";
 import { InspectionSheet } from "../patterns/InspectionSheet";
 import { OverflowMenu } from "../patterns/OverflowMenu";
+import { Road } from "../patterns/Road";
 import { TaskFormSheet } from "../patterns/TaskFormSheet";
 import { Button } from "../primitives/Button";
 import { Chip } from "../primitives/Chip";
@@ -17,9 +18,11 @@ import { Skeleton } from "../primitives/Skeleton";
 import { StatusChip } from "../primitives/StatusChip";
 import { useToast } from "../primitives/Toast";
 
-// P-10, Tasks: filter pills Due soon / All / Done (D-106) and the rows, each with Mark done (or
-// Inspect now for a maintenance task), Skip, Edit and Delete. The 30-day road joins this page
-// with the road component in Phase 5 (D-103).
+// P-10, Tasks: the 30-day road on top (the dashboard's road component, D-103), then filter pills
+// Due soon / All / Done (D-106) and the rows, each with Mark done (or Inspect now for a
+// maintenance task), Skip, Edit and Delete.
+
+const ROAD_DAYS = 30;
 
 const FILTERS: Array<{ scope: TaskScope; label: string; note: string; empty: string }> = [
   {
@@ -45,6 +48,7 @@ export function Tasks() {
   const all = useTasks("all");
   const filter = FILTERS.find((entry) => entry.scope === scope) ?? FILTERS[0]!;
   const none = all.data !== undefined && all.data.items.length === 0;
+  const road = useRoad(ROAD_DAYS);
 
   return (
     <div className="tasks-page">
@@ -54,6 +58,17 @@ export function Tasks() {
           <Button onClick={() => setCreating(true)}>New task</Button>
         </div>
       </div>
+      {road.isPending ? (
+        <Skeleton height={27} />
+      ) : road.isError ? (
+        <ErrorState message={road.error.message} onRetry={() => void road.refetch()} />
+      ) : (
+        <Road
+          road={road.data}
+          title="Next 30 days"
+          emptyText="No tasks or expiries in the next 30 days."
+        />
+      )}
       <GlassCard>
         <div className="stack">
           <div className="chip-row" role="radiogroup" aria-label="Show">

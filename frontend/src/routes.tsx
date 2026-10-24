@@ -8,6 +8,7 @@ import { Skeleton } from "./primitives/Skeleton";
 import { AddQueue } from "./screens/AddQueue";
 import { Camera } from "./screens/Camera";
 import { ConfirmDraft } from "./screens/ConfirmDraft";
+import { Dashboard } from "./screens/Dashboard";
 import { Inventory } from "./screens/Inventory";
 import { Item } from "./screens/Item";
 import { Labels } from "./screens/Labels";
@@ -18,9 +19,9 @@ import { Tasks } from "./screens/Tasks";
 import { Trash } from "./screens/Trash";
 import { Welcome } from "./screens/Welcome";
 
-// Every route of the app (PAGES.md 1). After Phase 4: first run, Inventory, Item, Camera, the
-// review queue and confirm, Labels, Trash, Tasks, Notifications, Settings and the not-found card.
-// `/` goes to Inventory until the dashboard exists (Phase 5).
+// Every route of the app (PAGES.md 1). After Phase 5: first run, the dashboard at `/`,
+// Inventory, Item, Camera, the review queue and confirm, Labels, Trash, Tasks, Notifications,
+// Settings and the not-found card.
 
 /**
  * Loads the profile once for every page and sends a first-time owner to /welcome. Everything
@@ -66,7 +67,7 @@ export function AppRoutes() {
       <Route element={<FirstRunGate />}>
         <Route path="/welcome" element={<Welcome />} />
         <Route element={<AppShell />}>
-          <Route index element={<Navigate to="/inventory" replace />} />
+          <Route index element={<Dashboard />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/items/:publicId" element={<Item />} />
           <Route path="/camera" element={<Camera />} />

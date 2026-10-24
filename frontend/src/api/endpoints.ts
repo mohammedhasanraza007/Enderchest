@@ -59,6 +59,12 @@ export type NotificationPage = components["schemas"]["NotificationPage"];
 export type NotificationCount = components["schemas"]["NotificationCount"];
 export type NotificationAction = components["schemas"]["NotificationAction"];
 export type SnoozeOption = components["schemas"]["SnoozeBody"]["option"];
+export type Dashboard = components["schemas"]["Dashboard"];
+export type RingName = components["schemas"]["RingBreakdown"]["ring"];
+export type RingBreakdown = components["schemas"]["RingBreakdown"];
+export type BreakdownEntry = components["schemas"]["BreakdownEntry"];
+export type Road = components["schemas"]["Road"];
+export type RoadEvent = components["schemas"]["RoadEvent"];
 export type TaskScope = "open" | "due" | "all" | "done";
 export type NotificationStatus = "open" | "snoozed" | "resolved" | "all";
 type ListQuery = NonNullable<operations["list_items_api_v1_items_get"]["parameters"]["query"]>;
@@ -185,6 +191,9 @@ export const api = {
     request<InspectionDone>("POST", `${item(publicId)}/inspections`, body),
 
   // Notifications (API 2.12)
+  dashboard: () => request<Dashboard>("GET", "/api/v1/dashboard"),
+  ring: (ring: RingName) => request<RingBreakdown>("GET", `/api/v1/dashboard/rings/${ring}`),
+  road: (days: number) => request<Road>("GET", `/api/v1/dashboard/road${query({ days })}`),
   notifications: (status: NotificationStatus) =>
     request<NotificationPage>("GET", `/api/v1/notifications${query({ status })}`),
   notificationCount: () => request<NotificationCount>("GET", "/api/v1/notifications/count"),

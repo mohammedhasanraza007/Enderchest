@@ -129,6 +129,20 @@
 
   /* Sticky nav halo behind the page on scroll */
   --nav-backdrop: rgba(22, 17, 13, 0.8);
+
+  /* Health rings, road and truck (DESIGN.md 4.1, 6.8, 6.11) */
+  --ring-arc: #fff1dd;
+  --ring-glow: rgba(255, 241, 221, 0.25);
+  --ring-face: rgba(201, 184, 168, 0.06);
+  --ring-track: rgba(201, 184, 168, 0.1);
+  --ring-hairline: rgba(255, 243, 226, 0.38);
+  --ring-hairline-faint: rgba(255, 243, 226, 0.16);
+  --road-dash: rgba(255, 241, 221, 0.5);
+  --road-notch: rgba(255, 241, 221, 0.7);
+  --truck-body: #c98a6e;
+  --truck-cab: #915e4b;
+  --truck-window: #fdecda;
+  --truck-ink: #1b120d;
 }
 
 /* ---------------------------------------------------------------- light (same style, translated) */
@@ -194,6 +208,20 @@
   --toggle-thumb: #faf8f3;
 
   --nav-backdrop: rgba(244, 241, 234, 0.8);
+
+  /* Rings: tracks #E9E2D5 with cocoa hairlines, arcs #3B2619 with a faint clay glow (4.4) */
+  --ring-arc: #3b2619;
+  --ring-glow: rgba(156, 94, 67, 0.22);
+  --ring-face: rgba(255, 253, 249, 0.5);
+  --ring-track: #e9e2d5;
+  --ring-hairline: rgba(59, 38, 25, 0.14);
+  --ring-hairline-faint: rgba(59, 38, 25, 0.1);
+  --road-dash: rgba(59, 38, 25, 0.35);
+  --road-notch: rgba(59, 38, 25, 0.6);
+  --truck-body: #c98a6e;
+  --truck-cab: #915e4b;
+  --truck-window: #fdecda;
+  --truck-ink: #1b120d;
 }
 
 @media (prefers-reduced-motion: reduce) {
