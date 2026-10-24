@@ -299,6 +299,7 @@ function ExpiryCheck({
   confirmed: boolean;
   onConfirm: (day: string) => void;
 }) {
+  const pickId = useId();
   const readings = [String(proposal.value), ...(proposal.alternatives ?? [])];
   const reasons = proposal.flags.filter((flag) => FLAG_WORDS[flag]).map((flag) => FLAG_WORDS[flag]);
   return (
@@ -313,18 +314,23 @@ function ExpiryCheck({
       </div>
       {reasons.length > 0 ? <p className="section-note">Check it: {reasons.join("; ")}.</p> : null}
       {readings.length > 1 ? (
-        <div className="chip-row" role="radiogroup" aria-label="Which date is printed?">
-          {readings.map((day) => (
-            <Chip
-              key={day}
-              role="radio"
-              selected={confirmed && chosen === day}
-              onSelect={() => onConfirm(day)}
-            >
-              {formatDay(day)}
-            </Chip>
-          ))}
-        </div>
+        <>
+          <p className="section-note" id={pickId}>
+            Which date is printed?
+          </p>
+          <div className="chip-row" role="radiogroup" aria-labelledby={pickId}>
+            {readings.map((day) => (
+              <Chip
+                key={day}
+                role="radio"
+                selected={confirmed && chosen === day}
+                onSelect={() => onConfirm(day)}
+              >
+                {formatDay(day)}
+              </Chip>
+            ))}
+          </div>
+        </>
       ) : confirmed ? null : (
         <Button variant="secondary" onClick={() => onConfirm(chosen)}>
           Confirm {formatDay(chosen)}

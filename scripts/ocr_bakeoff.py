@@ -260,7 +260,7 @@ def main() -> int:
                 LOADERS[engine]()
                 print(f"{engine}: ready")
             except (ImportError, FileNotFoundError) as missing:
-                print(f"{engine}: not installed ({missing.__class__.__name__})")
+                print(f"{engine}: not installed ({missing.__class__.__name__}: {missing})")
         return 0
     labels = load_labels(args.photos)
     photos = sorted(p for p in args.photos.iterdir()

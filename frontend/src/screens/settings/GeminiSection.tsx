@@ -101,7 +101,7 @@ function GeminiControls({ status }: { status: GeminiStatus }) {
       </div>
       <KeyForm keySet={status.key_set} />
 
-      <fieldset className="stack-gap">
+      <fieldset className="gemini-settings__mode">
         <legend className="field__label">When to use Gemini</legend>
         <div className="chip-row" role="radiogroup" aria-label="When to use Gemini">
           {MODES.map((mode) => (

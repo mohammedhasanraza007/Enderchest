@@ -93,9 +93,11 @@ CMD ["npx", "playwright", "test"]
 # All four candidates: RapidOCR (as in the app), EasyOCR (PyTorch, CPU wheels), docTR (onnxtr)
 # and Tesseract (Debian package). Never used by the app. The engines' models are fetched while
 # the image is built, so the measurement itself runs with no network (test.bat uses --network none).
+# EasyOCR brings the full OpenCV wheel, which needs libGL and GLib even without a screen.
 FROM python-base AS bakeoff
 RUN apt-get update \
     && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-eng \
+       libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 COPY backend/requirements-bakeoff.txt ./requirements-bakeoff.txt
 RUN pip install -c requirements.lock --extra-index-url https://download.pytorch.org/whl/cpu \
