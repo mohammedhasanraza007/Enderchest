@@ -130,3 +130,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Looked at 16 screenshots; fixed the pill on the road title, the nav at 1024 px and the Savings spacing.
 - Blocked on owner: gate 1 (20 photos, `test.bat ownership`), acceptance, screenshot approval; earlier owner items.
 - Next: Phase 6 verification (`D:\Projects\phase6v-next-prompt.txt`).
+
+## 2026-10-25 · phase6v · Phase 6 verification, chain hand-off to the Phase 7 build
+- Zip in: `phase6.zip` (folder `D:\Projects\Enderchest-phase-6v`, branch `phase-6-verify`). Zip out: `D:\Projects\phase6v.zip`, unzipped into `D:\Projects\Enderchest-phase-7` on branch `phase-7`.
+- Probe list first (19 probes), then every suite re-run on the zip's code (all green), then my own probes: 28 unit, 32 integration (incl. a lived-in v3 to v4 migration), 7 browser.
+- Found and fixed test-first: "10,000 mAh" and "2 in 1" in size reading, the D-119 lift with a different size, focus return from the price sheet, the pill's stem through a truck on today; DATA_MODEL 2.11 event names. F-040 to F-042.
+- After the fixes: lint; unit 246 + 87; integration 320; probes 1 to 25; Phase 6, dashboard, crawler, contrast, shell specs green. Looked at the own mode, Savings and pill shots (1280 both themes, 1024).
+- Verdict PASS WITH NOTES (N1 to N6; N1: DINOv2 at 0.80 barely separates pictures, gate 1 must look for a false High). Blocked on owner: gate 1, acceptance, screenshot approval.
+- Next: Phase 7 build (`D:\Projects\phase7-next-prompt.txt`).
