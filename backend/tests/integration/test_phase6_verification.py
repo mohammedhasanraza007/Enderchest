@@ -276,3 +276,55 @@ def test_the_pill_date_follows_the_latest_live_saving(stack: Stack):
     clock.set_now(day - timedelta(days=1))
     board = stack.client.get("/api/v1/dashboard").json()
     assert board["savings"]["pill_date"] != board["road"]["start"]
+
+
+# ---- migration 0004 --------------------------------------------------------------------------
+
+def test_migration_0004_keeps_a_lived_in_v3_database(settings, tmp_path, monkeypatch):
+    """A v3 database used through the API (categories, places, items in every state, photos,
+    a draft, tasks, reminders, events) keeps every row through 0004, after a verified backup."""
+    from app.db import migrate
+    from tests.integration.test_boot import health, v1_database
+
+    real = migrate.MIGRATIONS_DIR
+    folder = v1_database(settings, tmp_path, monkeypatch)
+    for name in ("0002_inventory.sql", "0003_lifecycle.sql"):
+        (folder / name).write_text((real / name).read_text())
+    with Stack(settings) as stack:
+        assert health(stack)["status"] == "ok"
+        tools = stack.post("/api/v1/categories", {"name": "Tools"}).json()
+        shelf = stack.post("/api/v1/locations", {"name": "Shelf"}).json()
+        kept = make(stack, "13 mm spanner", category_id=tools["id"], location_id=shelf["id"],
+                    attributes={"size": "13 mm"}, expiry_mode="date", expiry_date="2026-10-26")
+        stack.client.post(f"/api/v1/items/{kept['public_id']}/photos", headers=HEADERS,
+                          files={"image": ("a.jpg", imagekit.jpeg(), "image/jpeg")})
+        used = make(stack, "Glue stick")
+        stack.post(f"/api/v1/items/{used['public_id']}/use", {"amount": 1})
+        gone = make(stack, "Old cable")
+        stack.client.delete(f"/api/v1/items/{gone['public_id']}", headers=HEADERS)
+        stack.client.post("/api/v1/drafts", headers=HEADERS,
+                          files=[("images[]", ("d.jpg", imagekit.jpeg(), "image/jpeg"))])
+        assert stack.post("/api/v1/tasks", {"title": "Clean PC", "kind": "chore",
+                                            "first_due": "2026-10-20"}).status_code == 201
+        before, _ = snapshot(stack)
+    assert before["items"] == 3 and before["photos"] == 2 and before["tasks"] == 1
+    assert before["notifications"] >= 1 and before["events"] >= 4
+    (folder / "0004_ownership.sql").write_text((real / "0004_ownership.sql").read_text())
+
+    with Stack(settings) as stack:
+        assert health(stack)["status"] == "ok"
+        after, _ = snapshot(stack)
+        found = check(stack, "13 mm spanner").json()["candidates"]
+        assert [c["public_id"] for c in found] == [kept["public_id"]]
+    assert after.pop("savings") == 0
+    old_backup_log = after.pop("backup_log") - before.pop("backup_log")
+    assert old_backup_log >= 1 and after == before
+    conn = sqlite3.connect(settings.db_path)
+    try:
+        assert conn.execute("PRAGMA integrity_check").fetchone()[0] == "ok"
+        assert conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] \
+            == "4"
+        assert conn.execute("SELECT verified, ok FROM backup_log WHERE kind = 'pre-migration' "
+                            "ORDER BY id DESC LIMIT 1").fetchone() == (1, 1)
+    finally:
+        conn.close()
