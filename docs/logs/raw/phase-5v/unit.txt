@@ -1,0 +1,153 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 582B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 5.72kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 ...
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 0.3s
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.4s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 320B done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 16.33kB 0.0s done
+#8 DONE 0.0s
+
+#9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#9 DONE 0.0s
+
+#10 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#10 DONE 0.0s
+
+#11 [python-base 3/5] WORKDIR /app
+#11 CACHED
+
+#12 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#12 CACHED
+
+#13 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#13 CACHED
+
+#14 [tools  8/11] COPY frontend/ /frontend/
+#14 CACHED
+
+#15 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#15 CACHED
+
+#16 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#16 CACHED
+
+#17 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#17 CACHED
+
+#18 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#18 CACHED
+
+#19 [frontend-deps 2/4] WORKDIR /frontend
+#19 CACHED
+
+#20 [tools  5/11] RUN pip install -r requirements-dev.lock
+#20 CACHED
+
+#21 [tools  7/11] COPY assets/logo /assets/logo
+#21 CACHED
+
+#22 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#22 CACHED
+
+#23 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#23 CACHED
+
+#24 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#24 CACHED
+
+#25 [python-base 5/5] RUN pip install -r requirements.lock
+#25 CACHED
+
+#26 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#26 CACHED
+
+#27 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#27 CACHED
+
+#28 [tools 11/11] COPY backend/ ./
+#28 CACHED
+
+#29 exporting to image
+#29 exporting layers
+#29 exporting layers done
+#29 exporting manifest sha256:f3d6632b0801a5bd07ee5bff6752a9f6ed4c0696332bb031b4210ad57f594796 done
+#29 exporting config sha256:ed5d9c6345cc18e74c6aeb408810efff8df9d389a39748bb7616a1e6238ad2eb done
+#29 exporting attestation manifest sha256:cb1472fe2861e8d741bdefe4bb715f1197843f29e2439aa9a837e180da9b82e1 0.0s done
+#29 exporting manifest list sha256:b58c26cb6047bbe2cb1c6570ad35a08f9216b1fbe32cc3d2d9165e273b6a0979 0.0s done
+#29 naming to docker.io/library/enderchest-tools:latest done
+#29 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#29 DONE 0.1s
+
+#30 resolving provenance for metadata file
+#30 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-e6005502a6c0 Creating 
+ Container enderchest-test-tools-run-e6005502a6c0 Created 
+........................................................................ [ 34%]
+........................................................................ [ 69%]
+...............................................................          [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+207 passed, 1 warning in 1.44s
+ Container enderchest-test-tools-run-6c3192af346b Creating 
+ Container enderchest-test-tools-run-6c3192af346b Created 
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90m/frontend[39m
+
+ [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/lib/format.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m src/lib/dashboard.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/lib/proposals.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/lib/lifecycle.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/lib/inventory.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/primitives/primitives.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m83 passed[39m[22m[90m (83)[39m
+[2m   Start at [22m 18:16:57
+[2m   Duration [22m 520ms[2m (transform 66%, import 19%, tests 12%, worker 3%)[22m
+
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+
+> enderchest-frontend@0.1.0 api-types:check
+> openapi-typescript openapi.json -o /tmp/schema.d.ts && diff -q /tmp/schema.d.ts src/api/schema.d.ts
+
+✨ openapi-typescript 7.13.0
+🚀 openapi.json → /tmp/schema.d.ts [173.7ms]
