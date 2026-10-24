@@ -39,8 +39,19 @@ _UNIT_BASE = {
     "mah": ("charge", 1.0), "v": ("voltage", 1.0), "a": ("current", 1.0), "w": ("power", 1.0),
     "gb": ("storage", 1.0), "tb": ("storage", 1000.0), "pcs": ("count", 1.0),
 }
-_SIZE = re.compile(r"(\d+(?:[.,]\d+)?)\s*(mah|mm|cm|ml|kg|gb|tb|pcs|in|m|l|g|v|a|w|\")(?![a-z])",
+# "in" followed by a number is a name ("2 in 1 cable"), not inches.
+_SIZE = re.compile(r"(\d+(?:,\d+)*(?:\.\d+)?)\s*"
+                   r"(mah|mm|cm|ml|kg|gb|tb|pcs|in(?!\s*\d)|m|l|g|v|a|w|\")(?![a-z])",
                    re.IGNORECASE)
+# "10,000" and "1,00,000" group thousands (English and Indian labels); "1,5" is a decimal comma.
+_GROUPED = re.compile(r"\d{1,3}(?:,\d{2})*,\d{3}(?:\.\d+)?")
+
+
+def _number(text: str) -> float:
+    if _GROUPED.fullmatch(text) or "." in text:
+        return float(text.replace(",", ""))
+    whole, _, rest = text.partition(",")
+    return float(f"{whole}.{rest.replace(',', '')}" if rest else whole)
 
 
 @dataclass(frozen=True)
@@ -70,7 +81,7 @@ def sizes_in(text: str) -> tuple[tuple[str, float], ...]:
     found: list[tuple[str, float]] = []
     for number, unit in _SIZE.findall(text or ""):
         kind, factor = _UNIT_BASE[unit.lower()]
-        entry = (kind, round(float(number.replace(",", ".")) * factor, 3))
+        entry = (kind, round(_number(number) * factor, 3))
         if entry not in found:
             found.append(entry)
     return tuple(found)
@@ -147,8 +158,8 @@ def score(query: Query, item: dict, category_name: str | None) -> Candidate:
                        else "Looks a little similar")
     text_support = model > 0 or size > 0 or overlap >= 50
     found = level(points, model > 0, size > 0, overlap, text_support)
-    if found is None and not text_support and image == IMAGE_STRONG_POINTS:
-        found = "low"  # a strong look-alike is still worth a glance (D-119)
+    if found is None and not text_support and size == 0 and image == IMAGE_STRONG_POINTS:
+        found = "low"  # a strong look-alike is worth a glance unless its size differs (D-119)
     return Candidate(item["id"], points, found, reasons)
 
 
