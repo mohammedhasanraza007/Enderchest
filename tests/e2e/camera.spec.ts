@@ -75,6 +75,7 @@ test("several uploads make a review queue; drafts count nowhere until saved", as
   await expect(page.getByLabel("Name", { exact: true })).toHaveValue("");
   await page.getByLabel("Name", { exact: true }).fill("Second");
   await page.getByRole("button", { name: "Save and add next" }).click();
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue(""); // the third draft is open
   await page.getByRole("button", { name: "Discard draft" }).click();
   await expect(page.getByText("Nothing waiting for review.")).toBeVisible();
   expect(((await (await request.get("/api/v1/items")).json()) as { total: number }).total).toBe(2);

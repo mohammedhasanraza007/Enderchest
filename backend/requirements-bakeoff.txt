@@ -1,7 +1,7 @@
 # The OCR bake-off's other engines (Phase 3 spec Build 1, D-099), for the bakeoff image only;
 # installed on top of requirements.lock, which stays the constraint. Never in the app image.
-# Top-level pins: their own requirements resolve when the image is built (pypi.org did not answer
-# when this file was written, so no full lock could be made; record the frozen list then).
+# Top-level pins. The full frozen list of the image built on 2026-10-24 (all four engines ready,
+# Tesseract 5.3.0 from Debian) is docs/logs/raw/phase-3/bakeoff-image-freeze.txt.
 torch==2.14.1+cpu
 torchvision==0.29.1+cpu
 easyocr==1.7.2

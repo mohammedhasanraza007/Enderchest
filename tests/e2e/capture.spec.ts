@@ -161,5 +161,6 @@ test("a key the server refuses for an unseen reason still shows a message (F-024
   const section = page.locator(".glass-card").filter({ hasText: "When to use Gemini" });
   await section.getByLabel("Gemini API key").fill(KEY);
   await section.getByRole("button", { name: "Save key" }).click();
-  await expect(section.getByText("Some values are not valid.")).toBeVisible();
+  // The problem on a field the form does not show becomes the visible general message.
+  await expect(section.getByText("Something else is wrong.")).toBeVisible();
 });
