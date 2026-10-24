@@ -5,6 +5,7 @@ import { AppearanceSection } from "./settings/AppearanceSection";
 import { BackupSection } from "./settings/BackupSection";
 import { CategoriesSection } from "./settings/CategoriesSection";
 import { DataSection } from "./settings/DataSection";
+import { GeminiSection } from "./settings/GeminiSection";
 import { LocationsSection } from "./settings/LocationsSection";
 import { ProfileSection } from "./settings/ProfileSection";
 
@@ -26,6 +27,7 @@ export function Settings() {
         <CategoriesSection />
         <LocationsSection />
         <BackupSection timeZone={profile.timezone} />
+        <GeminiSection />
         <DataSection />
         <AboutSection />
       </div>

@@ -869,8 +869,11 @@ export interface components {
         GeminiStatus: {
             /** Key Set */
             key_set: boolean;
-            /** Mode */
-            mode: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "off" | "ask" | "auto";
             /** Model */
             model: string;
             /** Share Images */

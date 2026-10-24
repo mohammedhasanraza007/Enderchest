@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { api } from "./endpoints";
-import type { ItemFilters, ProfileUpdate } from "./endpoints";
+import type { Draft, ItemFilters, ProfileUpdate } from "./endpoints";
 
 export const keys = {
   health: ["health"] as const,
@@ -24,7 +24,16 @@ export const keys = {
   itemEvents: (publicId: string) => ["item-events", publicId] as const,
   drafts: ["drafts"] as const,
   draft: (id: string) => ["draft", id] as const,
+  gemini: ["gemini"] as const,
 };
+
+// A reading runs in the background (D-100); while one is pending the draft is read again every
+// second, and polling stops by itself once nothing is pending.
+const READING_POLL_MS = 1000;
+
+function isReading(draft: Draft): boolean {
+  return draft.ocr_status === "pending" || draft.gemini_status === "pending";
+}
 
 export function useProfile() {
   return useQuery({ queryKey: keys.profile, queryFn: api.profile, staleTime: 60_000 });
@@ -102,11 +111,25 @@ export function useItemEvents(publicId: string) {
 }
 
 export function useDrafts() {
-  return useQuery({ queryKey: keys.drafts, queryFn: api.drafts });
+  return useQuery({
+    queryKey: keys.drafts,
+    queryFn: api.drafts,
+    refetchInterval: (query) => (query.state.data?.items.some(isReading) ? READING_POLL_MS : false),
+  });
 }
 
 export function useDraft(id: string) {
-  return useQuery({ queryKey: keys.draft(id), queryFn: () => api.draft(id) });
+  return useQuery({
+    queryKey: keys.draft(id),
+    queryFn: () => api.draft(id),
+    refetchInterval: (query) =>
+      query.state.data && isReading(query.state.data) ? READING_POLL_MS : false,
+  });
+}
+
+/** Gemini key state, model, mode and photo sharing (P-02, P-07). */
+export function useGemini() {
+  return useQuery({ queryKey: keys.gemini, queryFn: api.gemini });
 }
 
 /**

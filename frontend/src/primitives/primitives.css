@@ -106,6 +106,14 @@
   font-size: 0.9375rem;
   color: var(--text-muted-glass);
 }
+/* A label with something beside it, for example where a read value came from (P-07). */
+.field__label-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
 
 .field__control {
   width: 100%;

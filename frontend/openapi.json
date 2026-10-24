@@ -935,6 +935,11 @@
             "type": "boolean"
           },
           "mode": {
+            "enum": [
+              "off",
+              "ask",
+              "auto"
+            ],
             "title": "Mode",
             "type": "string"
           },

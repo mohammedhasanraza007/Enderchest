@@ -34,6 +34,10 @@ export type Draft = components["schemas"]["Draft"];
 export type DraftFields = components["schemas"]["DraftFields"];
 export type DraftBatch = components["schemas"]["DraftBatch"];
 export type DraftList = components["schemas"]["DraftList"];
+export type Proposal = components["schemas"]["Proposal"];
+export type ExtractQueued = components["schemas"]["ExtractQueued"];
+export type GeminiStatus = components["schemas"]["GeminiStatus"];
+export type GeminiTest = components["schemas"]["TestResult"];
 export type DeletedItem = components["schemas"]["DeletedItem"];
 export type LabelPrintedDone = components["schemas"]["LabelPrintedDone"];
 export type UndoDone = components["schemas"]["UndoDone"];
@@ -131,6 +135,15 @@ export const api = {
       headers,
     ),
   discardDraft: (id: string) => request<null>("DELETE", `/api/v1/drafts/${encodeURIComponent(id)}`),
+  /** Re-read (`local`) or Improve with Gemini (`gemini`); poll the draft for the result. */
+  extract: (id: string, engine: "local" | "gemini") =>
+    request<ExtractQueued>("POST", `/api/v1/drafts/${encodeURIComponent(id)}/extract`, { engine }),
+
+  gemini: () => request<GeminiStatus>("GET", "/api/v1/gemini"),
+  setGeminiKey: (key: string) =>
+    request<{ key_set: boolean }>("PUT", "/api/v1/gemini/key", { key }),
+  removeGeminiKey: () => request<null>("DELETE", "/api/v1/gemini/key"),
+  testGemini: () => request<GeminiTest>("POST", "/api/v1/gemini/test"),
 };
 
 function form(field: string, files: Blob[]): FormData {

@@ -312,3 +312,108 @@
   align-items: center;
   gap: var(--space-3);
 }
+
+/* ------------------------------------------------------------------ smart capture (P-07) */
+/* Where a value came from: a small pill in the chip colours. The confidence dot is a shape in
+   the text colour (filled high, half medium, ring low), never a status colour. */
+.source-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 24px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-pill);
+  color: var(--text);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.confidence-dot {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+}
+.confidence-dot--high {
+  background: currentColor;
+}
+.confidence-dot--medium {
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+
+.reading-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--hairline-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+}
+.reading-panel .section-note {
+  color: var(--text);
+}
+.reading-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+:root[data-theme="light"] .reading-panel {
+  border-radius: 28px;
+}
+
+.expiry-check {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.expiry-check__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.read-drawer__heading {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+.read-drawer__text {
+  max-height: 40vh;
+  overflow: auto;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--hairline-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.read-drawer__notes {
+  padding-left: var(--space-5);
+}
+.read-drawer__values {
+  display: grid;
+  gap: var(--space-2);
+}
+.read-drawer__values div {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: var(--space-3);
+}
+.read-drawer__values dt {
+  color: var(--text-muted-glass);
+}
+
+.gemini-settings__status,
+.gemini-settings__test {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}

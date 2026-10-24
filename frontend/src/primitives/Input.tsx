@@ -1,5 +1,10 @@
 import { useId } from "react";
-import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 import { ChevronDown, CircleAlert } from "lucide-react";
 
 // Text input and select (DESIGN.md 6.12): a pill with the label above in muted text.
@@ -9,6 +14,24 @@ interface FieldProps {
   label: string;
   hint?: string;
   error?: string;
+  /** Beside the label, for example where a read value came from (P-07). */
+  aside?: ReactNode;
+}
+
+function FieldLabel({ id, label, aside }: { id: string; label: string; aside?: ReactNode }) {
+  const text = (
+    <label className="field__label" htmlFor={id}>
+      {label}
+    </label>
+  );
+  return aside ? (
+    <div className="field__label-row">
+      {text}
+      {aside}
+    </div>
+  ) : (
+    text
+  );
 }
 
 function FieldMessage({ id, error, hint }: { id: string; error?: string; hint?: string }) {
@@ -33,6 +56,7 @@ export function Input({
   label,
   hint,
   error,
+  aside,
   className,
   ...rest
 }: FieldProps & Omit<InputHTMLAttributes<HTMLInputElement>, "className"> & { className?: string }) {
@@ -40,9 +64,7 @@ export function Input({
   const messageId = `${id}-message`;
   return (
     <div className={["field", className ?? ""].filter(Boolean).join(" ")}>
-      <label className="field__label" htmlFor={id}>
-        {label}
-      </label>
+      <FieldLabel id={id} label={label} aside={aside} />
       <input
         {...rest}
         id={id}
@@ -60,6 +82,7 @@ export function TextArea({
   label,
   hint,
   error,
+  aside,
   className,
   ...rest
 }: FieldProps &
@@ -68,9 +91,7 @@ export function TextArea({
   const messageId = `${id}-message`;
   return (
     <div className={["field", className ?? ""].filter(Boolean).join(" ")}>
-      <label className="field__label" htmlFor={id}>
-        {label}
-      </label>
+      <FieldLabel id={id} label={label} aside={aside} />
       <textarea
         {...rest}
         id={id}
@@ -92,6 +113,7 @@ export function Select({
   label,
   hint,
   error,
+  aside,
   options,
   className,
   ...rest
@@ -103,9 +125,7 @@ export function Select({
   const messageId = `${id}-message`;
   return (
     <div className={["field", className ?? ""].filter(Boolean).join(" ")}>
-      <label className="field__label" htmlFor={id}>
-        {label}
-      </label>
+      <FieldLabel id={id} label={label} aside={aside} />
       <div className="field__select">
         <select
           {...rest}

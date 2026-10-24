@@ -13,6 +13,13 @@ import { Skeleton } from "../primitives/Skeleton";
 // P-07, the review queue: photos taken or uploaded that are not items yet. A draft counts nowhere
 // until it is saved (D-049); closing the browser loses nothing.
 
+const READING_STATE: Record<Draft["ocr_status"], string> = {
+  none: "not read",
+  pending: "reading the photo…",
+  done: "read",
+  failed: "could not be read",
+};
+
 export function AddQueue() {
   usePageTitle("To review");
   const drafts = useDrafts();
@@ -61,7 +68,9 @@ function DraftRow({ draft }: { draft: Draft }) {
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
   const photo = draft.photos[0];
-  const name = draft.fields.name?.trim() || "Untitled";
+  // The owner's name first, then the name read from the photo, then "Untitled" (P-07).
+  const name =
+    draft.fields.name?.trim() || String(draft.proposed["name"]?.value ?? "") || "Untitled";
 
   async function discard() {
     if (busy) return;
@@ -80,7 +89,9 @@ function DraftRow({ draft }: { draft: Draft }) {
       {photo ? <img className="row-list__thumb" src={fileUrl.thumb(photo.id)} alt="" /> : null}
       <div className="row-list__text">
         <Link to={`/add/${draft.id}`}>{name}</Link>
-        <span className="section-note">Added {formatMoment(draft.created_at, timeZone)}</span>
+        <span className="section-note">
+          Added {formatMoment(draft.created_at, timeZone)} · {READING_STATE[draft.ocr_status]}
+        </span>
         {failure ? (
           <span role="alert" className="field__error">
             {failure}

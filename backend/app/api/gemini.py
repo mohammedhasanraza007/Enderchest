@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, Response
 from pydantic import BaseModel, ConfigDict
 
 from ..boot.manager import BootManager
+from ..schemas.profile import GeminiMode
 from ..services import gemini as gemini_service
 from .deps import current_user_id, get_db, require_ok
 
@@ -19,7 +20,7 @@ router = APIRouter(prefix="/api/v1")
 class GeminiStatus(BaseModel):
     key_set: bool
     model: str
-    mode: str
+    mode: GeminiMode
     share_images: bool
 
 

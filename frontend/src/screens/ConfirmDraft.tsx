@@ -2,26 +2,42 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApiError, idempotencyKey } from "../api/client";
 import { api, fileUrl } from "../api/endpoints";
-import type { Draft } from "../api/endpoints";
+import type { Draft, Proposal } from "../api/endpoints";
 import { useQueryClient } from "@tanstack/react-query";
-import { keys, useDraft, useRefreshInventory } from "../api/queries";
+import { keys, useDraft, useGemini, useRefreshInventory } from "../api/queries";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useUnsavedGuard } from "../hooks/useUnsavedGuard";
+import { formatDay } from "../lib/format";
 import { splitProblems } from "../lib/formErrors";
 import { ITEM_FIELDS, toDraftFields, validate, valuesFromDraft } from "../lib/itemForm";
 import type { ItemFormValues } from "../lib/itemForm";
+import {
+  FLAG_WORDS,
+  PROPOSAL_FIELDS,
+  applyProposals,
+  changedFields,
+  formValue,
+  ownedFields,
+  sourcesFor,
+} from "../lib/proposals";
+import type { ProposalField, Proposed } from "../lib/proposals";
 import { ErrorState } from "../patterns/ErrorState";
 import { ItemFields } from "../patterns/ItemFields";
+import { ReadDrawer } from "../patterns/Reading";
 import { Button, LinkButton } from "../primitives/Button";
+import { Chip } from "../primitives/Chip";
 import { GlassCard } from "../primitives/Glass";
 import { Skeleton } from "../primitives/Skeleton";
+import { StatusChip } from "../primitives/StatusChip";
 import { useToast } from "../primitives/Toast";
 
 // P-07, confirm one draft: its photos on the left, the item fields on the right, saved to the
-// server as the owner types (so closing the browser loses nothing). Nothing is read from the photo
-// in this phase; every value is the owner's own.
+// server as the owner types (so closing the browser loses nothing). Values read from the photo
+// (or suggested by Gemini) fill only the fields the owner has not made their own, each with a
+// tag saying where it came from; a read expiry date counts only once the owner taps it (D-100).
 
 const SAVE_AFTER_MS = 600;
+const CONFIRM_REASON = "Confirm the expiry date.";
 
 export function ConfirmDraft() {
   const { draftId = "" } = useParams();
@@ -56,13 +72,33 @@ export function ConfirmDraft() {
   return <ConfirmForm key={draft.data.id} draft={draft.data} />;
 }
 
+/** True when the date in the form is the read one (or its other reading), not one typed in. */
+function readExpiry(values: ItemFormValues, proposal: Proposal | undefined): boolean {
+  if (!proposal || values.expiry_mode !== "date") return false;
+  return [String(proposal.value), ...(proposal.alternatives ?? [])].includes(values.expiry_date);
+}
+
 function ConfirmForm({ draft }: { draft: Draft }) {
   const navigate = useNavigate();
   const refresh = useRefreshInventory();
   const client = useQueryClient();
   const toast = useToast();
-  const [values, setValues] = useState<ItemFormValues>(() => valuesFromDraft(draft.fields));
+  const proposed: Proposed = draft.proposed;
+  // The fields the owner has made their own; proposals never touch them (D-100).
+  const owned = useRef<Set<ProposalField>>(ownedFields(valuesFromDraft(draft.fields), proposed));
+  const [values, setValues] = useState<ItemFormValues>(() =>
+    applyProposals(valuesFromDraft(draft.fields), proposed, owned.current),
+  );
+  const [expiryConfirmed, setExpiryConfirmed] = useState<boolean>(
+    () =>
+      draft.fields.expiry_confirmed ??
+      !readExpiry(
+        applyProposals(valuesFromDraft(draft.fields), proposed, owned.current),
+        proposed["expiry_date"],
+      ),
+  );
   const [touched, setTouched] = useState(false);
+  const [dirty, setDirty] = useState(false);
   const [saveState, setSaveState] = useState<"saved" | "pending" | "failed">("saved");
   const [serverProblems, setServerProblems] = useState<Record<string, string>>({});
   const [general, setGeneral] = useState<string | null>(null);
@@ -71,32 +107,72 @@ function ConfirmForm({ draft }: { draft: Draft }) {
   const reasonId = useId();
   const latest = useRef(values);
   latest.current = values;
+  const confirmedNow = useRef(expiryConfirmed);
+  confirmedNow.current = expiryConfirmed;
   useUnsavedGuard(saveState === "pending");
+
+  // A reading that finishes while the page is open fills the fields still left to it.
+  const proposedKey = JSON.stringify(proposed);
+  const applied = useRef(proposedKey);
+  useEffect(() => {
+    if (applied.current === proposedKey) return;
+    applied.current = proposedKey;
+    const before = latest.current;
+    const next = applyProposals(before, proposed, owned.current);
+    if (formValue(next, "expiry_date") !== formValue(before, "expiry_date")) {
+      setExpiryConfirmed(!readExpiry(next, proposed["expiry_date"]));
+    }
+    setValues(next);
+    setDirty(true);
+  }, [proposedKey, proposed]);
 
   // Saved as the owner edits: a pause in typing sends the fields (PAGES.md P-07).
   useEffect(() => {
-    if (!touched) return;
+    if (!dirty) return;
     setSaveState("pending");
     const timer = window.setTimeout(() => {
-      api.changeDraft(draft.id, toDraftFields(latest.current, true)).then(
+      api.changeDraft(draft.id, toDraftFields(latest.current, confirmedNow.current)).then(
         () => setSaveState("saved"),
         () => setSaveState("failed"),
       );
     }, SAVE_AFTER_MS);
     return () => window.clearTimeout(timer);
-  }, [values, touched, draft.id]);
+  }, [values, expiryConfirmed, dirty, draft.id]);
 
   const problems = validate(values);
   const shown: Record<string, string> = { ...serverProblems };
   if (touched) Object.assign(shown, problems);
-  const firstProblem = Object.values(problems)[0];
+  const needsConfirm =
+    values.expiry_mode === "date" && values.expiry_date !== "" && !expiryConfirmed;
+  const firstProblem = Object.values(problems)[0] ?? (needsConfirm ? CONFIRM_REASON : undefined);
+  const expiryProposal = proposed["expiry_date"];
+
+  function edit(next: ItemFormValues) {
+    const before = latest.current;
+    for (const field of changedFields(before, next)) owned.current.add(field);
+    // A date the owner types or changes is their own, so it needs no extra tap.
+    if (formValue(next, "expiry_date") !== formValue(before, "expiry_date")) {
+      setExpiryConfirmed(true);
+    }
+    setTouched(true);
+    setServerProblems({});
+    setValues(next);
+    setDirty(true);
+  }
+
+  function confirmDate(day: string) {
+    owned.current.add("expiry_date");
+    setValues({ ...latest.current, expiry_mode: "date", expiry_date: day });
+    setExpiryConfirmed(true);
+    setDirty(true);
+  }
 
   async function commit(next: "item" | "next") {
     if (busy) return;
     setBusy(true);
     setGeneral(null);
     try {
-      await api.changeDraft(draft.id, toDraftFields(latest.current, true));
+      await api.changeDraft(draft.id, toDraftFields(latest.current, confirmedNow.current));
       setSaveState("saved");
       const item = await api.commitDraft(draft.id, key);
       await refresh();
@@ -146,15 +222,23 @@ function ConfirmForm({ draft }: { draft: Draft }) {
             if (!firstProblem) void commit("next");
           }}
         >
+          <ReadingPanel draft={draft} />
           <ItemFields
             values={values}
-            onChange={(next) => {
-              setTouched(true);
-              setServerProblems({});
-              setValues(next);
-            }}
+            onChange={edit}
             problems={shown}
             categoryDefaults
+            sources={sourcesFor(values, proposed)}
+            expiryNote={
+              readExpiry(values, expiryProposal) && expiryProposal ? (
+                <ExpiryCheck
+                  proposal={expiryProposal}
+                  chosen={values.expiry_date}
+                  confirmed={expiryConfirmed}
+                  onConfirm={confirmDate}
+                />
+              ) : null
+            }
           />
           <p className="section-note" role="status">
             {saveState === "pending"
@@ -199,6 +283,177 @@ function ConfirmForm({ draft }: { draft: Draft }) {
           </div>
         </form>
       </GlassCard>
+    </div>
+  );
+}
+
+/** A read expiry date: "Not confirmed" until tapped; an ambiguous one offers both readings. */
+function ExpiryCheck({
+  proposal,
+  chosen,
+  confirmed,
+  onConfirm,
+}: {
+  proposal: Proposal;
+  chosen: string;
+  confirmed: boolean;
+  onConfirm: (day: string) => void;
+}) {
+  const readings = [String(proposal.value), ...(proposal.alternatives ?? [])];
+  const reasons = proposal.flags.filter((flag) => FLAG_WORDS[flag]).map((flag) => FLAG_WORDS[flag]);
+  return (
+    <div className="expiry-check">
+      <div className="expiry-check__status">
+        {confirmed ? (
+          <StatusChip kind="success">Confirmed</StatusChip>
+        ) : (
+          <StatusChip kind="warning">Not confirmed</StatusChip>
+        )}
+        {proposal.text ? <span className="section-note">Read “{proposal.text}”</span> : null}
+      </div>
+      {reasons.length > 0 ? <p className="section-note">Check it: {reasons.join("; ")}.</p> : null}
+      {readings.length > 1 ? (
+        <div className="chip-row" role="radiogroup" aria-label="Which date is printed?">
+          {readings.map((day) => (
+            <Chip
+              key={day}
+              role="radio"
+              selected={confirmed && chosen === day}
+              onSelect={() => onConfirm(day)}
+            >
+              {formatDay(day)}
+            </Chip>
+          ))}
+        </div>
+      ) : confirmed ? null : (
+        <Button variant="secondary" onClick={() => onConfirm(chosen)}>
+          Confirm {formatDay(chosen)}
+        </Button>
+      )}
+    </div>
+  );
+}
+
+/** Reading state, Re-read, Improve with Gemini and the "What was read" drawer. */
+function ReadingPanel({ draft }: { draft: Draft }) {
+  const client = useQueryClient();
+  const gemini = useGemini();
+  const [drawer, setDrawer] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+  const [asking, setAsking] = useState<"local" | "gemini" | null>(null);
+  const reading = draft.ocr_status === "pending";
+  const askingGemini = draft.gemini_status === "pending";
+  const geminiOn = gemini.data !== undefined && gemini.data.key_set && gemini.data.mode !== "off";
+  const filled = PROPOSAL_FIELDS.filter((field) => draft.proposed[field]).length;
+  const fromGemini = Object.values(draft.proposed).filter((p) => p.source === "gemini").length;
+
+  async function extract(engine: "local" | "gemini") {
+    if (asking) return;
+    setAsking(engine);
+    setFailure(null);
+    try {
+      await api.extract(draft.id, engine);
+      await client.invalidateQueries({ queryKey: keys.draft(draft.id) });
+    } catch (error) {
+      setFailure(splitProblems(error, []).general);
+    } finally {
+      setAsking(null);
+    }
+  }
+
+  const status =
+    draft.ocr_status === "pending"
+      ? "Reading the photo…"
+      : draft.ocr_status === "none"
+        ? "This photo has not been read yet."
+        : draft.ocr_status === "failed"
+          ? null
+          : filled === 0
+            ? "Nothing useful was read from the photo. Fill in the fields yourself."
+            : `Filled ${filled === 1 ? "1 field" : `${filled} fields`} from the photo. Check each one before saving.`;
+  const geminiStatus =
+    draft.gemini_status === "pending"
+      ? "Asking Gemini…"
+      : draft.gemini_status === "done"
+        ? fromGemini === 0
+          ? "Gemini added nothing the photo reading did not already have."
+          : `Gemini filled ${fromGemini === 1 ? "1 field" : `${fromGemini} fields`} (unverified).`
+        : draft.gemini_status === "skipped"
+          ? "Gemini was not asked: the photo gave a name or a model."
+          : null;
+
+  return (
+    <div className="reading-panel">
+      {status ? (
+        <p className="section-note" role="status">
+          {status}
+        </p>
+      ) : null}
+      {draft.ocr_status === "failed" && draft.ocr_error ? (
+        <p role="alert" className="form-failure">
+          {draft.ocr_error}
+        </p>
+      ) : null}
+      {geminiStatus ? <p className="section-note">{geminiStatus}</p> : null}
+      {draft.gemini_status === "failed" && draft.gemini_error ? (
+        <p role="alert" className="form-failure">
+          {draft.gemini_error}
+        </p>
+      ) : null}
+      {failure ? (
+        <p role="alert" className="form-failure">
+          {failure}
+        </p>
+      ) : null}
+      <div className="reading-panel__actions">
+        {reading ? (
+          <Button variant="secondary" disabled disabledReason="The photo is being read.">
+            Re-read
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            loading={asking === "local"}
+            onClick={() => void extract("local")}
+          >
+            {draft.ocr_status === "none" ? "Read the photo" : "Re-read"}
+          </Button>
+        )}
+        {geminiOn ? (
+          reading || askingGemini ? (
+            <Button
+              variant="secondary"
+              disabled
+              disabledReason={
+                reading ? "Wait for the photo reading to finish." : "Gemini is answering."
+              }
+            >
+              Improve with Gemini
+            </Button>
+          ) : (
+            <Button
+              variant="secondary"
+              loading={asking === "gemini"}
+              onClick={() => void extract("gemini")}
+            >
+              Improve with Gemini
+            </Button>
+          )
+        ) : null}
+        {draft.raw_text !== null || draft.gemini_values ? (
+          <Button variant="ghost" onClick={() => setDrawer(true)}>
+            What was read
+          </Button>
+        ) : null}
+      </div>
+      {geminiOn && gemini.data ? (
+        <p className="section-note">
+          Improve with Gemini sends the text read from this photo
+          {gemini.data.share_images ? ", and the photo itself," : ""} to Google Gemini. Its answers
+          are suggestions and are not checked.
+        </p>
+      ) : null}
+      <ReadDrawer draft={draft} open={drawer} onClose={() => setDrawer(false)} />
     </div>
   );
 }

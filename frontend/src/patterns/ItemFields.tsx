@@ -1,15 +1,18 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { Minus, Plus, X } from "lucide-react";
 import { api } from "../api/endpoints";
 import type { Category, Location } from "../api/endpoints";
 import { useCategories, useLocations, useRefreshInventory } from "../api/queries";
 import { splitProblems } from "../lib/formErrors";
-import { applyCategoryDefaults } from "../lib/itemForm";
+import { applyCategoryDefaults, normaliseKey } from "../lib/itemForm";
 import type { ExpiryMode, ItemFormValues } from "../lib/itemForm";
 import { Button } from "../primitives/Button";
 import { Chip } from "../primitives/Chip";
 import { Input, Select, TextArea } from "../primitives/Input";
 import { Toggle } from "../primitives/Toggle";
+import type { FieldSource, ProposalField } from "../lib/proposals";
+import { SourceTag } from "./Reading";
 
 // The item fields in the order of PAGES.md P-05. Used by the item form sheet (create, edit,
 // duplicate) and by the draft confirm screen (P-07). The parent owns the values; this only draws
@@ -32,9 +35,34 @@ interface ItemFieldsProps {
   problems: Record<string, string>;
   /** A new item takes its category's defaults; an edit keeps what the owner chose. */
   categoryDefaults: boolean;
+  /** Where each read value came from (P-07, confirm screen only). */
+  sources?: Partial<Record<ProposalField, FieldSource>>;
+  /** Under the expiry date: the confirmation of a read date (P-07). */
+  expiryNote?: ReactNode;
 }
 
-export function ItemFields({ values, onChange, problems, categoryDefaults }: ItemFieldsProps) {
+function tag(source: FieldSource | undefined): ReactNode {
+  return source ? <SourceTag source={source} /> : undefined;
+}
+
+const READ_ATTRIBUTES: ProposalField[] = ["model", "size", "brand"];
+
+function attributeSource(
+  sources: Partial<Record<ProposalField, FieldSource>>,
+  key: string,
+): FieldSource | undefined {
+  const field = READ_ATTRIBUTES.find((entry) => entry === normaliseKey(key));
+  return field ? sources[field] : undefined;
+}
+
+export function ItemFields({
+  values,
+  onChange,
+  problems,
+  categoryDefaults,
+  sources = {},
+  expiryNote,
+}: ItemFieldsProps) {
   const categories = useCategories();
   const locations = useLocations();
   const set = <K extends keyof ItemFormValues>(key: K, value: ItemFormValues[K]) =>
@@ -53,6 +81,7 @@ export function ItemFields({ values, onChange, problems, categoryDefaults }: Ite
       <Input
         label="Name"
         value={values.name}
+        aside={tag(sources.name)}
         onChange={(event) => set("name", event.target.value)}
         error={problems["name"]}
         maxLength={120}
@@ -62,6 +91,7 @@ export function ItemFields({ values, onChange, problems, categoryDefaults }: Ite
       <div className="item-fields__pair">
         <Select
           label="Category"
+          aside={tag(sources.category_id)}
           value={values.category_id === null ? "" : String(values.category_id)}
           onChange={(event) =>
             chooseCategory(event.target.value === "" ? null : Number(event.target.value))
@@ -159,6 +189,7 @@ export function ItemFields({ values, onChange, problems, categoryDefaults }: Ite
           <Input
             label="Expiry date"
             type="date"
+            aside={tag(sources.expiry_date)}
             value={values.expiry_date}
             onChange={(event) => set("expiry_date", event.target.value)}
             error={problems["expiry_date"]}
@@ -166,6 +197,7 @@ export function ItemFields({ values, onChange, problems, categoryDefaults }: Ite
         ) : problems["expiry_date"] ? (
           <p className="field__error">{problems["expiry_date"]}</p>
         ) : null}
+        {values.expiry_mode === "date" ? expiryNote : null}
       </fieldset>
 
       <Input
@@ -177,7 +209,12 @@ export function ItemFields({ values, onChange, problems, categoryDefaults }: Ite
         placeholder="1240"
       />
 
-      <AttributeRows values={values} onChange={onChange} error={problems["attributes"]} />
+      <AttributeRows
+        values={values}
+        onChange={onChange}
+        error={problems["attributes"]}
+        sources={sources}
+      />
 
       <TextArea
         label="Notes"
@@ -201,10 +238,12 @@ function AttributeRows({
   values,
   onChange,
   error,
+  sources,
 }: {
   values: ItemFormValues;
   onChange: (next: ItemFormValues) => void;
   error?: string;
+  sources: Partial<Record<ProposalField, FieldSource>>;
 }) {
   const rows = values.attributes;
   const setRows = (next: typeof rows) => onChange({ ...values, attributes: next });
@@ -224,6 +263,7 @@ function AttributeRows({
           <Input
             label="Value"
             value={row.value}
+            aside={tag(attributeSource(sources, row.key))}
             hint="Commas make a list: 8, 10, 12"
             onChange={(event) =>
               setRows(rows.map((r, i) => (i === index ? { ...r, value: event.target.value } : r)))
