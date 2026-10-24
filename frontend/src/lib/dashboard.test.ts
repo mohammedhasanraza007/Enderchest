@@ -10,6 +10,7 @@ import {
   ringsLabel,
   roadDays,
   tickLabel,
+  tickShown,
 } from "./dashboard";
 
 const ring = (value: number | null, num = 0, den = 0) => ({ value, num, den });
@@ -57,6 +58,15 @@ describe("road", () => {
     expect(tickLabel("2026-10-16", true)).toBe("16 Oct");
     expect(tickLabel("2026-10-17", false)).toBe("17");
     expect(tickLabel("2026-11-01", false)).toBe("1 Nov");
+  });
+
+  it("names every other day on a long road, and always the 1st and the truck's day", () => {
+    expect(tickShown(1, "2026-10-17", 14, "2026-10-18")).toBe(true);
+    expect(tickShown(1, "2026-10-17", 30, "2026-10-18")).toBe(false);
+    expect(tickShown(2, "2026-10-18", 30, "2026-10-18")).toBe(true);
+    expect(tickShown(15, "2026-10-31", 30, "2026-10-18")).toBe(false);
+    expect(tickShown(17, "2026-11-01", 30, "2026-10-18")).toBe(true);
+    expect(tickShown(5, "2026-10-21", 30, "2026-10-21")).toBe(true);
   });
 
   it("names a busy day after its task and counts the rest", () => {

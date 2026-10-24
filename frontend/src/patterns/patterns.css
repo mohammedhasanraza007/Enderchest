@@ -611,7 +611,7 @@
 }
 .rings__glow {
   stroke: var(--ring-glow);
-  stroke-width: 16;
+  stroke-width: 12;
 }
 .rings__arc {
   stroke: var(--ring-arc);
@@ -636,6 +636,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-1);
+  padding-top: var(--space-5);
   pointer-events: none; /* a click anywhere on the rings opens the sheet */
   text-align: center;
 }
@@ -644,7 +645,7 @@
   font-family: var(--font-display);
   font-size: 5.5rem;
   font-weight: 400;
-  line-height: 0.9;
+  line-height: 0.8;
 }
 .rings__label {
   margin: 0;
@@ -666,10 +667,14 @@
 /* ------------------------------------------------------------------ the road (6.11) */
 .road {
   position: relative;
-  --road-bar-top: calc(28px + var(--space-4));
+  --road-title-gap: var(--space-4);
+  --road-bar-top: calc(28px + var(--road-title-gap));
+}
+.road--truck-start {
+  --road-title-gap: var(--space-7);
 }
 .road__title {
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--road-title-gap);
   font-family: var(--font-sans);
   font-size: 1.3125rem;
   font-weight: 400;
@@ -818,6 +823,8 @@
   font-size: 0.875rem;
 }
 .tasks-page .road {
+  /* room for the truck under the title, which is wider than a day on a 30-day road */
+  --road-title-gap: var(--space-7);
   margin-bottom: var(--space-5);
 }
 

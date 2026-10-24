@@ -8,6 +8,7 @@ import {
   eventSummary,
   roadDays,
   tickLabel,
+  tickShown,
 } from "../lib/dashboard";
 import { formatDay } from "../lib/format";
 import { Dialog } from "../primitives/Overlay";
@@ -31,9 +32,14 @@ export function Road({ road, title, emptyText }: RoadProps) {
   const days = roadDays(road.start, road.end);
   const at = (day: string) => `${(dayPosition(days.indexOf(day), days.length) * 100).toFixed(3)}%`;
   const truckEvent = road.events.find((event) => event.date === road.truck_date);
+  // Parked on the first two days, the truck stands under the title: give the title headroom.
+  const truckAtStart = days.indexOf(road.truck_date) <= 1;
 
   return (
-    <section className="road" aria-labelledby={titleId}>
+    <section
+      className={`road${truckAtStart ? " road--truck-start" : ""}`}
+      aria-labelledby={titleId}
+    >
       <h2 id={titleId} className="road__title">
         {title}
       </h2>
@@ -71,7 +77,11 @@ export function Road({ road, title, emptyText }: RoadProps) {
               style={{ left: at(day) }}
             >
               <span className="road__mark" />
-              <span className="road__day">{tickLabel(day, index === 0)}</span>
+              <span className="road__day">
+                {tickShown(index, day, days.length, road.truck_date)
+                  ? tickLabel(day, index === 0)
+                  : ""}
+              </span>
               {day === road.truck_date && truckEvent ? (
                 <span className="road__label">{eventLabel(truckEvent)}</span>
               ) : null}

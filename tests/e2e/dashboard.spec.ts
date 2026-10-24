@@ -195,7 +195,8 @@ test("the Tasks page has the same road over 30 days", async ({ page, request }) 
   await page.goto("/tasks");
   await settled(page);
   await expect(page.getByRole("heading", { name: "Next 30 days" })).toBeVisible();
-  await expect(page.locator(".road__day")).toHaveCount(30);
+  await expect(page.locator(".road__tick")).toHaveCount(30);
+  await expect(page.locator(".road__day").nth(1)).toHaveText(""); // every other day on 30 days
   await expect(page.locator(".road__label")).toHaveText("Pantry Refill +1");
   await expect(page.getByRole("button", { name: /^26 Oct: Blade check is due/ })).toHaveCount(1);
 });

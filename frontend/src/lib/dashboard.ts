@@ -70,6 +70,14 @@ export function tickLabel(day: string, first: boolean): string {
   return first || moment.getUTCDate() === 1 ? `${number} ${MONTH.format(moment)}` : number;
 }
 
+/**
+ * Whether a tick shows its date. Up to 14 days every tick does; a longer road (Tasks, 30 days)
+ * names every other day, the 1st of a month and the truck's day, so the numbers do not collide.
+ */
+export function tickShown(index: number, day: string, days: number, truckDate: string): boolean {
+  return days <= 14 || index % 2 === 0 || day.endsWith("-01") || day === truckDate;
+}
+
 /** The label under the truck's day: "Pantry Refill", or "Pantry Refill +1" for a busy day. */
 export function eventLabel(event: RoadEvent): string {
   return event.count > 1 ? `${event.label} +${event.count - 1}` : event.label;
