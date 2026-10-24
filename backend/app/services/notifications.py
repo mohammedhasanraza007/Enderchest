@@ -7,7 +7,7 @@ no duplicates and lose nothing.
 """
 
 import sqlite3
-from datetime import UTC, date, datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import NamedTuple
 
 from .. import clock
@@ -23,6 +23,10 @@ from . import profile as profile_service
 
 RECONCILE_EVERY = timedelta(minutes=15)
 UNSHOWN_MAX = 5
+# When each database was last reconciled, and for which local date (in memory, D-108). Kept out
+# of the database so a reconcile that finds nothing to change writes nothing: a bookkeeping write
+# every 15 minutes would make the backup "changed" rule fire every hour (F-022).
+_last_runs: dict[str, tuple[datetime, str]] = {}
 
 
 class Desired(NamedTuple):
@@ -105,30 +109,31 @@ def reconcile(conn: sqlite3.Connection, user_id: int) -> dict:
         notifications_repo.resolve(conn, user_id, stale, "superseded", now)
         notifications_repo.reopen(conn, user_id, wake)
         changed.update(superseded=len(stale), woken=len(wake))
-        _remember(conn, now, today)
+        if any(changed.values()):
+            _remember(conn, now, today)  # only beside a real change, never on its own
+    _last_runs[_database(conn)] = (clock.now(), today.isoformat())
     if any(changed.values()):
         log_event("info", "reconciled", **changed)
     return changed
 
 
+def _database(conn: sqlite3.Connection) -> str:
+    return conn.execute("PRAGMA database_list").fetchone()[2]
+
+
 def _remember(conn: sqlite3.Connection, now: str, today: date) -> None:
+    """`scheduler_state` records the last reconcile that changed something (DATA_MODEL 2.14)."""
     for key, value in (("last_reconcile_at", now), ("last_local_date", today.isoformat())):
         conn.execute("INSERT INTO scheduler_state (key, value) VALUES (?, ?) "
                      "ON CONFLICT(key) DO UPDATE SET value = excluded.value", (key, value))
 
 
 def is_stale(conn: sqlite3.Connection, user_id: int) -> bool:
-    """True when the local date moved or the last run is 15 minutes old (or never ran)."""
-    state = {row["key"]: row["value"] for row in conn.execute(
-        "SELECT key, value FROM scheduler_state WHERE key IN "
-        "('last_reconcile_at', 'last_local_date')")}
-    if state.get("last_local_date") != profile_service.local_today(conn, user_id).isoformat():
+    """True when the local date moved or the last run is 15 minutes old (or never ran here)."""
+    last = _last_runs.get(_database(conn))
+    if last is None or last[1] != profile_service.local_today(conn, user_id).isoformat():
         return True
-    last = state.get("last_reconcile_at")
-    if last is None:
-        return True
-    at = datetime.strptime(last, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
-    return not timedelta(0) <= clock.now() - at < RECONCILE_EVERY  # a clock moved back counts
+    return not timedelta(0) <= clock.now() - last[0] < RECONCILE_EVERY  # a clock moved back counts
 
 
 def refresh(conn: sqlite3.Connection, user_id: int) -> None:

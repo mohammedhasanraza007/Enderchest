@@ -13,6 +13,8 @@ $ok = $false
 function Set-Day { param([string]$Day)
     return (Api -Method POST -Path '/api/v1/test/clock' -Body @{ local_date = $Day })
 }
+# Callers wrap the result in @(): PowerShell 5.1 unrolls a one-row array into a lone object,
+# and a lone [pscustomobject] has no .Count.
 function All-Rows { return @((Api -Path '/api/v1/notifications?status=all&limit=200').Json.items) }
 function Restart-App {
     [void](Dk restart $script:Container)
@@ -27,25 +29,25 @@ if (Reset-TestData) {
     [void](Set-Day (& $day 0))
     $item = Api -Method POST -Path '/api/v1/items' -Body @{ name = 'Probe milk'; expiry_date = (& $day 2) }
     $task = Api -Method POST -Path '/api/v1/tasks' -Body @{ title = 'Probe chore'; first_due = (& $day 1); interval_days = 7 }
-    $step1 = All-Rows
+    $step1 = @(All-Rows)
     $firstId = if ($step1.Count -eq 1) { $step1[0].id } else { -1 }
 
     $up1 = Restart-App
     [void](Set-Day (& $day 1))
-    $step2 = All-Rows
+    $step2 = @(All-Rows)
     $soon2 = @($step2 | Where-Object { $_.kind -eq 'expiry_soon' })
     $task2 = @($step2 | Where-Object { $_.kind -eq 'task_due' -and $_.status -eq 'open' })
 
     $up2 = Restart-App            # start-up reconcile on the real clock: day D, the task is not due
     $back = @(All-Rows | Where-Object { $_.kind -eq 'task_due' })
     [void](Set-Day (& $day 3))
-    $step3 = All-Rows
+    $step3 = @(All-Rows)
     $expired = @($step3 | Where-Object { $_.kind -eq 'expired' -and $_.status -eq 'open' })
     $soon3 = @($step3 | Where-Object { $_.kind -eq 'expiry_soon' })
     $task3 = @($step3 | Where-Object { $_.kind -eq 'task_due' })
     $keys = $step3 | ForEach-Object { "$($_.kind)|$($_.item.public_id)|$($_.task.id)|$($_.due_date)" }
     $unique = (@($keys | Select-Object -Unique).Count -eq $keys.Count)
-    $again = All-Rows
+    $again = @(All-Rows)
     $stable = (($again | ConvertTo-Json -Depth 6) -eq ($step3 | ConvertTo-Json -Depth 6))
 
     $good = ($item.Status -eq 201) -and ($task.Status -eq 201) -and ($step1.Count -eq 1) -and

@@ -525,3 +525,24 @@ def test_lead_days_change_reconciles_at_once(stack: Stack):
     assert centre(stack) == []
     stack.client.patch("/api/v1/settings", json={"lead_days": 7}, headers=HEADERS)
     assert [n["word"] for n in centre(stack)] == ["6 days left"]
+
+
+# ---- F-022: the reconcile's own writes never make the backup "changed" rule fire --------------
+
+def test_a_timed_reconcile_on_an_idle_database_is_not_a_change(stack: Stack):
+    from app.backup.engine import changed_since_own_write
+
+    day(stack, DAY0)
+    expiring(stack, DAY0 + timedelta(days=4))  # outside the 3-day window today
+    assert stack.app.state.reconciler.tick() is True  # the start-up reconcile
+    assert post(stack, "/backups").status_code == 201  # the backup's own write is the baseline
+    assert changed_since_own_write(stack.settings) is None
+    clock.advance(20 * 60)  # 15 minutes passed: the reconcile runs and finds nothing to change
+    assert stack.app.state.reconciler.tick() is True
+    assert changed_since_own_write(stack.settings) is None
+    day(stack, DAY0 + timedelta(days=1))  # the date moved: the item enters the window
+    assert stack.app.state.reconciler.tick() is True
+    assert [n["word"] for n in centre(stack)] == ["3 days left"]
+    assert changed_since_own_write(stack.settings) is None  # the app's own reminder, not a change
+    item(stack, "Kettle")  # an owner's write still counts
+    assert changed_since_own_write(stack.settings) is not None

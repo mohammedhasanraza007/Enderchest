@@ -7,6 +7,7 @@ check runs every 30 seconds, so a date change (or a moved test clock) is seen wi
 import asyncio
 import sqlite3
 
+from ..backup.engine import changed_since_own_write, note_app_write
 from ..boot.manager import BootManager, Status, WrongState
 from ..logs import log_event
 from ..services import notifications as notifications_service
@@ -43,7 +44,13 @@ class Reconciler:
         try:
             conn = self._manager.db()
             if self._startup_pending or notifications_service.is_stale(conn, USER_ID):
-                notifications_service.reconcile(conn, USER_ID)
+                settings = self._manager.settings
+                idle = changed_since_own_write(settings) is None
+                changed = notifications_service.reconcile(conn, USER_ID)
+                if idle and any(changed.values()):
+                    # Time alone moved the reminders on an idle database: not an owner's change,
+                    # so the backup "changed" rule does not fire for it (F-022, D-108).
+                    note_app_write(settings)
                 self._startup_pending = False
                 return True
         except WrongState:

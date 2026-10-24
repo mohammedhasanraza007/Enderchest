@@ -37,6 +37,12 @@ def _note_own_write(settings: Settings, log_conn: sqlite3.Connection | None) -> 
         _own_write_mtime[settings.db_path] = _db_mtime(settings) or 0.0
 
 
+def note_app_write(settings: Settings) -> None:
+    """A write the app made by itself on a database with no unseen change (the reconcile on its
+    timer adding the day's reminders, D-108): like a backup's log row, it is not a change."""
+    _own_write_mtime[settings.db_path] = _db_mtime(settings) or 0.0
+
+
 def changed_since_own_write(settings: Settings) -> datetime | None:
     """When the database was last modified by anything other than a backup's own log row."""
     newest = _db_mtime(settings)
