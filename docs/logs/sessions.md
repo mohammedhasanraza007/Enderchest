@@ -56,3 +56,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed (test-first): `dev.bat` Vite never served a Windows edit (probe 18); test builds retagged the live image (D-089, probe 19); failed automatic backups retried every 30 s (D-090); two wrong CODE_MAP paths (`check_docs.py`).
 - Blocked on owner: gate 1 screenshot approval; `build.bat` then `run.bat`; Back up now and `backup.bat` on live; `-Live` probes 4 and 9; `restore.bat`.
 - Next: Phase 2 build (`D:\Projects\phase2-next-prompt.txt`), started by this chat as a new session.
+
+## 2026-10-23/24 · phase2 · Phase 2 build (inventory), chain hand-off to the Phase 2 verification
+- Zip in: `phase1.2.zip` (already unzipped into `D:\Projects\Enderchest-phase-2`, branch `phase-2`). Zip out: `D:\Projects\phase2.zip`, unzipped into `D:\Projects\Enderchest-phase-2v` on branch `phase-2-verify` (D-091).
+- Built Phase 2 in full (backend, screens, browser tests); brief `docs/reviews/phase-2-brief.md`; decisions D-092 to D-096; owner rules relayed by the first session recorded as D-097 (UI bar, /design-sync at the very end, chain-keeper state file).
+- Checks: lint clean; unit 87 + 58; integration 182; Playwright 69 + 3; probes 1 to 19 PASS (13 after a fix); budgets met; contrast 0 failures on 11 routes in both themes; crawler 0 dead controls on 13 routes; 25 screenshots reviewed and 8 look fixes made.
+- Failed and fixed (test-first where code): shared DB connection across requests (500 on Labels); an empty committed script file; stale throwaway volumes in `test.bat e2e` and probe 13; crawler flaws (index-based, modal-blind, print and leave-page dialogs).
+- Blocked on owner: webcam and printed-label acceptance run, screenshot approval, `build.bat`/`run.bat` (live migration to schema 2), earlier live checks.
+- Next: Phase 2 verification (`D:\Projects\phase2v-next-prompt.txt`), started by this session as a new session.
