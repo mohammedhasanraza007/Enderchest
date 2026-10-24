@@ -204,7 +204,11 @@ export function changedPayload(initial: ItemFormValues, current: ItemFormValues)
  * The fields a draft can store right now (PAGES.md P-07, saved as the owner edits): a value
  * still being typed wrongly is left out instead of being refused.
  */
-export function toDraftFields(values: ItemFormValues, expiryConfirmed: boolean): DraftFields {
+export function toDraftFields(
+  values: ItemFormValues,
+  expiryConfirmed: boolean,
+  owned: Iterable<NonNullable<DraftFields["owned"]>[number]> = [],
+): DraftFields {
   const problems = validate({ ...values, name: values.name.trim() === "" ? "x" : values.name });
   const fields: DraftFields = {
     name: values.name.trim(),
@@ -213,6 +217,7 @@ export function toDraftFields(values: ItemFormValues, expiryConfirmed: boolean):
     expiry_mode: values.expiry_mode,
     no_label_needed: values.no_label_needed,
     expiry_confirmed: expiryConfirmed,
+    owned: [...owned],
   };
   if (!problems["quantity"]) fields.quantity = Number(values.quantity);
   fields.expiry_date =

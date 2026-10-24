@@ -76,8 +76,13 @@ export function withProposal(
  * The fields the owner has made their own: a value that is not what was proposed. A deliberate
  * "No expiry" counts as the owner's choice too.
  */
-export function ownedFields(values: ItemFormValues, proposed: Proposed): Set<ProposalField> {
-  const owned = new Set<ProposalField>();
+export function ownedFields(
+  values: ItemFormValues,
+  proposed: Proposed,
+  saved: readonly ProposalField[] = [],
+): Set<ProposalField> {
+  // `saved` is the list the draft kept: a field the owner cleared looks untouched otherwise.
+  const owned = new Set<ProposalField>(saved);
   for (const field of PROPOSAL_FIELDS) {
     const current = formValue(values, field);
     const proposal = proposed[field];

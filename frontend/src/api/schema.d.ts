@@ -768,6 +768,8 @@ export interface components {
             no_label_needed?: boolean | null;
             /** Notes */
             notes?: string | null;
+            /** Owned */
+            owned?: ("name" | "category_id" | "expiry_date" | "model" | "size" | "brand")[] | null;
             /** Price Paise */
             price_paise?: number | null;
             /** Quantity */

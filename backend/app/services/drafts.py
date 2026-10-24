@@ -132,6 +132,7 @@ def commit(conn: sqlite3.Connection, user_id: int, draft_id: str) -> dict:
     _open(row)
     fields = {k: v for k, v in json.loads(row["fields"]).items() if v is not None}
     confirmed = fields.pop("expiry_confirmed", True)
+    fields.pop("owned", None)
     if not fields.get("name"):
         raise items_service.problem("name", "Enter a name to save the item.")
     if fields.get("expiry_mode", "date" if "expiry_date" in fields else None) == "date" \

@@ -262,6 +262,20 @@ def test_a_draft_needs_a_name_and_a_confirmed_date_to_commit(stack: Stack):
     assert stack.client.post(f"{path}/commit", headers=HEADERS).status_code == 201
 
 
+def test_the_fields_the_owner_made_their_own_are_kept_and_never_saved_on_the_item(stack: Stack):
+    """D-100 after a reload: a field the owner cleared must stay theirs, so the list is stored."""
+    draft = make_drafts(stack, [imagekit.jpeg()]).json()["drafts"][0]
+    path = f"/api/v1/drafts/{draft['id']}"
+    changed = stack.client.patch(path, json={"fields": {"name": "Milk", "owned": ["model"]}},
+                                 headers=HEADERS)
+    assert changed.json()["fields"]["owned"] == ["model"]
+    bad = stack.client.patch(path, json={"fields": {"owned": ["price"]}}, headers=HEADERS)
+    assert bad.status_code == 422
+    item = stack.client.post(f"{path}/commit", headers=HEADERS)
+    assert item.status_code == 201
+    assert "owned" not in item.json() and "owned" not in item.json()["attributes"]
+
+
 def test_a_discarded_draft_keeps_its_photo_rows_and_files(stack: Stack):
     draft = make_drafts(stack, [imagekit.jpeg()]).json()["drafts"][0]
     assert stack.client.delete(f"/api/v1/drafts/{draft['id']}", headers=HEADERS).status_code \

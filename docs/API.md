@@ -119,7 +119,7 @@ Tables below: columns are Phase, Method, Path (relative to `/api/v1` unless it s
 | 2 | POST | /drafts | multipart `images[]` (1 to 20); one draft per image | 201 `{drafts:[Draft]}` | `payload_too_large`, `unsupported_media` |
 | 2 | GET | /drafts | query `status` (default `open`) | `{items:[Draft]}` | |
 | 2 | GET | /drafts/{id} | none | Draft | `not_found` |
-| 2 | PATCH | /drafts/{id} | `{fields:{…partial…}}` | Draft | `validation_error` |
+| 2 | PATCH | /drafts/{id} | `{fields:{…partial…}}`; besides the item keys, `expiry_confirmed` and `owned` (the read fields the owner made their own, so a reload never refills one they cleared, D-100; dropped on commit) | Draft | `validation_error` |
 | 2 | POST | /drafts/{id}/photos | multipart `image` | Draft | `limit_reached`, `unsupported_media` |
 | 2 | POST | /drafts/{id}/commit | none | 201 ItemDetail | `validation_error`, `expiry_unconfirmed` |
 | 2 | DELETE | /drafts/{id} | none | 204 (status `discarded`, photos untouched) | `not_found` |

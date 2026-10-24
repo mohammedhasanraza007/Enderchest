@@ -85,7 +85,9 @@ function ConfirmForm({ draft }: { draft: Draft }) {
   const toast = useToast();
   const proposed: Proposed = draft.proposed;
   // The fields the owner has made their own; proposals never touch them (D-100).
-  const owned = useRef<Set<ProposalField>>(ownedFields(valuesFromDraft(draft.fields), proposed));
+  const owned = useRef<Set<ProposalField>>(
+    ownedFields(valuesFromDraft(draft.fields), proposed, draft.fields.owned ?? []),
+  );
   const [values, setValues] = useState<ItemFormValues>(() =>
     applyProposals(valuesFromDraft(draft.fields), proposed, owned.current),
   );
@@ -131,10 +133,12 @@ function ConfirmForm({ draft }: { draft: Draft }) {
     if (!dirty) return;
     setSaveState("pending");
     const timer = window.setTimeout(() => {
-      api.changeDraft(draft.id, toDraftFields(latest.current, confirmedNow.current)).then(
-        () => setSaveState("saved"),
-        () => setSaveState("failed"),
-      );
+      api
+        .changeDraft(draft.id, toDraftFields(latest.current, confirmedNow.current, owned.current))
+        .then(
+          () => setSaveState("saved"),
+          () => setSaveState("failed"),
+        );
     }, SAVE_AFTER_MS);
     return () => window.clearTimeout(timer);
   }, [values, expiryConfirmed, dirty, draft.id]);
@@ -172,7 +176,10 @@ function ConfirmForm({ draft }: { draft: Draft }) {
     setBusy(true);
     setGeneral(null);
     try {
-      await api.changeDraft(draft.id, toDraftFields(latest.current, confirmedNow.current));
+      await api.changeDraft(
+        draft.id,
+        toDraftFields(latest.current, confirmedNow.current, owned.current),
+      );
       setSaveState("saved");
       const item = await api.commitDraft(draft.id, key);
       await refresh();

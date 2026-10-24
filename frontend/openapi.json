@@ -597,6 +597,28 @@
             ],
             "title": "Notes"
           },
+          "owned": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "name",
+                    "category_id",
+                    "expiry_date",
+                    "model",
+                    "size",
+                    "brand"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owned"
+          },
           "price_paise": {
             "anyOf": [
               {

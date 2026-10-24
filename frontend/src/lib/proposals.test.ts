@@ -45,6 +45,14 @@ describe("proposals", () => {
     expect(applyProposals(typed, PROPOSED, owned).name).toBe("My oat milk");
   });
 
+  it("keep a field the owner cleared as theirs after a reload (D-100)", () => {
+    const cleared = { ...emptyValues(), name: "Oat Milk" };
+    const owned = ownedFields(cleared, PROPOSED, ["model", "expiry_date"]);
+    const filled = applyProposals(cleared, PROPOSED, owned);
+    expect(filled.attributes).toEqual([{ key: "size", value: "500 ml" }]);
+    expect(filled.expiry_date).toBe("");
+  });
+
   it("treat a deliberate No expiry as the owner's", () => {
     const none = { ...emptyValues(), expiry_mode: "none" as const };
     const filled = applyProposals(none, PROPOSED, ownedFields(none, PROPOSED));

@@ -16,6 +16,9 @@ class DraftFields(ItemFields):
 
     name: str | None = None
     expiry_confirmed: bool | None = None
+    # The read fields the owner made their own, so a reload never refills one they cleared (D-100).
+    owned: list[Literal["name", "category_id", "expiry_date", "model", "size", "brand"]] | None = (
+        None)
 
     @field_validator("name")
     @classmethod
