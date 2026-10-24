@@ -1,0 +1,22 @@
+{
+  "routes": [
+    "/",
+    "/inventory",
+    "/items/ENDR-K3QMWPXJ",
+    "/items/ENDR-H4KV18JZ",
+    "/items/ENDR-9AQT2BRK",
+    "/camera?mode=add",
+    "/camera?mode=scan",
+    "/camera?mode=own",
+    "/add",
+    "/add/a4d02caa-5d34-4237-b22a-624a753e9ece",
+    "/labels?ids=ENDR-K3QMWPXJ,ENDR-H4KV18JZ",
+    "/trash",
+    "/settings",
+    "/tasks",
+    "/notifications",
+    "/savings"
+  ],
+  "checked": 569,
+  "failures": []
+}

@@ -122,3 +122,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Looked at 8 screenshots against the reference: notes N1 to N3 (minor).
 - Verdict: PASS WITH NOTES. Blocked on owner: Phase 5 acceptance and screenshot approval; earlier owner items.
 - Next: Phase 6 build (`D:\Projects\phase6-next-prompt.txt`).
+
+## 2026-10-25 · phase6 · Phase 6 build (Do I own this? and savings), chain hand-off to the Phase 6 verification
+- Zip in: `phase5v.zip` (folder `D:\Projects\Enderchest-phase-6`, branch `phase-6`). Zip out: `D:\Projects\phase6.zip`, unzipped into `D:\Projects\Enderchest-phase-6v` on branch `phase-6-verify`.
+- Brief first (D-114 to D-118), then migration 0004, DINOv2-small embeddings with a background job, the ownership check with the spec's scoring, savings with Undo, the own mode, Savings page, nav tab and road pill; D-119 during the build.
+- Tests added: 11 unit, 13 integration (incl. the v3 to v4 migration), 4 vitest, 7 Playwright (5 flows, 2 shot runs), probes 24 and 25; crawler and contrast cover the new routes. All suites green (lint; unit 218 + 87; integration 288; e2e 117 + 3; probes 1 to 25).
+- Looked at 16 screenshots; fixed the pill on the road title, the nav at 1024 px and the Savings spacing.
+- Blocked on owner: gate 1 (20 photos, `test.bat ownership`), acceptance, screenshot approval; earlier owner items.
+- Next: Phase 6 verification (`D:\Projects\phase6v-next-prompt.txt`).

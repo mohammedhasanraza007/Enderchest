@@ -18,7 +18,7 @@
 #5 ...
 
 #6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
-#6 DONE 0.4s
+#6 DONE 0.3s
 
 #5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
 #5 DONE 0.4s
@@ -30,93 +30,93 @@
 #8 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
 #8 DONE 0.0s
 
-#9 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
-#9 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
 #9 DONE 0.0s
 
-#10 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
-#10 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#10 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
 #10 DONE 0.0s
 
 #11 [internal] load build context
-#11 transferring context: 321.88kB 0.0s done
+#11 transferring context: 18.51kB 0.0s done
 #11 DONE 0.0s
 
-#12 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#12 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
 #12 CACHED
 
-#13 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#13 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
 #13 CACHED
 
 #14 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 #14 CACHED
 
-#15 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#15 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
 #15 CACHED
 
-#16 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#16 [python-base 5/7] RUN pip install -r requirements.lock
 #16 CACHED
 
-#17 [python-base 3/7] WORKDIR /app
+#17 [frontend-deps 2/4] WORKDIR /frontend
 #17 CACHED
 
-#18 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#18 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
 #18 CACHED
 
-#19 [python-base 5/7] RUN pip install -r requirements.lock
+#19 [tools  5/11] RUN pip install -r requirements-dev.lock
 #19 CACHED
 
-#20 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#20 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
 #20 CACHED
 
-#21 [frontend-deps 2/4] WORKDIR /frontend
+#21 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
 #21 CACHED
 
-#22 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#22 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
 #22 CACHED
 
-#23 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#23 [tools  7/11] COPY assets/logo /assets/logo
 #23 CACHED
 
-#24 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#24 [tools  8/11] COPY frontend/ /frontend/
 #24 CACHED
 
-#25 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#25 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
 #25 CACHED
 
-#26 [tools  5/11] RUN pip install -r requirements-dev.lock
+#26 [python-base 3/7] WORKDIR /app
 #26 CACHED
 
-#27 [tools  7/11] COPY assets/logo /assets/logo
+#27 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
 #27 CACHED
 
-#28 [tools  8/11] COPY frontend/ /frontend/
-#28 DONE 0.0s
+#28 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#28 CACHED
 
-#29 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
-#29 DONE 0.0s
+#29 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#29 CACHED
 
-#30 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
-#30 DONE 0.0s
+#30 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#30 CACHED
 
 #31 [tools 11/11] COPY backend/ ./
-#31 DONE 0.1s
+#31 CACHED
 
 #32 exporting to image
-#32 exporting layers 0.1s done
-#32 exporting manifest sha256:a02bedd14e837c152dd6ed79a7efcb5a13f8cad35a59404c364a4bd24593a0bc 0.0s done
-#32 exporting config sha256:065e250ffdd60472f5debb3431ae6eae307dc6a9d73608a1e28dfe05aa82d169 done
-#32 exporting attestation manifest sha256:a0bd4dd49e89b8eda826cef39976ae11b2b26628f4106d85df1bc25274425685 0.0s done
-#32 exporting manifest list sha256:b5a66b1a44e5c360cc3b568b291031c9ab85319575ef37e08c941432cf7b3a9b 0.0s done
+#32 exporting layers done
+#32 exporting manifest sha256:d7810644fbc81e9f1f91364b1e1928c8056f3d2518dfb4af0a68888b3111e857 done
+#32 exporting config sha256:3fd4f47cfe2ca35675ced12000fc371e45b9ebd998888a00c6ccce369c24e0a1 done
+#32 exporting attestation manifest sha256:8f792e8583643fa8aaf984f0fa53e9a17d6569726da7be266ed7c73adcaa24e7 0.0s done
+#32 exporting manifest list sha256:13cf7832d6d1cf9706344a83304267bf5829031fd3f20f0c23bfdd3baa9ef7ee 0.0s done
 #32 naming to docker.io/library/enderchest-tools:latest done
-#32 unpacking to docker.io/library/enderchest-tools:latest 0.1s done
-#32 DONE 0.4s
+#32 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#32 DONE 0.1s
 
 #33 resolving provenance for metadata file
 #33 DONE 0.0s
  Image enderchest-tools:latest Built 
- Container enderchest-test-tools-run-bd04d8947ecd Creating 
- Container enderchest-test-tools-run-bd04d8947ecd Created 
+ Container enderchest-test-tools-run-fe8c8f7fdc60 Creating 
+ Container enderchest-test-tools-run-fe8c8f7fdc60 Created 
 ........................................................................ [ 25%]
 ........................................................................ [ 50%]
 ........................................................................ [ 75%]
@@ -127,4 +127,4 @@
     from starlette.testclient import TestClient as TestClient  # noqa
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-288 passed, 1 warning in 56.31s
+288 passed, 1 warning in 54.49s

@@ -1,0 +1,22 @@
+{
+  "routes": [
+    "/",
+    "/inventory",
+    "/items/ENDR-ZN4ZGKS0",
+    "/items/ENDR-4KDEMQQB",
+    "/items/ENDR-654B0PTC",
+    "/camera?mode=add",
+    "/camera?mode=scan",
+    "/camera?mode=own",
+    "/add",
+    "/add/537b23d8-0f2e-431d-9522-cd1f8ebfcac4",
+    "/labels?ids=ENDR-ZN4ZGKS0,ENDR-4KDEMQQB",
+    "/trash",
+    "/settings",
+    "/tasks",
+    "/notifications",
+    "/savings"
+  ],
+  "checked": 569,
+  "failures": []
+}

@@ -15,13 +15,10 @@
 #4 CACHED
 
 #5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
-#5 ...
+#5 DONE 0.4s
 
 #6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
-#6 DONE 0.3s
-
-#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
-#5 DONE 0.4s
+#6 DONE 0.4s
 
 #7 [internal] load .dockerignore
 #7 transferring context: 320B done
@@ -30,73 +27,73 @@
 #8 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
 #8 DONE 0.0s
 
-#9 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
-#9 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#9 [internal] load build context
+#9 transferring context: 18.51kB 0.0s done
 #9 DONE 0.0s
 
 #10 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
 #10 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
 #10 DONE 0.0s
 
-#11 [internal] load build context
-#11 transferring context: 18.31kB 0.0s done
+#11 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#11 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
 #11 DONE 0.0s
 
-#12 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#12 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
 #12 CACHED
 
-#13 [tools  8/11] COPY frontend/ /frontend/
+#13 [python-base 3/7] WORKDIR /app
 #13 CACHED
 
-#14 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#14 [tools  7/11] COPY assets/logo /assets/logo
 #14 CACHED
 
-#15 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#15 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
 #15 CACHED
 
-#16 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#16 [python-base 5/7] RUN pip install -r requirements.lock
 #16 CACHED
 
-#17 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#17 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
 #17 CACHED
 
-#18 [tools  5/11] RUN pip install -r requirements-dev.lock
+#18 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 #18 CACHED
 
-#19 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#19 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
 #19 CACHED
 
-#20 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#20 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
 #20 CACHED
 
-#21 [tools  7/11] COPY assets/logo /assets/logo
+#21 [frontend-deps 2/4] WORKDIR /frontend
 #21 CACHED
 
-#22 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#22 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
 #22 CACHED
 
-#23 [frontend-deps 2/4] WORKDIR /frontend
+#23 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
 #23 CACHED
 
-#24 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#24 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
 #24 CACHED
 
-#25 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#25 [tools  8/11] COPY frontend/ /frontend/
 #25 CACHED
 
-#26 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#26 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
 #26 CACHED
 
-#27 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#27 [tools  5/11] RUN pip install -r requirements-dev.lock
 #27 CACHED
 
-#28 [python-base 3/7] WORKDIR /app
+#28 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
 #28 CACHED
 
-#29 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#29 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
 #29 CACHED
 
-#30 [python-base 5/7] RUN pip install -r requirements.lock
+#30 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
 #30 CACHED
 
 #31 [tools 11/11] COPY backend/ ./
@@ -104,10 +101,10 @@
 
 #32 exporting to image
 #32 exporting layers done
-#32 exporting manifest sha256:8b8805565de4ba9017f09e37de7552a99710346e716464c81754fbc217973d05 done
-#32 exporting config sha256:4efa7fc3b1db136ce01af6b6434226476bcbcbbfbda39656b12172818a4ea2fb done
-#32 exporting attestation manifest sha256:0a1545fe10ab76c049a22475ed9a340bb1b0fa9ca47a1742b1933a576a499375 0.0s done
-#32 exporting manifest list sha256:f92ee9a11adabbceb4dff4a0e3d7a69ea74622899a477317056bb30dbb83c88c 0.0s done
+#32 exporting manifest sha256:d7810644fbc81e9f1f91364b1e1928c8056f3d2518dfb4af0a68888b3111e857 done
+#32 exporting config sha256:3fd4f47cfe2ca35675ced12000fc371e45b9ebd998888a00c6ccce369c24e0a1 done
+#32 exporting attestation manifest sha256:6e426cc5d5743282cbd338eed90b4a019c4d626555e61a17e12db357581857ba 0.0s done
+#32 exporting manifest list sha256:2396552dce1463d8ccc2673ef0e226c09174c156e50141d4bdd295259c3dceb5 done
 #32 naming to docker.io/library/enderchest-tools:latest done
 #32 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
 #32 DONE 0.1s
@@ -115,8 +112,8 @@
 #33 resolving provenance for metadata file
 #33 DONE 0.0s
  Image enderchest-tools:latest Built 
- Container enderchest-test-tools-run-2b1f34c3d467 Creating 
- Container enderchest-test-tools-run-2b1f34c3d467 Created 
+ Container enderchest-test-tools-run-0ddfd0feae41 Creating 
+ Container enderchest-test-tools-run-0ddfd0feae41 Created 
 ........................................................................ [ 33%]
 ........................................................................ [ 66%]
 ........................................................................ [ 99%]
@@ -127,28 +124,28 @@
     from starlette.testclient import TestClient as TestClient  # noqa
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-218 passed, 1 warning in 1.45s
- Container enderchest-test-tools-run-2cebb93953b3 Creating 
- Container enderchest-test-tools-run-2cebb93953b3 Created 
+218 passed, 1 warning in 1.40s
+ Container enderchest-test-tools-run-adaf98bcbd23 Creating 
+ Container enderchest-test-tools-run-adaf98bcbd23 Created 
 
 [1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90m/frontend[39m
 
- [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 31[2mms[22m[39m
- [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
- [32m✓[39m src/lib/dashboard.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/lib/format.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
  [32m✓[39m src/lib/ownership.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
- [32m✓[39m src/lib/format.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 26[2mms[22m[39m
- [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
- [32m✓[39m src/lib/proposals.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m src/lib/lifecycle.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/lib/inventory.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 22[2mms[22m[39m
- [32m✓[39m src/primitives/primitives.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/lib/dashboard.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m src/lib/proposals.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/lib/lifecycle.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/lib/inventory.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/primitives/primitives.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[32m 24[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
 [2m      Tests [22m [1m[32m87 passed[39m[22m[90m (87)[39m
-[2m   Start at [22m 19:07:05
-[2m   Duration [22m 495ms[2m (transform 63%, import 21%, tests 12%, worker 3%)[22m
+[2m   Start at [22m 19:40:38
+[2m   Duration [22m 522ms[2m (transform 65%, import 20%, tests 12%, worker 3%)[22m
 
 npm notice
 npm notice New major version of npm available! 10.9.9 -> 12.2.1
@@ -160,4 +157,4 @@ npm notice
 > openapi-typescript openapi.json -o /tmp/schema.d.ts && diff -q /tmp/schema.d.ts src/api/schema.d.ts
 
 ✨ openapi-typescript 7.13.0
-🚀 openapi.json → /tmp/schema.d.ts [158.3ms]
+🚀 openapi.json → /tmp/schema.d.ts [172.3ms]

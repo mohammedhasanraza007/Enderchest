@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-REM test.bat [unit|integration|lint|probes|e2e|types|format|bakeoff|all]   (default: all)
+REM test.bat [unit|integration|lint|probes|e2e|types|format|bakeoff|ownership|all]   (default: all)
 REM Everything here uses the TEST stack (compose.test.yaml) or temporary folders in a container.
 REM It never touches the live stack or the live volume.
 REM   lint         ruff (Python), then tsc, eslint and prettier (frontend)
@@ -13,6 +13,8 @@ REM   types        rewrite frontend/openapi.json and frontend/src/api/schema.d.t
 REM   format       rewrite the frontend files with prettier (lint only checks them)
 REM   bakeoff      the Phase 3 OCR engine measurement on the owner's photos (D-099): builds the
 REM                bakeoff image (four engines, models baked in) and runs it with no network
+REM   ownership    the Phase 6 gate-1 table on the owner's 20 photos (tests\fixtures\private\phase6)
+REM                against a COPY of the newest backup, offline; the backup is only read
 
 set "WHAT=%~1"
 if "%WHAT%"=="" set "WHAT=all"
@@ -35,8 +37,9 @@ if /I "%WHAT%"=="e2e" goto e2e
 if /I "%WHAT%"=="types" goto types
 if /I "%WHAT%"=="format" goto format
 if /I "%WHAT%"=="bakeoff" goto bakeoff
+if /I "%WHAT%"=="ownership" goto ownership
 if /I "%WHAT%"=="all" goto all
-echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|bakeoff^|all]
+echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|bakeoff^|ownership^|all]
 exit /b 2
 
 :build
@@ -111,6 +114,25 @@ if not exist "docs\logs\raw\phase-3\bakeoff" mkdir "docs\logs\raw\phase-3\bakeof
 docker build --target bakeoff -t enderchest-bakeoff:latest .
 if errorlevel 1 exit /b 1
 docker run --rm --network none -v "%~dp0tests\fixtures\private\phase3:/photos:ro" -v "%~dp0docs\logs\raw\phase-3\bakeoff:/results" enderchest-bakeoff:latest
+exit /b %errorlevel%
+
+:ownership
+REM The photos and the backup folder are mounted read-only; the table lands in
+REM docs\logs\raw\phase-6\ownership. ENDERCHEST_BACKUP_DIR comes from .env (build.bat writes it).
+if not exist "tests\fixtures\private\phase6\labels.csv" (
+  echo No photos yet: put the 20 photos and labels.csv in tests\fixtures\private\phase6 first.
+  exit /b 2
+)
+set "BACKUPS="
+if exist ".env" for /f "usebackq tokens=1,* delims==" %%a in (".env") do if /I "%%a"=="ENDERCHEST_BACKUP_DIR" set "BACKUPS=%%b"
+if "%BACKUPS%"=="" (
+  echo No backup folder known: run build.bat, then Back up now in Settings, first.
+  exit /b 2
+)
+if not exist "docs\logs\raw\phase-6\ownership" mkdir "docs\logs\raw\phase-6\ownership"
+%DC% build tools
+if errorlevel 1 exit /b 1
+docker run --rm --network none -v "%BACKUPS%:/backups:ro" -v "%~dp0tests\fixtures\private\phase6:/photos:ro" -v "%~dp0docs\logs\raw\phase-6\ownership:/results" -v "%~dp0scripts:/app/scripts:ro" enderchest-tools:latest python scripts/ownership_measure.py --backups /backups --photos /photos --out /results
 exit /b %errorlevel%
 
 :all
