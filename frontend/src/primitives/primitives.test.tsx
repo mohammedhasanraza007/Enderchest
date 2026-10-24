@@ -32,6 +32,15 @@ describe("Button", () => {
     expect(markup).toContain("Nothing to save yet.");
     expect(markup).toMatch(/aria-describedby="([^"]+)"[\s\S]*id="\1"/);
   });
+  it("can point at a reason already on screen instead of repeating it", () => {
+    const markup = html(
+      <Button disabled disabledReasonId="shared-reason">
+        Save
+      </Button>,
+    );
+    expect(markup).toContain('aria-describedby="shared-reason"');
+    expect(markup).not.toContain("pill__reason");
+  });
   it("keeps its label and adds a progress dot while loading", () => {
     const markup = html(<Button loading>Back up now</Button>);
     expect(markup).toContain("Back up now");

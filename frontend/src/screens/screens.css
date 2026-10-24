@@ -163,6 +163,15 @@
   font-size: 1.5rem;
   aspect-ratio: auto;
 }
+.row-list__line > .row-list__text {
+  flex-basis: 120px;
+}
+.row-list__line > .pill--ghost {
+  padding-inline: var(--space-3);
+}
+.photo-frame__main-label {
+  gap: var(--space-1);
+}
 .row-list__toggles {
   display: flex;
   flex-wrap: wrap;
@@ -172,17 +181,18 @@
 /* ------------------------------------------------------------------ inventory (P-03) */
 .filters {
   display: grid;
-  grid-template-columns: minmax(240px, 2fr) repeat(6, minmax(120px, 1fr));
+  grid-template-columns: repeat(6, minmax(140px, 1fr));
   align-items: end;
   gap: var(--space-3);
   margin-bottom: var(--space-5);
 }
-@media (max-width: 1180px) {
+.filters .search-pill {
+  grid-column: 1 / -1;
+  height: 52px;
+}
+@media (max-width: 1000px) {
   .filters {
-    grid-template-columns: repeat(4, minmax(140px, 1fr));
-  }
-  .filters .search-pill {
-    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
   }
 }
 .search-pill {
@@ -208,6 +218,10 @@
   background: transparent;
   color: var(--text);
   font: inherit;
+}
+.search-pill input::placeholder {
+  color: var(--text-muted-glass);
+  opacity: 1;
 }
 .inventory__count {
   margin: 0 0 var(--space-3);
@@ -432,7 +446,6 @@
 }
 .detail-rows dt {
   color: var(--text-muted-glass);
-  text-transform: capitalize;
 }
 .detail-rows dd {
   margin: 0;
@@ -621,6 +634,12 @@
   flex: none;
   width: 25mm;
   height: 25mm;
+}
+@media screen {
+  .print-label {
+    outline: 1px dashed var(--hairline-panel);
+    outline-offset: -1px;
+  }
 }
 .print-label__text {
   display: flex;

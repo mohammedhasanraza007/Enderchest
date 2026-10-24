@@ -4,7 +4,9 @@ import { Link } from "react-router-dom";
 import type { LinkProps } from "react-router-dom";
 
 // The pill button (DESIGN.md 6.10). Three looks: primary (cream), secondary (glass), ghost.
-// A disabled button must say why, so `disabledReason` is required whenever `disabled` is true.
+// A disabled button must say why: `disabledReason` (shown beside it) is required whenever
+// `disabled` is true, unless `disabledReasonId` points at a reason already on screen (two buttons
+// that are disabled for the same reason share one line).
 
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 
@@ -14,8 +16,10 @@ interface Common {
   loading?: boolean;
   children: ReactNode;
 }
-type Enabled = { disabled?: false; disabledReason?: undefined };
-type Disabled = { disabled: true; disabledReason: string };
+type Enabled = { disabled?: false; disabledReason?: undefined; disabledReasonId?: undefined };
+type Disabled =
+  | { disabled: true; disabledReason: string; disabledReasonId?: undefined }
+  | { disabled: true; disabledReasonId: string; disabledReason?: undefined };
 
 export type ButtonProps = Common &
   (Enabled | Disabled) &
@@ -32,6 +36,7 @@ export function Button({
   loading = false,
   disabled,
   disabledReason,
+  disabledReasonId,
   children,
   className,
   onClick,
@@ -47,7 +52,7 @@ export function Button({
         className={classNames(variant, loading, className)}
         disabled={disabled}
         aria-busy={loading || undefined}
-        aria-describedby={disabled ? reasonId : rest["aria-describedby"]}
+        aria-describedby={disabled ? (disabledReasonId ?? reasonId) : rest["aria-describedby"]}
         onClick={(event) => {
           if (loading) {
             event.preventDefault(); // a second click while the first is running does nothing
@@ -59,7 +64,7 @@ export function Button({
         {children}
         {loading ? <span className="pill__dot" aria-hidden="true" /> : null}
       </button>
-      {disabled ? (
+      {disabled && disabledReason ? (
         <span id={reasonId} className="pill__reason">
           {disabledReason}
         </span>

@@ -146,7 +146,7 @@ function ItemView({ item }: { item: ItemDetail }) {
           </div>
           {Object.entries(item.attributes).map(([key, value]) => (
             <div key={key}>
-              <dt>{key.replace(/_/g, " ")}</dt>
+              <dt>{sentence(key)}</dt>
               <dd>{Array.isArray(value) ? value.join(", ") : value}</dd>
             </div>
           ))}
@@ -273,9 +273,9 @@ function PhotoFrame({ item }: { item: ItemDetail }) {
         {current && item.deleted_at === null ? (
           <>
             {current.is_primary ? (
-              <Button variant="ghost" disabled disabledReason="This is the main photo.">
-                <Star size={18} strokeWidth={1.5} aria-hidden="true" /> Main photo
-              </Button>
+              <span className="chip photo-frame__main-label">
+                <Star size={16} strokeWidth={1.5} aria-hidden="true" /> Main photo
+              </span>
             ) : (
               <Button
                 variant="ghost"
@@ -361,6 +361,12 @@ function LabelCard({ item, timeZone }: { item: ItemDetail; timeZone: string }) {
       </div>
     </GlassCard>
   );
+}
+
+/** "part_no" as "Part no": sentence case, the house style (DESIGN.md 12). */
+function sentence(key: string): string {
+  const words = key.replace(/_/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 const EVENT_WORDS: Record<string, string> = {

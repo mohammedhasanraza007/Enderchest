@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApiError, idempotencyKey } from "../api/client";
 import { api, fileUrl } from "../api/endpoints";
@@ -68,6 +68,7 @@ function ConfirmForm({ draft }: { draft: Draft }) {
   const [general, setGeneral] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [key] = useState(idempotencyKey);
+  const reasonId = useId();
   const latest = useRef(values);
   latest.current = values;
   useUnsavedGuard(saveState === "pending");
@@ -167,13 +168,18 @@ function ConfirmForm({ draft }: { draft: Draft }) {
               {general}
             </p>
           ) : null}
+          {firstProblem ? (
+            <p id={reasonId} className="pill__reason">
+              To save: {firstProblem}
+            </p>
+          ) : null}
           <div className="sheet-actions">
             {firstProblem ? (
               <>
-                <Button type="submit" disabled disabledReason={firstProblem}>
+                <Button type="submit" disabled disabledReasonId={reasonId}>
                   Save and add next
                 </Button>
-                <Button variant="secondary" disabled disabledReason={firstProblem}>
+                <Button variant="secondary" disabled disabledReasonId={reasonId}>
                   Save item
                 </Button>
               </>

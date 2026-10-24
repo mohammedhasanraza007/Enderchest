@@ -181,7 +181,7 @@ test("photos on the item page: add, make main, hide; the file stays on disk", as
   await expect(page.getByRole("button", { name: /^Photo 2/ })).toBeVisible();
   await page.getByRole("button", { name: /^Photo 2/ }).click();
   await page.getByRole("button", { name: "Make main photo" }).click();
-  await expect(page.getByRole("button", { name: "Main photo", exact: true })).toBeDisabled();
+  await expect(page.locator(".photo-frame__main-label")).toHaveText("Main photo");
   const before = await item(page, id);
   const main = before.photos.find((photo) => photo.is_primary)!;
   expect(before.photos[1]!.id).toBe(main.id);
@@ -248,7 +248,7 @@ test("Trash: restore, then permanent delete after a fresh backup", async ({ page
   const leaver = page.locator(".row-list__row", { hasText: "Leaver" });
   await leaver.getByRole("button", { name: "Delete permanently" }).click();
   const dialog = page.getByRole("dialog", { name: "Delete permanently?" });
-  await expect(dialog.getByText("Older backups still contain it")).toBeVisible();
+  await expect(dialog.getByText(/Older backups still/)).toBeVisible();
   await dialog.getByLabel("Type DELETE to confirm").fill("DELETE");
   await expect(dialog.getByRole("button", { name: "Delete permanently" })).toBeDisabled();
   await dialog.getByRole("button", { name: "Back up now" }).click();
