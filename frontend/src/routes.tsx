@@ -12,13 +12,15 @@ import { Inventory } from "./screens/Inventory";
 import { Item } from "./screens/Item";
 import { Labels } from "./screens/Labels";
 import { NotFound } from "./screens/NotFound";
+import { Notifications } from "./screens/Notifications";
 import { Settings } from "./screens/Settings";
+import { Tasks } from "./screens/Tasks";
 import { Trash } from "./screens/Trash";
 import { Welcome } from "./screens/Welcome";
 
-// Every route of the app (PAGES.md 1). After Phase 2: first run, Inventory, Item, Camera, the
-// review queue and confirm, Labels, Trash, Settings and the not-found card. `/` goes to Inventory
-// until the dashboard exists (Phase 5).
+// Every route of the app (PAGES.md 1). After Phase 4: first run, Inventory, Item, Camera, the
+// review queue and confirm, Labels, Trash, Tasks, Notifications, Settings and the not-found card.
+// `/` goes to Inventory until the dashboard exists (Phase 5).
 
 /**
  * Loads the profile once for every page and sends a first-time owner to /welcome. Everything
@@ -72,6 +74,8 @@ export function AppRoutes() {
           <Route path="/add/:draftId" element={<ConfirmDraft />} />
           <Route path="/labels" element={<Labels />} />
           <Route path="/trash" element={<Trash />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Route>

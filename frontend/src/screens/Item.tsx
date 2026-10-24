@@ -12,6 +12,7 @@ import { formatRupees } from "../lib/money";
 import { ErrorState } from "../patterns/ErrorState";
 import { ItemFormSheet } from "../patterns/ItemFormSheet";
 import { ExpiryChip, ItemPhoto, StateChip } from "../patterns/ItemVisuals";
+import { MaintenanceCard } from "../patterns/MaintenanceCard";
 import { OverflowMenu } from "../patterns/OverflowMenu";
 import { Button, LinkButton } from "../primitives/Button";
 import { GlassCard, InnerPanel } from "../primitives/Glass";
@@ -19,8 +20,9 @@ import { Skeleton } from "../primitives/Skeleton";
 import { useToast } from "../primitives/Toast";
 import { NotFound } from "./NotFound";
 
-// P-04, the item page: photos, the details card, the label card and the history. Lifecycle and
-// maintenance controls arrive in Phase 4; nothing for them is shown before then.
+// P-04, the item page: photos, the details card, the label card, the maintenance card and the
+// history. An active item can be used, marked expired or discarded (each with Undo); an item that
+// is not active says so and offers Reactivate (Phase 4).
 
 export function Item() {
   const { publicId = "" } = useParams();
@@ -97,9 +99,73 @@ function ItemView({ item }: { item: ItemDetail }) {
     }
   }
 
+  /** Use it, Mark expired, Discard: each answers with an event id for the 10 s Undo. */
+  async function lifecycle(action: "use" | "expire" | "discard") {
+    if (busy) return;
+    setBusy(true);
+    setFailure(null);
+    try {
+      const call =
+        action === "use"
+          ? api.markUsed(item.public_id)
+          : action === "expire"
+            ? api.markExpired(item.public_id)
+            : api.discard(item.public_id);
+      const { item: saved, event_id } = await call;
+      await refresh();
+      const word =
+        action === "use"
+          ? saved.state === "used"
+            ? "Used up."
+            : `Used one. ${saved.quantity} left.`
+          : action === "expire"
+            ? "Marked expired."
+            : "Discarded.";
+      toast({
+        message: word,
+        actionLabel: "Undo",
+        onAction: () =>
+          void api
+            .undo(event_id)
+            .then(refresh)
+            .catch((error: unknown) =>
+              toast({ message: error instanceof Error ? error.message : "Undo did not work." }),
+            ),
+      });
+    } catch (error) {
+      setFailure(error instanceof Error ? error.message : "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function reactivate() {
+    if (busy) return;
+    setBusy(true);
+    setFailure(null);
+    try {
+      await api.reactivate(item.public_id);
+      await refresh();
+      toast({ message: `${item.name} is active again.` });
+    } catch (error) {
+      setFailure(error instanceof Error ? error.message : "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const where = item.location_path.join(" › ");
+  const active = item.state === "active" && item.deleted_at === null;
   return (
     <div className="item-page">
+      {item.state !== "active" && item.deleted_at === null ? (
+        <InnerPanel className="item-banner" role="status">
+          <span>{STATE_BANNER[item.state]}</span>
+          <Button loading={busy} onClick={() => void reactivate()}>
+            Reactivate
+          </Button>
+        </InnerPanel>
+      ) : null}
       {item.deleted_at ? (
         <InnerPanel className="item-banner" role="status">
           <span>In Trash since {formatMoment(item.deleted_at, timeZone)}.</span>
@@ -117,6 +183,7 @@ function ItemView({ item }: { item: ItemDetail }) {
       <div className="item-page__media">
         <PhotoFrame item={item} />
         {item.label.no_label_needed ? null : <LabelCard item={item} timeZone={timeZone} />}
+        <MaintenanceCard item={item} />
         <History publicId={item.public_id} timeZone={timeZone} />
       </div>
 
@@ -152,6 +219,19 @@ function ItemView({ item }: { item: ItemDetail }) {
           ))}
         </dl>
         {item.notes ? <p className="item-card__notes">{item.notes}</p> : null}
+        {active ? (
+          <div className="item-card__actions">
+            <Button loading={busy} onClick={() => void lifecycle("use")}>
+              Use it
+            </Button>
+            <Button variant="secondary" onClick={() => void lifecycle("expire")}>
+              Mark expired
+            </Button>
+            <Button variant="secondary" onClick={() => void lifecycle("discard")}>
+              Discard
+            </Button>
+          </div>
+        ) : null}
         {item.deleted_at ? null : (
           <div className="item-card__actions">
             <Button onClick={() => setEditing(true)}>Edit</Button>
@@ -369,6 +449,12 @@ function sentence(key: string): string {
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
+const STATE_BANNER = {
+  used: "Used up. Reactivate it if you have more.",
+  expired: "Marked expired.",
+  discarded: "Discarded.",
+} as const;
+
 const EVENT_WORDS: Record<string, string> = {
   item_created: "Added",
   item_updated: "Edited",
@@ -378,6 +464,17 @@ const EVENT_WORDS: Record<string, string> = {
   photo_added: "Photo added",
   photo_removed: "Photo hidden",
   draft_committed: "Saved from the camera",
+  item_used: "Used",
+  item_expired_marked: "Marked expired",
+  item_discarded: "Discarded",
+  item_reactivated: "Reactivated",
+  task_created: "Maintenance plan made",
+  task_updated: "Maintenance plan changed",
+  task_deleted: "Maintenance plan deleted",
+  task_done: "Maintenance done",
+  task_skipped: "Inspection skipped",
+  inspection_done: "Inspected",
+  notification_resolved: "Reminder closed",
 };
 
 function eventWord(event: EventView): string {

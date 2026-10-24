@@ -63,3 +63,21 @@ export function formatDay(day: string, now: Date = new Date()): string {
   const sameYear = moment.getUTCFullYear() === now.getFullYear();
   return sameYear ? shown.format(moment) : `${shown.format(moment)} ${moment.getUTCFullYear()}`;
 }
+
+/** Today's date (YYYY-MM-DD) in a time zone, for a form's default due date. */
+export function localToday(timeZone: string, now: Date = new Date()): string {
+  // en-CA writes dates as YYYY-MM-DD.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now);
+}
+
+/** A calendar date moved by whole days (dates only, no time zone). */
+export function addDays(day: string, days: number): string {
+  const moment = new Date(`${day}T00:00:00Z`);
+  moment.setUTCDate(moment.getUTCDate() + days);
+  return moment.toISOString().slice(0, 10);
+}

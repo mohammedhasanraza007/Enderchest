@@ -3,18 +3,19 @@ import { Link, useLocation } from "react-router-dom";
 import type { Profile } from "../api/endpoints";
 import { BrandMark } from "../primitives/BrandMark";
 import { LiveBadge } from "../primitives/LiveBadge";
+import { Bell } from "./Bell";
 import { useCameraLive } from "./CameraLive";
 import { NameMenu } from "./NameMenu";
 
 // The floating navigation capsule (DESIGN.md 6.2): the logo and wordmark on the left, the pages
-// that work in the centre (after Phase 2: Inventory and Camera, PAGES.md 1, D-034), the name pill
-// on the right. The LIVE badge sits on Camera only while a stream runs. The bell arrives with
-// notifications (Phase 4).
+// that work in the centre (after Phase 4: Inventory, Camera and Tasks, PAGES.md 1, D-034), the
+// bell and the name pill on the right. The LIVE badge sits on Camera only while a stream runs.
 
 // Each tab also stands for the pages reached from it, so exactly one tab is lit (DESIGN.md 6.3).
 const PAGES = [
   { to: "/inventory", label: "Inventory", section: ["/items/", "/labels", "/trash"] },
   { to: "/camera", label: "Camera", section: ["/add"] },
+  { to: "/tasks", label: "Tasks", section: [] },
 ];
 
 /** "page" on the tab's own page, "true" on a page inside its section, else nothing. */
@@ -60,6 +61,7 @@ export function NavCapsule({ profile }: { profile: Profile & { name: string } })
           })}
         </ul>
         <div className="nav__end">
+          <Bell />
           <NameMenu profile={profile} />
         </div>
       </nav>

@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { api } from "./endpoints";
-import type { Draft, ItemFilters, ProfileUpdate } from "./endpoints";
+import type { Draft, ItemFilters, NotificationStatus, ProfileUpdate, TaskScope } from "./endpoints";
 
 export const keys = {
   health: ["health"] as const,
@@ -25,7 +25,14 @@ export const keys = {
   drafts: ["drafts"] as const,
   draft: (id: string) => ["draft", id] as const,
   gemini: ["gemini"] as const,
+  tasks: (scope: TaskScope) => ["tasks", scope] as const,
+  inspections: (publicId: string) => ["inspections", publicId] as const,
+  notifications: (status: NotificationStatus) => ["notifications", status] as const,
+  notificationCount: ["notification-count"] as const,
 };
+
+// The bell is read every minute and whenever the window gets focus (PAGES.md P-11).
+const NOTIFICATION_POLL_MS = 60_000;
 
 // A reading runs in the background (D-100); while one is pending the draft is read again every
 // second, and polling stops by itself once nothing is pending.
@@ -127,22 +134,65 @@ export function useDraft(id: string) {
   });
 }
 
+export function useSettings() {
+  return useQuery({ queryKey: keys.settings, queryFn: api.settings });
+}
+
+export function useTasks(scope: TaskScope) {
+  return useQuery({ queryKey: keys.tasks(scope), queryFn: () => api.tasks(scope) });
+}
+
+export function useInspections(publicId: string) {
+  return useQuery({
+    queryKey: keys.inspections(publicId),
+    queryFn: () => api.inspections(publicId),
+  });
+}
+
+export function useNotifications(status: NotificationStatus) {
+  return useQuery({
+    queryKey: keys.notifications(status),
+    queryFn: () => api.notifications(status),
+    refetchOnWindowFocus: true,
+  });
+}
+
+/** Open and unread counts, and the rows never shown as a browser notification. */
+export function useNotificationCount() {
+  return useQuery({
+    queryKey: keys.notificationCount,
+    queryFn: api.notificationCount,
+    refetchInterval: NOTIFICATION_POLL_MS,
+    refetchOnWindowFocus: true,
+  });
+}
+
 /** Gemini key state, model, mode and photo sharing (P-02, P-07). */
 export function useGemini() {
   return useQuery({ queryKey: keys.gemini, queryFn: api.gemini });
 }
 
 /**
- * After any inventory change: every list, item, history, count and draft is read again, so no
- * screen shows a stale number (DESIGN.md 13, counts match lists).
+ * After any inventory change: every list, item, history, count, draft, task and reminder is read
+ * again, so no screen shows a stale number (DESIGN.md 13, counts match lists). An item change can
+ * change what is due, so the reminders are part of it (D-107).
  */
 export function useRefreshInventory(): () => Promise<void> {
   const client = useQueryClient();
   return useCallback(async () => {
     await Promise.all(
-      [keys.items, ["item"], ["item-events"], keys.categories, keys.locations, keys.drafts].map(
-        (queryKey) => client.invalidateQueries({ queryKey }),
-      ),
+      [
+        keys.items,
+        ["item"],
+        ["item-events"],
+        keys.categories,
+        keys.locations,
+        keys.drafts,
+        ["tasks"],
+        ["inspections"],
+        ["notifications"],
+        keys.notificationCount,
+      ].map((queryKey) => client.invalidateQueries({ queryKey })),
     );
   }, [client]);
 }

@@ -693,3 +693,36 @@
     break-after: page;
   }
 }
+
+/* ------------------------------------------------------------------ tasks (P-10) */
+.task-row__title {
+  font-size: 1.0625rem;
+}
+.task-row__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.task-row__word {
+  color: var(--text-muted-glass);
+}
+.task-row__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ------------------------------------------------------------------ notifications (P-11) */
+.notifications-page__banner {
+  margin-bottom: var(--space-5);
+}
+.lead-days {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+.lead-days .field {
+  flex: 1 1 280px;
+}

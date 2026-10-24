@@ -41,6 +41,26 @@ export type GeminiTest = components["schemas"]["TestResult"];
 export type DeletedItem = components["schemas"]["DeletedItem"];
 export type LabelPrintedDone = components["schemas"]["LabelPrintedDone"];
 export type UndoDone = components["schemas"]["UndoDone"];
+export type LifecycleDone = components["schemas"]["LifecycleDone"];
+export type TaskView = components["schemas"]["TaskView"];
+export type TaskList = components["schemas"]["TaskList"];
+export type TaskCreate = components["schemas"]["TaskCreate"];
+export type TaskPatch = components["schemas"]["TaskPatch"];
+export type TaskDone = components["schemas"]["TaskDone"];
+export type TaskDeleted = components["schemas"]["TaskDeleted"];
+export type MaintenanceBody = components["schemas"]["MaintenanceBody"];
+export type MaintenanceView = NonNullable<ItemDetail["maintenance"]>;
+export type InspectionCreate = components["schemas"]["InspectionCreate"];
+export type InspectionView = components["schemas"]["InspectionView"];
+export type InspectionDone = components["schemas"]["InspectionDone"];
+export type InspectionList = components["schemas"]["InspectionList"];
+export type NotificationView = components["schemas"]["NotificationView"];
+export type NotificationPage = components["schemas"]["NotificationPage"];
+export type NotificationCount = components["schemas"]["NotificationCount"];
+export type NotificationAction = components["schemas"]["NotificationAction"];
+export type SnoozeOption = components["schemas"]["SnoozeBody"]["option"];
+export type TaskScope = "open" | "due" | "all" | "done";
+export type NotificationStatus = "open" | "snoozed" | "resolved" | "all";
 type ListQuery = NonNullable<operations["list_items_api_v1_items_get"]["parameters"]["query"]>;
 /** The Inventory filters (PAGES.md P-03); `limit` and `cursor` are added by the list hook. */
 export type ItemFilters = Partial<Omit<ListQuery, "limit" | "cursor">>;
@@ -138,6 +158,43 @@ export const api = {
   /** Re-read (`local`) or Improve with Gemini (`gemini`); poll the draft for the result. */
   extract: (id: string, engine: "local" | "gemini") =>
     request<ExtractQueued>("POST", `/api/v1/drafts/${encodeURIComponent(id)}/extract`, { engine }),
+
+  // Phase 4: lifecycle (API 2.10)
+  markUsed: (publicId: string, amount = 1) =>
+    request<LifecycleDone>("POST", `${item(publicId)}/use`, { amount }),
+  markExpired: (publicId: string) =>
+    request<LifecycleDone>("POST", `${item(publicId)}/mark-expired`),
+  discard: (publicId: string) => request<LifecycleDone>("POST", `${item(publicId)}/discard`),
+  reactivate: (publicId: string) => request<ItemDetail>("POST", `${item(publicId)}/reactivate`),
+
+  // Tasks, maintenance and inspections (API 2.11)
+  tasks: (scope: TaskScope, itemPublicId?: string) =>
+    request<TaskList>("GET", `/api/v1/tasks${query({ scope, item: itemPublicId })}`),
+  createTask: (body: TaskCreate, headers: Record<string, string>) =>
+    request<TaskView>("POST", "/api/v1/tasks", body, headers),
+  changeTask: (id: number, body: TaskPatch) =>
+    request<TaskView>("PATCH", `/api/v1/tasks/${id}`, body),
+  deleteTask: (id: number) => request<TaskDeleted>("DELETE", `/api/v1/tasks/${id}`),
+  taskDone: (id: number) => request<TaskDone>("POST", `/api/v1/tasks/${id}/done`),
+  taskSkip: (id: number) => request<TaskDone>("POST", `/api/v1/tasks/${id}/skip`),
+  putMaintenance: (publicId: string, body: MaintenanceBody) =>
+    request<TaskView>("PUT", `${item(publicId)}/maintenance`, body),
+  inspections: (publicId: string) =>
+    request<InspectionList>("GET", `${item(publicId)}/inspections`),
+  addInspection: (publicId: string, body: InspectionCreate) =>
+    request<InspectionDone>("POST", `${item(publicId)}/inspections`, body),
+
+  // Notifications (API 2.12)
+  notifications: (status: NotificationStatus) =>
+    request<NotificationPage>("GET", `/api/v1/notifications${query({ status })}`),
+  notificationCount: () => request<NotificationCount>("GET", "/api/v1/notifications/count"),
+  readAll: () => request<{ updated: number }>("POST", "/api/v1/notifications/read-all"),
+  readNotification: (id: number) => request<null>("POST", `/api/v1/notifications/${id}/read`),
+  snooze: (id: number, option: SnoozeOption) =>
+    request<NotificationView>("POST", `/api/v1/notifications/${id}/snooze`, { option }),
+  dismiss: (id: number) => request<NotificationView>("POST", `/api/v1/notifications/${id}/dismiss`),
+  /** Claim the browser alert for this row; only the first caller gets `claimed` (D-107). */
+  shown: (id: number) => request<{ claimed: boolean }>("POST", `/api/v1/notifications/${id}/shown`),
 
   gemini: () => request<GeminiStatus>("GET", "/api/v1/gemini"),
   setGeminiKey: (key: string) =>

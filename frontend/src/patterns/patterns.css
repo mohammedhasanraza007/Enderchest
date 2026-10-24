@@ -419,3 +419,127 @@
   align-items: center;
   gap: var(--space-3);
 }
+
+/* ------------------------------------------------------------------ bell (DESIGN.md 6.5) */
+.bell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.bell:hover {
+  background: var(--surface-pill-hover);
+}
+.bell.is-active {
+  border-color: var(--hairline-pill);
+  background: var(--surface-nav-active);
+}
+.bell__badge {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--clay-badge);
+  color: var(--on-clay);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ small form helpers */
+.plain-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.tight-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--hairline-panel);
+  border-radius: var(--radius-panel);
+  background: var(--surface-panel);
+  list-style: none;
+}
+.picker-list__option {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.picker-list__option:hover {
+  background: var(--surface-pill);
+}
+.picker-list .section-note {
+  padding: var(--space-2) var(--space-4);
+}
+
+/* ------------------------------------------------------------------ reminder rows (6.9) */
+.reminder-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.reminder {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--hairline-panel);
+}
+.reminder:first-child {
+  border-top: 0;
+  padding-top: var(--space-1);
+}
+.reminder:last-child {
+  padding-bottom: var(--space-1);
+}
+.reminder__text {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+.reminder__text a {
+  color: var(--text);
+}
+.reminder__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.reminder__actions > .pill {
+  min-width: 128px;
+}
+
+/* ------------------------------------------------------------------ maintenance card (P-04) */
+.maintenance-card__suggested {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
