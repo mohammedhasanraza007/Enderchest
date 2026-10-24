@@ -47,7 +47,11 @@ export function MaintenanceCard({ item }: { item: ItemDetail }) {
       <div className="stack">
         {plan === null ? (
           planning || opensByDefault ? (
-            <PlanForm item={item} onDone={() => setPlanning(false)} />
+            <PlanForm
+              item={item}
+              onDone={() => setPlanning(false)}
+              canCancel={planning && !opensByDefault}
+            />
           ) : (
             <div className="tight-stack">
               <p className="section-note">No inspection plan yet.</p>
@@ -59,13 +63,18 @@ export function MaintenanceCard({ item }: { item: ItemDetail }) {
             </div>
           )
         ) : planning ? (
-          <PlanForm item={item} onDone={() => setPlanning(false)} />
+          <PlanForm item={item} onDone={() => setPlanning(false)} canCancel />
         ) : (
-          <PlanSummary item={item} onChange={() => setPlanning(true)} />
+          <PlanSummary item={item} />
         )}
-        {active ? (
-          <div>
-            <Button onClick={() => setInspecting(true)}>Inspect now</Button>
+        {active || (plan !== null && !planning) ? (
+          <div className="chip-row">
+            {active ? <Button onClick={() => setInspecting(true)}>Inspect now</Button> : null}
+            {plan !== null && !planning ? (
+              <Button variant="secondary" onClick={() => setPlanning(true)}>
+                Change plan
+              </Button>
+            ) : null}
           </div>
         ) : null}
         <Inspections item={item} />
@@ -76,7 +85,7 @@ export function MaintenanceCard({ item }: { item: ItemDetail }) {
 }
 
 /** The saved plan: the toggle, how often, the next date, and Confirm for a Gemini suggestion. */
-function PlanSummary({ item, onChange }: { item: ItemDetail; onChange: () => void }) {
+function PlanSummary({ item }: { item: ItemDetail }) {
   const plan = item.maintenance!;
   const refresh = useRefreshInventory();
   const toast = useToast();
@@ -133,11 +142,6 @@ function PlanSummary({ item, onChange }: { item: ItemDetail; onChange: () => voi
           </Button>
         </InnerPanel>
       ) : null}
-      <div>
-        <Button variant="ghost" onClick={onChange}>
-          Change plan
-        </Button>
-      </div>
       {failure ? (
         <p role="alert" className="form-failure">
           {failure}
@@ -148,7 +152,15 @@ function PlanSummary({ item, onChange }: { item: ItemDetail; onChange: () => voi
 }
 
 /** Every N days and the first due date; Gemini's interval can fill it, labelled as unverified. */
-function PlanForm({ item, onDone }: { item: ItemDetail; onDone: () => void }) {
+function PlanForm({
+  item,
+  onDone,
+  canCancel,
+}: {
+  item: ItemDetail;
+  onDone: () => void;
+  canCancel: boolean;
+}) {
   const timeZone = useProfile().data?.timezone ?? "UTC";
   const today = localToday(timeZone);
   const plan = item.maintenance;
@@ -205,6 +217,9 @@ function PlanForm({ item, onDone }: { item: ItemDetail; onDone: () => void }) {
         if (!problem) save();
       }}
     >
+      {plan === null ? (
+        <p className="section-note">No inspection plan yet. Choose how often to inspect it.</p>
+      ) : null}
       {suggestion && !fromGemini && String(suggestion.interval_days) !== every ? (
         <InnerPanel className="maintenance-card__suggested">
           <StatusChip kind="info">suggested, unverified</StatusChip>
@@ -255,7 +270,7 @@ function PlanForm({ item, onDone }: { item: ItemDetail; onDone: () => void }) {
             Save plan
           </Button>
         )}
-        {plan !== null ? (
+        {canCancel ? (
           <Button variant="ghost" onClick={onDone}>
             Cancel
           </Button>

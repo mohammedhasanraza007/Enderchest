@@ -234,7 +234,10 @@ function ItemView({ item }: { item: ItemDetail }) {
         ) : null}
         {item.deleted_at ? null : (
           <div className="item-card__actions">
-            <Button onClick={() => setEditing(true)}>Edit</Button>
+            {/* Beside Use it, Edit steps back so the card has one main action. */}
+            <Button variant={active ? "secondary" : "primary"} onClick={() => setEditing(true)}>
+              Edit
+            </Button>
             <OverflowMenu
               label="More item actions"
               actions={[

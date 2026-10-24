@@ -141,9 +141,9 @@ test("Settings -> Notifications saves the lead days and says the honest limit", 
     "Reminders appear here and as browser notifications while an Enderchest tab is open.",
   );
   await expect(section.getByRole("button", { name: "Save" })).toBeDisabled();
-  await section.getByLabel("Warn me this many days before an expiry date").fill("20");
+  await section.getByLabel("Warn me this many days before expiry").fill("20");
   await expect(section).toContainText("Choose 1 to 14 days.");
-  await section.getByLabel("Warn me this many days before an expiry date").fill("7");
+  await section.getByLabel("Warn me this many days before expiry").fill("7");
   await section.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("You will be warned 7 days before.")).toBeVisible();
   await expect(page.getByRole("link", { name: "Notifications, 1 open" })).toBeVisible();

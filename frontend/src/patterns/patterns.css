@@ -462,6 +462,10 @@
   padding: 0;
   border: 0;
 }
+.plain-fieldset > legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+}
 .tight-stack {
   display: flex;
   flex-direction: column;

@@ -80,7 +80,7 @@ function LeadDays({ saved }: { saved: number }) {
   return (
     <form className="lead-days" onSubmit={submit} noValidate>
       <Input
-        label="Warn me this many days before an expiry date"
+        label="Warn me this many days before expiry"
         inputMode="numeric"
         value={value}
         onChange={(event) => {
