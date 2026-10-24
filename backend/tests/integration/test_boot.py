@@ -332,3 +332,40 @@ def test_the_lifecycle_migration_upgrades_a_v2_database_with_items(
     assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
     conn.close()
     assert any(p.name.startswith("pre-migration-v2-to-v3-") for p in settings.backups_dir.iterdir())
+
+
+def test_the_ownership_migration_upgrades_a_v3_database_with_a_photo(
+        settings: Settings, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """Phase 6: a Phase 4/5 database (an item with a photo) gains `savings` after a verified
+    pre-migration backup; the item and its photo row are kept and have no embedding yet."""
+    from app.db import migrate
+
+    real = migrate.MIGRATIONS_DIR
+    folder = v1_database(settings, tmp_path, monkeypatch)
+    for name in ("0002_inventory.sql", "0003_lifecycle.sql"):
+        (folder / name).write_text((real / name).read_text())
+    with Stack(settings) as stack:  # migrates to version 3
+        assert health(stack)["status"] == "ok"
+    conn = sqlite3.connect(settings.db_path)
+    conn.execute(
+        "INSERT INTO items (user_id, public_id, name, expiry_mode, created_at, updated_at, "
+        "state_changed_at) VALUES (1, 'ENDR-7K2M9QXA', '13 mm spanner', 'none', "
+        "'2026-10-01T00:00:00Z', '2026-10-01T00:00:00Z', '2026-10-01T00:00:00Z')")
+    conn.execute(
+        "INSERT INTO photos (id, user_id, item_id, path, thumb_path, width, height, bytes, sha256,"
+        " mime, created_at) VALUES ('p1', 1, 1, 'p1.jpg', 'p1.jpg', 10, 10, 1, 'x', 'image/jpeg',"
+        " '2026-10-01T00:00:00Z')")
+    conn.commit()
+    conn.close()
+    (folder / "0004_ownership.sql").write_text((real / "0004_ownership.sql").read_text())
+
+    with Stack(settings) as stack:
+        assert health(stack)["status"] == "ok"
+        assert stack.client.get("/api/v1/items/ENDR-7K2M9QXA").json()["name"] == "13 mm spanner"
+        assert stack.client.get("/api/v1/savings").json()["total_paise"] == 0
+    conn = sqlite3.connect(settings.db_path)
+    assert conn.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "4"
+    assert conn.execute("SELECT embedding FROM photos WHERE id = 'p1'").fetchone() == (None,)
+    assert conn.execute("PRAGMA foreign_key_check").fetchall() == []
+    conn.close()
+    assert any(p.name.startswith("pre-migration-v3-to-v4-") for p in settings.backups_dir.iterdir())

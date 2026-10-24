@@ -751,6 +751,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ownership/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check
+         * @description Read-only: proposes candidates and writes nothing (spec gate 4).
+         */
+        post: operations["check_api_v1_ownership_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/photos/{photo_id}": {
         parameters: {
             query?: never;
@@ -815,6 +835,41 @@ export interface paths {
         put: operations["put_profile_api_v1_profile_put"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/savings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Savings */
+        get: operations["list_savings_api_v1_savings_get"];
+        put?: never;
+        /** Add Saving */
+        post: operations["add_saving_api_v1_savings_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/savings/{saving_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Saving */
+        delete: operations["remove_saving_api_v1_savings__saving_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -993,6 +1048,13 @@ export interface components {
             /** Image */
             image: string;
         };
+        /** Body_check_api_v1_ownership_check_post */
+        Body_check_api_v1_ownership_check_post: {
+            /** Image */
+            image?: string | null;
+            /** Text */
+            text?: string | null;
+        };
         /** Body_create_drafts_api_v1_drafts_post */
         Body_create_drafts_api_v1_drafts_post: {
             /** Images[] */
@@ -1059,6 +1121,53 @@ export interface components {
             maintenance_default?: boolean | null;
             /** Name */
             name?: string | null;
+        };
+        /** CheckCandidate */
+        CheckCandidate: {
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "high" | "medium" | "low";
+            /** Location Path */
+            location_path: string[];
+            /** Name */
+            name: string;
+            /** Price Paise */
+            price_paise: number | null;
+            /** Primary Photo Id */
+            primary_photo_id: string | null;
+            /** Public Id */
+            public_id: string;
+            /** Quantity */
+            quantity: number;
+            /** Reasons */
+            reasons: string[];
+            /** Score */
+            score: number;
+        };
+        /** CheckEngine */
+        CheckEngine: {
+            /** Gemini Used */
+            gemini_used: boolean;
+            /** Ocr */
+            ocr: string | null;
+        };
+        /** CheckQuery */
+        CheckQuery: {
+            /** Fields */
+            fields: {
+                [key: string]: string;
+            };
+            /** Lines */
+            lines: string[];
+        };
+        /** CheckResult */
+        CheckResult: {
+            /** Candidates */
+            candidates: components["schemas"]["CheckCandidate"][];
+            engine: components["schemas"]["CheckEngine"];
+            query: components["schemas"]["CheckQuery"];
         };
         /** Dashboard */
         Dashboard: {
@@ -1866,12 +1975,67 @@ export interface components {
             /** Label */
             label: string;
         };
+        /**
+         * SavingCreate
+         * @description A saving exists only after the owner confirms "I didn't buy it" and types the price.
+         */
+        SavingCreate: {
+            /** Item Name */
+            item_name?: string | null;
+            /** Item Public Id */
+            item_public_id?: string | null;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /** Price Paise */
+            price_paise: number;
+        };
+        /** SavingCreated */
+        SavingCreated: {
+            /** Event Id */
+            event_id: number;
+            /** Id */
+            id: number;
+        };
+        /** SavingRemoved */
+        SavingRemoved: {
+            /** Event Id */
+            event_id: number;
+        };
+        /** SavingView */
+        SavingView: {
+            /** Id */
+            id: number;
+            /** Item Name */
+            item_name: string;
+            /** Item Public Id */
+            item_public_id: string | null;
+            /** Local Date */
+            local_date: string;
+            /** Note */
+            note: string;
+            /** Price Paise */
+            price_paise: number;
+        };
         /** Savings */
         Savings: {
             /** Month Paise */
             month_paise: number;
             /** Pill Date */
             pill_date: string | null;
+        };
+        /** SavingsPage */
+        SavingsPage: {
+            /** Items */
+            items: components["schemas"]["SavingView"][];
+            /** Month Paise */
+            month_paise: number;
+            /** Next Cursor */
+            next_cursor: string | null;
+            /** Total Paise */
+            total_paise: number;
         };
         /**
          * SettingsPatch
@@ -3788,6 +3952,39 @@ export interface operations {
             };
         };
     };
+    check_api_v1_ownership_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_check_api_v1_ownership_check_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     hide_photo_api_v1_photos__photo_id__delete: {
         parameters: {
             query?: never;
@@ -3915,6 +4112,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Profile"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_savings_api_v1_savings_get: {
+        parameters: {
+            query?: {
+                period?: "month" | "all";
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavingsPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_saving_api_v1_savings_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "idempotency-key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavingCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavingCreated"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_saving_api_v1_savings__saving_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                saving_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavingRemoved"];
                 };
             };
             /** @description Validation Error */

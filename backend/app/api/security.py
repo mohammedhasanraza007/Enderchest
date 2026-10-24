@@ -22,6 +22,7 @@ MULTIPART_PATHS: tuple[tuple[re.Pattern[str], int], ...] = (
     (re.compile(r"^/api/v1/items/[^/]+/photos$"), _ONE_IMAGE),
     (re.compile(r"^/api/v1/drafts$"), 20 * 12 * MB + MB),
     (re.compile(r"^/api/v1/drafts/[^/]+/photos$"), _ONE_IMAGE),
+    (re.compile(r"^/api/v1/ownership/check$"), _ONE_IMAGE),
 )
 
 

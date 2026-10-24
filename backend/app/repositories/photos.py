@@ -49,3 +49,29 @@ def move_to_item(conn: sqlite3.Connection, user_id: int, draft_id: str, item_id:
 def referenced_paths(conn: sqlite3.Connection) -> list[str]:
     """Every stored photo path, hidden ones too, for the restore report of missing files."""
     return [row["path"] for row in conn.execute("SELECT path FROM photos")]
+
+
+def needing_embedding(conn: sqlite3.Connection, user_id: int, model: str,
+                      limit: int) -> list[sqlite3.Row]:
+    """Live photos with no vector, or one from another model (the background job's work)."""
+    return conn.execute(
+        "SELECT id, path FROM photos WHERE user_id = ? AND deleted_at IS NULL "
+        "AND (embedding_model IS NULL OR embedding_model != ?) ORDER BY created_at, rowid "
+        "LIMIT ?", (user_id, model, limit)).fetchall()
+
+
+def set_embedding(conn: sqlite3.Connection, user_id: int, photo_id: str, blob: bytes,
+                  model: str) -> None:
+    conn.execute("UPDATE photos SET embedding = ?, embedding_model = ? "
+                 "WHERE user_id = ? AND id = ?",
+                 (blob, model, user_id, photo_id))
+
+
+def active_item_embeddings(conn: sqlite3.Connection, user_id: int,
+                           model: str) -> list[sqlite3.Row]:
+    """Vectors of live photos of active items outside Trash (the ownership check's pool)."""
+    return conn.execute(
+        "SELECT p.item_id, p.embedding FROM photos p JOIN items i ON i.id = p.item_id "
+        "WHERE p.user_id = ? AND p.deleted_at IS NULL AND length(p.embedding) > 0 "
+        "AND p.embedding_model = ? AND i.state = 'active' AND i.deleted_at IS NULL",
+        (user_id, model)).fetchall()

@@ -12,11 +12,12 @@ from ..errors import AppError
 from ..repositories import events as events_repo
 from . import items as items_service
 from . import lifecycle as lifecycle_service
+from . import savings as savings_service
 from . import tasks as tasks_service
 
 UNDO_WINDOW = timedelta(seconds=60)
 _TASK_KINDS = {"task_done", "task_skipped", "task_deleted"}
-UNDOABLE = {"item_deleted"} | lifecycle_service.UNDOABLE | _TASK_KINDS
+UNDOABLE = {"item_deleted"} | lifecycle_service.UNDOABLE | _TASK_KINDS | savings_service.UNDOABLE
 
 
 def undo(conn: sqlite3.Connection, user_id: int, event_id: int) -> None:
@@ -33,5 +34,7 @@ def undo(conn: sqlite3.Connection, user_id: int, event_id: int) -> None:
         items_service.undo_delete(conn, user_id, event)
     elif event["kind"] in lifecycle_service.UNDOABLE:
         lifecycle_service.undo(conn, user_id, event)
+    elif event["kind"] in savings_service.UNDOABLE:
+        savings_service.undo(conn, user_id, event)
     else:
         tasks_service.undo_task_event(conn, user_id, event)

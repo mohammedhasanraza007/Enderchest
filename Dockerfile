@@ -37,6 +37,12 @@ WORKDIR /app
 # Dependencies first, so editing code does not reinstall them.
 COPY backend/requirements.lock ./requirements.lock
 RUN pip install -r requirements.lock
+# The provisional image-embedding model (D-115), fetched once and checked by its sha256; it is
+# read-only data like the OCR models, so the image works with no network at run time.
+ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a \
+    https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx \
+    /opt/models/dinov2-small.onnx
+RUN chmod 0644 /opt/models/dinov2-small.onnx
 
 # ---- runtime --------------------------------------------------------------------------------
 FROM python-base AS runtime

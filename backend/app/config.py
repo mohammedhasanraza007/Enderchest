@@ -12,6 +12,8 @@ DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite"  # D-102
 DEFAULT_GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta"
 # The Ryzen 5 5500 has 6 cores: 4 reading threads leave room for the API and the browser.
 DEFAULT_OCR_THREADS = 4
+# The provisional image-embedding model baked into the image (D-115).
+DEFAULT_EMBEDDING_MODEL = Path("/opt/models/dinov2-small.onnx")
 
 
 @dataclass(frozen=True)
@@ -25,6 +27,7 @@ class Settings:
     gemini_model_default: str = DEFAULT_GEMINI_MODEL  # ENDERCHEST_GEMINI_MODEL
     gemini_url: str = DEFAULT_GEMINI_URL  # ENDERCHEST_GEMINI_URL; tests point it at a closed port
     ocr_threads: int = DEFAULT_OCR_THREADS  # ENDERCHEST_OCR_THREADS
+    embedding_model: Path = DEFAULT_EMBEDDING_MODEL  # ENDERCHEST_EMBEDDING_MODEL
     frontend_dir: Path = DEFAULT_FRONTEND_DIR  # the built frontend, copied into the image
     build_date: str | None = None  # ENDERCHEST_BUILD_DATE, set by build.bat; None if not recorded
 
@@ -77,6 +80,7 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
         gemini_model_default=env.get("ENDERCHEST_GEMINI_MODEL") or DEFAULT_GEMINI_MODEL,
         gemini_url=env.get("ENDERCHEST_GEMINI_URL") or DEFAULT_GEMINI_URL,
         ocr_threads=int(env.get("ENDERCHEST_OCR_THREADS") or DEFAULT_OCR_THREADS),
+        embedding_model=Path(env.get("ENDERCHEST_EMBEDDING_MODEL") or DEFAULT_EMBEDDING_MODEL),
         frontend_dir=Path(env.get("ENDERCHEST_FRONTEND_DIR", str(DEFAULT_FRONTEND_DIR))),
         build_date=(env.get("ENDERCHEST_BUILD_DATE") or None),
     )

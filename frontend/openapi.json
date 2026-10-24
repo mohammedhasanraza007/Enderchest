@@ -180,6 +180,35 @@
         "title": "Body_add_photo_api_v1_items__public_id__photos_post",
         "type": "object"
       },
+      "Body_check_api_v1_ownership_check_post": {
+        "properties": {
+          "image": {
+            "anyOf": [
+              {
+                "contentMediaType": "application/octet-stream",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          }
+        },
+        "title": "Body_check_api_v1_ownership_check_post",
+        "type": "object"
+      },
       "Body_create_drafts_api_v1_drafts_post": {
         "properties": {
           "images[]": {
@@ -364,6 +393,157 @@
           }
         },
         "title": "CategoryPatch",
+        "type": "object"
+      },
+      "CheckCandidate": {
+        "properties": {
+          "level": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "location_path": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Location Path",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "price_paise": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Paise"
+          },
+          "primary_photo_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Photo Id"
+          },
+          "public_id": {
+            "title": "Public Id",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "score": {
+            "title": "Score",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "public_id",
+          "name",
+          "primary_photo_id",
+          "location_path",
+          "quantity",
+          "price_paise",
+          "score",
+          "level",
+          "reasons"
+        ],
+        "title": "CheckCandidate",
+        "type": "object"
+      },
+      "CheckEngine": {
+        "properties": {
+          "gemini_used": {
+            "title": "Gemini Used",
+            "type": "boolean"
+          },
+          "ocr": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ocr"
+          }
+        },
+        "required": [
+          "ocr",
+          "gemini_used"
+        ],
+        "title": "CheckEngine",
+        "type": "object"
+      },
+      "CheckQuery": {
+        "properties": {
+          "fields": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "object"
+          },
+          "lines": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Lines",
+            "type": "array"
+          }
+        },
+        "required": [
+          "lines",
+          "fields"
+        ],
+        "title": "CheckQuery",
+        "type": "object"
+      },
+      "CheckResult": {
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/CheckCandidate"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/CheckEngine"
+          },
+          "query": {
+            "$ref": "#/components/schemas/CheckQuery"
+          }
+        },
+        "required": [
+          "query",
+          "candidates",
+          "engine"
+        ],
+        "title": "CheckResult",
         "type": "object"
       },
       "Dashboard": {
@@ -3159,6 +3339,126 @@
         "title": "RoadEvent",
         "type": "object"
       },
+      "SavingCreate": {
+        "additionalProperties": false,
+        "description": "A saving exists only after the owner confirms \"I didn't buy it\" and types the price.",
+        "properties": {
+          "item_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Name"
+          },
+          "item_public_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Public Id"
+          },
+          "note": {
+            "default": "",
+            "title": "Note",
+            "type": "string"
+          },
+          "price_paise": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 1000000000000.0,
+            "title": "Price Paise",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "price_paise"
+        ],
+        "title": "SavingCreate",
+        "type": "object"
+      },
+      "SavingCreated": {
+        "properties": {
+          "event_id": {
+            "title": "Event Id",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "event_id"
+        ],
+        "title": "SavingCreated",
+        "type": "object"
+      },
+      "SavingRemoved": {
+        "properties": {
+          "event_id": {
+            "title": "Event Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "event_id"
+        ],
+        "title": "SavingRemoved",
+        "type": "object"
+      },
+      "SavingView": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "item_name": {
+            "title": "Item Name",
+            "type": "string"
+          },
+          "item_public_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Public Id"
+          },
+          "local_date": {
+            "title": "Local Date",
+            "type": "string"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "price_paise": {
+            "title": "Price Paise",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "item_name",
+          "item_public_id",
+          "price_paise",
+          "local_date",
+          "note"
+        ],
+        "title": "SavingView",
+        "type": "object"
+      },
       "Savings": {
         "properties": {
           "month_paise": {
@@ -3182,6 +3482,44 @@
           "pill_date"
         ],
         "title": "Savings",
+        "type": "object"
+      },
+      "SavingsPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SavingView"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "month_paise": {
+            "title": "Month Paise",
+            "type": "integer"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "total_paise": {
+            "title": "Total Paise",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total_paise",
+          "month_paise",
+          "items",
+          "next_cursor"
+        ],
+        "title": "SavingsPage",
         "type": "object"
       },
       "SettingsPatch": {
@@ -6114,6 +6452,44 @@
         "summary": "Snooze"
       }
     },
+    "/api/v1/ownership/check": {
+      "post": {
+        "description": "Read-only: proposes candidates and writes nothing (spec gate 4).",
+        "operationId": "check_api_v1_ownership_check_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_check_api_v1_ownership_check_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Check"
+      }
+    },
     "/api/v1/photos/{photo_id}": {
       "delete": {
         "operationId": "hide_photo_api_v1_photos__photo_id__delete",
@@ -6262,6 +6638,171 @@
           }
         },
         "summary": "Put Profile"
+      }
+    },
+    "/api/v1/savings": {
+      "get": {
+        "operationId": "list_savings_api_v1_savings_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "period",
+            "required": false,
+            "schema": {
+              "default": "month",
+              "enum": [
+                "month",
+                "all"
+              ],
+              "title": "Period",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingsPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Savings"
+      },
+      "post": {
+        "operationId": "add_saving_api_v1_savings_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "idempotency-key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavingCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingCreated"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Saving"
+      }
+    },
+    "/api/v1/savings/{saving_id}": {
+      "delete": {
+        "operationId": "remove_saving_api_v1_savings__saving_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "saving_id",
+            "required": true,
+            "schema": {
+              "title": "Saving Id",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingRemoved"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Remove Saving"
       }
     },
     "/api/v1/settings": {

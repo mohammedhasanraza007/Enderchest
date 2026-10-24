@@ -26,6 +26,7 @@ from ..repositories import notifications as notifications_repo
 from ..repositories import users as users_repo
 from . import notifications as notifications_service
 from . import profile as profile_service
+from . import savings as savings_service
 from .catalog import location_paths
 
 ATTENTION_ROWS = 3
@@ -140,7 +141,8 @@ def dashboard(conn: sqlite3.Connection, user_id: int) -> dict:
         "attention": {"rows": [notifications_service.view(row, today) for row in rows],
                       "total": total},
         "road": counted.road(DASHBOARD_ROAD_DAYS),
-        "savings": None, "streak": None,  # Phase 6 and later (spec, API 2.13)
+        "savings": savings_service.for_dashboard(conn, user_id, today),
+        "streak": None,  # a later phase (API 2.13)
     }
 
 

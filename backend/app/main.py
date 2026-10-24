@@ -19,6 +19,7 @@ from .api import (
     labels,
     lifecycle,
     notifications,
+    ownership,
     pages,
     photos,
     profile,
@@ -31,6 +32,7 @@ from .config import Settings, load_settings
 from .errors import install_error_handlers
 from .idempotency import IdempotencyStore
 from .scheduler.backups import BackupScheduler
+from .scheduler.embeddings import Embedder
 from .scheduler.reconcile import Reconciler
 from .services.test_support import WriteLoop
 
@@ -43,17 +45,20 @@ def create_app(settings: Settings | None = None,
     write_loop = WriteLoop()
     scheduler = BackupScheduler(manager)
     reconciler = Reconciler(manager)
+    embedder = Embedder(manager)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         # The checks run in a thread so /health answers "starting" while they work.
         threading.Thread(target=manager.run_checks, name="boot-checks", daemon=True).start()
-        tasks = ([asyncio.create_task(scheduler.run()), asyncio.create_task(reconciler.run())]
+        tasks = ([asyncio.create_task(scheduler.run()), asyncio.create_task(reconciler.run()),
+                  asyncio.create_task(embedder.run())]
                  if start_scheduler else [])
         yield
         if tasks:
             await scheduler.stop()
             await reconciler.stop()
+            await embedder.stop()
             await asyncio.gather(*tasks)  # a backup already running finishes first
         write_loop.stop()
         manager.shutdown()
@@ -62,6 +67,7 @@ def create_app(settings: Settings | None = None,
                   lifespan=lifespan)
     app.state.manager = manager
     app.state.reconciler = reconciler
+    app.state.embedder = embedder
     app.state.write_loop = write_loop
     app.state.idempotency = IdempotencyStore()
     install_error_handlers(app)
@@ -80,6 +86,7 @@ def create_app(settings: Settings | None = None,
     app.include_router(lifecycle.router)
     app.include_router(notifications.router)
     app.include_router(dashboard.router)
+    app.include_router(ownership.router)
     if settings.env == "test":
         app.include_router(test_support.router)
     app.include_router(pages.router)  # last: its catch-all must never shadow an API route
