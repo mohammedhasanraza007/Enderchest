@@ -1,6 +1,27 @@
 {
   "components": {
     "schemas": {
+      "Attention": {
+        "properties": {
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/NotificationView"
+            },
+            "title": "Rows",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rows",
+          "total"
+        ],
+        "title": "Attention",
+        "type": "object"
+      },
       "BackupItem": {
         "properties": {
           "at": {
@@ -176,6 +197,57 @@
         "title": "Body_create_drafts_api_v1_drafts_post",
         "type": "object"
       },
+      "BreakdownEntry": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "item",
+              "task"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "public_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Public Id"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "public_id",
+          "task_id",
+          "note"
+        ],
+        "title": "BreakdownEntry",
+        "type": "object"
+      },
       "Category": {
         "properties": {
           "expires_default": {
@@ -292,6 +364,79 @@
           }
         },
         "title": "CategoryPatch",
+        "type": "object"
+      },
+      "Dashboard": {
+        "properties": {
+          "attention": {
+            "$ref": "#/components/schemas/Attention"
+          },
+          "greeting": {
+            "$ref": "#/components/schemas/Greeting"
+          },
+          "item_count": {
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "rings": {
+            "$ref": "#/components/schemas/Rings"
+          },
+          "road": {
+            "$ref": "#/components/schemas/Road"
+          },
+          "savings": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Savings"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "streak": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Streak"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "subtitle": {
+            "title": "Subtitle",
+            "type": "string"
+          },
+          "today": {
+            "title": "Today",
+            "type": "string"
+          }
+        },
+        "required": [
+          "today",
+          "greeting",
+          "subtitle",
+          "item_count",
+          "score",
+          "rings",
+          "attention",
+          "road",
+          "savings",
+          "streak"
+        ],
+        "title": "Dashboard",
         "type": "object"
       },
       "DeletedItem": {
@@ -981,6 +1126,30 @@
           "share_images"
         ],
         "title": "GeminiStatus",
+        "type": "object"
+      },
+      "Greeting": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "part": {
+            "enum": [
+              "morning",
+              "afternoon",
+              "evening",
+              "night"
+            ],
+            "title": "Part",
+            "type": "string"
+          }
+        },
+        "required": [
+          "part",
+          "name"
+        ],
+        "title": "Greeting",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -2761,6 +2930,260 @@
         "title": "RestoreBody",
         "type": "object"
       },
+      "Ring": {
+        "properties": {
+          "den": {
+            "title": "Den",
+            "type": "integer"
+          },
+          "num": {
+            "title": "Num",
+            "type": "integer"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "value",
+          "num",
+          "den"
+        ],
+        "title": "Ring",
+        "type": "object"
+      },
+      "RingBreakdown": {
+        "properties": {
+          "den": {
+            "title": "Den",
+            "type": "integer"
+          },
+          "failing": {
+            "items": {
+              "$ref": "#/components/schemas/BreakdownEntry"
+            },
+            "title": "Failing",
+            "type": "array"
+          },
+          "num": {
+            "title": "Num",
+            "type": "integer"
+          },
+          "qualifying": {
+            "items": {
+              "$ref": "#/components/schemas/BreakdownEntry"
+            },
+            "title": "Qualifying",
+            "type": "array"
+          },
+          "ring": {
+            "enum": [
+              "documented",
+              "located",
+              "fresh",
+              "on_time"
+            ],
+            "title": "Ring",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "ring",
+          "value",
+          "num",
+          "den",
+          "qualifying",
+          "failing"
+        ],
+        "title": "RingBreakdown",
+        "type": "object"
+      },
+      "Rings": {
+        "properties": {
+          "documented": {
+            "$ref": "#/components/schemas/Ring"
+          },
+          "fresh": {
+            "$ref": "#/components/schemas/Ring"
+          },
+          "located": {
+            "$ref": "#/components/schemas/Ring"
+          },
+          "on_time": {
+            "$ref": "#/components/schemas/Ring"
+          }
+        },
+        "required": [
+          "documented",
+          "located",
+          "fresh",
+          "on_time"
+        ],
+        "title": "Rings",
+        "type": "object"
+      },
+      "Road": {
+        "properties": {
+          "end": {
+            "title": "End",
+            "type": "string"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/RoadEvent"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "start": {
+            "title": "Start",
+            "type": "string"
+          },
+          "truck_date": {
+            "title": "Truck Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "events",
+          "truck_date"
+        ],
+        "title": "Road",
+        "type": "object"
+      },
+      "RoadEntry": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "expiry",
+              "task"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "public_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Public Id"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          }
+        },
+        "required": [
+          "kind",
+          "label",
+          "public_id",
+          "task_id"
+        ],
+        "title": "RoadEntry",
+        "type": "object"
+      },
+      "RoadEvent": {
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/RoadEntry"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "expiry",
+              "task",
+              "mixed"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "kind",
+          "label",
+          "count",
+          "entries"
+        ],
+        "title": "RoadEvent",
+        "type": "object"
+      },
+      "Savings": {
+        "properties": {
+          "month_paise": {
+            "title": "Month Paise",
+            "type": "integer"
+          },
+          "pill_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pill Date"
+          }
+        },
+        "required": [
+          "month_paise",
+          "pill_date"
+        ],
+        "title": "Savings",
+        "type": "object"
+      },
       "SettingsPatch": {
         "additionalProperties": false,
         "description": "Any subset of the settings; a key that is present must carry a real value.\n\nStrict: the string \"yes\" is not a boolean and \"7\" is not a number of days.",
@@ -2942,6 +3365,19 @@
           "confirm"
         ],
         "title": "StartEmptyBody",
+        "type": "object"
+      },
+      "Streak": {
+        "properties": {
+          "days": {
+            "title": "Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "days"
+        ],
+        "title": "Streak",
         "type": "object"
       },
       "TaskCreate": {
@@ -3635,6 +4071,105 @@
           }
         },
         "summary": "Change Category"
+      }
+    },
+    "/api/v1/dashboard": {
+      "get": {
+        "operationId": "dashboard_api_v1_dashboard_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Dashboard"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Dashboard"
+      }
+    },
+    "/api/v1/dashboard/rings/{ring}": {
+      "get": {
+        "operationId": "ring_breakdown_api_v1_dashboard_rings__ring__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ring",
+            "required": true,
+            "schema": {
+              "title": "Ring",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RingBreakdown"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ring Breakdown"
+      }
+    },
+    "/api/v1/dashboard/road": {
+      "get": {
+        "operationId": "road_api_v1_dashboard_road_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "default": 14,
+              "maximum": 30,
+              "minimum": 1,
+              "title": "Days",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Road"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Road"
       }
     },
     "/api/v1/drafts": {

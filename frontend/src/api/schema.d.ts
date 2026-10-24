@@ -109,6 +109,57 @@ export interface paths {
         patch: operations["change_category_api_v1_categories__category_id__patch"];
         trace?: never;
     };
+    "/api/v1/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard */
+        get: operations["dashboard_api_v1_dashboard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/rings/{ring}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ring Breakdown */
+        get: operations["ring_breakdown_api_v1_dashboard_rings__ring__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard/road": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Road */
+        get: operations["road_api_v1_dashboard_road_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/drafts": {
         parameters: {
             query?: never;
@@ -881,6 +932,13 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** Attention */
+        Attention: {
+            /** Rows */
+            rows: components["schemas"]["NotificationView"][];
+            /** Total */
+            total: number;
+        };
         /** BackupItem */
         BackupItem: {
             /** At */
@@ -940,6 +998,22 @@ export interface components {
             /** Images[] */
             "images[]": string[];
         };
+        /** BreakdownEntry */
+        BreakdownEntry: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "item" | "task";
+            /** Name */
+            name: string;
+            /** Note */
+            note: string;
+            /** Public Id */
+            public_id: string | null;
+            /** Task Id */
+            task_id: number | null;
+        };
         /** Category */
         Category: {
             /** Expires Default */
@@ -985,6 +1059,23 @@ export interface components {
             maintenance_default?: boolean | null;
             /** Name */
             name?: string | null;
+        };
+        /** Dashboard */
+        Dashboard: {
+            attention: components["schemas"]["Attention"];
+            greeting: components["schemas"]["Greeting"];
+            /** Item Count */
+            item_count: number;
+            rings: components["schemas"]["Rings"];
+            road: components["schemas"]["Road"];
+            savings: components["schemas"]["Savings"] | null;
+            /** Score */
+            score: number | null;
+            streak: components["schemas"]["Streak"] | null;
+            /** Subtitle */
+            subtitle: string;
+            /** Today */
+            today: string;
         };
         /** DeletedItem */
         DeletedItem: {
@@ -1172,6 +1263,16 @@ export interface components {
             model: string;
             /** Share Images */
             share_images: boolean;
+        };
+        /** Greeting */
+        Greeting: {
+            /** Name */
+            name: string;
+            /**
+             * Part
+             * @enum {string}
+             */
+            part: "morning" | "afternoon" | "evening" | "night";
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1690,6 +1791,88 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** Ring */
+        Ring: {
+            /** Den */
+            den: number;
+            /** Num */
+            num: number;
+            /** Value */
+            value: number | null;
+        };
+        /** RingBreakdown */
+        RingBreakdown: {
+            /** Den */
+            den: number;
+            /** Failing */
+            failing: components["schemas"]["BreakdownEntry"][];
+            /** Num */
+            num: number;
+            /** Qualifying */
+            qualifying: components["schemas"]["BreakdownEntry"][];
+            /**
+             * Ring
+             * @enum {string}
+             */
+            ring: "documented" | "located" | "fresh" | "on_time";
+            /** Value */
+            value: number | null;
+        };
+        /** Rings */
+        Rings: {
+            documented: components["schemas"]["Ring"];
+            fresh: components["schemas"]["Ring"];
+            located: components["schemas"]["Ring"];
+            on_time: components["schemas"]["Ring"];
+        };
+        /** Road */
+        Road: {
+            /** End */
+            end: string;
+            /** Events */
+            events: components["schemas"]["RoadEvent"][];
+            /** Start */
+            start: string;
+            /** Truck Date */
+            truck_date: string;
+        };
+        /** RoadEntry */
+        RoadEntry: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "expiry" | "task";
+            /** Label */
+            label: string;
+            /** Public Id */
+            public_id: string | null;
+            /** Task Id */
+            task_id: number | null;
+        };
+        /** RoadEvent */
+        RoadEvent: {
+            /** Count */
+            count: number;
+            /** Date */
+            date: string;
+            /** Entries */
+            entries: components["schemas"]["RoadEntry"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "expiry" | "task" | "mixed";
+            /** Label */
+            label: string;
+        };
+        /** Savings */
+        Savings: {
+            /** Month Paise */
+            month_paise: number;
+            /** Pill Date */
+            pill_date: string | null;
+        };
         /**
          * SettingsPatch
          * @description Any subset of the settings; a key that is present must carry a real value.
@@ -1750,6 +1933,11 @@ export interface components {
              * @constant
              */
             confirm: "START EMPTY";
+        };
+        /** Streak */
+        Streak: {
+            /** Days */
+            days: number;
         };
         /** TaskCreate */
         TaskCreate: {
@@ -2137,6 +2325,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Category"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dashboard_api_v1_dashboard_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Dashboard"];
+                };
+            };
+        };
+    };
+    ring_breakdown_api_v1_dashboard_rings__ring__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ring: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RingBreakdown"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    road_api_v1_dashboard_road_get: {
+        parameters: {
+            query?: {
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Road"];
                 };
             };
             /** @description Validation Error */
