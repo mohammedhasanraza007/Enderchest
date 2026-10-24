@@ -79,6 +79,12 @@ class BootManager:
             raise WrongState("the database is not open")
         return connections.get()
 
+    def open_connection(self) -> sqlite3.Connection:
+        """A new connection the caller owns and closes; only valid in state `ok`."""
+        if self._state.status is not Status.OK:
+            raise WrongState("the database is not open")
+        return connect(self.settings.db_path)
+
     def warnings(self) -> list[str]:
         found = []
         if self.data_mounted and not self.backups_mounted:

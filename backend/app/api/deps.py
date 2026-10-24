@@ -1,6 +1,7 @@
 """Shared route dependencies."""
 
 import sqlite3
+from collections.abc import Iterator
 
 from fastapi import Request
 
@@ -21,8 +22,18 @@ def require_ok(request: Request) -> BootManager:
     return manager
 
 
-def get_db(request: Request) -> sqlite3.Connection:
-    return require_ok(request).db()
+def get_db(request: Request) -> Iterator[sqlite3.Connection]:
+    """A connection for this request alone, closed when the request ends.
+
+    FastAPI runs a sync dependency and its route in different worker threads, so a per-thread
+    connection handed out here could be in use by another request at the same moment (sqlite3
+    then fails with "bad parameter or other API misuse"). One connection per request never is.
+    """
+    conn = require_ok(request).open_connection()
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 
 def current_user_id() -> int:

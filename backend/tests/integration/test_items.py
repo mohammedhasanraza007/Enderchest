@@ -356,3 +356,17 @@ def test_a_draft_or_a_deleted_item_never_counts(stack: Stack):
     conn.execute("INSERT INTO drafts (id, user_id, created_at, updated_at) "
                  "VALUES ('d1', 1, 'x', 'x')")
     assert listing(stack)["total"] == 1
+
+
+def test_many_requests_at_once_never_share_a_connection(stack: Stack):
+    """Regression: FastAPI runs a sync dependency and its route in different worker threads, so
+    a per-thread connection handed out by the dependency was used by two requests at once
+    (sqlite3 "bad parameter or other API misuse", a 500 on the Labels page). Each request now
+    has its own connection."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    ids = [create(stack, name=f"Item {n}")["public_id"] for n in range(6)]
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        codes = list(pool.map(lambda n: stack.client.get(f"/api/v1/items/{ids[n % 6]}").status_code,
+                              range(240)))
+    assert codes == [200] * 240
