@@ -22,3 +22,43 @@ Fresh session, 2026-10-25, chain step (D-091). Builder and verifier are the same
 17. **Look (D-097):** own mode, Savings and the dashboard pill at 1280 px dark and light and 1024 px against the reference; contrast and crawler green.
 18. **Migration 0004** from a realistic v3 database (items, photos, tasks, notifications): counts preserved, `savings` table and index exist, pre-migration backup verified.
 19. **Reality audit:** grep shipped code for mock/fake/dummy/lorem/stub/TODO/FIXME and fixed numbers; no ₹ shown that is not from a row.
+
+## Results (per probe)
+| # | Probe | Result | How |
+|---|---|---|---|
+| 1 | Re-run all suites | PASS | before fixes: lint clean; unit 218 + 87; integration 288; e2e 117 + 3 (17.0 min). After fixes: lint clean; unit 246 + 87; integration 320; probes 1 to 25 ALL PASSED; Phase 6, dashboard and my specs 25 passed; crawler (own mode, dashboard), contrast (both themes), shell reference 7 passed (`raw/phase-6v/`) |
+| 2 | Scoring table by hand | PASS after fix | `test_phase6_verification_rules.py`: every signal's points, levels at 24/25, 44/45, 74/75, High needs a model match or size + overlap ≥ 80. **F1 (minor, fixed):** D-119 lifted a look-alike whose size differs (score −15, "Different size · Looks similar") to Possible; root cause confirmed: the lift tested "no positive text support" only |
+| 3 | Normalisation | PASS after fix | 1 L = 1000 ml, 0.5 kg, 1.3 cm, 0.5 in, `1"`, `1,5 l`, sizes lists, mixed kinds say nothing, model case/space/dash/dot. **F2 (minor, fixed):** "10,000 mAh" was read as 10 mAh (−30 against "10000 mAh"); **F3 (minor, fixed):** "2 in 1 USB cable" was read as 2 inches and hid the owner's own cable. Root causes confirmed (`_SIZE` regex and `float(n.replace(",", "."))`) |
+| 4 | Active only | PASS | used, expired, discarded found while active and gone after; Trash (builder test); a hidden photo's vector stops matching; draft photos embedded but never candidates |
+| 5 | At most five | PASS | ten equal High matches → five, by item id |
+| 6 | Never certain | PASS | reasons are a closed set; grep of shipped code finds only comments; probe 25 scans the page; e2e scans the body |
+| 7 | A check writes nothing | PASS | every table's row count and the photo, thumb and upload-tmp files equal before and after 3 good and 5 refused checks (HEIC 415, empty 422, truncated 415, garbage 415, 12 MB+ 413) |
+| 8 | Offline, no Gemini | PASS | probe 24 (`--network none`, key set, `auto`, sharing on: 0 requests during checks, 1 after Test connection as the control); builder's in-process network-off test |
+| 9 | Input validation | PASS | JSON body and no parts 422; 200 characters accepted, 201 refused; one error shape, no traceback |
+| 10 | Embeddings | PASS | new photo, backfill, hidden skipped, a broken file marked once (empty blob, current model) and not retried, a model-name change re-embeds every photo |
+| 11 | Savings validation | PASS | "100", 10.5, 10.0, 0, −5, true, null, 10^12 + 1, 10^30 → 422; empty, blank, 121-character names 422; with an item the item's name wins; unknown id, item in Trash 404; a purged item keeps its saving by name |
+| 12 | Totals | PASS | paging by 2 sums to `total_paise`; removed rows excluded; Kolkata month boundary (builder test) |
+| 13 | Undo | PASS | twice within 60 s changes once; 61 s → 409 `undo_expired`; kinds `saving_added`, `saving_undone`, `saving_removed`. Doc mismatch fixed: DATA_MODEL 2.11 said `savings_added` |
+| 14 | Idempotency-Key | PASS | same key → same id, one row; another key → a second row |
+| 15 | Dashboard pill | PASS after fix | `pill_date` follows the latest live saving, moves back on remove, a future date is never today; pill and truck on today do not overlap each other or the title at 1024 and 1280. **F4 (minor, fixed):** the lifted pill's 46 px stem was drawn through the truck when the truck stood on today |
+| 16 | UI flows | PASS after fix | paste and drop give the photo to check; keyboard only through own mode and Savings; Savings loading skeleton, error with Retry; D-118 (builder spec). **F5 (minor, fixed):** Escape on "I didn't buy it" left focus on the page body (PAGES 2: focus returns to the opener); root cause confirmed: `SavingSheet` unmounted its `<dialog>` instead of closing it |
+| 17 | Look (D-097) | PASS (owner approval BLOCKED) | own results 1280 dark/light and 1024, price sheet, Savings 1280 both themes, pill 1280 both themes and 1024, pill and truck on today 1024 and 1280: tokens only, status only on dark chips, cream pill as in the reference. The nav over "Camera" in the dark full-page shot is the sticky nav in a full-page capture, not the layout |
+| 18 | Migration 0004 | PASS | a v3 database used through the API (category, place, items in three states, photos, a draft, a chore, reminders, events): every old table's count equal, `savings` empty, integrity ok, version 4, verified pre-migration backup, the check finds the item after |
+| 19 | Reality audit | PASS | no mock/fake/stub/TODO in Phase 6 code (one index named `photos_embedding_todo`); every ₹ on screen is a sum of `savings` rows (DATA_MODEL 2.13) or a row's price |
+
+## Part 1, spec conformance
+Build 1 migration 0004 MET; embeddings for every saved photo by a background job and backfill MET; model chosen by measurement **BLOCKED** (D-115 provisional DINOv2-small). Build 2 MET (image and/or text, OCR fields, cosine against active items). Build 3 MET after F1 to F3 (table, levels, image-only at most Possible, five, active only). Build 4 MET (P-13 incl. paste/drop, words, None of these, Add it per D-118, I didn't buy it with a required price; P-14; nav Savings; pill per D-116, F4 fixed). Build 5 MET (third mode pill). Gate 1 **BLOCKED** (owner's 20 photos). Gates 2, 3, 4, 5 MET. API 2.14 shapes and errors MET. No new dependency beyond the allow-list (`rapidfuzz`, `onnxruntime`, `numpy`); no scope creep. MISTAKES C (text and size lead, appearance only proposes; never a certainty) and H (savings only after confirmation) respected; DATA_SAFETY: the live stack was not touched.
+
+## Part 2, does it work
+On the test stack: the image rebuilt and started (`test.bat e2e`, probes 3, 4, 9), the main flows driven in Chromium (words check, photo check, paste, drop, price sheet, Undo, Savings, dashboard pill). `build.bat`/`run.bat` on the live stack are the owner's (BLOCKED).
+
+## Notes (minor, logged; none blocking)
+- N1. **DINOv2 at 0.80 barely separates pictures:** two different text labels score 0.970, two different shape scenes 0.946, two flat colours 0.887 (`raw/phase-6v/embedding-cosines.txt`); a check with an unrelated label photo brought 2 of 6 labelled items in as "Possible · Looks similar" (`look-alike-flood.txt`). The +15 can also lift a not-owned item with a fuzzy model match and the same name from Medium (65) to High (80): gate 1 must look for that false High. Provisional until gate 1 (D-115); tune the thresholds there.
+- N2. With the spec's starting points, High through "size match and name overlap ≥ 80" is unreachable (30 + 20 + 5 + 15 = 70 < 75); only a model match reaches High. Tune at gate 1.
+- N3. OCR look-alikes in model numbers (O/0, S/5) score 0: the fuzzy ratio ≥ 92 helps only models of 13 or more characters. Consider folding O→0 and I→1 on both sides at gate 1.
+- N4. The embedding loop stops until restart if a tick raises something other than `OSError`, `ValueError` or `sqlite3.Error` (for example an ONNX Runtime error); hypothesis from reading `scheduler/embeddings.py`, not reproduced.
+- N5. Removing the photo after a photo check keeps the results, and "Add it to my inventory" then opens the words form instead of a draft.
+- N6. "This month" has no upper bound: a saving dated in a later month (test clock moved back) counts in this month; the list and the totals still agree.
+
+## Verdict
+**PASS WITH NOTES.** Five minor failures were found and fixed in this session test-first (F1 to F5, new failure kinds F-040 to F-042), plus one doc mismatch. Notes N1 to N6 are minor and logged; the owner's agreement is pending (D-091). BLOCKED on the owner: gate 1 (20 photos, `test.bat ownership`), the acceptance run, screenshot approval.
