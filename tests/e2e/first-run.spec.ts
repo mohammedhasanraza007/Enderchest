@@ -104,7 +104,7 @@ test("the name can be changed later in Settings and shows in the capsule", async
   await saveProfile(request, { name: "Mohammed", timezone: "UTC" });
   await page.goto("/settings");
   await page.getByLabel("Your name").fill("Mo");
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "Save", exact: true }).click();
   await expect(page.getByText("Profile saved.")).toBeVisible();
   await expect(page.getByRole("button", { name: "Mo", exact: true })).toBeVisible();
 });
@@ -150,7 +150,7 @@ test("a failed save in Settings keeps the change, says why, and changes nothing"
   await page.getByLabel("Your name").fill("Mo");
   const error = { error: { code: "internal_error", message: "The disk is full.", details: {} } };
   await breakSaving(page, (route) => route.fulfill({ status: 500, json: error }));
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "Save", exact: true }).click();
 
   await expect(page.getByText("The disk is full.")).toBeVisible();
   await expect(page.getByLabel("Your name")).toHaveValue("Mo");
@@ -159,7 +159,7 @@ test("a failed save in Settings keeps the change, says why, and changes nothing"
   expect((await (await request.get("/api/v1/profile")).json()).name).toBe("Mohammed");
 
   await page.unrouteAll();
-  await page.getByRole("button", { name: "Save" }).click();
+  await page.getByRole("button", { name: "Save", exact: true }).click();
   await expect(page.getByText("Profile saved.")).toBeVisible();
   await expect(page.getByText("The disk is full.")).toHaveCount(0);
 });

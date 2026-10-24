@@ -204,3 +204,9 @@ Full contract in `DATA_SAFETY.md`. The short list:
 - A first-run rule must treat existing backups as "not fresh" (it did, correctly): a test or probe that expects a brand-new database on a volume whose backup folder holds backups will get `recovery`.
 - Don't rely on `backup_log` alone for "last good backup": after a restore the log is the old file's log. The folder is the fallback (`services/backups.py`).
 - Docker Desktop at `D:\DockerDesktop\Docker Desktop.exe` cannot be kept running by a Claude shell; the owner starts it. Windows paths in the scratchpad are too long for `git clone`; use a short temp folder.
+
+## O. Added by the Phase 3 build (each one happened)
+- Don't write Windows paths into a file through a Python here-document typed in Git Bash: the doubled backslashes arrive single, and Python turns `\f`, `\r` and `\b` in `tests\fixtures`, `logs\raw` and `phase-3\bakeoff` into control characters inside a `.bat`. Write such files with the Write tool, or build the backslash with `chr(92)`; afterwards look for bytes below 32 other than CR and LF.
+- Don't type `python - <<EOF` or a bare `python` in the Claude shell on Windows: a missing script waits for input until the tool times out. Use `python3 file.py` or a quoted here-document that ends cleanly.
+- A background job (an OCR reading) outlives the request and the test that queued it: integration tests must wait for the shared worker to drain before their temporary folders go (`tests/conftest.py::drain_readings`), or a job writes into the next test.
+- A draft's `pending` state is a promise made by one process: after a restart nothing will keep it. Show it as interrupted (in-memory `inflight` registry) instead of polling forever.

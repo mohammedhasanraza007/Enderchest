@@ -35,10 +35,13 @@ def test_the_marker_is_checked_as_well_as_the_environment(settings: Settings):
 def test_reset_wipes_the_test_data_and_starts_fresh(stack: Stack):
     stack.manager.db().execute("INSERT INTO scheduler_state VALUES ('junk', '1')")
     (stack.settings.photos_dir / "p.jpg").write_bytes(b"x")
+    stack.client.put("/api/v1/gemini/key", json={"key": "AIzaTestKeyThatIsNotReal_0123456789"},
+                     headers={"X-Enderchest": "1"})
     stack.post("/api/v1/backups")
     assert stack.post("/api/v1/test/reset").json() == {"state": "ok"}
     assert "junk" not in state_keys(stack.settings)
     assert not list(stack.settings.photos_dir.iterdir())
+    assert stack.client.get("/api/v1/gemini").json()["key_set"] is False  # a fresh app has no key
     assert not list(stack.settings.backups_dir.iterdir())
     assert stack.client.get("/health").json()["status"] == "ok"
 

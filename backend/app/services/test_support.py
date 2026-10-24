@@ -104,13 +104,15 @@ def delete_database_files(settings: Settings) -> None:
 
 
 def reset_test_data(settings: Settings, manager: BootManager, loop: WriteLoop) -> None:
-    """Wipe the TEST database, photos, thumbnails, staging and test backups, then start fresh."""
+    """Wipe the TEST database, photos, thumbnails, staging, test backups and the Gemini key, then
+    start fresh: a reset app has never been given a key."""
     assert settings.env == "test", "test-only helper"
     with manager.exclusive():
         loop.stop()
         manager.release_connections()
         delete_database_files(settings)
-        for folder in (settings.photos_dir, settings.thumbs_dir, settings.staging_dir):
+        for folder in (settings.photos_dir, settings.thumbs_dir, settings.staging_dir,
+                       settings.secrets_dir):
             _wipe_contents(folder)
         if manager.backups_mounted:
             _wipe_contents(settings.backups_dir)
