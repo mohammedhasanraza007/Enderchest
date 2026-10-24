@@ -316,6 +316,17 @@
           "fields": {
             "$ref": "#/components/schemas/DraftFields"
           },
+          "gemini_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gemini Error"
+          },
           "gemini_status": {
             "enum": [
               "none",
@@ -327,9 +338,40 @@
             "title": "Gemini Status",
             "type": "string"
           },
+          "gemini_values": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeminiAnswer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "id": {
             "title": "Id",
             "type": "string"
+          },
+          "ocr_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ocr Error"
+          },
+          "ocr_info": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReadingInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "ocr_status": {
             "enum": [
@@ -349,7 +391,9 @@
             "type": "array"
           },
           "proposed": {
-            "additionalProperties": true,
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Proposal"
+            },
             "title": "Proposed",
             "type": "object"
           },
@@ -363,6 +407,13 @@
               }
             ],
             "title": "Raw Text"
+          },
+          "read_notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Read Notes",
+            "type": "array"
           },
           "status": {
             "enum": [
@@ -383,6 +434,11 @@
           "gemini_status",
           "proposed",
           "raw_text",
+          "ocr_error",
+          "gemini_error",
+          "read_notes",
+          "ocr_info",
+          "gemini_values",
           "created_at"
         ],
         "title": "Draft",
@@ -738,6 +794,166 @@
           "word"
         ],
         "title": "ExpiryView",
+        "type": "object"
+      },
+      "ExtractQueued": {
+        "properties": {
+          "gemini_status": {
+            "anyOf": [
+              {
+                "const": "pending",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gemini Status"
+          },
+          "ocr_status": {
+            "anyOf": [
+              {
+                "const": "pending",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ocr Status"
+          }
+        },
+        "title": "ExtractQueued",
+        "type": "object"
+      },
+      "ExtractRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "engine": {
+            "enum": [
+              "local",
+              "gemini"
+            ],
+            "title": "Engine",
+            "type": "string"
+          }
+        },
+        "required": [
+          "engine"
+        ],
+        "title": "ExtractRequest",
+        "type": "object"
+      },
+      "GeminiAnswer": {
+        "description": "Gemini's validated answer, shown in the \"What was read\" drawer.",
+        "properties": {
+          "brand": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brand"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "expiry_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expiry Text"
+          },
+          "inspection_interval_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inspection Interval Days"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          }
+        },
+        "title": "GeminiAnswer",
+        "type": "object"
+      },
+      "GeminiStatus": {
+        "properties": {
+          "key_set": {
+            "title": "Key Set",
+            "type": "boolean"
+          },
+          "mode": {
+            "title": "Mode",
+            "type": "string"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "share_images": {
+            "title": "Share Images",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key_set",
+          "model",
+          "mode",
+          "share_images"
+        ],
+        "title": "GeminiStatus",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -1441,6 +1657,33 @@
         "title": "ItemSummary",
         "type": "object"
       },
+      "KeyBody": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "title": "Key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key"
+        ],
+        "title": "KeyBody",
+        "type": "object"
+      },
+      "KeySet": {
+        "properties": {
+          "key_set": {
+            "title": "Key Set",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key_set"
+        ],
+        "title": "KeySet",
+        "type": "object"
+      },
       "LabelPrinted": {
         "additionalProperties": false,
         "properties": {
@@ -1761,6 +2004,102 @@
         "title": "ProfileUpdate",
         "type": "object"
       },
+      "Proposal": {
+        "description": "A value read from the photo (`ocr`) or suggested by Gemini, never trusted unconfirmed.",
+        "properties": {
+          "alternatives": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternatives"
+          },
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Confidence",
+            "type": "string"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Flags",
+            "type": "array"
+          },
+          "source": {
+            "enum": [
+              "ocr",
+              "gemini"
+            ],
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "value",
+          "source",
+          "confidence",
+          "flags"
+        ],
+        "title": "Proposal",
+        "type": "object"
+      },
+      "ReadingInfo": {
+        "properties": {
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "ms": {
+            "title": "Ms",
+            "type": "integer"
+          },
+          "photos": {
+            "title": "Photos",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "engine",
+          "ms",
+          "photos"
+        ],
+        "title": "ReadingInfo",
+        "type": "object"
+      },
       "Ref": {
         "properties": {
           "id": {
@@ -1855,7 +2194,7 @@
           "gemini_model": {
             "anyOf": [
               {
-                "maxLength": 100,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9.\\-]{0,99}$",
                 "type": "string"
               },
               {
@@ -1947,6 +2286,29 @@
           "confirm"
         ],
         "title": "StartEmptyBody",
+        "type": "object"
+      },
+      "TestResult": {
+        "properties": {
+          "latency_ms": {
+            "title": "Latency Ms",
+            "type": "integer"
+          },
+          "model": {
+            "title": "Model",
+            "type": "string"
+          },
+          "ok": {
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok",
+          "model",
+          "latency_ms"
+        ],
+        "title": "TestResult",
         "type": "object"
       },
       "UndoDone": {
@@ -2549,6 +2911,56 @@
         "summary": "Commit Draft"
       }
     },
+    "/api/v1/drafts/{draft_id}/extract": {
+      "post": {
+        "description": "Re-read (`local`) or Improve with Gemini (`gemini`); the client polls the draft.",
+        "operationId": "extract_api_v1_drafts__draft_id__extract_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "draft_id",
+            "required": true,
+            "schema": {
+              "title": "Draft Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtractRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractQueued"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Extract"
+      }
+    },
     "/api/v1/drafts/{draft_id}/photos": {
       "post": {
         "operationId": "add_draft_photo_api_v1_drafts__draft_id__photos_post",
@@ -2635,6 +3047,89 @@
           }
         },
         "summary": "Undo"
+      }
+    },
+    "/api/v1/gemini": {
+      "get": {
+        "operationId": "get_gemini_api_v1_gemini_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeminiStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Gemini"
+      }
+    },
+    "/api/v1/gemini/key": {
+      "delete": {
+        "operationId": "delete_key_api_v1_gemini_key_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Delete Key"
+      },
+      "put": {
+        "operationId": "put_key_api_v1_gemini_key_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeySet"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Put Key"
+      }
+    },
+    "/api/v1/gemini/test": {
+      "post": {
+        "operationId": "test_gemini_api_v1_gemini_test_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Test Gemini"
       }
     },
     "/api/v1/items": {

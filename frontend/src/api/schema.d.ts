@@ -163,6 +163,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/drafts/{draft_id}/extract": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Extract
+         * @description Re-read (`local`) or Improve with Gemini (`gemini`); the client polls the draft.
+         */
+        post: operations["extract_api_v1_drafts__draft_id__extract_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/drafts/{draft_id}/photos": {
         parameters: {
             query?: never;
@@ -191,6 +211,58 @@ export interface paths {
         put?: never;
         /** Undo */
         post: operations["undo_api_v1_events__event_id__undo_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gemini": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Gemini */
+        get: operations["get_gemini_api_v1_gemini_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gemini/key": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Put Key */
+        put: operations["put_key_api_v1_gemini_key_put"];
+        post?: never;
+        /** Delete Key */
+        delete: operations["delete_key_api_v1_gemini_key_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/gemini/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Test Gemini */
+        post: operations["test_gemini_api_v1_gemini_test_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -632,13 +704,19 @@ export interface components {
             /** Created At */
             created_at: string;
             fields: components["schemas"]["DraftFields"];
+            /** Gemini Error */
+            gemini_error: string | null;
             /**
              * Gemini Status
              * @enum {string}
              */
             gemini_status: "none" | "pending" | "done" | "failed" | "skipped";
+            gemini_values: components["schemas"]["GeminiAnswer"] | null;
             /** Id */
             id: string;
+            /** Ocr Error */
+            ocr_error: string | null;
+            ocr_info: components["schemas"]["ReadingInfo"] | null;
             /**
              * Ocr Status
              * @enum {string}
@@ -648,10 +726,12 @@ export interface components {
             photos: components["schemas"]["DraftPhoto"][];
             /** Proposed */
             proposed: {
-                [key: string]: unknown;
+                [key: string]: components["schemas"]["Proposal"];
             };
             /** Raw Text */
             raw_text: string | null;
+            /** Read Notes */
+            read_notes: string[];
             /**
              * Status
              * @enum {string}
@@ -749,6 +829,52 @@ export interface components {
             status: "no_expiry" | "unknown" | "expired" | "today" | "soon" | "ok";
             /** Word */
             word: string;
+        };
+        /** ExtractQueued */
+        ExtractQueued: {
+            /** Gemini Status */
+            gemini_status?: "pending" | null;
+            /** Ocr Status */
+            ocr_status?: "pending" | null;
+        };
+        /** ExtractRequest */
+        ExtractRequest: {
+            /**
+             * Engine
+             * @enum {string}
+             */
+            engine: "local" | "gemini";
+        };
+        /**
+         * GeminiAnswer
+         * @description Gemini's validated answer, shown in the "What was read" drawer.
+         */
+        GeminiAnswer: {
+            /** Brand */
+            brand?: string | null;
+            /** Category */
+            category?: string | null;
+            /** Expiry Text */
+            expiry_text?: string | null;
+            /** Inspection Interval Days */
+            inspection_interval_days?: number | null;
+            /** Model */
+            model?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Size */
+            size?: string | null;
+        };
+        /** GeminiStatus */
+        GeminiStatus: {
+            /** Key Set */
+            key_set: boolean;
+            /** Mode */
+            mode: string;
+            /** Model */
+            model: string;
+            /** Share Images */
+            share_images: boolean;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -909,6 +1035,16 @@ export interface components {
              */
             state: "active" | "used" | "expired" | "discarded";
         };
+        /** KeyBody */
+        KeyBody: {
+            /** Key */
+            key: string;
+        };
+        /** KeySet */
+        KeySet: {
+            /** Key Set */
+            key_set: boolean;
+        };
         /** LabelPrinted */
         LabelPrinted: {
             /** Public Ids */
@@ -1017,6 +1153,39 @@ export interface components {
             /** Timezone */
             timezone: string;
         };
+        /**
+         * Proposal
+         * @description A value read from the photo (`ocr`) or suggested by Gemini, never trusted unconfirmed.
+         */
+        Proposal: {
+            /** Alternatives */
+            alternatives?: string[] | null;
+            /**
+             * Confidence
+             * @enum {string}
+             */
+            confidence: "high" | "medium" | "low";
+            /** Flags */
+            flags: string[];
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "ocr" | "gemini";
+            /** Text */
+            text?: string | null;
+            /** Value */
+            value: string | number;
+        };
+        /** ReadingInfo */
+        ReadingInfo: {
+            /** Engine */
+            engine: string;
+            /** Ms */
+            ms: number;
+            /** Photos */
+            photos: number;
+        };
         /** Ref */
         Ref: {
             /** Id */
@@ -1081,6 +1250,15 @@ export interface components {
              * @constant
              */
             confirm: "START EMPTY";
+        };
+        /** TestResult */
+        TestResult: {
+            /** Latency Ms */
+            latency_ms: number;
+            /** Model */
+            model: string;
+            /** Ok */
+            ok: boolean;
         };
         /** UndoDone */
         UndoDone: {
@@ -1552,6 +1730,41 @@ export interface operations {
             };
         };
     };
+    extract_api_v1_drafts__draft_id__extract_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExtractRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExtractQueued"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     add_draft_photo_api_v1_drafts__draft_id__photos_post: {
         parameters: {
             query?: never;
@@ -1614,6 +1827,97 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_gemini_api_v1_gemini_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GeminiStatus"];
+                };
+            };
+        };
+    };
+    put_key_api_v1_gemini_key_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KeyBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeySet"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_key_api_v1_gemini_key_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    test_gemini_api_v1_gemini_test_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestResult"];
                 };
             };
         };

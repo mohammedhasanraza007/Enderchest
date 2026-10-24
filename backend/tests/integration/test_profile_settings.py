@@ -11,7 +11,7 @@ DEFAULTS = {
     "lead_days": 3,
     "coach_enabled": True,
     "gemini_mode": "off",
-    "gemini_model": "",
+    "gemini_model": "gemini-3.5-flash-lite",  # D-102
     "share_images_with_gemini": False,
     "assistant_share_item_text": False,
 }

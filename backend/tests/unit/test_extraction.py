@@ -15,7 +15,8 @@ def lines(*rows: tuple[str, float, float]) -> list[Line]:
 
 
 LABEL = lines(("OAT MILK BARISTA", 0.99, 60), ("1 L  MODEL AB-1234X", 0.95, 30),
-              ("MFD 12/01/2026  EXP 14/03/2027", 0.97, 30), ("BATCH L4471  Net Qty 500 ml", 0.99, 30))
+              ("MFD 12/01/2026  EXP 14/03/2027", 0.97, 30),
+              ("BATCH L4471  Net Qty 500 ml", 0.99, 30))
 
 
 def test_a_label_gives_all_four_fields():
