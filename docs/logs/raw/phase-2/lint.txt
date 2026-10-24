@@ -1,0 +1,114 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 580B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 4.42kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.3s
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 0.4s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 320B done
+#7 DONE 0.0s
+
+#8 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#8 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#8 DONE 0.0s
+
+#9 [python-base 1/5] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#9 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#9 DONE 0.0s
+
+#10 [internal] load build context
+#10 transferring context: 1.26MB 0.3s done
+#10 DONE 0.3s
+
+#11 [tools  2/10] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#11 CACHED
+
+#12 [frontend-deps 2/4] WORKDIR /frontend
+#12 CACHED
+
+#13 [python-base 2/5] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#13 CACHED
+
+#14 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#14 CACHED
+
+#15 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#15 CACHED
+
+#16 [tools  5/10] RUN pip install -r requirements-dev.lock
+#16 CACHED
+
+#17 [tools  3/10] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#17 CACHED
+
+#18 [python-base 3/5] WORKDIR /app
+#18 CACHED
+
+#19 [python-base 5/5] RUN pip install -r requirements.lock
+#19 CACHED
+
+#20 [tools  4/10] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#20 CACHED
+
+#21 [tools  1/10] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#21 CACHED
+
+#22 [tools  6/10] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#22 CACHED
+
+#23 [python-base 4/5] COPY backend/requirements.lock ./requirements.lock
+#23 CACHED
+
+#24 [tools  7/10] COPY assets/logo /assets/logo
+#24 CACHED
+
+#25 [tools  8/10] COPY frontend/ /frontend/
+#25 DONE 0.1s
+
+#26 [tools  9/10] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#26 DONE 0.0s
+
+#27 [tools 10/10] COPY backend/ ./
+#27 DONE 0.1s
+
+#28 exporting to image
+#28 exporting layers 0.1s done
+#28 exporting manifest sha256:ba768ac05f67075278586b2b67bfbb00ab3408cb4e700f9c964c004872198abf 0.0s done
+#28 exporting config sha256:c96f01e8a0c2e6b051bfa71a423366ea0bd18f8ccbc2e89ceb63c499061296ad 0.0s done
+#28 exporting attestation manifest sha256:9652f4c61355e0dbf34c243e9b83384a45b78c6e526428235f48647ce5ce25b5 0.0s done
+#28 exporting manifest list sha256:37b53aca166fb03423c3a1a4e2b44bcf0ae89a3e60b20c01b4abdfb7b7ce433c 0.0s done
+#28 naming to docker.io/library/enderchest-tools:latest done
+#28 unpacking to docker.io/library/enderchest-tools:latest 0.1s done
+#28 DONE 0.3s
+
+#29 resolving provenance for metadata file
+#29 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-00617f486a8e Creating 
+ Container enderchest-test-tools-run-00617f486a8e Created 
+All checks passed!
+ Container enderchest-test-tools-run-f9dc4c27cd2f Creating 
+ Container enderchest-test-tools-run-f9dc4c27cd2f Created 
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+Checking formatting...
+All matched files use Prettier code style!

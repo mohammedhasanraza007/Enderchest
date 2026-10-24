@@ -1,0 +1,19 @@
+ Container enderchest-test-app-nobackups-1 Recreate 
+ Container enderchest-test-app-nobackups-1 Recreated 
+ Container enderchest-test-app-nobackups-1 Starting 
+ Container enderchest-test-app-nobackups-1 Started 
+ Container enderchest-test-app-nobackups-1 Waiting 
+ Container enderchest-test-app-nobackups-1 Healthy 
+ Container enderchest-test-app-nobackups-1 Running 
+ Container enderchest-test-app-nobackups-1 Waiting 
+ Container enderchest-test-app-nobackups-1 Healthy 
+ Container enderchest-test-e2e-nobackups-run-69c28eac0c79 Creating 
+ Container enderchest-test-e2e-nobackups-run-69c28eac0c79 Created 
+
+Running 3 tests using 1 worker
+
+  ✓  1 ../tests/e2e/nobackups.spec.ts:8:5 › the banner says the folder is not connected, on every page (459ms)
+  ✓  2 ../tests/e2e/nobackups.spec.ts:27:5 › Settings shows the same truth and a Back up now that says why it is off (370ms)
+  ✓  3 ../tests/e2e/nobackups.spec.ts:42:5 › no backup is attempted, so no request for one is sent (800ms)
+
+  3 passed (2.4s)
