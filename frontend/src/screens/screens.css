@@ -852,3 +852,62 @@ body:has(.road) {
     width: 360px;
   }
 }
+
+/* ------------------------------------------------------------ Do I own this? (P-13) */
+.own-photo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.own-form {
+  width: 100%;
+}
+.own-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+}
+.own-results__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.own-why {
+  color: var(--text);
+}
+.own-none {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.own-none__text {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------- Savings (P-14) */
+.savings-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.savings-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.savings-total__amount {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
+}
+.savings-price {
+  font-variant-numeric: tabular-nums;
+}
+.savings-empty {
+  margin: 0;
+}

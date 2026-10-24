@@ -58,6 +58,14 @@ export type NotificationView = components["schemas"]["NotificationView"];
 export type NotificationPage = components["schemas"]["NotificationPage"];
 export type NotificationCount = components["schemas"]["NotificationCount"];
 export type NotificationAction = components["schemas"]["NotificationAction"];
+export type CheckResult = components["schemas"]["CheckResult"];
+export type CheckCandidate = components["schemas"]["CheckCandidate"];
+export type SavingCreate = components["schemas"]["SavingCreate"];
+export type SavingsPage = components["schemas"]["SavingsPage"];
+export type SavingView = components["schemas"]["SavingView"];
+export type SavingsPeriod = "month" | "all";
+/** The Savings page lists the newest 200 entries and says so when there are more. */
+export const SAVINGS_SHOWN = 200;
 export type SnoozeOption = components["schemas"]["SnoozeBody"]["option"];
 export type Dashboard = components["schemas"]["Dashboard"];
 export type RingName = components["schemas"]["RingBreakdown"]["ring"];
@@ -210,6 +218,20 @@ export const api = {
     request<{ key_set: boolean }>("PUT", "/api/v1/gemini/key", { key }),
   removeGeminiKey: () => request<null>("DELETE", "/api/v1/gemini/key"),
   testGemini: () => request<GeminiTest>("POST", "/api/v1/gemini/test"),
+
+  // Phase 6: "Do I own this?" and savings (API 2.14)
+  /** Read-only: proposes candidates, saves nothing. Always multipart, even with words only. */
+  checkOwnership: (image: Blob | null, text: string) => {
+    const body = new FormData();
+    if (image) body.append("image", image, "query.jpg");
+    if (text.trim() !== "") body.append("text", text.trim());
+    return upload<CheckResult>("/api/v1/ownership/check", body);
+  },
+  savings: (period: SavingsPeriod) =>
+    request<SavingsPage>("GET", `/api/v1/savings${query({ period, limit: SAVINGS_SHOWN })}`),
+  addSaving: (body: SavingCreate, headers: Record<string, string>) =>
+    request<{ id: number; event_id: number }>("POST", "/api/v1/savings", body, headers),
+  removeSaving: (id: number) => request<{ event_id: number }>("DELETE", `/api/v1/savings/${id}`),
 };
 
 function form(field: string, files: Blob[]): FormData {

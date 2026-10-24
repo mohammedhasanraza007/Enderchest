@@ -14,6 +14,7 @@ import { Item } from "./screens/Item";
 import { Labels } from "./screens/Labels";
 import { NotFound } from "./screens/NotFound";
 import { Notifications } from "./screens/Notifications";
+import { Savings } from "./screens/Savings";
 import { Settings } from "./screens/Settings";
 import { Tasks } from "./screens/Tasks";
 import { Trash } from "./screens/Trash";
@@ -77,6 +78,7 @@ export function AppRoutes() {
           <Route path="/trash" element={<Trash />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/savings" element={<Savings />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Route>

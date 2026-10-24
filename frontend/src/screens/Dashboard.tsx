@@ -52,6 +52,7 @@ export function Dashboard() {
         road={data.road}
         title="Next 14 days"
         emptyText="No tasks or expiries in the next 14 days."
+        savings={data.savings}
       />
       <RingSheet ring={ring} rings={data.rings} onChoose={setRing} onClose={() => setRing(null)} />
     </div>

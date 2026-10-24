@@ -11,10 +11,12 @@ import {
   tickShown,
 } from "../lib/dashboard";
 import { formatDay } from "../lib/format";
+import { formatRupees } from "../lib/money";
 import { Dialog } from "../primitives/Overlay";
 
 // The road (DESIGN.md 6.11): a full-bleed bar with a dashed centre line, a tick per day from
-// today, a notch per day with something on it, and the truck parked at the next job (D-110).
+// today, a notch per day with something on it, the truck parked at the next job (D-110) and, on
+// the dashboard, the savings pill on today when a saving was confirmed today (D-116).
 // One component for the dashboard (14 days) and the Tasks page (30 days, D-103). Each day with
 // events is a button: hover or focus shows what is on it, a click opens the day. The events are
 // an ordered list, so a screen reader hears the road as a list (DESIGN.md 14).
@@ -24,9 +26,12 @@ interface RoadProps {
   title: string;
   /** What the empty road says, for example "No tasks or expiries in the next 14 days." */
   emptyText: string;
+  /** The dashboard's confirmed savings; the pill shows only on the day of the latest one, which
+   * must be today (D-116: never on a future date). */
+  savings?: { month_paise: number; pill_date: string | null } | null;
 }
 
-export function Road({ road, title, emptyText }: RoadProps) {
+export function Road({ road, title, emptyText, savings }: RoadProps) {
   const [open, setOpen] = useState<RoadEvent | null>(null);
   const titleId = useId();
   const days = roadDays(road.start, road.end);
@@ -34,6 +39,7 @@ export function Road({ road, title, emptyText }: RoadProps) {
   const truckEvent = road.events.find((event) => event.date === road.truck_date);
   // Parked on the first two days, the truck stands under the title: give the title headroom.
   const truckAtStart = days.indexOf(road.truck_date) <= 1;
+  const pill = savings && savings.pill_date === road.start ? savings.month_paise : null;
 
   return (
     <section
@@ -46,6 +52,15 @@ export function Road({ road, title, emptyText }: RoadProps) {
       <div className="road__bar" aria-hidden="true" />
       <div className="road__track">
         <Truck left={at(road.truck_date)} />
+        {pill !== null ? (
+          <Link
+            to="/savings"
+            className={`road__pill${truckAtStart ? " road__pill--lifted" : ""}`}
+            style={{ left: at(road.start) }}
+          >
+            {formatRupees(pill)} saved
+          </Link>
+        ) : null}
         {road.events.length === 0 ? (
           <p className="road__empty">{emptyText}</p>
         ) : (

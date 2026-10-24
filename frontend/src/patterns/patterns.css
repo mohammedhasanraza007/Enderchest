@@ -804,6 +804,46 @@
   color: var(--text-muted-page);
   font-size: 0.875rem;
 }
+/* The savings pill (6.11): cream, on today's tick, with a thin stem down to the road. */
+.road__pill {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  z-index: 3;
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--cream-fill);
+  color: var(--on-cream);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  text-decoration: none;
+  transform: translateX(-50%);
+}
+.road__pill::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: 6px;
+  background: var(--cream-fill);
+}
+.road__pill:hover {
+  background: var(--cream-fill-hover);
+}
+.road__pill:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* The truck parks on today or tomorrow: the pill rises above it, never on top of it. */
+.road__pill--lifted {
+  bottom: calc(100% + 46px);
+}
+.road__pill--lifted::after {
+  height: 46px;
+}
 .road__day-list {
   display: flex;
   flex-direction: column;

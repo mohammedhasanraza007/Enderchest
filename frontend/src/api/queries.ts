@@ -16,6 +16,7 @@ import type {
   NotificationStatus,
   ProfileUpdate,
   RingName,
+  SavingsPeriod,
   TaskScope,
 } from "./endpoints";
 
@@ -39,6 +40,7 @@ export const keys = {
   dashboard: ["dashboard"] as const,
   ring: (ring: RingName) => ["dashboard", "ring", ring] as const,
   road: (days: number) => ["dashboard", "road", days] as const,
+  savings: (period: SavingsPeriod) => ["savings", period] as const,
 };
 
 // The bell is read every minute and whenever the window gets focus (PAGES.md P-11).
@@ -196,6 +198,11 @@ export function useRoad(days: number) {
   return useQuery({ queryKey: keys.road(days), queryFn: () => api.road(days) });
 }
 
+/** Confirmed savings for this month or all time (P-14); both totals come with either. */
+export function useSavings(period: SavingsPeriod) {
+  return useQuery({ queryKey: keys.savings(period), queryFn: () => api.savings(period) });
+}
+
 /** Gemini key state, model, mode and photo sharing (P-02, P-07). */
 export function useGemini() {
   return useQuery({ queryKey: keys.gemini, queryFn: api.gemini });
@@ -222,6 +229,7 @@ export function useRefreshInventory(): () => Promise<void> {
         ["notifications"],
         keys.notificationCount,
         keys.dashboard,
+        ["savings"],
       ].map((queryKey) => client.invalidateQueries({ queryKey })),
     );
   }, [client]);

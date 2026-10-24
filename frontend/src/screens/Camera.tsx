@@ -14,10 +14,12 @@ import { Button } from "../primitives/Button";
 import { Chip } from "../primitives/Chip";
 import { GlassCard, InnerPanel } from "../primitives/Glass";
 import { Input, Select } from "../primitives/Input";
+import { OwnControls } from "./OwnCheck";
 
 // P-06, the camera hub. Add mode: the shutter, Upload photos, drag and drop and paste all make
 // drafts (one per photo, up to 20) and open the review. Scan mode reads printed QR labels with a
-// JavaScript decoder about five times a second (D-055) and offers a typed-ID field. The stream
+// JavaScript decoder about five times a second (D-055) and offers a typed-ID field. "Do I own
+// this?" (P-13, Phase 6) checks a photo or words against the inventory (OwnCheck.tsx). The stream
 // stops when this page is left or the tab is hidden.
 
 const MAX_FILES = 20;
@@ -58,7 +60,8 @@ const CAMERA_TEXT: Record<Exclude<CameraState, "live">, { title: string; body: s
 export function Camera() {
   usePageTitle("Camera");
   const [params, setParams] = useSearchParams();
-  const mode = params.get("mode") === "scan" ? "scan" : "add";
+  const wanted = params.get("mode");
+  const mode = wanted === "scan" || wanted === "own" ? wanted : "add";
   const camera = useCamera();
   const live = camera.state === "live";
   // Each Try again is counted, so a second failure says so instead of looking like nothing.
@@ -82,6 +85,13 @@ export function Camera() {
             onSelect={() => setParams({ mode: "scan" }, { replace: true })}
           >
             Scan label
+          </Chip>
+          <Chip
+            role="radio"
+            selected={mode === "own"}
+            onSelect={() => setParams({ mode: "own" }, { replace: true })}
+          >
+            Do I own this?
           </Chip>
         </div>
       </div>
@@ -132,11 +142,9 @@ export function Camera() {
             ]}
           />
         ) : null}
-        {mode === "add" ? (
-          <AddControls live={live} capture={camera.capture} />
-        ) : (
-          <ScanControls live={live} videoRef={camera.videoRef} />
-        )}
+        {mode === "add" ? <AddControls live={live} capture={camera.capture} /> : null}
+        {mode === "scan" ? <ScanControls live={live} videoRef={camera.videoRef} /> : null}
+        {mode === "own" ? <OwnControls live={live} capture={camera.capture} /> : null}
       </GlassCard>
     </div>
   );
