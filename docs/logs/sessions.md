@@ -72,3 +72,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Failed and fixed test-first (minor): search matched attribute keys (F-029); duplicate names case-insensitive for ASCII only (F-030); D-098. New failure kinds F-026 to F-031.
 - Verdict: no blocker or major; PASS for Claude's part; PASS WITH NOTES needs the owner's acceptance run, screenshot approval, live build/run, and agreement to notes N3 to N9.
 - Next: Phase 3 build (`D:\Projects\phase3-next-prompt.txt`), started by this session as a new session.
+
+## 2026-10-24 · phase3 · Phase 3 build (capture), chain hand-off to the Phase 3 verification
+- Zip in: `phase2v.zip` (already unzipped into `D:\Projects\Enderchest-phase-3`, branch `phase-3`). Zip out: `D:\Projects\phase3.zip`, unzipped into `D:\Projects\Enderchest-phase-3v` on branch `phase-3-verify` (D-091). One usage-limit pause mid-build: a clean checkpoint commit, then the same session continued on the owner's word.
+- Built: expiry parser (35/35 cases), local OCR (RapidOCR, provisional, D-099) in the shared heavy worker, field extraction, readings on draft creation and Re-read (D-100), Gemini REST client, key file and Settings section (D-101, D-102), confirm screen tags, confidence dots, "What was read", expiry confirmation, date pills; bake-off harness and `bakeoff` image (`test.bat bakeoff`); probes 20 and 21. Brief `docs/reviews/phase-3-brief.md`.
+- Checks: lint clean; unit 160 + 65; integration 198; Playwright 82 + 3; probes 1 to 21 ALL PASSED; contrast 0 failures (327 pieces per theme); crawler 0 dead controls on 13 routes; 12 screenshots reviewed, 3 look fixes.
+- Failed and fixed: old settings tests expected an empty model default; the test reset kept the Gemini key; two test races or wrong expectations; `test.bat` edited while running (a second suite started); Python wrote control characters into `test.bat` paths (caught and repaired before commit).
+- Blocked on owner: gate 2 (20 photos, labels.csv, `test.bat bakeoff`), gate 4 (Gemini key), acceptance run, screenshot approval, `build.bat`/`run.bat`.
+- Next: Phase 3 verification (`D:\Projects\phase3v-next-prompt.txt`).

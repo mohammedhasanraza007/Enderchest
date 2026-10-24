@@ -17,7 +17,7 @@ Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end 
 
 ## Current state (facts)
 - Phase 3 built: expiry parser (35/35 supplied cases plus 10 more), local OCR (RapidOCR 3.10 on ONNX Runtime, provisional, D-099) in the shared size-1 `heavy` worker, field extraction (name, model, size, expiry), readings queued on draft creation and by Re-read (D-100), Gemini over REST with the key file, modes off/ask/auto, photos only when shared (D-101, D-102), the confirm screen with source tags, confidence dots, the "What was read" drawer, expiry confirmation and date pills, the queue's read names, Settings → Gemini. Bake-off harness `scripts/ocr_bakeoff.py` and image target `bakeoff` (`test.bat bakeoff`; all four engines load, models baked in).
-- Results on the final code: lint clean; unit 160 pytest + 65 vitest; integration 198; Playwright E2E_RESULT; probes PROBES_RESULT.
+- Results on the final code: lint clean; unit 160 pytest + 65 vitest; integration 198; Playwright main 82 + no-backups 3; probes 1 to 21 ALL PASSED (20: a photo read with no network, Gemini "could not be reached"; 21: `/health` median 3.4 ms, max 75.5 ms while three readings queued, readings 0.4 to 1.4 s).
 - Decisions up to D-102. Failure kinds up to F-031 (the verification adds the build's).
 - No migration in Phase 3 (the drafts table already had the reading columns). Live stack untouched (still Phase 1 code, schema 1, until the owner runs `build.bat`).
 
