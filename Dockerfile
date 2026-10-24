@@ -68,6 +68,9 @@ COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
 COPY assets/logo /assets/logo
 COPY frontend/ /frontend/
 COPY scripts/export_openapi.py ./scripts/export_openapi.py
+# Text fixtures the unit tests read (the owner's private photos never enter an image).
+COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+ENV ENDERCHEST_FIXTURES=/fixtures
 COPY backend/ ./
 CMD ["pytest", "-q"]
 
