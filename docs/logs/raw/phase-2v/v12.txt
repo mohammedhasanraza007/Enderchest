@@ -1,0 +1,11 @@
+PASS V12 setup: 3 items, 5 photos, 2 open drafts, every file matches its stored SHA-256  [3 5 2]
+
+1 passed, 0 failed
+-- after stop and start
+PASS V12 after the restart: same items, drafts, photo rows and file hashes; quick_check ok
+
+1 passed, 0 failed
+-- after rm -sf and up (container recreated)
+PASS V12 after the restart: same items, drafts, photo rows and file hashes; quick_check ok
+
+1 passed, 0 failed

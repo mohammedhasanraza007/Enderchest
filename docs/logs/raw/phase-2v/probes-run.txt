@@ -1,0 +1,40 @@
+--- probe 1 ---
+PROBE 1: PASS - records before=302 after stop/up=302, consistent=True, quick_check=ok; item ENDR-YS5JC6QZ with photo intact=True
+--- probe 2 ---
+PROBE 2: PASS - container removed=True; records before=297 after=297, consistent=True
+--- probe 3 ---
+PROBE 3: PASS - no-cache build ok=True; records before=296 after=296, consistent=True; item with photo intact=True
+--- probe 4 ---
+PROBE 4: PASS - copy at Enderchest-moved-be99b4: up=True; same project containers=[enderchest-test-app-1
+enderchest-test-app-nobackups-1]; records before=306 after=306
+--- probe 5 ---
+PROBE 5: PASS - container removed=True; records before=305 after=305, consistent=True
+--- probe 6 ---
+PROBE 6: PASS - round 1 killed at ~158 rows, after restart rows=167 consistent=True quick_check=ok; round 2 killed at ~366 rows, after restart rows=375 consistent=True quick_check=ok; round 3 killed at ~624 rows, after restart rows=634 consistent=True quick_check=ok
+--- probe 7 ---
+PROBE 7: PASS - state=locked/no_data_volume; /data contents=[]; API status 503
+--- probe 8 ---
+PROBE 8: PASS - after delete state=recovery; backups offered=1; restore status=200; records before=294 after=294
+--- probe 9 ---
+PROBE 9: PASS - test stack: build:0 build:0 build:0 up:0 up:0 up:0; records before=298 after=298
+--- probe 10 ---
+PROBE 10: PASS - state=locked/newer_data schema_found=99; API 503; file hash unchanged=True
+--- probe 11 ---
+PROBE 11: PASS - app uid=10001; backup on host=True; photo mirrored=True; fresh volume state=recovery:True; restore status=200; records before=297 after=297; photo sha256 equal=True
+--- probe 12 ---
+PROBE 12: PASS - all 6 checks refused or clean as required
+--- probe 13 ---
+PROBE 13: PASS - live config on test data: locked/env_mismatch; test config on live-marked data: locked/env_mismatch; files unchanged: test=True live-marked=True
+--- probe 14 ---
+PROBE 14: PASS - kills=1; a .partial was seen after a kill=True; listed as backup=False; left after restart=False; next backup status=201
+--- probe 15 ---
+PROBE 15: PASS - script exit=0; new manual files=1; name printed=True; listed by the API=True; output=[Backup made and verified: manual-20261024T061423Z.sqlite3 (136 KB) | Folder: ./.test-backups]
+--- probe 16 ---
+PROBE 16: PASS - baseline manual-20261024T061425Z; clock moved to 07:44Z; auto backups on an idle database after two ticks: 0; after a real write: control backup made=True; backup_due reasons in the log=[startup,daily,changed]
+--- probe 17 ---
+PROBE 17: PASS - first run before=False; stopped=True; unreachable while stopped=True; after start: name=Mohammed timezone=Asia/Kolkata theme=dark step=categories; after step 2: first_run_complete=True
+--- probe 18 ---
+PROBE 18: PASS - dev services up=True; first version served=True; edit served within 15 s=True
+--- probe 19 ---
+PROBE 19: PASS - test build ok=True; test tag exists=True; live tag before=sha256:a73eb8a1774b after=sha256:a73eb8a1774b
+ALL PASSED: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19

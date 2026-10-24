@@ -1,0 +1,12 @@
+V1 live upgrade path, 2026-10-24 (test env, throwaway volume enderchest_test_data_v1p_20261024113035, backup folder in the session scratchpad)
+Phase 1 image: git archive d70c165 (phase1.2 checkpoint) -> docker build --target runtime -t enderchest-p1verify:latest
+Phase 1 container: /health schema_found 1; PUT /profile Mohammed, Asia/Kolkata, light -> first_run_complete true; PATCH /settings lead_days 5;
+  POST /backups -> manual-20261024T060048Z verified; meta schema_version 1, env_marker test. Stopped and removed (container only).
+Phase 2 image (enderchest-app-test:latest 9fd023e3f84f, this session's build) on the same volume and folder:
+  /health ok, schema_found 2, schema_supported 2
+  log: backup_done kind pre-migration name pre-migration-v1-to-v2-20261024T060101Z bytes 45056 (before the migration)
+  pre-migration file: schema_version 1, users [Mohammed], integrity ok
+  GET /profile: Mohammed, Asia/Kolkata, light, first_run_complete true, first_run_step done (D-093: not sent back to first run)
+  GET /settings: lead_days 5 kept; categories []; items total 0; integrity_check ok; tables + categories locations items drafts photos events
+  docker restart: schema 2, no second pre-migration backup (folder: manual, pre-migration, photos/)
+Volume kept by design (never delete volumes).

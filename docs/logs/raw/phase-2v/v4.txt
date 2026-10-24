@@ -1,0 +1,12 @@
+PASS V4 an item not in Trash is refused (not_deleted)  [409 not_deleted]
+PASS V4 confirm {'confirm': 'delete'} refused  [422 validation_error]
+PASS V4 confirm {'confirm': 'DELETE '} refused  [422 validation_error]
+PASS V4 confirm {} refused  [422 validation_error]
+PASS V4 confirm {'confirm': 'DELETE', 'x': 1} refused  [422 validation_error]
+PASS V4 no good backup under 24 h (clock +25 h): backup_required  [409 backup_required backups listed 0]
+PASS V4 Back up now works on the test stack  [201 None]
+PASS V4 permanent delete: 204, row, photo row and files gone, item_purged keeps name and id only  [204 files gone True rows 0/0 event {'name': 'Doomed', 'public_id': 'ENDR-4RVXZ7HN'}]
+PASS V4 a purged id: item 404, lookup 404, second purge 404  [404 404 404 not_found]
+PASS V4 older backups still hold the item (what the dialog says)
+
+10 passed, 0 failed
