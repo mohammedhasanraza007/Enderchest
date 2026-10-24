@@ -21,10 +21,16 @@ export function SavingSheet({
   item: { public_id: string; name: string; price_paise: number | null } | null;
   onClose: () => void;
 }) {
-  return item ? <OpenSavingSheet item={item} onClose={onClose} /> : null;
+  // The sheet stays mounted so closing it calls dialog.close(), which returns focus to the
+  // button that opened it; the form inside starts fresh for each item.
+  return (
+    <Sheet open={item !== null} onClose={onClose} title="I didn't buy it">
+      {item ? <SavingForm key={item.public_id} item={item} onClose={onClose} /> : null}
+    </Sheet>
+  );
 }
 
-function OpenSavingSheet({
+function SavingForm({
   item,
   onClose,
 }: {
@@ -66,47 +72,45 @@ function OpenSavingSheet({
   }
 
   return (
-    <Sheet open onClose={onClose} title="I didn't buy it">
-      <form className="stack" onSubmit={(event) => void save(event)} noValidate>
-        <p className="section-note">
-          Record what you did not spend on {item.name}. Only the price you type counts.
+    <form className="stack" onSubmit={(event) => void save(event)} noValidate>
+      <p className="section-note">
+        Record what you did not spend on {item.name}. Only the price you type counts.
+      </p>
+      <Input
+        label="Price saved (₹)"
+        value={price}
+        inputMode="decimal"
+        autoComplete="off"
+        required
+        error={touched ? (problem ?? undefined) : undefined}
+        onChange={(event) => setPrice(event.target.value)}
+        onBlur={() => setTouched(true)}
+      />
+      <TextArea
+        label="Note (optional)"
+        value={note}
+        rows={2}
+        onChange={(event) => setNote(event.target.value)}
+      />
+      {general ? (
+        <p role="alert" className="field__error">
+          {general}
         </p>
-        <Input
-          label="Price saved (₹)"
-          value={price}
-          inputMode="decimal"
-          autoComplete="off"
-          required
-          error={touched ? (problem ?? undefined) : undefined}
-          onChange={(event) => setPrice(event.target.value)}
-          onBlur={() => setTouched(true)}
-        />
-        <TextArea
-          label="Note (optional)"
-          value={note}
-          rows={2}
-          onChange={(event) => setNote(event.target.value)}
-        />
-        {general ? (
-          <p role="alert" className="field__error">
-            {general}
-          </p>
-        ) : null}
-        <div className="chip-row">
-          {problem ? (
-            <Button type="submit" disabled disabledReason={problem}>
-              Save
-            </Button>
-          ) : (
-            <Button type="submit" loading={saving}>
-              Save
-            </Button>
-          )}
-          <Button variant="ghost" onClick={onClose}>
-            Cancel
+      ) : null}
+      <div className="chip-row">
+        {problem ? (
+          <Button type="submit" disabled disabledReason={problem}>
+            Save
           </Button>
-        </div>
-      </form>
-    </Sheet>
+        ) : (
+          <Button type="submit" loading={saving}>
+            Save
+          </Button>
+        )}
+        <Button variant="ghost" onClick={onClose}>
+          Cancel
+        </Button>
+      </div>
+    </form>
   );
 }

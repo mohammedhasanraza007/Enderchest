@@ -1,0 +1,6 @@
+query ['CORDLESS DRILL', '18 V'] read {'name': 'Cordless Drill', 'size': '18 V'}
+    Buck Converter low 26 ['Looks similar']
+    Tea Strainer low 22 ['Looks similar']
+query ['NOTEBOOK A5', 'RULED'] read {'name': 'Notebook A5'}
+    Buck Converter low 25 ['Looks similar']
+    Tea Strainer low 25 ['Looks similar']

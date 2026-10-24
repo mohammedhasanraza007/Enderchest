@@ -1,0 +1,160 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 582B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.3s
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 0.4s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 320B done
+#7 DONE 0.0s
+
+#8 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#8 DONE 0.0s
+
+#9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#9 DONE 0.0s
+
+#10 [internal] load build context
+#10 transferring context: 18.31kB 0.0s done
+#10 DONE 0.0s
+
+#11 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#11 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#11 DONE 0.0s
+
+#12 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#12 CACHED
+
+#13 [python-base 5/7] RUN pip install -r requirements.lock
+#13 CACHED
+
+#14 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#14 CACHED
+
+#15 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#15 CACHED
+
+#16 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#16 CACHED
+
+#17 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#17 CACHED
+
+#18 [tools  5/11] RUN pip install -r requirements-dev.lock
+#18 CACHED
+
+#19 [frontend-deps 2/4] WORKDIR /frontend
+#19 CACHED
+
+#20 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#20 CACHED
+
+#21 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#21 CACHED
+
+#22 [tools  8/11] COPY frontend/ /frontend/
+#22 CACHED
+
+#23 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#23 CACHED
+
+#24 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#24 CACHED
+
+#25 [python-base 3/7] WORKDIR /app
+#25 CACHED
+
+#26 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#26 CACHED
+
+#27 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#27 CACHED
+
+#28 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#28 CACHED
+
+#29 [tools  7/11] COPY assets/logo /assets/logo
+#29 CACHED
+
+#30 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#30 CACHED
+
+#31 [tools 11/11] COPY backend/ ./
+#31 CACHED
+
+#32 exporting to image
+#32 exporting layers done
+#32 exporting manifest sha256:83a6ed93039dbb0d2ba4ddb4fa4c9e1c07bbedbdd6bbe90aa4d2b6740f8f513c done
+#32 exporting config sha256:43e65fa5658fcbb672dbeee47b5798c3c46a88834a1c8ad96458175e4a82b8be done
+#32 exporting attestation manifest sha256:76775c0eeaa06c4f6d751db842cd9e9e843ac3ed92e8989f15af8247b9d98e7d 0.0s done
+#32 exporting manifest list sha256:b380aa5f37b5c459111c47847da505309846682f1abeab3235c12600e9b9ddb0 done
+#32 naming to docker.io/library/enderchest-tools:latest done
+#32 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#32 DONE 0.1s
+
+#33 resolving provenance for metadata file
+#33 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-0c8cbdf07bf9 Creating 
+ Container enderchest-test-tools-run-0c8cbdf07bf9 Created 
+........................................................................ [ 29%]
+........................................................................ [ 58%]
+........................................................................ [ 87%]
+..............................                                           [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+246 passed, 1 warning in 1.54s
+ Container enderchest-test-tools-run-dc11d017f879 Creating 
+ Container enderchest-test-tools-run-dc11d017f879 Created 
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90m/frontend[39m
+
+ [32m✓[39m src/lib/theme.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/api/client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m src/lib/dashboard.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/lib/ownership.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/lib/format.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m src/lib/backupText.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/lib/timezones.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/lib/proposals.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/lib/lifecycle.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m src/lib/inventory.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/primitives/primitives.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m87 passed[39m[22m[90m (87)[39m
+[2m   Start at [22m 23:27:04
+[2m   Duration [22m 490ms[2m (transform 66%, import 19%, tests 12%, worker 3%)[22m
+
+npm notice
+npm notice New major version of npm available! 10.9.9 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+
+> enderchest-frontend@0.1.0 api-types:check
+> openapi-typescript openapi.json -o /tmp/schema.d.ts && diff -q /tmp/schema.d.ts src/api/schema.d.ts
+
+✨ openapi-typescript 7.13.0
+🚀 openapi.json → /tmp/schema.d.ts [164.3ms]
