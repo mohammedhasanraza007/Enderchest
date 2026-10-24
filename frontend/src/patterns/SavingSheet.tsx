@@ -11,7 +11,8 @@ import { Sheet } from "../primitives/Overlay";
 import { useToast } from "../primitives/Toast";
 
 // "I didn't buy it" (P-13): the owner types the price they did not spend; nothing is counted
-// until they press Save (CLAUDE.md 6, no estimates). The toast offers Undo for 60 seconds.
+// until they press Save (CLAUDE.md 6, no estimates). The toast offers Undo for 10 seconds
+// (PAGES 2); the server accepts it for 60.
 
 export function SavingSheet({
   item,
