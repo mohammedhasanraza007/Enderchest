@@ -32,6 +32,20 @@ def set_fields(conn: sqlite3.Connection, user_id: int, draft_id: str, fields_jso
                  (fields_json, now, user_id, draft_id))
 
 
+_READING_COLUMNS = {"ocr": ("ocr_status", "ocr_result"),
+                    "gemini": ("gemini_status", "gemini_result")}
+
+
+def set_reading(conn: sqlite3.Connection, user_id: int, draft_id: str, kind: str, status: str,
+                result_json: str | None, now: str) -> None:
+    """A reading's state; `result_json` None keeps the last result (shown while re-reading)."""
+    status_column, result_column = _READING_COLUMNS[kind]
+    conn.execute(
+        f"UPDATE drafts SET {status_column} = ?, {result_column} = COALESCE(?, {result_column}), "
+        "updated_at = ? WHERE user_id = ? AND id = ?",
+        (status, result_json, now, user_id, draft_id))
+
+
 def set_status(conn: sqlite3.Connection, user_id: int, draft_id: str, status: str, now: str,
                committed_item_id: int | None = None) -> None:
     conn.execute(

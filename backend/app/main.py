@@ -13,6 +13,7 @@ from .api import (
     boot,
     catalog,
     drafts,
+    gemini,
     items,
     labels,
     pages,
@@ -67,6 +68,7 @@ def create_app(settings: Settings | None = None,
     app.include_router(items.router)
     app.include_router(photos.router)
     app.include_router(drafts.router)
+    app.include_router(gemini.router)
     if settings.env == "test":
         app.include_router(test_support.router)
     app.include_router(pages.router)  # last: its catch-all must never shadow an API route

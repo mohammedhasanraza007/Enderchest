@@ -6,14 +6,18 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
+from app import heavy
 from app.boot.manager import Status
 from app.config import Settings
 from app.db.connection import connect
 from app.db.create import create_database
 from app.main import create_app
+from app.services import gemini as gemini_service
 
 PORT = 8470
 HEADERS = {"X-Enderchest": "1"}
+# Tests never call Google (D-102): port 9 on this machine refuses every connection.
+CLOSED_GEMINI_URL = "http://127.0.0.1:9/v1beta"
 
 
 # What the Vite build leaves behind, reduced to what the server reads: a shell with a theme hint.
@@ -29,7 +33,8 @@ def settings(tmp_path: Path) -> Settings:
     frontend.mkdir()
     (frontend / "index.html").write_text(SHELL_HTML)
     return Settings(env="test", port=PORT, data_dir=data, backups_dir=backups,
-                    backup_dir_hint="the backup folder", frontend_dir=frontend)
+                    backup_dir_hint="the backup folder", frontend_dir=frontend,
+                    gemini_url=CLOSED_GEMINI_URL)
 
 
 def make_database(settings: Settings) -> None:
@@ -63,6 +68,13 @@ def wait_for_state(manager, *, timeout: float = 15.0) -> Status:
     raise AssertionError("boot checks did not settle")
 
 
+def drain_readings() -> None:
+    """Wait for every queued reading: each worker is single and first-in first-out, so a no-op
+    queued now finishes after everything queued before it. OCR first, as it may queue Gemini."""
+    heavy.run(lambda: None)
+    gemini_service._executor.submit(lambda: None).result()
+
+
 class Stack:
     """A running app on temporary folders, with a client that speaks like the browser."""
 
@@ -78,6 +90,7 @@ class Stack:
         return self
 
     def __exit__(self, *exc) -> None:
+        drain_readings()  # a reading queued by this test must not write into the next one
         self.client.__exit__(*exc)
 
     @property

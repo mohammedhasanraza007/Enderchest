@@ -2,7 +2,7 @@
 
 import io
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 ORIENTATION = 0x0112
 GPS_INFO = 0x8825
@@ -44,3 +44,18 @@ def heic_header() -> bytes:
 def truncated_jpeg() -> bytes:
     data = jpeg(1200, 900)
     return data[: len(data) // 2]
+
+
+def label_jpeg(lines: list[str], *, width: int = 1200, size: int = 40) -> bytes:
+    """Black text on white, the first line twice as big: a product label for the OCR tests.
+    Drawn text reads far more cleanly than a real pack; never accuracy evidence (D-056)."""
+    heights = [size * 2] + [size] * (len(lines) - 1)
+    image = Image.new("RGB", (width, 80 + sum(h + 36 for h in heights)), "white")
+    draw = ImageDraw.Draw(image)
+    top = 50
+    for text, height in zip(lines, heights, strict=True):
+        draw.text((50, top), text, fill="black", font=ImageFont.load_default(size=height))
+        top += height + 36
+    out = io.BytesIO()
+    image.save(out, format="JPEG", quality=92)
+    return out.getvalue()

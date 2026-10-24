@@ -59,9 +59,18 @@ class _Found:
     month_only: bool = False
 
 
+def date_spans(text: str) -> list[tuple[int, int]]:
+    """Where date-shaped runs sit in the text, labelled or not, real dates or not."""
+    fixed, _ = _fix_look_alikes(_upper(text))
+    return [(found.start, found.end) for found in _find_dates(fixed)[0]]
+
+
+def _upper(text: str) -> str:
+    return "".join(c.upper() if len(c.upper()) == 1 else c for c in text)  # keeps positions
+
+
 def parse_expiry(text: str, today: date) -> ExpiryReading:
-    upper = "".join(c.upper() if len(c.upper()) == 1 else c for c in text)  # keeps positions
-    fixed, fixed_at = _fix_look_alikes(upper)
+    fixed, fixed_at = _fix_look_alikes(_upper(text))
     dates, masked = _find_dates(fixed)
     labels = sorted([(m.start(), m.end(), "expiry") for m in _EXPIRY_LABEL.finditer(fixed)]
                     + [(m.start(), m.end(), "made") for m in _MADE_LABEL.finditer(fixed)])

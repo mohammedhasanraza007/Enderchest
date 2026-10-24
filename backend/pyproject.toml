@@ -12,13 +12,15 @@ dependencies = [
   "python-multipart",
   "pillow",
   "segno",
+  "httpx",
+  "rapidocr",
+  "onnxruntime",
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest",
   "ruff",
-  "httpx",
 ]
 
 [tool.ruff]

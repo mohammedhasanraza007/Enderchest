@@ -7,9 +7,18 @@ from fastapi import APIRouter, Depends, File, Header, Response, UploadFile
 
 from ..boot.manager import BootManager
 from ..idempotency import IdempotencyStore
-from ..schemas.drafts import Draft, DraftBatch, DraftList, DraftPatch
+from ..schemas.drafts import (
+    Draft,
+    DraftBatch,
+    DraftList,
+    DraftPatch,
+    ExtractQueued,
+    ExtractRequest,
+)
 from ..schemas.items import ItemDetail
 from ..services import drafts as drafts_service
+from ..services import gemini as gemini_service
+from ..services import reading as reading_service
 from .deps import current_user_id, get_db, require_ok
 from .items import get_idempotency
 from .photos import read_upload
@@ -26,7 +35,10 @@ def create_drafts(images: list[UploadFile] = File(..., alias="images[]"),
                   user_id: int = Depends(current_user_id)) -> DraftBatch:
     uploads = [read_upload(image) for image in images[:drafts_service.MAX_BATCH + 1]]
     drafts = drafts_service.create_drafts(conn, manager.settings, user_id, uploads)
-    return DraftBatch(drafts=[Draft(**draft) for draft in drafts])
+    for draft in drafts:  # each new draft is read at once (D-100)
+        reading_service.queue_local(conn, manager, user_id, draft["id"])
+    return DraftBatch(drafts=[Draft(**drafts_service.get_draft(conn, user_id, draft["id"]))
+                              for draft in drafts])
 
 
 @router.get("/drafts", **SET_ONLY)
@@ -72,3 +84,16 @@ def discard_draft(draft_id: str, conn: sqlite3.Connection = Depends(get_db),
                   user_id: int = Depends(current_user_id)) -> Response:
     drafts_service.discard(conn, user_id, draft_id)
     return Response(status_code=204)
+
+
+@router.post("/drafts/{draft_id}/extract", status_code=202, response_model_exclude_none=True)
+def extract(draft_id: str, body: ExtractRequest, manager: BootManager = Depends(require_ok),
+            conn: sqlite3.Connection = Depends(get_db),
+            user_id: int = Depends(current_user_id)) -> ExtractQueued:
+    """Re-read (`local`) or Improve with Gemini (`gemini`); the client polls the draft."""
+    drafts_service.require_open(conn, user_id, draft_id)
+    if body.engine == "local":
+        reading_service.queue_local(conn, manager, user_id, draft_id)
+        return ExtractQueued(ocr_status="pending")
+    gemini_service.queue(conn, manager, user_id, draft_id)
+    return ExtractQueued(gemini_status="pending")

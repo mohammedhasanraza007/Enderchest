@@ -22,6 +22,7 @@ from ..schemas.items import ItemCreate
 from . import items as items_service
 from . import photos as photos_service
 from . import profile as profile_service
+from . import reading
 
 MAX_BATCH = 20
 
@@ -31,8 +32,7 @@ def _view(conn: sqlite3.Connection, user_id: int, row: sqlite3.Row) -> dict:
     return {"id": row["id"], "status": row["status"], "fields": json.loads(row["fields"]),
             "photos": [{"id": p["id"], "width": p["width"], "height": p["height"]}
                        for p in photos],
-            "ocr_status": row["ocr_status"], "gemini_status": row["gemini_status"],
-            "proposed": {}, "raw_text": None, "created_at": row["created_at"]}
+            **reading.view(row), "created_at": row["created_at"]}
 
 
 def _row(conn: sqlite3.Connection, user_id: int, draft_id: str) -> sqlite3.Row:
@@ -46,6 +46,10 @@ def _open(row: sqlite3.Row) -> None:
     if row["status"] != "open":
         raise AppError("conflict", 409, f"That draft is already {row['status']}.",
                        {"reason": row["status"]})
+
+
+def require_open(conn: sqlite3.Connection, user_id: int, draft_id: str) -> None:
+    _open(_row(conn, user_id, draft_id))
 
 
 def get_draft(conn: sqlite3.Connection, user_id: int, draft_id: str) -> dict:

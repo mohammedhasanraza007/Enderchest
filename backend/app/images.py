@@ -3,8 +3,8 @@
 Every image is checked by its bytes (never its name or the browser's content type), turned
 upright from its EXIF orientation, stripped of all metadata, re-encoded as JPEG (quality 92,
 long edge at most 2560 px) and given a 320 px thumbnail. Files are named by UUID: the uploaded
-name is never used, so it cannot reach the file system. Image work runs one at a time in a
-single-worker executor so the API and /health stay responsive.
+name is never used, so it cannot reach the file system. Image work runs one at a time in the
+shared heavy executor (`heavy.py`) so the API and /health stay responsive.
 """
 
 import hashlib
@@ -12,12 +12,12 @@ import io
 import os
 import uuid
 import warnings
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 
+from . import heavy
 from .config import Settings
 from .fsutil import fsync_dir, fsync_path
 
@@ -29,7 +29,6 @@ JPEG_QUALITY = 92
 THUMB_QUALITY = 85
 
 Image.MAX_IMAGE_PIXELS = MAX_PIXELS
-_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="images")
 
 
 class ImageRefused(Exception):
@@ -114,7 +113,7 @@ def process(data: bytes) -> Processed:
 
 
 def process_in_executor(data: bytes) -> Processed:
-    return _executor.submit(process, data).result()
+    return heavy.run(process, data)
 
 
 def _write_atomic(content: bytes, tmp_dir: Path, final: Path) -> None:
@@ -153,7 +152,7 @@ def remake_thumb(settings: Settings, original: Path, target: Path) -> None:
             return _encode(opened.convert("RGB"), THUMB_EDGE, THUMB_QUALITY)
 
     settings.upload_tmp_dir.mkdir(parents=True, exist_ok=True)
-    _write_atomic(_executor.submit(work).result(), settings.upload_tmp_dir, target)
+    _write_atomic(heavy.run(work), settings.upload_tmp_dir, target)
 
 
 def discard(settings: Settings, stored: Stored) -> None:

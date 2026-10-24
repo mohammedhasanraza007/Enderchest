@@ -40,6 +40,35 @@ class DraftPhoto(BaseModel):
     height: int
 
 
+class Proposal(BaseModel):
+    """A value read from the photo (`ocr`) or suggested by Gemini, never trusted unconfirmed."""
+
+    value: str | int
+    source: Literal["ocr", "gemini"]
+    confidence: Literal["high", "medium", "low"]
+    flags: list[str]
+    text: str | None = None  # the line or Gemini text the value came from
+    alternatives: list[str] | None = None  # the other reading of an ambiguous date
+
+
+class ReadingInfo(BaseModel):
+    engine: str
+    ms: int
+    photos: int
+
+
+class GeminiAnswer(BaseModel):
+    """Gemini's validated answer, shown in the "What was read" drawer."""
+
+    name: str | None = None
+    brand: str | None = None
+    model: str | None = None
+    size: str | None = None
+    category: str | None = None
+    expiry_text: str | None = None
+    inspection_interval_days: int | None = None
+
+
 class Draft(BaseModel):
     id: str
     status: Literal["open", "committed", "discarded"]
@@ -47,9 +76,26 @@ class Draft(BaseModel):
     photos: list[DraftPhoto]
     ocr_status: Literal["none", "pending", "done", "failed"]
     gemini_status: Literal["none", "pending", "done", "failed", "skipped"]
-    proposed: dict  # values read from the photo arrive in Phase 3; empty until then
+    # Keys: name, model, size, brand, expiry_date, category_id, inspection_interval_days.
+    proposed: dict[str, Proposal]
     raw_text: str | None
+    ocr_error: str | None
+    gemini_error: str | None
+    read_notes: list[str]
+    ocr_info: ReadingInfo | None
+    gemini_values: GeminiAnswer | None
     created_at: str
+
+
+class ExtractRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    engine: Literal["local", "gemini"]
+
+
+class ExtractQueued(BaseModel):
+    ocr_status: Literal["pending"] | None = None
+    gemini_status: Literal["pending"] | None = None
 
 
 class DraftList(BaseModel):

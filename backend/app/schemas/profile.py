@@ -75,7 +75,8 @@ class SettingsPatch(BaseModel):
     lead_days: int | None = Field(default=None, ge=1, le=14)
     coach_enabled: bool | None = None
     gemini_mode: GeminiMode | None = None
-    gemini_model: str | None = Field(default=None, max_length=100)
+    # A model name only (it becomes part of the Gemini URL path): letters, digits, dots, dashes.
+    gemini_model: str | None = Field(default=None, pattern=r"^[A-Za-z0-9][A-Za-z0-9.\-]{0,99}$")
     share_images_with_gemini: bool | None = None
     assistant_share_item_text: bool | None = None
     # P-01 step 2 is finished (Continue or Skip); the only value a client may write (D-093).

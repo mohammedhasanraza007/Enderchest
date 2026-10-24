@@ -8,6 +8,10 @@ from pathlib import Path
 APP_VERSION = "0.1.0"
 INTERNAL_PORT = 8470
 DEFAULT_FRONTEND_DIR = Path("/app/frontend-dist")
+DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite"  # D-102
+DEFAULT_GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta"
+# The Ryzen 5 5500 has 6 cores: 4 reading threads leave room for the API and the browser.
+DEFAULT_OCR_THREADS = 4
 
 
 @dataclass(frozen=True)
@@ -18,7 +22,9 @@ class Settings:
     backups_dir: Path
     backup_dir_hint: str  # the host folder, shown to the owner only
     app_version: str = APP_VERSION
-    gemini_model_default: str = ""  # ENDERCHEST_GEMINI_MODEL; Phase 3 picks the real default
+    gemini_model_default: str = DEFAULT_GEMINI_MODEL  # ENDERCHEST_GEMINI_MODEL
+    gemini_url: str = DEFAULT_GEMINI_URL  # ENDERCHEST_GEMINI_URL; tests point it at a closed port
+    ocr_threads: int = DEFAULT_OCR_THREADS  # ENDERCHEST_OCR_THREADS
     frontend_dir: Path = DEFAULT_FRONTEND_DIR  # the built frontend, copied into the image
     build_date: str | None = None  # ENDERCHEST_BUILD_DATE, set by build.bat; None if not recorded
 
@@ -68,7 +74,9 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
         data_dir=Path(env.get("ENDERCHEST_DATA_DIR", "/data")),
         backups_dir=backups_dir,
         backup_dir_hint=env.get("ENDERCHEST_BACKUP_DIR", str(backups_dir)),
-        gemini_model_default=env.get("ENDERCHEST_GEMINI_MODEL", ""),
+        gemini_model_default=env.get("ENDERCHEST_GEMINI_MODEL") or DEFAULT_GEMINI_MODEL,
+        gemini_url=env.get("ENDERCHEST_GEMINI_URL") or DEFAULT_GEMINI_URL,
+        ocr_threads=int(env.get("ENDERCHEST_OCR_THREADS") or DEFAULT_OCR_THREADS),
         frontend_dir=Path(env.get("ENDERCHEST_FRONTEND_DIR", str(DEFAULT_FRONTEND_DIR))),
         build_date=(env.get("ENDERCHEST_BUILD_DATE") or None),
     )
