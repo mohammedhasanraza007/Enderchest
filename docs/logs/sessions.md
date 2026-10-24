@@ -138,3 +138,4 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - After the fixes: lint; unit 246 + 87; integration 320; probes 1 to 25; Phase 6, dashboard, crawler, contrast, shell specs green. Looked at the own mode, Savings and pill shots (1280 both themes, 1024).
 - Verdict PASS WITH NOTES (N1 to N6; N1: DINOv2 at 0.80 barely separates pictures, gate 1 must look for a false High). Blocked on owner: gate 1, acceptance, screenshot approval.
 - Next: Phase 7 build (`D:\Projects\phase7-next-prompt.txt`).
+- Zip route: fresh `git clone` into an empty scratch folder, `zip-list.txt` from `git ls-files -co --exclude-standard` plus `.git`, `C:\Windows\System32\tar.exe -a -c -f`.
