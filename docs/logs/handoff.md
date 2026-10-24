@@ -3,43 +3,41 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase3v.zip`. The Phase 3 verification session unzipped it into `D:\Projects\Enderchest-phase-4\Enderchest` and made branch `phase-4` there (D-091). Never unzip over an existing repo or worktree (D-067).
+- Zip: `phase4.zip`. The Phase 4 build session unzipped it into `D:\Projects\Enderchest-phase-4v\Enderchest` and made branch `phase-4-verify` there (D-091). Never unzip over an existing repo or worktree (D-067).
 - **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Do not wait for "go". Keep `D:\Projects\enderchest-chain-state.txt` current (running at start; handing-off with the next step before `start_session`). UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. Copy the rules into every next prompt. If `start_session` is refused, message the top session "Enderchest phase 0 foundation".
-- Last closed phase: none formally. Phases 0 to 3: verification PASS for Claude's part, owner checks pending. **Phase 3 verification: PASS for Claude's part** (`docs/reviews/phase-3-verification.md`; one minor D-100 defect fixed, F-032).
-- **Next task: the Phase 4 build (Lifecycle)**, `docs/specs/phase-4-lifecycle.md`; prompt `D:\Projects\phase4-next-prompt.txt`.
-- Resume check: `git log --oneline -3` shows `phase3v: checkpoint (phase3v zip)` on top.
+- Last closed phase: none formally. Phases 0 to 3: verification PASS for Claude's part, owner checks pending. **Phase 4 built**; Verification: pending for phase 4.
+- **Next task: the Phase 4 verification** (fresh session), prompt `D:\Projects\phase4v-next-prompt.txt`, brief `docs/reviews/phase-4-brief.md`.
+- Resume check: `git log --oneline -3` shows `phase4: checkpoint (phase4 zip)` on top.
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it. Time-box bugs: fix once, simply, with a test; a second failure goes to the evidence log.
 
 ## Next steps, in this order
-1. **Phase 4 build** (Lifecycle): it reads Gemini's suggested inspection interval from `drafts.gemini_result` through `committed_item_id` (D-102). Draft fields now carry `owned` (dropped on commit).
-2. Then the Phase 4 verification (fresh session).
-3. Small TODOs any session may take: make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5, N6, N7; Phase 3 notes N1 to N3.
+1. **Phase 4 verification** (fresh session, branch `phase-4-verify`): F-019 and the reconcile (D-104, D-108) deserve the hardest look.
+2. Then the Phase 5 build (Dashboard); it also adds the 30-day road to the Tasks page (D-103) and reuses `patterns/Reminders.tsx` for Needs attention.
+3. Small TODOs any session may take: make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5 to N7; Phase 3 notes N1 to N3.
 
 ## Current state (facts)
-- Phase 3 built: expiry parser (35/35 supplied cases plus 10 more), local OCR (RapidOCR 3.10 on ONNX Runtime, provisional, D-099) in the shared size-1 `heavy` worker, field extraction (name, model, size, expiry), readings queued on draft creation and by Re-read (D-100), Gemini over REST with the key file, modes off/ask/auto, photos only when shared (D-101, D-102), the confirm screen with source tags, confidence dots, the "What was read" drawer, expiry confirmation and date pills, the queue's read names, Settings → Gemini. Bake-off harness `scripts/ocr_bakeoff.py` and image target `bakeoff` (`test.bat bakeoff`; all four engines load, models baked in).
-- Results on the final code: lint clean; unit 160 pytest + 65 vitest; integration 198; Playwright main 82 + no-backups 3; probes 1 to 21 ALL PASSED (20: a photo read with no network, Gemini "could not be reached"; 21: `/health` median 3.4 ms, max 75.5 ms while three readings queued, readings 0.4 to 1.4 s).
-- Decisions up to D-102. Failure kinds up to F-035. Phase 3 verification re-runs: unit 160 + 66, integration 199, Playwright 82 + 3, probes 1 to 21 ALL PASSED.
-- No migration in Phase 3 (the drafts table already had the reading columns). Live stack untouched (still Phase 1 code, schema 1, until the owner runs `build.bat`).
+- Phase 4 built: migration 0003 (`tasks`, `inspections`, `notifications`); use, mark expired, discard, reactivate with Undo; tasks with both schedule modes; the item's maintenance task (Gemini interval "suggested, unverified", D-102) and inspections (worn/defective raise "inspection suggested", D-104); the reconcile at start, every 15 minutes, on a date change, before notification reads and after writes (D-107), writing nothing when idle (D-108); notification centre with server actions, snooze capped at the expiry date, the `shown` claim; Tasks, Notifications, item lifecycle and maintenance card, Settings → Notifications, the bell, `(N)` tab title, browser notifications once per row.
+- Results on the final code: lint clean; unit 193 pytest + 75 vitest; integration 235; Playwright main 93 + no-backups 3; probes 1 to 23 ALL PASSED (22: restarts and a clock moved both ways; 23: ten concurrent `shown` claims, one wins; 16 caught F-022, fixed as D-108); contrast 0 failures (13 routes, 441/442 pieces); crawler 0 dead controls on 16 routes; 20 screenshots reviewed, 6 look fixes.
+- Decisions up to D-108. Failure kinds up to F-035 (the verification adds the build's new ones, listed in its prompt).
+- Schema 3. The live stack is untouched (still Phase 1 code, schema 1, until the owner runs `build.bat`); its upgrade runs 0002 and 0003 after a verified pre-migration backup.
 
 ## Owner runs next
-1. **Gate 2:** take 20 photos with the webcam as `tests/fixtures/README.md` says, put them and `labels.csv` in `tests\fixtures\private\phase3\`, correct every row, say "labels confirmed", then run `.\test.bat bakeoff` (offline; the table lands in `docs\logs\raw\phase-3\bakeoff\`). If another engine wins, only `backend/app/integrations/ocr/engine.py` changes (D-099).
-2. **Gate 4 (optional):** Settings → Gemini: paste your key (Google AI Studio), choose "Ask each time", press "Test connection"; then on a confirm screen press "Improve with Gemini". Or write that you waive it.
-3. `build.bat`, then `run.bat` (the live app moves to the Phase 3 code; schema 2 migration from Phase 2 runs first if not done yet, after a verified pre-migration backup).
-4. Phase 3 acceptance (5 minutes): add three real items with the webcam; open "What was read"; correct a wrong field; confirm a date; check the saved item.
-5. Look at `docs/logs/raw/phase-3/shots/*.png` and agree (or not) to the Phase 3 notes N1 to N3 in `docs/reviews/phase-3-verification.md`. Look (and the Phase 1 and 2 shots) and say "approved" or what looks wrong.
-6. Still open from earlier phases: Phase 2 acceptance (webcam, printed label), Back up now and `backup.bat` on live, `.\test.bat probes -Only "4,9" -Live`, `restore.bat` once; optional: delete stray container `great_gagarin`.
+1. `build.bat`, then `run.bat` (the live app moves to the Phase 4 code; migrations 0002 and 0003 run after verified pre-migration backups).
+2. **Phase 4 acceptance (3 minutes):** create a task due today and an item expiring tomorrow; open the app and see both under the bell; mark one done, snooze one; Settings → Notifications → "Allow browser notifications", then "Send a test notification" and check the system alert appears (an Enderchest tab must be open).
+3. Look at `docs/logs/raw/phase-4/shots/*.png` (and the Phase 1 to 3 shots) and say "approved" or what looks wrong.
+4. Still open from Phase 3: gate 2 (20 webcam photos, `labels.csv`, `.\test.bat bakeoff`), gate 4 (Gemini key, or a written waiver), the Phase 3 acceptance; notes N1 to N3.
+5. Still open from earlier phases: Phase 2 acceptance (webcam, printed label), Back up now and `backup.bat` on live, `.\test.bat probes -Only "4,9" -Live`, `restore.bat` once; optional: delete stray container `great_gagarin`.
 
 ## Known issues to carry
-- The OCR engine and its 1600 px edge are provisional until gate 2. Drawn labels read perfectly; real packs will not (curved, glossy, small print): expect lower confidence and more "Not confirmed" taps.
-- The Gemini request shape (`responseSchema` with `nullable`) is unverified against the real service until gate 4.
-- Search case-folding is ASCII-only (D-098, N3). A hidden photo's file is still served by id (N4). Category and place counts include used, expired and discarded items (N9, check in Phase 4).
-- Backup log times use the real clock while the test clock can move (F-031). Offset cursor paging can shift one tile (CODE_MAP 5).
-- Throwaway test volumes (`enderchest_test_data_p10_*`, `_p11_*`, `_p13_*`, `_p20_*`, `_q1_*`, `_v1p_*`, old anonymous ones) and the images `enderchest-p1verify:latest`, `enderchest-bakeoff:latest` (3.3 GB with PyTorch; the app test image is 752 MB; remove with `docker image rm enderchest-bakeoff` once the bake-off is done) are kept by design; never delete volumes.
-- Never leave a shell's working folder inside `test-results`. Bind-mount only folders that exist on both sides (F-028). Never edit `test.bat` while it runs.
+- Browser notifications need an open Enderchest tab (said in the UI); a closed browser shows nothing (idea O-007). The browser test runs on Chromium's new headless mode: the headless shell always reports "denied".
+- An owner's write landing in the same moment as a timed reconcile is seen by the backup "changed" rule only at the next change or the daily backup (D-108, like D-083).
+- The OCR engine and its 1600 px edge are provisional until gate 2; the Gemini request shape is unverified until gate 4.
+- Search case-folding is ASCII-only (D-098). Category and place counts include used, expired and discarded items (N9, still to decide). Offset cursor paging can shift one tile (CODE_MAP 5).
+- Throwaway test volumes and the images `enderchest-p1verify`, `enderchest-bakeoff` (3.3 GB) are kept by design; never delete volumes. Never leave a shell's working folder inside `test-results`. Never edit `test.bat` while it runs.
 
 ## How to work on this laptop
 - Owner's laptop: Ryzen 5 5500 (6 cores), 16 GB RAM, AMD RX 6600 LE: small CPU models only.
 - Docker Desktop is `D:\DockerDesktop\Docker Desktop.exe`. Claude's guard denies any command containing the live volume's name, volume removal, prune or `down -v`; retagging `enderchest-app:latest` is refused too. Use full paths.
-- `.\test.bat <what>` through `cmd /c "<full path>\test.bat <what> > <full path>\file 2>&1"`, then read the exit code. The browser suite takes about 12 minutes, the probes about 20; run long jobs in the background and wait inside your own turn.
-- Probe scripts can run inside a container (`docker cp`, `docker exec`): `backend/tests/probes/capture_probe.py` (probes 20, 21).
+- `.\test.bat <what>` through `cmd /c "<full path>\test.bat <what> > <full path>\file 2>&1"`. The browser suite takes about 13 minutes, the probes about 25; run long jobs in the background and wait inside your own turn (PowerShell `Wait-Process` on the cmd's id works; foreground sleep is blocked).
+- Quick loops without rebuilding: `docker run --rm -v <repo>/backend:/app -w /app enderchest-tools:latest pytest …`; Playwright specs with `-v <repo>/tests/e2e:/tests/e2e` on `docker compose … --profile e2e run --rm e2e npx playwright test <spec>`. Prettier on files outside `frontend/` needs `--config /frontend/.prettierrc.json`.
 - The Windows zip route is proven (`docs/PROCESS.md` 7: clone first, `tar -a -c -f ... -T zip-list.txt`).

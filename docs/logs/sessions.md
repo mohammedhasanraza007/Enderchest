@@ -88,3 +88,12 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Added failure kinds F-032 to F-035 (the build's: key left by the test reset, batch edited while running, control characters from Python strings; the last one recurred while writing its own row).
 - Verdict: PASS for Claude's part; gates 2 and 4 and the acceptance run BLOCKED on the owner; notes N1 to N3.
 - Next: Phase 4 build (`D:\Projects\phase4-next-prompt.txt`).
+
+## 2026-10-24 · phase4 · Phase 4 build (lifecycle), chain hand-off to the Phase 4 verification
+- Zip in: `phase3v.zip` (already unzipped into `D:\Projects\Enderchest-phase-4`, branch `phase-4`). Zip out: `D:\Projects\phase4.zip` (clone, `zip-list.txt`, Windows `tar`), unzipped into `D:\Projects\Enderchest-phase-4v` on branch `phase-4-verify`.
+- Built: migration 0003; lifecycle (use, mark expired, discard, reactivate, Undo through one entry); tasks (both schedule modes); the item's maintenance task with Gemini's interval "suggested, unverified"; inspections and "inspection suggested" findings; the reconcile loop (D-104, D-107, D-108); notification endpoints; Tasks, Notifications, item lifecycle and maintenance card, Settings → Notifications, the bell, `(N)` title, browser notifications claimed once. Brief `docs/reviews/phase-4-brief.md`; decisions D-103 to D-108.
+- Checks on the final code: lint clean; unit 193 + 75; integration 235; Playwright 93 + 3; probes 1 to 23 ALL PASSED; contrast 0 failures (13 routes); crawler 0 dead controls (16 routes); 20 screenshots reviewed, 6 look fixes.
+- Failed and fixed: probe 16 caught F-022 (the reconcile's bookkeeping write made hourly backups; D-108); the headless shell reports notifications "denied" (the gate-8 test runs on `channel: "chromium"`); the gallery's bell asked a server; two "Save" buttons on Settings; F-024 in the new task form; probe 22 tripped on PowerShell 5.1 unrolling a one-row array; Prettier reformatted older e2e files at 80 columns (restored).
+- Blocked on owner: the acceptance run (real system alert), screenshot approval, `build.bat`/`run.bat`; Phase 3 gates 2 and 4 still open.
+- Next: Phase 4 verification (`D:\Projects\phase4v-next-prompt.txt`).
+
