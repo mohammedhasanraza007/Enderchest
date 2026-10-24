@@ -1,0 +1,48 @@
+--- probe 1 ---
+PROBE 1: PASS - records before=299 after stop/up=299, consistent=True, quick_check=ok; item ENDR-B7ZA40M9 with photo intact=True
+--- probe 2 ---
+PROBE 2: PASS - container removed=True; records before=297 after=297, consistent=True
+--- probe 3 ---
+PROBE 3: PASS - no-cache build ok=True; records before=291 after=291, consistent=True; item with photo intact=True
+--- probe 4 ---
+PROBE 4: PASS - copy at Enderchest-moved-663bfe: up=True; same project containers=[enderchest-test-app-1
+enderchest-test-app-nobackups-1]; records before=305 after=305
+--- probe 5 ---
+PROBE 5: PASS - container removed=True; records before=311 after=311, consistent=True
+--- probe 6 ---
+PROBE 6: PASS - round 1 killed at ~163 rows, after restart rows=172 consistent=True quick_check=ok; round 2 killed at ~371 rows, after restart rows=380 consistent=True quick_check=ok; round 3 killed at ~622 rows, after restart rows=630 consistent=True quick_check=ok
+--- probe 7 ---
+PROBE 7: PASS - state=locked/no_data_volume; /data contents=[]; API status 503
+--- probe 8 ---
+PROBE 8: PASS - after delete state=recovery; backups offered=1; restore status=200; records before=312 after=312
+--- probe 9 ---
+PROBE 9: PASS - test stack: build:0 build:0 build:0 up:0 up:0 up:0; records before=307 after=307
+--- probe 10 ---
+PROBE 10: PASS - state=locked/newer_data schema_found=99; API 503; file hash unchanged=True
+--- probe 11 ---
+PROBE 11: PASS - app uid=10001; backup on host=True; photo mirrored=True; fresh volume state=recovery:True; restore status=200; records before=305 after=305; photo sha256 equal=True
+--- probe 12 ---
+PROBE 12: PASS - all 6 checks refused or clean as required
+--- probe 13 ---
+PROBE 13: PASS - live config on test data: locked/env_mismatch; test config on live-marked data: locked/env_mismatch; files unchanged: test=True live-marked=True
+--- probe 14 ---
+PROBE 14: PASS - kills=1; a .partial was seen after a kill=True; listed as backup=False; left after restart=False; next backup status=201
+--- probe 15 ---
+PROBE 15: PASS - script exit=0; new manual files=1; name printed=True; listed by the API=True; output=[Backup made and verified: manual-20261024T143540Z.sqlite3 (184 KB) | Folder: ./.test-backups]
+--- probe 16 ---
+PROBE 16: PASS - baseline manual-20261024T143541Z; clock moved to 16:05Z; auto backups on an idle database after two ticks: 0; after a real write: control backup made=True; backup_due reasons in the log=[startup,changed]
+--- probe 17 ---
+PROBE 17: PASS - first run before=False; stopped=True; unreachable while stopped=True; after start: name=Mohammed timezone=Asia/Kolkata theme=dark step=categories; after step 2: first_run_complete=True
+--- probe 18 ---
+PROBE 18: PASS - dev services up=True; first version served=True; edit served within 15 s=True
+--- probe 19 ---
+PROBE 19: PASS - test build ok=True; test tag exists=True; live tag before=sha256:a73eb8a1774b after=sha256:a73eb8a1774b
+--- probe 20 ---
+PROBE 20: PASS - no network: {"network": "unreachable", "ocr_status": "done", "read": {"expiry_date": "2027-03-14", "model": "AB-1234X", "size": "500 ml", "name": "Oat Milk Barista"}, "test": [502, "Gemini could not be reached. Check the internet connection; everything else keeps working without it."], "extract": 202, "gemini": ["failed", "Gemini could not be reached. Check the internet connection; everything else keeps working without it."], "local_kept": true, "passed": true}
+--- probe 21 ---
+PROBE 21: PASS - readings queued at once: {"readings": [["done", 1408], ["done", 636], ["done", 486]], "health_samples": 35, "health_ms": {"median": 3.1, "max": 13.0}, "passed": true}
+--- probe 22 ---
+PROBE 22: PASS - day D rows=1; after restart + D+1: expiry_soon same row=True, task rows=1; after restart (real clock D): task row=superseded; at D+3: expired=1, old expiry_soon=superseded, task row reopened=True '2 days overdue'; rows=3, keys unique=True, second read unchanged=True
+--- probe 23 ---
+PROBE 23: PASS - row 1 unshown before=1; 10 concurrent claims: claimed=1 not claimed=9, all HTTP 200=True; unshown after=0, still open=1
+ALL PASSED: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23

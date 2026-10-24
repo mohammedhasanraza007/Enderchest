@@ -97,3 +97,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Blocked on owner: the acceptance run (real system alert), screenshot approval, `build.bat`/`run.bat`; Phase 3 gates 2 and 4 still open.
 - Next: Phase 4 verification (`D:\Projects\phase4v-next-prompt.txt`).
 
+
+## 2026-10-24 · phase4v · Phase 4 verification, chain hand-off to the Phase 5 build
+- Zip in: `phase4.zip` (unzipped into `D:\Projects\Enderchest-phase-4v`, branch `phase-4-verify`). Zip out: `D:\Projects\phase4v.zip`, unzipped into `D:\Projects\Enderchest-phase-5` on branch `phase-5`.
+- Probe list first (11 items), then re-ran everything: lint, unit, integration exit 0; Playwright 93 + 3; probes 1 to 23 ALL PASSED.
+- Seven new independent reconcile probes (`test_phase4_verification.py`), all pass. Wording, screenshots (20) and reality audit checked.
+- Verdict: PASS WITH NOTES (N1 snooze dialog corner, N2 1024 px action wrap, N3 DATA_MODEL 2.9 wording for done early). Failure kinds F-036 to F-039 added.
+- Blocked on owner: Phase 4 acceptance, screenshot approval, `build.bat`/`run.bat`; earlier phases' owner items.
+- Next: Phase 5 build (`D:\Projects\phase5-next-prompt.txt`).

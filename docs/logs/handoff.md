@@ -3,22 +3,22 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase4.zip`. The Phase 4 build session unzipped it into `D:\Projects\Enderchest-phase-4v\Enderchest` and made branch `phase-4-verify` there (D-091). Never unzip over an existing repo or worktree (D-067).
+- Zip: `phase4v.zip`. The Phase 4 verification session unzipped it into `D:\Projects\Enderchest-phase-5\Enderchest` and made branch `phase-5` there (D-091). Never unzip over an existing repo or worktree (D-067).
 - **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Do not wait for "go". Keep `D:\Projects\enderchest-chain-state.txt` current (running at start; handing-off with the next step before `start_session`). UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. Copy the rules into every next prompt. If `start_session` is refused, message the top session "Enderchest phase 0 foundation".
-- Last closed phase: none formally. Phases 0 to 3: verification PASS for Claude's part, owner checks pending. **Phase 4 built**; Verification: pending for phase 4.
-- **Next task: the Phase 4 verification** (fresh session), prompt `D:\Projects\phase4v-next-prompt.txt`, brief `docs/reviews/phase-4-brief.md`.
-- Resume check: `git log --oneline -3` shows `phase4: checkpoint (phase4 zip)` on top.
+- Last closed phase: Phase 4, verification **PASS WITH NOTES** for Claude's part (`docs/reviews/phase-4-verification.md`, notes N1 to N3); owner acceptance and screenshot approval BLOCKED. Phases 0 to 3: PASS for Claude's part, owner checks pending.
+- **Next task: the Phase 5 build (Dashboard)**, prompt `D:\Projects\phase5-next-prompt.txt`, spec `docs/specs/phase-5-dashboard.md`; it also adds the 30-day road to the Tasks page (D-103).
+- Resume check: `git log --oneline -3` shows `pack: phase 4 verification checkpoint (phase4v zip)` on top.
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it. Time-box bugs: fix once, simply, with a test; a second failure goes to the evidence log.
 
 ## Next steps, in this order
-1. **Phase 4 verification** (fresh session, branch `phase-4-verify`): F-019 and the reconcile (D-104, D-108) deserve the hardest look.
-2. Then the Phase 5 build (Dashboard); it also adds the 30-day road to the Tasks page (D-103) and reuses `patterns/Reminders.tsx` for Needs attention.
-3. Small TODOs any session may take: make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5 to N7; Phase 3 notes N1 to N3.
+1. **Phase 5 build** (fresh session, branch `phase-5`): Dashboard (ring, Needs attention reusing `patterns/Reminders.tsx`, 14-day road), the 30-day road on Tasks (D-103); F-020 (every number equals its breakdown) is new for this phase.
+2. Then the Phase 5 verification (fresh session).
+3. Small TODOs any session may take: Phase 4 notes N1 (snooze dialog corner), N2 (item actions at 1024 px), N3 (DATA_MODEL 2.9 sentence for done early); make `test.bat lint` cover `tests/e2e`; unload the OCR model after 10 idle minutes; Phase 2 notes N5 to N7; Phase 3 notes N1 to N3.
 
 ## Current state (facts)
 - Phase 4 built: migration 0003 (`tasks`, `inspections`, `notifications`); use, mark expired, discard, reactivate with Undo; tasks with both schedule modes; the item's maintenance task (Gemini interval "suggested, unverified", D-102) and inspections (worn/defective raise "inspection suggested", D-104); the reconcile at start, every 15 minutes, on a date change, before notification reads and after writes (D-107), writing nothing when idle (D-108); notification centre with server actions, snooze capped at the expiry date, the `shown` claim; Tasks, Notifications, item lifecycle and maintenance card, Settings → Notifications, the bell, `(N)` tab title, browser notifications once per row.
 - Results on the final code: lint clean; unit 193 pytest + 75 vitest; integration 235; Playwright main 93 + no-backups 3; probes 1 to 23 ALL PASSED (22: restarts and a clock moved both ways; 23: ten concurrent `shown` claims, one wins; 16 caught F-022, fixed as D-108); contrast 0 failures (13 routes, 441/442 pieces); crawler 0 dead controls on 16 routes; 20 screenshots reviewed, 6 look fixes.
-- Decisions up to D-108. Failure kinds up to F-035 (the verification adds the build's new ones, listed in its prompt).
+- Decisions up to D-108. Failure kinds up to F-039.
 - Schema 3. The live stack is untouched (still Phase 1 code, schema 1, until the owner runs `build.bat`); its upgrade runs 0002 and 0003 after a verified pre-migration backup.
 
 ## Owner runs next
