@@ -172,7 +172,8 @@ Phase 3: `POST /drafts` also queues one local reading per new draft (`ocr_status
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
 | 5 | GET | /dashboard | none | `{today, greeting:{part:'morning'\|'afternoon'\|'evening'\|'night', name}, subtitle, item_count, score\|null, rings:{documented,located,fresh,on_time}, attention:{rows:[NotificationView], total}, road:{start,end,events:[{date,kind,label,count}], truck_date}, savings:{month_paise, pill_date\|null}\|null, streak:{days}\|null}`; each ring `{value\|null, num, den}`. `savings` is `null` until Phase 6 data exists | |
-| 5 | GET | /dashboard/rings/{ring} | `ring` is `documented`, `located`, `fresh` or `on_time` | `{ring, value, num, den, qualifying:[ItemSummary\|task], failing:[ItemSummary\|task]}` (up to 200 each) | `not_found` |
+| 5 | GET | /dashboard/rings/{ring} | `ring` is `documented`, `located`, `fresh` or `on_time` | `{ring, value, num, den, qualifying:[entry], failing:[entry]}` (up to 200 each); entry `{kind:'item'\|'task', name, public_id, task_id, note}` (D-112) | `not_found` |
+| 5 | GET | /dashboard/road | `days` 1 to 30 (default 14; Tasks uses 30, D-103) | the `road` object of `GET /dashboard`; each event `{date, kind:'expiry'\|'task'\|'mixed', label, count, entries:[{kind, label, public_id, task_id}]}` (D-110, D-113) | `validation_error` |
 
 ### 2.14 Ownership and savings
 | Ph | Method | Path | Request | Success | Errors |

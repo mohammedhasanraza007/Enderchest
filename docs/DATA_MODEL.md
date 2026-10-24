@@ -97,7 +97,7 @@ Indexes: (`user_id`,`state`,`deleted_at`), (`user_id`,`expiry_date`), (`user_id`
 | `source` | `user` or `gemini` (a `gemini` task is shown as "suggested, unverified" until the user edits or confirms it) |
 | `notes`, `created_at`, `updated_at`, `deleted_at` | |
 At most one live maintenance task per item (unique index on `item_id` where `kind='maintenance' AND deleted_at IS NULL`).
-**Completion rule:** `done` on date D sets `last_done=D`; recurring: `next_due = D + interval_days` when `from_completion`, or the next date of the original series strictly after D when `fixed` (add `interval_days` repeatedly to the old `next_due` until it is after D). `skip` behaves like `done` for scheduling but records `task_skipped` and does not count towards streaks. One-off tasks set `enabled=0` after done or skipped.
+**Completion rule:** `done` on date D sets `last_done=D`; recurring: `next_due = D + interval_days` when `from_completion`, or the next date of the original series strictly after D when `fixed` (add `interval_days` to the old `next_due` at least once, then repeatedly until it is after D: the occurrence just done is satisfied even when done early; Phase 4 verification N3). `skip` behaves like `done` for scheduling but records `task_skipped` and does not count towards streaks. One-off tasks set `enabled=0` after done or skipped.
 
 ### 2.10 `inspections` (0003) — the QM-flavoured record
 `id`, `user_id`, `item_id`, `task_id` NULL, `performed_at`, `local_date`, `result` (`ok`,`worn`,`defective`), `note`, `photo_id` NULL. An inspection also completes the item's maintenance task (same rule as `done`). `worn` and `defective` leave the item `active`, add an attention row worded "inspection suggested: worn" or "inspection suggested: defective" (never "replacement required"), and offer "Mark discarded".
@@ -155,7 +155,7 @@ The reference image's word "expiring" is retired; "expires today" replaces it.
 `score = round(Σ(weight × value) / Σ(weight))` over applicable rings only. Default weights Documented 25, Located 20, Fresh 35, On time 20 (O-004). With no active items the score is `null` and the UI shows an em dash.
 
 ### 3.6 Road (next 14 days)
-Window = `today` through `today + 13`. Events: active items with `expiry_mode='date'` and `expiry_date` in the window; enabled tasks with `next_due` in the window. Overdue things are not on the road; they are in Needs attention. Several events on one date collapse to a count. **Truck date** = the earliest event date in the window, else `today`.
+Window = `today` through `today + 13`. Events: active items with `expiry_mode='date'` and `expiry_date` in the window; enabled tasks with `next_due` in the window. Overdue things are not on the road; they are in Needs attention. Several events on one date collapse to a count. **Truck date** = the earliest task (chore or maintenance) due after `today` in the window; with none, the earliest event after `today`; else `today` (D-110: what is due today is already in Needs attention).
 
 ### 3.7 Streak
 A local day counts when at least one event of kind `item_used`, `item_expired_marked`, `item_discarded`, `task_done`, `inspection_done` or `notification_resolved` (resolution not `superseded`) happened on that `local_date`. Days on which nothing was due are skipped (they neither extend nor break the streak). The streak is the number of consecutive counting days ending today or yesterday. No copy ever shames a broken streak.
