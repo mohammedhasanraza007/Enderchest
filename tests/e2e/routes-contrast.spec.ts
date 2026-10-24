@@ -4,7 +4,19 @@
 
 import { writeFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
-import { jpegBytes, makeItem, neededRatio, post, resetApp, saveProfile, textPairs, worstRatio } from "./helpers";
+import {
+  jpegBytes,
+  labelBytes,
+  makeDraft,
+  makeItem,
+  neededRatio,
+  post,
+  readingSettled,
+  resetApp,
+  saveProfile,
+  textPairs,
+  worstRatio,
+} from "./helpers";
 
 test.use({ reducedMotion: "reduce" });
 
@@ -37,11 +49,21 @@ for (const theme of ["dark", "light"] as const) {
       headers: { "X-Enderchest": "1" },
       multipart: { image: { name: "a.jpg", mimeType: "image/jpeg", buffer: photo } },
     });
-    const drafts = await request.post("/api/v1/drafts", {
+    // A read label (Phase 3): source tags, an ambiguous date to pick, and Gemini switched on
+    // so its button and disclosure are measured too (its address is a closed port here).
+    const draft = await makeDraft(
+      request,
+      await labelBytes(page, ["OAT MILK BARISTA", "MODEL AB-1234X  500 ml", "EXP 03/04/2027"]),
+    );
+    await request.put("/api/v1/gemini/key", {
       headers: { "X-Enderchest": "1" },
-      multipart: { "images[]": { name: "b.jpg", mimeType: "image/jpeg", buffer: photo } },
+      data: { key: "AIzaTestKeyThatIsNotReal_0123456789" },
     });
-    const draft = ((await drafts.json()) as { drafts: Array<{ id: string }> }).drafts[0]!.id;
+    await request.patch("/api/v1/settings", {
+      headers: { "X-Enderchest": "1" },
+      data: { gemini_mode: "ask" },
+    });
+    await readingSettled(request, draft);
 
     const routes = [
       "/inventory",

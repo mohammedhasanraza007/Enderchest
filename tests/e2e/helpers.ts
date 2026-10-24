@@ -207,3 +207,61 @@ export function neededRatio(pair: TextPair): number {
 export function worstRatio(pair: TextPair): number {
   return Math.min(...pair.backgrounds.map((bg) => contrast(pair.fg, bg)));
 }
+
+// ---- smart capture (Phase 3) ---------------------------------------------------------------
+
+/**
+ * A product label drawn by the browser's canvas: black text on white, the first line twice as
+ * big. It reads far more cleanly than a real pack, so it is a regression tool for the reading
+ * flow and never accuracy evidence (D-056).
+ */
+export async function labelBytes(page: Page, lines: string[]): Promise<Buffer> {
+  const base64 = await page.evaluate(async (rows) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1200;
+    canvas.height = 120 + rows.length * 90;
+    const context = canvas.getContext("2d")!;
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#000000";
+    context.textBaseline = "top";
+    let top = 50;
+    rows.forEach((row, index) => {
+      const size = index === 0 ? 80 : 40;
+      context.font = `${size}px sans-serif`;
+      context.fillText(row, 50, top);
+      top += size + 36;
+    });
+    const blob = await new Promise<Blob>((resolve) =>
+      canvas.toBlob((made) => resolve(made!), "image/jpeg", 0.92),
+    );
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    let text = "";
+    for (const byte of bytes) text += String.fromCharCode(byte);
+    return btoa(text);
+  }, lines);
+  return Buffer.from(base64, "base64");
+}
+
+/** Upload one photo as a new draft and return its id; the app starts reading it at once. */
+export async function makeDraft(request: APIRequestContext, image: Buffer): Promise<string> {
+  const response = await request.post("/api/v1/drafts", {
+    headers: WRITE,
+    multipart: { "images[]": { name: "label.jpg", mimeType: "image/jpeg", buffer: image } },
+  });
+  if (!response.ok()) throw new Error(`draft failed: ${response.status()} ${await response.text()}`);
+  return ((await response.json()) as { drafts: Array<{ id: string }> }).drafts[0]!.id;
+}
+
+/** Wait until no reading of the draft is pending (the app reads in the background). */
+export async function readingSettled(request: APIRequestContext, draftId: string): Promise<void> {
+  for (let tries = 0; tries < 120; tries += 1) {
+    const draft = (await (await request.get(`/api/v1/drafts/${draftId}`)).json()) as {
+      ocr_status: string;
+      gemini_status: string;
+    };
+    if (draft.ocr_status !== "pending" && draft.gemini_status !== "pending") return;
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  throw new Error("the reading never finished");
+}

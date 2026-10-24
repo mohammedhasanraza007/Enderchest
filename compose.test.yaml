@@ -21,6 +21,8 @@ services:
       ENDERCHEST_ENV: test
       ENDERCHEST_PORT: ${ENDERCHEST_TEST_PORT:-8471}
       ENDERCHEST_BACKUP_DIR: ${ENDERCHEST_TEST_BACKUP_DIR:-./.test-backups}
+      # The test stack never calls Google (D-102): port 9 refuses every connection.
+      ENDERCHEST_GEMINI_URL: http://127.0.0.1:9/v1beta
     volumes:
       - enderchest_test_data:/data
       - ${ENDERCHEST_TEST_BACKUP_DIR:-./.test-backups}:/backups
@@ -46,6 +48,7 @@ services:
     environment:
       ENDERCHEST_ENV: test
       ENDERCHEST_PORT: 8470
+      ENDERCHEST_GEMINI_URL: http://127.0.0.1:9/v1beta
     volumes:
       - /data
     healthcheck:
@@ -103,6 +106,7 @@ services:
       ENDERCHEST_ENV: test
       ENDERCHEST_PORT: ${ENDERCHEST_TEST_PORT:-8471}
       ENDERCHEST_BACKUP_DIR: ./.test-backups
+      ENDERCHEST_GEMINI_URL: http://127.0.0.1:9/v1beta
     volumes:
       - enderchest_test_data:/data
       - ./.test-backups:/backups

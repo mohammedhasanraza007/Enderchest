@@ -15,7 +15,16 @@
 
 import { expect, test } from "@playwright/test";
 import type { Locator, Page, Request } from "@playwright/test";
-import { jpegBytes, makeItem, post, resetApp, saveProfile } from "./helpers";
+import {
+  jpegBytes,
+  labelBytes,
+  makeDraft,
+  makeItem,
+  post,
+  readingSettled,
+  resetApp,
+  saveProfile,
+} from "./helpers";
 
 const CONTROLS =
   'button:not(.skip-link), a[href]:not(.skip-link), [role="radio"], [role="switch"], [role="tab"], summary';
@@ -208,11 +217,12 @@ async function seed(page: Page): Promise<Record<string, string>> {
       multipart: { image: { name: "a.jpg", mimeType: "image/jpeg", buffer: photo } },
     });
   }
-  const drafts = await request.post("/api/v1/drafts", {
-    headers: { "X-Enderchest": "1" },
-    multipart: { "images[]": { name: "b.jpg", mimeType: "image/jpeg", buffer: photo } },
-  });
-  const draft = ((await drafts.json()) as { drafts: Array<{ id: string }> }).drafts[0]!.id;
+  // A read label (Phase 3), so the confirm screen has its tags, date pills and drawer.
+  const draft = await makeDraft(
+    request,
+    await labelBytes(page, ["OAT MILK BARISTA", "MODEL AB-1234X", "EXP 03/04/2027"]),
+  );
+  await readingSettled(request, draft);
   return { first, second, trashed, draft };
 }
 
