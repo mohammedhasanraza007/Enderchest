@@ -47,6 +47,14 @@ def test_duplicate_category_names_are_refused_case_insensitively(stack: Stack):
     assert patch(stack, f"/categories/{other['id']}", {"name": "TOOLS"}).status_code == 409
 
 
+def test_duplicate_names_are_refused_case_insensitively_beyond_ascii(stack: Stack):
+    # Found by the Phase 2 verification: SQLite's NOCASE folds A to Z only.
+    post(stack, "/categories", {"name": "Ölfarben"})
+    assert post(stack, "/categories", {"name": "ölfarben"}).status_code == 409
+    post(stack, "/locations", {"name": "Garáge"})
+    assert post(stack, "/locations", {"name": "GARÁGE"}).status_code == 409
+
+
 def test_renaming_and_toggling_defaults(stack: Stack):
     made = post(stack, "/categories", {"name": "Tools"}).json()
     changed = patch(stack, f"/categories/{made['id']}", {"name": "Hand tools",

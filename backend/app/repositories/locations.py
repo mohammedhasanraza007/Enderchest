@@ -19,13 +19,13 @@ def list_all(conn: sqlite3.Connection, user_id: int) -> list[sqlite3.Row]:
 
 def name_taken(conn: sqlite3.Connection, user_id: int, name: str, parent_id: int | None,
                except_id: int | None = None) -> bool:
-    row = conn.execute(
-        "SELECT 1 FROM locations WHERE user_id = ? AND deleted_at IS NULL "
-        "AND COALESCE(parent_id, 0) = COALESCE(?, 0) AND name = ? COLLATE NOCASE "
-        "AND id IS NOT ?",
-        (user_id, parent_id, name, except_id),
-    ).fetchone()
-    return row is not None
+    # Compared with casefold in Python: SQLite's NOCASE folds only A to Z, so "Ö" and "ö" differ.
+    rows = conn.execute(
+        "SELECT name FROM locations WHERE user_id = ? AND deleted_at IS NULL "
+        "AND COALESCE(parent_id, 0) = COALESCE(?, 0) AND id IS NOT ?",
+        (user_id, parent_id, except_id),
+    ).fetchall()
+    return any(row[0].casefold() == name.casefold() for row in rows)
 
 
 def insert(conn: sqlite3.Connection, user_id: int, *, name: str, parent_id: int | None,
