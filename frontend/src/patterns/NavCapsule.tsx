@@ -41,7 +41,12 @@ export function NavCapsule({ profile }: { profile: Profile & { name: string } })
   return (
     <header className={["nav", compact ? "nav--compact" : ""].filter(Boolean).join(" ")}>
       <nav className="nav__capsule" aria-label="Main">
-        <Link to="/" className="nav__brand" aria-label="Enderchest home">
+        <Link
+          to="/"
+          className="nav__brand"
+          aria-label="Enderchest home"
+          aria-current={pathname === "/" ? "page" : undefined}
+        >
           <BrandMark size={32} decorative />
           <span className="nav__wordmark">Enderchest</span>
         </Link>
