@@ -23,8 +23,21 @@ Fresh session, 2026-10-25, branch `phase-7-verify`, on the code of `phase7.zip` 
 - 2, 3, 7, 8, 9, 10, 11, 13 — the build's vitest and Playwright coach specs, re-run here; code read of `useCoach.ts` (the effect's cleanup aborts the request and clears the pill; `active` is false in Scan mode and when `coach_enabled` is off) and `lib/coach.ts` (`worthReading` refuses flat frames).
 - 13 and D-097 — looked at `docs/logs/raw/phase-7/shots/coach-found-*-1280.png` and `*-1024.png`, dark and light: tokens and glass match the reference; chips sit on the model and date lines; pill and shutter fit. The feed is the fake test camera: regression only.
 
-## Suite results
-See "Results" below and `docs/logs/raw/phase-7v/`.
-
 ## Results
-(filled in after the runs)
+- lint clean; unit 258 + 108 vitest; integration 328; probes 1 to 27 ALL PASSED; own probes V1 to V6 passed (`docs/logs/raw/phase-7v/`).
+- e2e 142 passed, 1 failed: `coach.spec.ts` "never two frames in flight, about one a second" measured 896 ms between two frame starts against its 900 ms bound. Not a product fault: the 1000 ms send timer is followed by an encode (`toBlob`) of varying length, so starts jitter; no two frames were in flight and the server's own gap is 500 ms. Fixed in the test (bound 800 ms, reason in a comment); the coach spec then passed 3 runs in a row (42 tests).
+- No product code changed.
+
+## Gates
+1. Real label captures — BLOCKED (owner's photos, `test.bat coach`).
+2. 60 fps — BLOCKED (owner's laptop; headless paints 30 fps, coach on and off the same). `/health` under 200 ms while frames are read — PASS (probe 26, max 9 ms in the browser run).
+3. Coach off removes prompts and server calls — PASS (e2e, re-run).
+4. Owner's live check — BLOCKED.
+5. Verification — this file.
+
+## Notes
+- N1: blur by Laplacian variance does not catch blurred screen photos; a pure-white card can read as glare (carried from the build; tune at gate 1).
+- N2: `isBlank` treats luma up to 2 as black (not strictly exact black), which absorbs encoder noise from idle virtual cameras; fine, but the D-126 wording says "exact".
+
+## Verdict
+**PASS WITH NOTES** — Claude's part; gates 1, 2 (60 fps) and 4 stay BLOCKED on the owner.

@@ -147,3 +147,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Tests added: 12 unit, 8 integration, 22 vitest, 20 Playwright (+ 1 measurement spec), probes 26 and 27, `test.bat coach`. All suites green (lint; unit 258 + 108; integration 328; e2e 143 + 3; probes 1 to 27).
 - Blocked on owner: gate 1 on label captures, gate 4 live check (60 fps), screenshot approval.
 - Next: Phase 7 verification (`D:\Projects\phase7v-next-prompt.txt`).
+
+## 2026-10-25 · phase7v · Phase 7 verification, chain hand-off to the Phase 8 build
+- Zip in: `phase7.zip` (folder `D:\Projects\Enderchest-phase-7v`, branch `phase-7-verify`). Zip out: `D:\Projects\phase7v.zip`, unzipped into `D:\Projects\Enderchest-phase-8` on branch `phase-8`.
+- Probe list first (13 probes); own probes V1 to V6 added (`test_coach_verify.py`: empty, truncated, 1281 px, PNG refused; busy keeps the gap free; an OCR crash frees the worker), all pass.
+- Re-run: lint, unit 258 + 108, integration 328, probes 1 to 27 green; e2e 142 + 1 failed (896 ms frame-start gap vs a 900 ms bound; toBlob jitter). Test bound set to 800 ms with the reason; coach spec 3 runs green.
+- Verdict: PASS WITH NOTES (N1 blur/glare on real frames, N2 isBlank wording). No product code changed.
+- Blocked on owner: gate 1 label captures, 60 fps and the live check, screenshot approval.
+- Next: Phase 8 build (`D:\Projects\phase8-next-prompt.txt`).

@@ -3,16 +3,16 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase7.zip`. The Phase 7 build session unzipped it into `D:\Projects\Enderchest-phase-7v\Enderchest` and made branch `phase-7-verify` there (D-091). Never unzip over an existing repo or worktree (D-067).
+- Zip: `phase7v.zip`. The Phase 7 verification session unzipped it into `D:\Projects\Enderchest-phase-8\Enderchest` and made branch `phase-8` there (D-091). Never unzip over an existing repo or worktree (D-067).
 - **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Do not wait for "go". Keep `D:\Projects\enderchest-chain-state.txt` current. UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. If `start_session` is refused, message the top session "Enderchest phase 0 foundation".
-- Last built phase: **Phase 7 (camera coach)**, Verification: **pending for phase 7**. Phase 6: PASS WITH NOTES; Phases 4, 5: PASS WITH NOTES; 0 to 3: PASS for Claude's part. Owner checks pending for all.
-- Resume check: `git log --oneline -3` shows `pack: phase 7 build (phase7 zip)` on top.
+- Last built phase: **Phase 7 (camera coach)**, Verification: **done for phase 7, PASS WITH NOTES** (`docs/reviews/phase-7-verification.md`; only a too-tight e2e bound fixed, no product change). Phase 6: PASS WITH NOTES; Phases 4, 5: PASS WITH NOTES; 0 to 3: PASS for Claude's part. Owner checks pending for all.
+- Resume check: `git log --oneline -3` shows `pack: phase 7 verification (phase7v zip)` on top.
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it. Time-box bugs: fix once, simply, with a test; a second failure goes to the evidence log.
 
 ## Next steps, in this order
-1. **Phase 7 verification** (fresh session, branch `phase-7-verify`, probe list first, `docs/reviews/phase-7-verification.md`).
-2. Then the Phase 8 build (polish and motion; D-124 left the shutter fill ring and the pill's entrance to it).
-3. Small TODOs: unload OCR and embedding models after 10 idle minutes; Phase 6 notes N4 to N6; Phase 5 N1 to N3; Phase 4 N1, N2; Phase 2 N5 to N7; Phase 3 N1 to N3.
+1. **Phase 8 build** (polish and motion, `docs/specs/phase-8-polish.md`, branch `phase-8`; D-124 left the shutter fill ring and the pill's entrance to it).
+2. Then the Phase 8 verification.
+3. Small TODOs: Phase 7 notes N1, N2; unload OCR and embedding models after 10 idle minutes; Phase 6 notes N4 to N6; Phase 5 N1 to N3; Phase 4 N1, N2; Phase 2 N5 to N7; Phase 3 N1 to N3.
 
 ## Current state (facts)
 - Phase 7 built: `POST /capture/frame` (in memory, never stored, 200 KB JPEG, `rate_limited` within 0.5 s, `busy` while the heavy worker has any job via `heavy.try_submit`, D-121); client tier every video frame on 320 px (`lib/coach.ts`), one 640 px frame about once a second when lit and sharp; prompt machine (300 ms hold, 1.5 s minimum, D-122); chips for model and date; Settings → Camera coach toggle (`coach_enabled`, no migration, schema 4); coach in Add and own modes only (D-120).

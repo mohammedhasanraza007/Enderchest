@@ -1,0 +1,140 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 582B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 0.8s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/node:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/python:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 0.7s
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 0.7s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#11 DONE 0.0s
+
+#12 [internal] load build context
+#12 transferring context: 18.61kB 0.0s done
+#12 DONE 0.0s
+
+#13 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#13 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#13 DONE 0.0s
+
+#14 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#14 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#14 DONE 0.0s
+
+#15 [frontend-deps 2/4] WORKDIR /frontend
+#15 CACHED
+
+#16 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#16 CACHED
+
+#17 [python-base 3/7] WORKDIR /app
+#17 CACHED
+
+#18 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#18 CACHED
+
+#19 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#19 CACHED
+
+#20 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#20 CACHED
+
+#21 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#21 CACHED
+
+#22 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#22 CACHED
+
+#23 [tools  7/11] COPY assets/logo /assets/logo
+#23 CACHED
+
+#24 [tools  5/11] RUN pip install -r requirements-dev.lock
+#24 CACHED
+
+#25 [tools  8/11] COPY frontend/ /frontend/
+#25 CACHED
+
+#26 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#26 CACHED
+
+#27 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#27 CACHED
+
+#28 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#28 CACHED
+
+#29 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#29 CACHED
+
+#30 [python-base 5/7] RUN pip install -r requirements.lock
+#30 CACHED
+
+#31 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#31 CACHED
+
+#32 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#32 CACHED
+
+#33 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#33 CACHED
+
+#34 [tools 11/11] COPY backend/ ./
+#34 CACHED
+
+#35 exporting to image
+#35 exporting layers done
+#35 exporting manifest sha256:20ad139024008eeb72f953b12c6dd042d66017d5ce42f0dbb91d95461c2e1756 done
+#35 exporting config sha256:d4769392bffb613a0e121d20013aedd0526b94fb9bb726990388ee861f5da05b done
+#35 exporting attestation manifest sha256:176befcca3a4d26262f1347bf446068e99faf0f74be67c84cc8a347f3e2a67ec 0.0s done
+#35 exporting manifest list sha256:34161c0bad2011855ba867680aebc6217eb3f7a184777df0486fc13840a7ba8e 0.0s done
+#35 naming to docker.io/library/enderchest-tools:latest done
+#35 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#35 DONE 0.1s
+
+#36 resolving provenance for metadata file
+#36 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-9c6cb2a8d6e3 Creating 
+ Container enderchest-test-tools-run-9c6cb2a8d6e3 Created 
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+........................................................................ [ 65%]
+........................................................................ [ 87%]
+........................................                                 [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+328 passed, 1 warning in 73.64s (0:01:13)
