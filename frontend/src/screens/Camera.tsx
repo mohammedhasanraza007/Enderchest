@@ -4,11 +4,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import jsQR from "jsqr";
 import { ApiError } from "../api/client";
 import { api } from "../api/endpoints";
-import { useRefreshInventory } from "../api/queries";
+import { useRefreshInventory, useSettings } from "../api/queries";
 import { useCamera } from "../hooks/useCamera";
 import type { CameraState } from "../hooks/useCamera";
+import { useCoach } from "../hooks/useCoach";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { isPublicId } from "../lib/ids";
+import { CoachPill } from "../patterns/CoachPill";
 import { ItemFormSheet } from "../patterns/ItemFormSheet";
 import { Button } from "../primitives/Button";
 import { Chip } from "../primitives/Chip";
@@ -20,7 +22,9 @@ import { OwnControls } from "./OwnCheck";
 // drafts (one per photo, up to 20) and open the review. Scan mode reads printed QR labels with a
 // JavaScript decoder about five times a second (D-055) and offers a typed-ID field. "Do I own
 // this?" (P-13, Phase 6) checks a photo or words against the inventory (OwnCheck.tsx). The stream
-// stops when this page is left or the tab is hidden.
+// stops when this page is left or the tab is hidden. The camera coach (Phase 7) gives short tips
+// on the live view in Add and "Do I own this?" (D-120) while it is on in Settings; capture never
+// waits for it.
 
 const MAX_FILES = 20;
 const IMAGE_TYPES = "image/jpeg,image/png,image/webp";
@@ -64,6 +68,9 @@ export function Camera() {
   const mode = wanted === "scan" || wanted === "own" ? wanted : "add";
   const camera = useCamera();
   const live = camera.state === "live";
+  // Off until the setting is known: the coach is a help, so a slow or failed read only hides it.
+  const coached = useSettings().data?.coach_enabled === true && live && mode !== "scan";
+  const coach = useCoach(camera.videoRef, coached);
   // Each Try again is counted, so a second failure says so instead of looking like nothing.
   const [retries, setRetries] = useState(0);
 
@@ -104,6 +111,7 @@ export function Camera() {
             muted
             aria-label="Camera picture"
           />
+          {coached ? <CoachPill message={coach.message} chips={coach.chips} /> : null}
           {camera.state === "live" ? null : (
             <div className="camera-view__message" role="status">
               <h2>{CAMERA_TEXT[camera.state].title}</h2>

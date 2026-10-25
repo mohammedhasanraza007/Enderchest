@@ -929,3 +929,47 @@
   color: var(--text-muted-glass);
   font-size: 0.9375rem;
 }
+
+/* ------------------------------------------------------ camera coach (DESIGN.md 9, Phase 7) */
+/* The nav's opaque fill over the video (D-059): readable on any picture. No backdrop blur: the
+   fill hides it anyway, and it would cost a repaint of the video every frame. */
+.coach {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.coach-pill {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-5);
+  max-width: min(88%, 520px);
+  margin: 0;
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--hairline-nav);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--surface-nav), var(--surface-nav-glow));
+  box-shadow: var(--shadow-nav);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.4;
+  text-align: center;
+  transform: translateX(-50%);
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.coach-pill--quiet {
+  opacity: 0;
+}
+.coach-chip {
+  position: absolute;
+  padding: 2px var(--space-3);
+  border: 1px solid var(--hairline-nav);
+  border-radius: var(--radius-pill);
+  background: var(--surface-nav);
+  color: var(--text);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transform: translateY(calc(-100% - var(--space-1)));
+}
+.coach-chip--below {
+  transform: translateY(var(--space-1));
+}

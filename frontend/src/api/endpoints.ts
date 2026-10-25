@@ -64,6 +64,7 @@ export type SavingCreate = components["schemas"]["SavingCreate"];
 export type SavingsPage = components["schemas"]["SavingsPage"];
 export type SavingView = components["schemas"]["SavingView"];
 export type SavingsPeriod = "month" | "all";
+export type FrameResult = components["schemas"]["FrameResult"];
 /** The Savings page lists the newest 200 entries and says so when there are more. */
 export const SAVINGS_SHOWN = 200;
 export type SnoozeOption = components["schemas"]["SnoozeBody"]["option"];
@@ -232,6 +233,11 @@ export const api = {
   addSaving: (body: SavingCreate, headers: Record<string, string>) =>
     request<{ id: number; event_id: number }>("POST", "/api/v1/savings", body, headers),
   removeSaving: (id: number) => request<{ event_id: number }>("DELETE", `/api/v1/savings/${id}`),
+
+  // Phase 7: the camera coach (API 2.15)
+  /** One small JPEG frame, read in memory and kept nowhere; `busy` or `rate_limited` drop it. */
+  captureFrame: (frame: Blob, signal: AbortSignal) =>
+    upload<FrameResult>("/api/v1/capture/frame", form("image", [frame]), signal),
 };
 
 function form(field: string, files: Blob[]): FormData {

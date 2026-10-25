@@ -76,9 +76,10 @@ export function request<T>(
   });
 }
 
-/** A multipart upload (photos). The browser writes the Content-Type with its boundary. */
-export function upload<T>(path: string, form: FormData): Promise<T> {
-  return send<T>("POST", path, { headers: { "X-Enderchest": "1" }, body: form });
+/** A multipart upload (photos). The browser writes the Content-Type with its boundary.
+ *  `signal` lets a caller abandon it (a coach frame when the coach is switched off). */
+export function upload<T>(path: string, form: FormData, signal?: AbortSignal): Promise<T> {
+  return send<T>("POST", path, { headers: { "X-Enderchest": "1" }, body: form, signal });
 }
 
 /** A fresh key per create, so a double click or a retry never makes two (API 1). */
