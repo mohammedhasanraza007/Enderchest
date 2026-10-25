@@ -43,9 +43,10 @@ def post_frame(data: bytes) -> int:
     body = (f"--{boundary}\r\nContent-Disposition: form-data; name=\"image\"; "
             f"filename=\"frame.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n").encode() + data + \
         f"\r\n--{boundary}--\r\n".encode()
+    headers = {"Host": HOST, "X-Enderchest": "1",
+               "Content-Type": f"multipart/form-data; boundary={boundary}"}
     request = urllib.request.Request(BASE + "/api/v1/capture/frame", data=body, method="POST",
-                                     headers={"Host": HOST, "X-Enderchest": "1",
-                                              "Content-Type": f"multipart/form-data; boundary={boundary}"})
+                                     headers=headers)
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
             response.read()

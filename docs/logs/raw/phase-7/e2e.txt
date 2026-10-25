@@ -1,0 +1,532 @@
+ Image enderchest-app-test:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 579B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 1.0s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.9s
+
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#6 DONE 0.9s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 320B done
+#7 DONE 0.0s
+
+#8 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#8 DONE 0.0s
+
+#9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d 0.0s done
+#9 DONE 0.0s
+
+#10 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#10 DONE 0.0s
+
+#11 [internal] load build context
+#11 transferring context: 13.91kB 0.0s done
+#11 DONE 0.0s
+
+#12 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#12 CACHED
+
+#13 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#13 CACHED
+
+#14 [frontend-build 2/3] COPY frontend/ ./
+#14 CACHED
+
+#15 [frontend-deps 2/4] WORKDIR /frontend
+#15 CACHED
+
+#16 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#16 CACHED
+
+#17 [frontend-build 3/3] RUN npm run build
+#17 CACHED
+
+#18 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#18 CACHED
+
+#19 [python-base 5/7] RUN pip install -r requirements.lock
+#19 CACHED
+
+#20 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#20 CACHED
+
+#21 [python-base 3/7] WORKDIR /app
+#21 CACHED
+
+#22 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#22 CACHED
+
+#23 [frontend-build 1/3] COPY assets/logo /assets/logo
+#23 CACHED
+
+#24 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#24 CACHED
+
+#25 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#25 CACHED
+
+#26 exporting to image
+#26 exporting layers done
+#26 exporting manifest sha256:9c4ce8c275dab8e671f18f5596f14f6c422c9d230735169806de0e9043910122 done
+#26 exporting config sha256:c2343a47d473091f9ae84ee6e0619247dbec371824f126a9985d45a8219cf6a8 done
+#26 exporting attestation manifest sha256:72bc6c921b8d00fcd5fa0d4c3528419878df5a4b07ea00d6abcbee93a0060f10 0.0s done
+#26 exporting manifest list sha256:d300c5c9d26226441af9954a780dc7c2f8a64107aebde2643943bf533f386710 0.0s done
+#26 naming to docker.io/library/enderchest-app-test:latest done
+#26 unpacking to docker.io/library/enderchest-app-test:latest done
+#26 DONE 0.1s
+
+#27 resolving provenance for metadata file
+#27 DONE 0.0s
+ Image enderchest-app-test:latest Built 
+ Image enderchest-e2e:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.05kB done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.4s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for mcr.microsoft.com/playwright:v1.64.1-noble
+#5 DONE 0.1s
+
+#6 [internal] load .dockerignore
+#6 transferring context: 320B done
+#6 DONE 0.0s
+
+#7 [e2e 1/8] FROM mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea
+#7 resolve mcr.microsoft.com/playwright:v1.64.1-noble@sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea 0.0s done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 204.37kB 0.0s done
+#8 DONE 0.0s
+
+#9 [e2e 2/8] WORKDIR /frontend
+#9 CACHED
+
+#10 [e2e 3/8] COPY frontend/package.json frontend/package-lock.json ./
+#10 CACHED
+
+#11 [e2e 4/8] RUN npm ci --ignore-scripts --no-audit --no-fund
+#11 CACHED
+
+#12 [e2e 5/8] COPY assets/logo /assets/logo
+#12 CACHED
+
+#13 [e2e 6/8] COPY frontend/ ./
+#13 DONE 0.0s
+
+#14 [e2e 7/8] COPY tests/e2e /tests/e2e
+#14 DONE 0.0s
+
+#15 [e2e 8/8] RUN ln -s /frontend/node_modules /tests/node_modules
+#15 DONE 0.2s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:c8ed2e410b774b883c78e9054478aa83900109ffa7f28eb76ef23b3cba7af5d5 done
+#16 exporting config sha256:c71d9837365045b957dfb7168873e33319a7df6ae745e9f517860f98bcb9a946
+#16 exporting config sha256:c71d9837365045b957dfb7168873e33319a7df6ae745e9f517860f98bcb9a946 0.0s done
+#16 exporting attestation manifest sha256:86d7773147362d29e437644966120c6f3e56a594daff5ada17d5646742ab9e67 0.0s done
+#16 exporting manifest list sha256:b489e5d77fc81be6e7163f729fd01af468371c6160651dbcf8cbe47d5045ab5b 0.0s done
+#16 naming to docker.io/library/enderchest-e2e:latest done
+#16 unpacking to docker.io/library/enderchest-e2e:latest 0.1s done
+#16 DONE 0.3s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image enderchest-e2e:latest Built 
+ Container enderchest-test-app-1 Running 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-app-1 Running 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-e2e-run-5cdfa8a6f610 Creating 
+ Container enderchest-test-e2e-run-5cdfa8a6f610 Created 
+[WebServer] 
+[WebServer] /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/dom-export.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+Running 143 tests using 1 worker
+
+  ✓    1 ../tests/e2e/backups.spec.ts:15:5 › Back up now makes a real file in the backup folder and lists it (498ms)
+  ✓    2 ../tests/e2e/backups.spec.ts:44:5 › a double click makes one backup, not two (2.0s)
+  ✓    3 ../tests/e2e/backups.spec.ts:56:5 › no backup banner shows while backups are healthy (301ms)
+  ✓    4 ../tests/e2e/boot-pages.spec.ts:35:7 › the recovery page uses the shared tokens and passes contrast (dark) (408ms)
+  ✓    5 ../tests/e2e/boot-pages.spec.ts:35:7 › the recovery page uses the shared tokens and passes contrast (light) (356ms)
+  ✓    6 ../tests/e2e/boot-pages.spec.ts:61:5 › a wrong confirmation is refused with a message and nothing changes (318ms)
+  ✓    7 ../tests/e2e/boot-pages.spec.ts:74:5 › restoring through the page brings the app and the owner's name back (514ms)
+  ✓    8 ../tests/e2e/boot-pages.spec.ts:86:5 › every other address shows the same boot page while the app is not ready (387ms)
+  ✓    9 ../tests/e2e/camera-switch.spec.ts:97:5 › a camera that sends only black is skipped for the next one, and says so (2.1s)
+  ✓   10 ../tests/e2e/camera-switch.spec.ts:110:5 › Switch camera goes from front to back and back again, named by where it faces (547ms)
+  ✓   11 ../tests/e2e/camera-switch.spec.ts:126:5 › one camera shows no switch and no picker (272ms)
+  ✓   12 ../tests/e2e/camera-switch.spec.ts:134:5 › a camera connected while none works starts by itself (302ms)
+  ✓   13 ../tests/e2e/camera-switch.spec.ts:153:5 › when every camera sends only black the page says so, and Try again looks again (5.5s)
+  ✓   14 ../tests/e2e/camera-switch.spec.ts:174:5 › cameras with unknown facing get the phone-app hint and a named switch (410ms)
+  ✓   15 ../tests/e2e/capture-shots.spec.ts:14:7 › smart capture screens (dark) (7.9s)
+  ✓   16 ../tests/e2e/capture-shots.spec.ts:14:7 › smart capture screens (light) (5.7s)
+  ✓   17 ../tests/e2e/capture.spec.ts:37:5 › a read photo fills the form with tags, and the expiry needs a tap (2.0s)
+  ✓   18 ../tests/e2e/capture.spec.ts:58:5 › an ambiguous date offers both readings and saves the one picked (1.9s)
+  ✓   19 ../tests/e2e/capture.spec.ts:74:5 › What was read shows the raw text, and Re-read reads again (1.8s)
+  ✓   20 ../tests/e2e/capture.spec.ts:88:5 › the queue shows the name read from the photo (1.1s)
+  ✓   21 ../tests/e2e/capture.spec.ts:97:5 › Gemini with no network says so and leaves the photo reading alone (3.1s)
+  ✓   22 ../tests/e2e/capture.spec.ts:109:5 › Improve with Gemini is not on screen while Gemini is off (1.8s)
+  ✓   23 ../tests/e2e/capture.spec.ts:115:5 › Settings: set a key, choose a mode, test without network, remove the key (977ms)
+  ✓   24 ../tests/e2e/capture.spec.ts:144:5 › a key the server refuses for an unseen reason still shows a message (F-024) (465ms)
+  ✓   25 ../tests/e2e/coach.spec.ts:111:7 › the coach names the dark scene (1.0s)
+  ✓   26 ../tests/e2e/coach.spec.ts:111:7 › the coach names the shake scene (1.1s)
+  ✓   27 ../tests/e2e/coach.spec.ts:111:7 › the coach names the glare scene (1.1s)
+  ✓   28 ../tests/e2e/coach.spec.ts:111:7 › the coach names the empty scene (1.1s)
+  ✓   29 ../tests/e2e/coach.spec.ts:111:7 › the coach names the good scene (2.1s)
+  ✓   30 ../tests/e2e/coach.spec.ts:119:5 › a fine label keeps the coach quiet (4.1s)
+  ✓   31 ../tests/e2e/coach.spec.ts:132:5 › never two frames in flight, about one a second (8.2s)
+  ✓   32 ../tests/e2e/coach.spec.ts:146:5 › with the coach off there is no prompt and no frame request (5.5s)
+  ✓   33 ../tests/e2e/coach.spec.ts:163:5 › Scan mode has no coach (4.2s)
+  ✓   34 ../tests/e2e/coach.spec.ts:172:5 › a busy answer drops the frame and the coach carries on (4.1s)
+COACH-FPS coach-off median=33.3ms coach-on frames=147 median=33.4ms p95=83.3ms health max=12ms
+  ✓   35 ../tests/e2e/coach.spec.ts:199:5 › frame rate and /health while frames are read (measured, gate 2) (13.9s)
+  ✓   36 ../tests/e2e/coach.spec.ts:262:5 › reduced motion: the prompt appears without a fade (1.1s)
+  ✓   37 ../tests/e2e/coach.spec.ts:276:7 › coach shots (dark) (5.2s)
+  ✓   38 ../tests/e2e/coach.spec.ts:276:7 › coach shots (light) (4.5s)
+  ✓   39 ../tests/e2e/contrast.spec.ts:77:9 › dark theme › every piece of text on every primitive passes WCAG AA (372ms)
+  ✓   40 ../tests/e2e/contrast.spec.ts:111:9 › dark theme › the ratios match the tables in DESIGN.md (204ms)
+  ✓   41 ../tests/e2e/contrast.spec.ts:77:9 › light theme › every piece of text on every primitive passes WCAG AA (335ms)
+  ✓   42 ../tests/e2e/contrast.spec.ts:111:9 › light theme › the ratios match the tables in DESIGN.md (148ms)
+  ✓   43 ../tests/e2e/contrast.spec.ts:133:5 › light theme text on its surfaces also clears 4.5:1 (no table exists for these) (175ms)
+  ✓   44 ../tests/e2e/dashboard-keyboard.spec.ts:14:5 › Tab walks the rings, the card and the road; the sheet opens and closes by keys (1.4s)
+  ✓   45 ../tests/e2e/dashboard-shots.spec.ts:65:5 › the reference frame on the three storyboard fixtures (4.3s)
+  ✓   46 ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (dark) (7.2s)
+  ✓   47 ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (light) (6.9s)
+  ✓   48 ../tests/e2e/dashboard.spec.ts:28:5 › frame 1: greeting, score, count, card rows and the truck on the 18th (1.3s)
+  ✓   49 ../tests/e2e/dashboard.spec.ts:60:5 › frames 2 and 3 move the score, the card and the truck (2.5s)
+  ✓   50 ../tests/e2e/dashboard.spec.ts:77:5 › using an item from the card takes its row out, and Undo brings it back (1.7s)
+  ✓   51 ../tests/e2e/dashboard.spec.ts:98:5 › the rings open a sheet whose lists match the ring's numbers (1.5s)
+  ✓   52 ../tests/e2e/dashboard.spec.ts:116:5 › a day on the road opens what is on it (1.5s)
+  ✓   53 ../tests/e2e/dashboard.spec.ts:135:5 › an empty inventory shows the real empty dashboard (818ms)
+  ✓   54 ../tests/e2e/dashboard.spec.ts:149:5 › more than three reminders: two rows and View all (929ms)
+  ✓   55 ../tests/e2e/dashboard.spec.ts:166:5 › loading shows the page's shape; a failed load says so and retries (308ms)
+  ✓   56 ../tests/e2e/dashboard.spec.ts:193:5 › the Tasks page has the same road over 30 days (1.3s)
+  ✓   57 ../tests/e2e/dead-controls.spec.ts:247:7 › dead-control crawler › /welcome has no dead controls (1.9s)
+  ✓   58 ../tests/e2e/dead-controls.spec.ts:254:7 › dead-control crawler › /settings has no dead controls (45.5s)
+  ✓   59 ../tests/e2e/dead-controls.spec.ts:262:7 › dead-control crawler › the not-found page has no dead controls (19.3s)
+  ✓   60 ../tests/e2e/dead-controls.spec.ts:270:7 › dead-control crawler › the empty dashboard has no dead controls (27.4s)
+  ✓   61 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › the dashboard has no dead controls (56.2s)
+  ✓   62 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Inventory has no dead controls (31.7s)
+  ✓   63 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › an item has no dead controls (1.5m)
+  ✓   64 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › an item in Trash has no dead controls (29.5s)
+  ✓   65 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Camera, add has no dead controls (55.3s)
+  ✓   66 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Camera, scan has no dead controls (24.7s)
+  ✓   67 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Camera, do I own this has no dead controls (25.7s)
+  ✓   68 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › the review queue has no dead controls (24.3s)
+  ✓   69 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › a draft has no dead controls (1.1m)
+  ✓   70 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Labels has no dead controls (28.9s)
+  ✓   71 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Trash has no dead controls (21.5s)
+  ✓   72 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Tasks has no dead controls (1.2m)
+  ✓   73 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Notifications has no dead controls (48.6s)
+  ✓   74 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Savings has no dead controls (26.5s)
+  ✓   75 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › an item with a worn inspection has no dead controls (1.2m)
+  ✓   76 ../tests/e2e/dead-controls.spec.ts:297:9 › dead-control crawler › Settings with data has no dead controls (1.3m)
+  ✓   77 ../tests/e2e/dead-controls.spec.ts:305:7 › dead-control crawler › the skip link moves to the main content (284ms)
+  ✓   78 ../tests/e2e/first-run.spec.ts:12:5 › a new database sends the owner to the welcome screen from any address (364ms)
+  ✓   79 ../tests/e2e/first-run.spec.ts:20:5 › an empty or too long name is refused with a message and nothing is saved (317ms)
+  ✓   80 ../tests/e2e/first-run.spec.ts:34:5 › name, then starter categories, then a greeting and the app (590ms)
+  ✓   81 ../tests/e2e/first-run.spec.ts:64:5 › Skip on step 2 makes no categories (356ms)
+  ✓   82 ../tests/e2e/first-run.spec.ts:73:5 › closing the tab on step 2 and reopening resumes at step 2 with the name kept (673ms)
+  ✓   83 ../tests/e2e/first-run.spec.ts:100:5 › the name can be changed later in Settings and shows in the capsule (404ms)
+  ✓   84 ../tests/e2e/first-run.spec.ts:120:5 › a failed first-run save keeps the typed name, says why, and the button works again (475ms)
+  ✓   85 ../tests/e2e/first-run.spec.ts:144:5 › a failed save in Settings keeps the change, says why, and changes nothing (523ms)
+  ✓   86 ../tests/e2e/inventory-shots.spec.ts:13:7 › every inventory screen at 1280 px (dark) (10.6s)
+  ✓   87 ../tests/e2e/inventory-shots.spec.ts:13:7 › every inventory screen at 1280 px (light) (8.4s)
+  ✓   88 ../tests/e2e/inventory.spec.ts:26:5 › an item added by hand shows in Inventory with its category, location and details (1.3s)
+  ✓   89 ../tests/e2e/inventory.spec.ts:63:5 › Save stays disabled with the reason while the form is wrong; closing with edits asks (514ms)
+  ✓   90 ../tests/e2e/inventory.spec.ts:81:5 › a server problem on a field the form does not show becomes a general message (F-024) (728ms)
+  ✓   91 ../tests/e2e/inventory.spec.ts:110:5 › search and filters live in the URL, Back restores them, and 1,000 items stay light (5.3s)
+  ✓   92 ../tests/e2e/inventory.spec.ts:167:5 › photos on the item page: add, make main, hide; the file stays on disk (812ms)
+  ✓   93 ../tests/e2e/inventory.spec.ts:197:5 › delete from the item page, then Undo brings it back (790ms)
+  ✓   94 ../tests/e2e/inventory.spec.ts:209:5 › select mode deletes several items with one Undo, and moves them (979ms)
+  ✓   95 ../tests/e2e/inventory.spec.ts:238:5 › Trash: restore, then permanent delete after a fresh backup (607ms)
+  ✓   96 ../tests/e2e/inventory.spec.ts:263:5 › labels render at their physical sizes, print, and are marked printed only on Yes (706ms)
+  ✓   97 ../tests/e2e/inventory.spec.ts:305:5 › categories: a delete in use asks where the items go; locations refuse a cycle (1.0s)
+  ✓   98 ../tests/e2e/labels-print.spec.ts:26:5 › the A4 sheet prints one A4 page per 21 labels at the standard 21-up pitch (779ms)
+  ✓   99 ../tests/e2e/labels-print.spec.ts:56:5 › single labels print one 50 × 30 mm page each (320ms)
+  ✓  100 ../tests/e2e/labels-print.spec.ts:74:5 › the served QR decodes to the public id and nothing else (280ms)
+  ✓  101 ../tests/e2e/lifecycle-shots.spec.ts:19:7 › lifecycle screens (dark) (8.5s)
+  ✓  102 ../tests/e2e/lifecycle-shots.spec.ts:19:7 › lifecycle screens (light) (7.0s)
+  ✓  103 ../tests/e2e/lifecycle.spec.ts:30:5 › a task made on the Tasks page is due today, done, and undone (1.1s)
+  ✓  104 ../tests/e2e/lifecycle.spec.ts:58:5 › a reminder is snoozed, and Use it with Undo restores the quantity (1.1s)
+  ✓  105 ../tests/e2e/lifecycle.spec.ts:90:5 › the item page: use, mark expired, reactivate, plan and inspect (1.6s)
+  ✓  106 ../tests/e2e/lifecycle.spec.ts:132:5 › Settings -> Notifications saves the lead days and says the honest limit (957ms)
+  ✓  107 ../tests/e2e/lifecycle.spec.ts:154:5 › a write without the safety header is refused for the new endpoints (61ms)
+  ✓  108 ../tests/e2e/name-menu.spec.ts:23:5 › the name menu works by keyboard alone (405ms)
+  ✓  109 ../tests/e2e/ownership-shots.spec.ts:14:7 › ownership screens (dark) (2.7s)
+  ✓  110 ../tests/e2e/ownership-shots.spec.ts:14:7 › ownership screens (light) (2.5s)
+  ✓  111 ../tests/e2e/ownership.spec.ts:30:5 › words find the right size, never say certain, and Not the same hides it (566ms)
+  ✓  112 ../tests/e2e/ownership.spec.ts:58:5 › I didn't buy it needs a typed price, records it, and Undo takes it back (792ms)
+  ✓  113 ../tests/e2e/ownership.spec.ts:80:5 › None of these: words open the new-item form, a photo makes a draft (1.7s)
+  ✓  114 ../tests/e2e/ownership.spec.ts:107:5 › Savings: totals equal the list, Remove asks, and Undo brings it back (854ms)
+  ✓  115 ../tests/e2e/ownership.spec.ts:137:5 › the dashboard road shows the savings pill only on the day of a saving (395ms)
+  ✓  116 ../tests/e2e/phase6-verification.spec.ts:52:5 › a pasted image becomes the photo to check (634ms)
+  ✓  117 ../tests/e2e/phase6-verification.spec.ts:62:5 › a dropped image becomes the photo to check (258ms)
+  ✓  118 ../tests/e2e/phase6-verification.spec.ts:69:5 › own mode by keyboard only: type, check, record a saving, Escape returns focus (573ms)
+  ✓  119 ../tests/e2e/phase6-verification.spec.ts:97:5 › Savings by keyboard only: period, Remove with confirm, Undo (405ms)
+  ✓  120 ../tests/e2e/phase6-verification.spec.ts:115:5 › Savings shows its shape while loading and a Retry when the read fails (1.6s)
+  ✓  121 ../tests/e2e/phase6-verification.spec.ts:139:5 › the savings pill and the truck on today do not overlap each other or the title (710ms)
+  ✓  122 ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the dark theme (753ms)
+  ✓  123 ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the light theme (698ms)
+  ✓  124 ../tests/e2e/primitives.spec.ts:75:5 › shape rules: pills everywhere, soft capsules for tall boxes in light, 24 px cards in dark (177ms)
+  ✓  125 ../tests/e2e/primitives.spec.ts:123:5 › the rupee sign renders from a real font in every family (gate 7) (175ms)
+  ✓  126 ../tests/e2e/routes-contrast.spec.ts:24:7 › text on every inventory route passes WCAG AA (dark) (10.4s)
+  ✓  127 ../tests/e2e/routes-contrast.spec.ts:24:7 › text on every inventory route passes WCAG AA (light) (10.9s)
+  ✓  128 ../tests/e2e/shell-reference.spec.ts:25:5 › the navigation capsule matches the reference frame within 12 px (506ms)
+  ✓  129 ../tests/e2e/shell-reference.spec.ts:101:5 › screenshots of the shell for the owner to approve (2.4s)
+  ✓  130 ../tests/e2e/theme.spec.ts:19:5 › the choice is saved on the server and survives a reload (452ms)
+  ✓  131 ../tests/e2e/theme.spec.ts:30:5 › there is no flash: the theme is on the page before any script of the app runs (741ms)
+  ✓  132 ../tests/e2e/theme.spec.ts:73:5 › on a slow load nothing is painted before the stylesheets, and System is already resolved (4.8s)
+  ✓  133 ../tests/e2e/theme.spec.ts:105:5 › System follows the operating system, live (418ms)
+  ✓  134 ../tests/e2e/theme.spec.ts:115:5 › the name menu changes the theme too (364ms)
+  ✓  135 ../tests/e2e/theme.spec.ts:122:5 › reduced motion is honoured: no crossfade, no transitions, no running animations (723ms)
+  ✓  136 ../tests/e2e/theme.spec.ts:153:5 › without reduced motion the theme change crossfades briefly (317ms)
+  ✓  137 ../tests/e2e/browser-notifications.spec.ts:49:5 › a browser notification fires once per row across reloads and two tabs (5.2s)
+  ✓  138 ../tests/e2e/camera.spec.ts:18:5 › Add mode: the shutter makes a draft, confirm saves the item with its photo; LIVE only while streaming (1.7s)
+  ✓  139 ../tests/e2e/camera.spec.ts:39:5 › a hidden tab stops the stream and showing it starts it again (454ms)
+  ✓  140 ../tests/e2e/camera.spec.ts:55:5 › several uploads make a review queue; drafts count nowhere until saved (1.2s)
+  ✓  141 ../tests/e2e/camera.spec.ts:84:5 › HEIC and oversize files get a clear refusal and add nothing (2.7s)
+  ✓  142 ../tests/e2e/camera.spec.ts:108:5 › Scan mode opens the item whose QR is in front of the camera (558ms)
+  ✓  143 ../tests/e2e/camera.spec.ts:135:5 › typed IDs: lowercase and look-alikes open the item, an unknown code says so (574ms)
+
+  Slow test file: ../tests/e2e/dead-controls.spec.ts (14.1m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  143 passed (18.4m)
+ Container enderchest-test-app-nobackups-1 Recreate 
+ Container enderchest-test-app-nobackups-1 Recreated 
+ Container enderchest-test-app-nobackups-1 Starting 
+ Container enderchest-test-app-nobackups-1 Started 
+ Container enderchest-test-app-nobackups-1 Waiting 
+ Container enderchest-test-app-nobackups-1 Healthy 
+ Container enderchest-test-app-nobackups-1 Running 
+ Container enderchest-test-app-nobackups-1 Waiting 
+ Container enderchest-test-app-nobackups-1 Healthy 
+ Container enderchest-test-e2e-nobackups-run-1fd3d2cdbdae Creating 
+ Container enderchest-test-e2e-nobackups-run-1fd3d2cdbdae Created 
+
+Running 3 tests using 1 worker
+
+  ✓  1 ../tests/e2e/nobackups.spec.ts:8:5 › the banner says the folder is not connected, on every page (611ms)
+  ✓  2 ../tests/e2e/nobackups.spec.ts:27:5 › Settings shows the same truth and a Back up now that says why it is off (412ms)
+  ✓  3 ../tests/e2e/nobackups.spec.ts:42:5 › no backup is attempted, so no request for one is sent (824ms)
+
+  3 passed (2.7s)

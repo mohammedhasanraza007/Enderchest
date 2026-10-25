@@ -139,3 +139,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Verdict PASS WITH NOTES (N1 to N6; N1: DINOv2 at 0.80 barely separates pictures, gate 1 must look for a false High). Blocked on owner: gate 1, acceptance, screenshot approval.
 - Next: Phase 7 build (`D:\Projects\phase7-next-prompt.txt`).
 - Zip route: fresh `git clone` into an empty scratch folder, `zip-list.txt` from `git ls-files -co --exclude-standard` plus `.git`, `C:\Windows\System32\tar.exe -a -c -f`.
+
+## 2026-10-25 · phase7 · Phase 7 build (camera coach), chain hand-off to the Phase 7 verification
+- Zip in: `phase6v.zip` (folder `D:\Projects\Enderchest-phase-7`, branch `phase-7`). Zip out: `D:\Projects\phase7.zip`, unzipped into `D:\Projects\Enderchest-phase-7v` on branch `phase-7-verify`.
+- Brief first (D-120 to D-124), then the frame route, client tier, prompt machine, chips, Settings toggle; D-125 (move closer at 3.5%) from an OCR calibration.
+- The owner joined mid-build: their new camera was detected (Iriun phone webcam plus a Windows virtual camera); real frames measured with their camera present; at their request cameras are now found and switched by themselves (D-126).
+- Tests added: 12 unit, 8 integration, 22 vitest, 20 Playwright (+ 1 measurement spec), probes 26 and 27, `test.bat coach`. All suites green (lint; unit 258 + 108; integration 328; e2e 143 + 3; probes 1 to 27).
+- Blocked on owner: gate 1 on label captures, gate 4 live check (60 fps), screenshot approval.
+- Next: Phase 7 verification (`D:\Projects\phase7v-next-prompt.txt`).

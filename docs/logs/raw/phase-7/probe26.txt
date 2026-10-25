@@ -1,0 +1,3 @@
+--- probe 26 ---
+PROBE 26: PASS - coach frames: {"ok": true, "frames_read": 25, "health_checks": 377, "health_max_ms": 40.5, "files_added": []}
+ALL PASSED: 26
