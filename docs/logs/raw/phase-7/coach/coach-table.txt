@@ -1,0 +1,5 @@
+Phase 7 coach on real captures, 2026-10-25T04:16:01.543Z
+Thresholds: blurry below 80, dark below 60, flat below 12 sd, glare blob above 4.0%, move closer below 3.5% box height
+file | condition | sharpness | brightness | contrast sd | glare | server | text_found | boxes | median box h | fields | prompt | words | verdict
+dark-iriun-covered-01.jpg | dark | 11 | 3 | 1 | 0.0% | not sent | - | - | - | - | dark | It's dark here. Find some light. | match
+Named conditions matched: 1 of 1

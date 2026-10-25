@@ -7,14 +7,15 @@
 # Probes 20 and 21 are Phase 3 gates: 20 reads a photo with the network disabled (gate 3), 21
 # times /health while readings queue (gate 5). Probes 22 and 23 are Phase 4 gates: 22 restarts the
 # container and moves the test clock forward and back (no duplicate or lost reminder), 23 sends ten
-# browser-notification claims at once (exactly one wins).
-#   run-probes.ps1                run probes 1 to 25
+# browser-notification claims at once (exactly one wins). Probes 24 and 25 are Phase 6 gates;
+# 26 and 27 are Phase 7 gates: /health under coach frames (none stored), ten frames at once.
+#   run-probes.ps1                run probes 1 to 27
 #   run-probes.ps1 -Only "6,12"   run only those
 #   run-probes.ps1 -Live          probes 4 and 9 use the live build.bat/run.bat (the owner's choice)
 param([string]$Only = '', [switch]$Live)   # -Only is a string: "6,12" (powershell -File does not build arrays)
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
-$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..25 }
+$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..27 }
 $out = Join-Path $root 'test-results'
 New-Item -ItemType Directory -Force $out | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $root '.test-backups') | Out-Null

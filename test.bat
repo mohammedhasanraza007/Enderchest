@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-REM test.bat [unit|integration|lint|probes|e2e|types|format|bakeoff|ownership|all]   (default: all)
+REM test.bat [unit|integration|lint|probes|e2e|types|format|bakeoff|ownership|coach|all]   (default: all)
 REM Everything here uses the TEST stack (compose.test.yaml) or temporary folders in a container.
 REM It never touches the live stack or the live volume.
 REM   lint         ruff (Python), then tsc, eslint and prettier (frontend)
@@ -14,6 +14,7 @@ REM   format       rewrite the frontend files with prettier (lint only checks th
 REM   bakeoff      the Phase 3 OCR engine measurement on the owner's photos (D-099): builds the
 REM                bakeoff image (four engines, models baked in) and runs it with no network
 REM   ownership    the Phase 6 gate-1 table on the owner's 20 photos (tests\fixtures\private\phase6)
+REM   coach        the Phase 7 gate-1 table on the owner's captures (tests\fixtures\private\phase7)
 REM                against a COPY of the newest backup, offline; the backup is only read
 
 set "WHAT=%~1"
@@ -38,8 +39,9 @@ if /I "%WHAT%"=="types" goto types
 if /I "%WHAT%"=="format" goto format
 if /I "%WHAT%"=="bakeoff" goto bakeoff
 if /I "%WHAT%"=="ownership" goto ownership
+if /I "%WHAT%"=="coach" goto coach
 if /I "%WHAT%"=="all" goto all
-echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|bakeoff^|ownership^|all]
+echo Usage: test.bat [unit^|integration^|lint^|probes^|e2e^|types^|format^|bakeoff^|ownership^|coach^|all]
 exit /b 2
 
 :build
@@ -133,6 +135,24 @@ if not exist "docs\logs\raw\phase-6\ownership" mkdir "docs\logs\raw\phase-6\owne
 %DC% build tools
 if errorlevel 1 exit /b 1
 docker run --rm --network none -v "%BACKUPS%:/backups:ro" -v "%~dp0tests\fixtures\private\phase6:/photos:ro" -v "%~dp0docs\logs\raw\phase-6\ownership:/results" -v "%~dp0scripts:/app/scripts:ro" enderchest-tools:latest python scripts/ownership_measure.py --backups /backups --photos /photos --out /results
+exit /b %errorlevel%
+
+:coach
+REM Photos named dark-, shake-, glare-, empty-, far- or good- go in tests\fixtures\private\phase7;
+REM the table lands in docs\logs\raw\phase-7\coach. Test stack only.
+if not exist "tests\fixtures\private\phase7" (
+  echo No captures yet: put JPEG photos named by condition in tests\fixtures\private\phase7 first.
+  exit /b 2
+)
+if not exist "docs\logs\raw\phase-7\coach" mkdir "docs\logs\raw\phase-7\coach"
+set "E2E=docker compose -f compose.test.yaml"
+%E2E% build app
+if errorlevel 1 exit /b 1
+%E2E% --profile e2e build e2e
+if errorlevel 1 exit /b 1
+%E2E% up -d --wait app
+if errorlevel 1 exit /b 1
+%E2E% --profile e2e run --rm -e E2E_PROJECT=coach -v "%~dp0tests\fixtures\private\phase7:/captures:ro" -v "%~dp0docs\logs\raw\phase-7\coach:/results" e2e
 exit /b %errorlevel%
 
 :all
