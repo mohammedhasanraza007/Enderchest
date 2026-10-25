@@ -12,9 +12,21 @@ interface FakeCamera {
   colour: string; // "#000000" sends no picture
 }
 
-const IDLE: FakeCamera = { deviceId: "idle", label: "Phone Webcam #2", colour: "#000000" };
-const FRONT: FakeCamera = { deviceId: "front", label: "Front Camera", colour: "#6b8f71" };
-const BACK: FakeCamera = { deviceId: "back", label: "Back Camera", colour: "#8f6b6b" };
+const IDLE: FakeCamera = {
+  deviceId: "idle",
+  label: "Phone Webcam #2",
+  colour: "#000000",
+};
+const FRONT: FakeCamera = {
+  deviceId: "front",
+  label: "Front Camera",
+  colour: "#6b8f71",
+};
+const BACK: FakeCamera = {
+  deviceId: "back",
+  label: "Back Camera",
+  colour: "#8f6b6b",
+};
 
 /** Replaces the browser's cameras with canvases; `window.plugIn(camera)` connects one later. */
 async function fakeCameras(page: Page, cameras: FakeCamera[]) {
@@ -22,7 +34,9 @@ async function fakeCameras(page: Page, cameras: FakeCamera[]) {
     const list = [...initial];
     const opened: string[] = [];
     (window as unknown as { opened: string[] }).opened = opened;
-    (window as unknown as { plugIn: (camera: FakeCamera) => void }).plugIn = (camera) => {
+    (window as unknown as { plugIn: (camera: FakeCamera) => void }).plugIn = (
+      camera,
+    ) => {
       list.push(camera);
       navigator.mediaDevices.dispatchEvent(new Event("devicechange"));
     };
@@ -39,8 +53,12 @@ async function fakeCameras(page: Page, cameras: FakeCamera[]) {
       );
     navigator.mediaDevices.getUserMedia = async (constraints) => {
       const video = (constraints?.video ?? {}) as MediaTrackConstraints;
-      const wanted = (video.deviceId as ConstrainDOMStringParameters | undefined)?.exact;
-      const camera = wanted ? list.find((one) => one.deviceId === wanted) : list[0];
+      const wanted = (
+        video.deviceId as ConstrainDOMStringParameters | undefined
+      )?.exact;
+      const camera = wanted
+        ? list.find((one) => one.deviceId === wanted)
+        : list[0];
       if (!camera) throw new DOMException("no camera", "NotFoundError");
       opened.push(camera.deviceId);
       const canvas = document.createElement("canvas");
@@ -81,7 +99,9 @@ test("a camera that sends only black is skipped for the next one, and says so", 
 }) => {
   await fakeCameras(page, [IDLE, FRONT, BACK]);
   await page.goto("/camera?mode=add");
-  await expect(page.getByText("Skipped Phone Webcam #2: no picture.")).toBeVisible();
+  await expect(
+    page.getByText("Skipped Phone Webcam #2: no picture."),
+  ).toBeVisible();
   await expect(page.getByLabel("Camera", { exact: true })).toHaveValue("front");
   expect(await opened(page)).toEqual(["idle", "front"]);
   await expect(page.getByRole("button", { name: "Take photo" })).toBeVisible();
@@ -111,12 +131,19 @@ test("one camera shows no switch and no picker", async ({ page }) => {
   await expect(page.getByLabel("Camera", { exact: true })).toHaveCount(0);
 });
 
-test("a camera connected while none works starts by itself", async ({ page }) => {
+test("a camera connected while none works starts by itself", async ({
+  page,
+}) => {
   await fakeCameras(page, []);
   await page.goto("/camera?mode=add");
-  await expect(page.getByRole("heading", { name: "No camera found" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "No camera found" }),
+  ).toBeVisible();
   await page.evaluate(
-    (camera) => (window as unknown as { plugIn: (c: typeof camera) => void }).plugIn(camera),
+    (camera) =>
+      (window as unknown as { plugIn: (c: typeof camera) => void }).plugIn(
+        camera,
+      ),
     FRONT,
   );
   await expect(page.getByRole("button", { name: "Take photo" })).toBeVisible();
@@ -126,18 +153,33 @@ test("a camera connected while none works starts by itself", async ({ page }) =>
 test("when every camera sends only black the page says so, and Try again looks again", async ({
   page,
 }) => {
-  await fakeCameras(page, [IDLE, { ...IDLE, deviceId: "idle2", label: "Phone Webcam" }]);
+  await fakeCameras(page, [
+    IDLE,
+    { ...IDLE, deviceId: "idle2", label: "Phone Webcam" },
+  ]);
   await page.goto("/camera?mode=add");
-  await expect(page.getByRole("heading", { name: "No picture from the cameras" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "No picture from the cameras" }),
+  ).toBeVisible();
   await expect(page.getByRole("button", { name: "Take photo" })).toHaveCount(0);
   await page.getByRole("button", { name: "Try again" }).click();
-  await expect(page.getByRole("heading", { name: "No picture from the cameras" })).toBeVisible();
-  await expect.poll(async () => (await opened(page)).length, { timeout: 10_000 }).toBe(4);
+  await expect(
+    page.getByRole("heading", { name: "No picture from the cameras" }),
+  ).toBeVisible();
+  await expect
+    .poll(async () => (await opened(page)).length, { timeout: 10_000 })
+    .toBe(4);
 });
 
-test("cameras with unknown facing get the phone-app hint and a named switch", async ({ page }) => {
+test("cameras with unknown facing get the phone-app hint and a named switch", async ({
+  page,
+}) => {
   await fakeCameras(page, [
-    { deviceId: "m35", label: "Phone (Windows Virtual Camera)", colour: "#6b8f71" },
+    {
+      deviceId: "m35",
+      label: "Phone (Windows Virtual Camera)",
+      colour: "#6b8f71",
+    },
     { deviceId: "iriun", label: "Iriun Webcam", colour: "#8f6b6b" },
   ]);
   await page.goto("/camera?mode=add");
