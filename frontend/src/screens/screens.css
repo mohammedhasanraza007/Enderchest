@@ -553,6 +553,30 @@
 .shutter:disabled {
   opacity: 0.5;
 }
+/* Switch camera (D-126): a round button on the picture, the nav's opaque fill (D-059). */
+.camera-switch {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hairline-nav);
+  border-radius: var(--radius-pill);
+  background: var(--surface-nav);
+  box-shadow: var(--shadow-nav);
+  color: var(--text);
+  cursor: pointer;
+}
+.camera-switch:hover {
+  background: var(--surface-nav-active);
+}
+.camera-choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
 
 /* ------------------------------------------------------------------ review and confirm (P-07) */
 .confirm {

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { FormEvent, RefObject } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import jsQR from "jsqr";
+import { SwitchCamera } from "lucide-react";
 import { ApiError } from "../api/client";
 import { api } from "../api/endpoints";
 import { useRefreshInventory, useSettings } from "../api/queries";
@@ -9,6 +10,7 @@ import { useCamera } from "../hooks/useCamera";
 import type { CameraState } from "../hooks/useCamera";
 import { useCoach } from "../hooks/useCoach";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { facingOf } from "../lib/cameras";
 import { isPublicId } from "../lib/ids";
 import { CoachPill } from "../patterns/CoachPill";
 import { ItemFormSheet } from "../patterns/ItemFormSheet";
@@ -58,6 +60,10 @@ const CAMERA_TEXT: Record<Exclude<CameraState, "live">, { title: string; body: s
   unsupported: {
     title: "This browser cannot use a camera here",
     body: "Upload photos or enter an item by hand instead.",
+  },
+  no_picture: {
+    title: "No picture from the cameras",
+    body: "They are on but send only black. If a phone is your webcam, open its app and connect it, then press Try again.",
   },
 };
 
@@ -112,6 +118,17 @@ export function Camera() {
             aria-label="Camera picture"
           />
           {coached ? <CoachPill message={coach.message} chips={coach.chips} /> : null}
+          {live && camera.canSwitch ? (
+            <button
+              type="button"
+              className="camera-switch"
+              aria-label={camera.switchText}
+              title={camera.switchText}
+              onClick={camera.switchCamera}
+            >
+              <SwitchCamera aria-hidden="true" size={22} />
+            </button>
+          ) : null}
           {camera.state === "live" ? null : (
             <div className="camera-view__message" role="status">
               <h2>{CAMERA_TEXT[camera.state].title}</h2>
@@ -137,18 +154,27 @@ export function Camera() {
           )}
         </div>
         {camera.devices.length > 1 ? (
-          <Select
-            label="Camera"
-            value={camera.deviceId ?? ""}
-            onChange={(event) => camera.chooseDevice(event.target.value || undefined)}
-            options={[
-              { value: "", label: "Default camera" },
-              ...camera.devices.map((device, index) => ({
+          <div className="camera-choice">
+            <Select
+              label="Camera"
+              value={camera.activeId ?? ""}
+              onChange={(event) => camera.chooseDevice(event.target.value)}
+              options={camera.devices.map((device, index) => ({
                 value: device.deviceId,
                 label: device.label || `Camera ${index + 1}`,
-              })),
-            ]}
-          />
+              }))}
+            />
+            {camera.skipped.length > 0 ? (
+              <p className="section-note" role="status">
+                Skipped {camera.skipped.join(", ")}: no picture.
+              </p>
+            ) : null}
+            {camera.devices.some((device) => facingOf(device.label)) ? null : (
+              <p className="section-note">
+                Phone as webcam? Its front and back cameras are switched in the phone&apos;s app.
+              </p>
+            )}
+          </div>
         ) : null}
         {mode === "add" ? <AddControls live={live} capture={camera.capture} /> : null}
         {mode === "scan" ? <ScanControls live={live} videoRef={camera.videoRef} /> : null}
