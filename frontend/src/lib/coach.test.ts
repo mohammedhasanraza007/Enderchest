@@ -128,6 +128,13 @@ describe("prompt choice", () => {
     expect(choosePrompt(GOOD, unsure, now)).toBe("unsure");
   });
 
+  it("says 'move closer' for small text, read or unsure (D-125)", () => {
+    const smallUnsure = reading({ text_found: false, boxes: [box(0.028, 0.9), box(0.03, 0.3)] });
+    expect(choosePrompt(GOOD, { ...smallUnsure, at: now }, now)).toBe("far");
+    const justBigEnough = reading({ boxes: [box(0.036), box(0.04), box(0.05)] }, now);
+    expect(choosePrompt(GOOD, justBigEnough, now)).toBeNull();
+  });
+
   it("treats a blank, flat frame as no label rather than blurry, and never sends it", () => {
     const flat: Metrics = { sharpness: 2, brightness: 150, contrast: 4, glare: 0 };
     expect(choosePrompt(flat, null, now)).toBe("no_text");
@@ -141,9 +148,10 @@ describe("prompt choice", () => {
     expect(worthReading({ ...GOOD, glare: 0.3 })).toBe(true); // glare still reads text
   });
 
-  it("measures far from the confident boxes only", () => {
+  it("measures far from the confident boxes, or from every box when asked", () => {
     expect(medianHeight([box(0.01, 0.2), box(0.05), box(0.07)])).toBeCloseTo(0.06);
     expect(medianHeight([box(0.05, 0.1)])).toBeNull();
+    expect(medianHeight([box(0.05, 0.1)], 0)).toBeCloseTo(0.05);
     expect(medianHeight([box(FAR_HEIGHT - 0.001)])).toBeLessThan(FAR_HEIGHT);
   });
 

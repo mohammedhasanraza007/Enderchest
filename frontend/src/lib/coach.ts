@@ -17,7 +17,10 @@ export const BLUR_MIN = 80; // variance of the Laplacian below this is blurry
 export const DARK_MIN = 60; // mean luma (0 to 255) below this is too dark
 export const GLARE_LUMA = 250; // a pixel brighter than this is blown out
 export const GLARE_BLOB = 0.04; // one bright blob over 4% of the frame is glare
-export const FAR_HEIGHT = 0.02; // median text height under 2% of the frame: move closer
+// Median text box under 3.5% of the frame height: move closer. The spec starts at 2%, but the OCR
+// engine pads its boxes, so the smallest text it still reads measures 2.2 to 3.3% at 640 px and
+// 2% could never fire (D-125).
+export const FAR_HEIGHT = 0.035;
 export const TEXT_CONFIDENCE = 0.5; // a box counts as read text from this confidence
 // A frame this flat (standard deviation of luma) has nothing to focus on: it cannot be judged
 // blurry, and it holds no label (an empty desk or a wall). Starting value, like the others.
@@ -146,10 +149,11 @@ export function worthReading(metrics: Metrics): boolean {
 export type PromptKind =
   "dark" | "blur" | "glare" | "no_text" | "unsure" | "far" | "model" | "date" | "model_date";
 
-/** The middle height of the confidently read boxes, as a fraction of the frame height. */
-export function medianHeight(boxes: FrameBox[]): number | null {
+/** The middle height of the boxes read with at least `minConfidence`, as a fraction of the
+ *  frame height. */
+export function medianHeight(boxes: FrameBox[], minConfidence = TEXT_CONFIDENCE): number | null {
   const heights = boxes
-    .filter((box) => box.conf >= TEXT_CONFIDENCE)
+    .filter((box) => box.conf >= minConfidence)
     .map((box) => box.h)
     .sort((a, b) => a - b);
   if (heights.length === 0) return null;
@@ -174,9 +178,12 @@ export function choosePrompt(
   if (metrics.glare > GLARE_BLOB) return "glare";
   if (flat) return "no_text";
   if (!fresh(reading, now)) return null;
-  if (!reading.text_found) return reading.boxes.length > 0 ? "unsure" : "no_text";
-  const height = medianHeight(reading.boxes);
+  if (reading.boxes.length === 0) return "no_text";
+  // Small text is "move closer" whether or not it was read confidently (D-125); larger text that
+  // is still unsure is "almost".
+  const height = medianHeight(reading.boxes, reading.text_found ? TEXT_CONFIDENCE : 0);
   if (height !== null && height < FAR_HEIGHT) return "far";
+  if (!reading.text_found) return "unsure";
   const { model, date } = reading.fields;
   if (model && date) return "model_date";
   if (date) return "date";
