@@ -269,3 +269,33 @@ test("reduced motion: the prompt appears without a fade", async ({ page }) => {
   );
   expect(duration).toBe("0s");
 });
+
+// Shots for the look check (D-097): the coach over the camera, both themes, 1280 and 1024 px.
+const SHOTS = "/test-results/shots-phase-7";
+for (const theme of ["dark", "light"] as const) {
+  test(`coach shots (${theme})`, async ({ page, request }) => {
+    await saveProfile(request, {
+      name: "Mohammed",
+      timezone: "Asia/Kolkata",
+      theme,
+    });
+    await feed(page, "good");
+    for (const width of [1280, 1024]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/camera?mode=add");
+      await expect(pill(page)).toHaveText(/found|spotted|model/, {
+        timeout: 20_000,
+      });
+      await page.screenshot({
+        path: `${SHOTS}/coach-found-${theme}-${width}.png`,
+      });
+    }
+    await page.goto("/settings");
+    await page
+      .getByRole("heading", { name: "Camera coach" })
+      .scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: `${SHOTS}/settings-coach-${theme}-1024.png`,
+    });
+  });
+}
