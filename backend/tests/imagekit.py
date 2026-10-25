@@ -59,3 +59,17 @@ def label_jpeg(lines: list[str], *, width: int = 1200, size: int = 40) -> bytes:
     out = io.BytesIO()
     image.save(out, format="JPEG", quality=92)
     return out.getvalue()
+
+
+def coach_frame(lines: list[str], *, size: int = 26, width: int = 640, height: int = 360,
+                background: str = "white") -> bytes:
+    """A 640 x 360 camera-coach frame (API 2.15) with `lines` drawn at `size` px, JPEG quality
+    80 as the page sends it. A regression tool only, never gate evidence (D-056)."""
+    image = Image.new("RGB", (width, height), background)
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.load_default(size=size)
+    for row, text in enumerate(lines):
+        draw.text((40, 40 + row * int(size * 1.8)), text, fill="black", font=font)
+    out = io.BytesIO()
+    image.save(out, format="JPEG", quality=80)
+    return out.getvalue()

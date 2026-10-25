@@ -50,6 +50,11 @@ def _line(raw: engine.RawLine, photo: int) -> Line:
                 (int(min(xs)), int(min(ys)), int(max(xs)), int(max(ys))), round(height, 1), photo)
 
 
+def read_image(image: Image.Image, threads: int) -> list[Line]:
+    """One image already in memory and already small (a camera-coach frame), as photo 0."""
+    return [_line(raw, 0) for raw in engine.recognise(image, threads) if raw.text.strip()]
+
+
 def read_photos(paths: list[Path], threads: int) -> Reading:
     """Read each photo in turn; lines keep the engine's reading order within a photo."""
     started = time.perf_counter()

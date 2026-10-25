@@ -12,6 +12,7 @@ from .api import (
     backups,
     boot,
     catalog,
+    coach,
     dashboard,
     drafts,
     gemini,
@@ -87,6 +88,7 @@ def create_app(settings: Settings | None = None,
     app.include_router(notifications.router)
     app.include_router(dashboard.router)
     app.include_router(ownership.router)
+    app.include_router(coach.router)
     if settings.env == "test":
         app.include_router(test_support.router)
     app.include_router(pages.router)  # last: its catch-all must never shadow an API route

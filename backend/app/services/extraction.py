@@ -112,6 +112,16 @@ def _line_spans(lines: list[Line]) -> list[tuple[int, int]]:
     return spans
 
 
+def covering(lines: list[Line], text: str) -> list[int]:
+    """Indexes of the lines that hold `text` once the lines are joined, as `_expiry` joins them
+    (a date may run over two lines). The camera coach marks those boxes as the date."""
+    start = "\n".join(_clean(line.text) for line in lines).find(text)
+    if start < 0 or not text:
+        return []
+    return [index for index, (first, last) in enumerate(_line_spans(lines))
+            if first < start + len(text) and start < last]
+
+
 def _sizes(text: str) -> list[re.Match]:
     return list(_SIZE.finditer(text))
 
