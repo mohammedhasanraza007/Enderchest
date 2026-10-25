@@ -226,6 +226,20 @@
         "title": "Body_create_drafts_api_v1_drafts_post",
         "type": "object"
       },
+      "Body_read_frame_api_v1_capture_frame_post": {
+        "properties": {
+          "image": {
+            "contentMediaType": "application/octet-stream",
+            "title": "Image",
+            "type": "string"
+          }
+        },
+        "required": [
+          "image"
+        ],
+        "title": "Body_read_frame_api_v1_capture_frame_post",
+        "type": "object"
+      },
       "BreakdownEntry": {
         "properties": {
           "kind": {
@@ -1189,6 +1203,107 @@
           "engine"
         ],
         "title": "ExtractRequest",
+        "type": "object"
+      },
+      "FrameBox": {
+        "properties": {
+          "conf": {
+            "title": "Conf",
+            "type": "number"
+          },
+          "h": {
+            "title": "H",
+            "type": "number"
+          },
+          "kind": {
+            "enum": [
+              "text",
+              "model",
+              "date"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "w": {
+            "title": "W",
+            "type": "number"
+          },
+          "x": {
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "title": "Y",
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y",
+          "w",
+          "h",
+          "conf",
+          "kind"
+        ],
+        "title": "FrameBox",
+        "type": "object"
+      },
+      "FrameFields": {
+        "properties": {
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          }
+        },
+        "title": "FrameFields",
+        "type": "object"
+      },
+      "FrameResult": {
+        "properties": {
+          "boxes": {
+            "items": {
+              "$ref": "#/components/schemas/FrameBox"
+            },
+            "title": "Boxes",
+            "type": "array"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "number"
+          },
+          "fields": {
+            "$ref": "#/components/schemas/FrameFields"
+          },
+          "text_found": {
+            "title": "Text Found",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "text_found",
+          "confidence",
+          "boxes",
+          "fields"
+        ],
+        "title": "FrameResult",
         "type": "object"
       },
       "GeminiAnswer": {
@@ -4256,6 +4371,45 @@
           }
         },
         "summary": "Start Empty"
+      }
+    },
+    "/api/v1/capture/frame": {
+      "post": {
+        "description": "Read-only: the frame is read in memory and kept nowhere (D-121).",
+        "operationId": "read_frame_api_v1_capture_frame_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_read_frame_api_v1_capture_frame_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FrameResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read Frame"
       }
     },
     "/api/v1/categories": {

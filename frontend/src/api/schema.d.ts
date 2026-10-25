@@ -73,6 +73,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/capture/frame": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Read Frame
+         * @description Read-only: the frame is read in memory and kept nowhere (D-121).
+         */
+        post: operations["read_frame_api_v1_capture_frame_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/categories": {
         parameters: {
             query?: never;
@@ -1060,6 +1080,11 @@ export interface components {
             /** Images[] */
             "images[]": string[];
         };
+        /** Body_read_frame_api_v1_capture_frame_post */
+        Body_read_frame_api_v1_capture_frame_post: {
+            /** Image */
+            image: string;
+        };
         /** BreakdownEntry */
         BreakdownEntry: {
             /**
@@ -1338,6 +1363,41 @@ export interface components {
              * @enum {string}
              */
             engine: "local" | "gemini";
+        };
+        /** FrameBox */
+        FrameBox: {
+            /** Conf */
+            conf: number;
+            /** H */
+            h: number;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "text" | "model" | "date";
+            /** W */
+            w: number;
+            /** X */
+            x: number;
+            /** Y */
+            y: number;
+        };
+        /** FrameFields */
+        FrameFields: {
+            /** Date */
+            date?: string | null;
+            /** Model */
+            model?: string | null;
+        };
+        /** FrameResult */
+        FrameResult: {
+            /** Boxes */
+            boxes: components["schemas"]["FrameBox"][];
+            /** Confidence */
+            confidence: number;
+            fields: components["schemas"]["FrameFields"];
+            /** Text Found */
+            text_found: boolean;
         };
         /**
          * GeminiAnswer
@@ -2370,6 +2430,39 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_frame_api_v1_capture_frame_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_read_frame_api_v1_capture_frame_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FrameResult"];
                 };
             };
             /** @description Validation Error */
