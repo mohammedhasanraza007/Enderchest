@@ -55,16 +55,18 @@ export function Road({ road, title, emptyText, savings, delivery = 0 }: RoadProp
       </h2>
       <div className="road__bar" aria-hidden="true" />
       <div className="road__track">
-        <div
-          className={`road__lane${moving ? " road__lane--moving" : ""}`}
-          style={{ transform: truckShift(dayPosition(days.indexOf(road.truck_date), days.length)) }}
-          aria-hidden="true"
-        >
+        <div className="road__lanes" aria-hidden="true">
           <div
-            key={delivery}
-            className={`road__drive${delivery > 0 ? " road__drive--deliver" : ""}`}
+            className={`road__lane${moving ? " road__lane--moving" : ""}`}
+            style={{ transform: truckShift(dayPosition(days.indexOf(road.truck_date), days.length)) }}
+            aria-hidden="true"
           >
-            <Truck />
+            <div
+              key={delivery}
+              className={`road__drive${delivery > 0 ? " road__drive--deliver" : ""}`}
+            >
+              <Truck />
+            </div>
           </div>
         </div>
         {pill !== null ? (

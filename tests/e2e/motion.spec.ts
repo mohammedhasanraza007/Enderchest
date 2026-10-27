@@ -142,6 +142,16 @@ test("the truck drives by transform when its day changes, never by left", async 
   const after = await lane.evaluate((el) => (el as HTMLElement).style.transform);
   expect(after).toMatch(/^translateX\([\d.]+%\)$/);
   expect(after).not.toBe(before);
+  // The shifted lane never widens the page (it is clipped inside the road).
+  for (const path of ["/", "/tasks"]) {
+    await page.goto(path);
+    await expect(page.locator(".road__lane").first()).toBeVisible();
+    const [scroll, inner] = await page.evaluate(() => [
+      document.documentElement.scrollWidth,
+      window.innerWidth,
+    ]);
+    expect(scroll).toBeLessThanOrEqual(inner);
+  }
 });
 
 test("saving a new item sends the box to the brand mark and clears itself", async ({

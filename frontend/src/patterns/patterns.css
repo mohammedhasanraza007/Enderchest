@@ -840,14 +840,24 @@
 /* The rear wheel sits over the day's tick, the cab pointing on along the road (reference). */
 /* The lane spans the road; moving it by a percentage of its own width moves the truck to a day
    without animating layout (D-128). The truck drives there when its day changes. */
-.road__lane {
+/* The lanes box clips the shifted lane, so it never widens the page; it leaves 48 px on the right
+   for the cab past the last day. */
+.road__lanes {
   position: absolute;
   top: -36px;
   left: 0;
+  right: -48px;
   z-index: 1;
-  width: 100%;
   height: 42px;
+  overflow: clip;
   pointer-events: none;
+}
+.road__lane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 48px);
+  height: 42px;
   transition: transform var(--dur-scene) var(--ease-inout);
 }
 .road__truck {
