@@ -629,6 +629,49 @@
   stroke: var(--ring-arc);
   stroke-width: 12;
 }
+/* Motion (DESIGN.md 10.4): a changed value glides; only stroke-dashoffset and opacity move. */
+.rings__glow,
+.rings__arc,
+.rings__flare {
+  transition: stroke-dashoffset var(--dur-ring) var(--ease-out);
+}
+.rings__flare {
+  fill: none;
+  stroke: var(--ring-arc);
+  stroke-width: 16;
+  stroke-linecap: round;
+  opacity: 0;
+  pointer-events: none;
+  animation: ring-flare var(--dur-ring) var(--ease-out) both;
+}
+@keyframes ring-flare {
+  35% {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* The entrance sweep: each arc grows from 12 o'clock to its value, outer ring first. */
+.dashboard--entrance .rings__arc,
+.dashboard--entrance .rings__glow {
+  animation: ring-sweep var(--dur-ring) var(--ease-out) both;
+  animation-delay: calc(var(--entrance-rings) + var(--ring-step, 0ms));
+}
+.dashboard--entrance [data-ring="located"] {
+  --ring-step: 60ms;
+}
+.dashboard--entrance [data-ring="fresh"] {
+  --ring-step: 120ms;
+}
+.dashboard--entrance [data-ring="on_time"] {
+  --ring-step: 180ms;
+}
+@keyframes ring-sweep {
+  from {
+    stroke-dashoffset: var(--arc-full);
+  }
+}
 .rings__inner {
   fill: none;
   stroke: var(--ring-hairline);
@@ -786,12 +829,50 @@
   opacity: 1;
 }
 /* The rear wheel sits over the day's tick, the cab pointing on along the road (reference). */
-.road__truck {
+/* The lane spans the road; moving it by a percentage of its own width moves the truck to a day
+   without animating layout (D-128). The truck drives there when its day changes. */
+.road__lane {
   position: absolute;
   top: -36px;
+  left: 0;
   z-index: 1;
-  transform: translateX(-20%);
+  width: 100%;
+  height: 42px;
   pointer-events: none;
+  transition: transform var(--dur-scene) var(--ease-inout);
+}
+.road__truck {
+  display: block;
+  transform: translateX(-20%);
+}
+.road__wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.road__lane--moving .road__wheel {
+  animation: wheel-turn var(--dur-scene) var(--ease-inout);
+}
+@keyframes wheel-turn {
+  to {
+    transform: rotate(540deg);
+  }
+}
+/* Rolls in from the left edge once (the entrance), or makes a short delivery (a milestone). */
+.dashboard--entrance .road__drive,
+.road__drive--deliver {
+  animation: truck-in var(--dur-scene) var(--ease-out) both;
+  animation-delay: var(--entrance-truck, 0ms);
+}
+.dashboard--entrance .road__wheel,
+.road__drive--deliver .road__wheel {
+  animation: wheel-turn var(--dur-scene) var(--ease-out) both;
+  animation-delay: var(--entrance-truck, 0ms);
+}
+@keyframes truck-in {
+  from {
+    opacity: 0;
+    transform: translateX(-160px);
+  }
 }
 .road__tick {
   position: absolute;

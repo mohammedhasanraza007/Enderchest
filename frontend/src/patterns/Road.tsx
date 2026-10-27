@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Road as RoadData, RoadEvent } from "../api/endpoints";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../lib/dashboard";
 import { formatDay } from "../lib/format";
 import { formatRupees } from "../lib/money";
+import { tokenMs, truckShift } from "../lib/motion";
 import { Dialog } from "../primitives/Overlay";
 
 // The road (DESIGN.md 6.11): a full-bleed bar with a dashed centre line, a tick per day from
@@ -29,9 +30,11 @@ interface RoadProps {
   /** The dashboard's confirmed savings; the pill shows only on the day of the latest one, which
    * must be today (D-116: never on a future date). */
   savings?: { month_paise: number; pill_date: string | null } | null;
+  /** Changes when the truck should make one short delivery (a streak milestone, D-129). */
+  delivery?: number;
 }
 
-export function Road({ road, title, emptyText, savings }: RoadProps) {
+export function Road({ road, title, emptyText, savings, delivery = 0 }: RoadProps) {
   const [open, setOpen] = useState<RoadEvent | null>(null);
   const titleId = useId();
   const days = roadDays(road.start, road.end);
@@ -40,6 +43,7 @@ export function Road({ road, title, emptyText, savings }: RoadProps) {
   // Parked on the first two days, the truck stands under the title: give the title headroom.
   const truckAtStart = days.indexOf(road.truck_date) <= 1;
   const pill = savings && savings.pill_date === road.start ? savings.month_paise : null;
+  const moving = useMoving(road.truck_date, delivery);
 
   return (
     <section
@@ -51,7 +55,18 @@ export function Road({ road, title, emptyText, savings }: RoadProps) {
       </h2>
       <div className="road__bar" aria-hidden="true" />
       <div className="road__track">
-        <Truck left={at(road.truck_date)} />
+        <div
+          className={`road__lane${moving ? " road__lane--moving" : ""}`}
+          style={{ transform: truckShift(dayPosition(days.indexOf(road.truck_date), days.length)) }}
+          aria-hidden="true"
+        >
+          <div
+            key={delivery}
+            className={`road__drive${delivery > 0 ? " road__drive--deliver" : ""}`}
+          >
+            <Truck />
+          </div>
+        </div>
         {pill !== null ? (
           <Link
             to="/savings"
@@ -128,16 +143,35 @@ export function Road({ road, title, emptyText, savings }: RoadProps) {
   );
 }
 
+/** True for one scene's length after the truck's day changes or a delivery starts: the wheels
+ * turn only while it moves (DESIGN.md 10.3). */
+function useMoving(truckDate: string, delivery: number): boolean {
+  const [moving, setMoving] = useState(false);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    const ms = tokenMs("--dur-scene");
+    if (ms === 0) return;
+    setMoving(true);
+    const timer = window.setTimeout(() => setMoving(false), ms);
+    return () => window.clearTimeout(timer);
+  }, [truckDate, delivery]);
+  return moving;
+}
+
 /** A flat delivery truck (DESIGN.md 6.11): clay box, darker cab, cream window, dark wheels. */
-function Truck({ left }: { left: string }) {
+export function Truck() {
   return (
     <svg
       className="road__truck"
-      style={{ left }}
       viewBox="0 0 75 42"
       width="75"
       height="42"
       aria-hidden="true"
+      focusable="false"
     >
       <rect x="1" y="4" width="48" height="28" rx="3" fill="var(--truck-body)" />
       <path
@@ -146,10 +180,13 @@ function Truck({ left }: { left: string }) {
       />
       <path d="M55 15h7l4.6 7.6H55z" fill="var(--truck-window)" />
       <rect x="1" y="30" width="72" height="3" rx="1.5" fill="var(--truck-cab)" />
-      <circle cx="15" cy="35" r="6" fill="var(--truck-ink)" />
-      <circle cx="15" cy="35" r="2.2" fill="var(--truck-body)" />
-      <circle cx="61" cy="35" r="6" fill="var(--truck-ink)" />
-      <circle cx="61" cy="35" r="2.2" fill="var(--truck-body)" />
+      {[15, 61].map((x) => (
+        <g key={x} className="road__wheel">
+          <circle cx={x} cy="35" r="6" fill="var(--truck-ink)" />
+          <circle cx={x} cy="35" r="2.2" fill="var(--truck-body)" />
+          <rect x={x - 0.6} y="30.5" width="1.2" height="2.6" rx="0.6" fill="var(--truck-body)" />
+        </g>
+      ))}
     </svg>
   );
 }

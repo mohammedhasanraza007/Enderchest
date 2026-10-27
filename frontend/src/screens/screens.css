@@ -798,6 +798,51 @@ body:has(.road) {
   color: var(--text-muted-page);
   font-size: 1.0625rem;
 }
+/* The streak (D-127): a quiet line under the subtitle, shown only from two days. */
+.greeting__streak {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+}
+.greeting__streak svg {
+  flex: none;
+  color: var(--text-muted-page);
+}
+
+/* The dashboard entrance (DESIGN.md 10.2, D-129): nav settles, greeting, rings, card, truck.
+   Only transform and opacity move; removing the class shows the final state at once. */
+.dashboard--entrance {
+  --entrance-greeting: 80ms;
+  --entrance-rings: 200ms;
+  --entrance-card: 420ms;
+  --entrance-truck: 600ms;
+}
+.dashboard--entrance .greeting,
+.dashboard--entrance .attention-card {
+  animation: arrive var(--dur-slow) var(--ease-out) both;
+  animation-delay: var(--entrance-greeting);
+}
+.dashboard--entrance .attention-card {
+  animation-delay: var(--entrance-card);
+}
+body.entrance .nav__capsule {
+  animation: settle var(--dur-slow) var(--ease-out) both;
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
 .attention-card {
   justify-self: end;
   width: 323px;

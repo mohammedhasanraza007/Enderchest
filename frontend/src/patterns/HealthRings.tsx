@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import type { Dashboard, RingName } from "../api/endpoints";
-import { RING_ORDER, RING_RADII, arcDash, itemsWord, ringsLabel } from "../lib/dashboard";
+import { useCountUp } from "../hooks/useCountUp";
+import { RING_ORDER, RING_RADII, itemsWord, ringsLabel } from "../lib/dashboard";
+import { arcOffset } from "../lib/motion";
 
 // The health rings (DESIGN.md 6.8): an outer hairline, four tracks with their arcs (Documented,
 // Located, Fresh, On time, outer to inner), an inner hairline and the score in the middle. The
 // arcs start at 12 o'clock, run clockwise and their length equals each value exactly. A ring
-// that does not apply is an empty track. Static in Phase 5; the sweep is Phase 8 motion.
+// that does not apply is an empty track. Motion (DESIGN.md 10.4, D-129): the arcs sweep in during
+// the dashboard entrance and glide when a value changes (stroke-dashoffset only); an improved ring
+// flares once; the score and item count count up when the server's numbers change.
 
 const SIZE = 400;
 const CENTRE = SIZE / 2;
@@ -16,11 +20,25 @@ interface HealthRingsProps {
   board: Pick<Dashboard, "score" | "rings" | "item_count">;
   /** Opens the breakdown sheet on a ring (the one pointed at, else the outer one). */
   onOpen: (ring: RingName) => void;
+  /** The dashboard entrance is playing: numbers count up from 0. */
+  entrance?: boolean;
+  /** An input ended the entrance: show the final numbers at once. */
+  settled?: boolean;
+  /** Rings that just improved, and a key that changes with each new pulse. */
+  pulse?: { rings: RingName[]; key: number };
 }
 
-export function HealthRings({ board, onOpen }: HealthRingsProps) {
+export function HealthRings({
+  board,
+  onOpen,
+  entrance = false,
+  settled = false,
+  pulse,
+}: HealthRingsProps) {
   const [lit, setLit] = useState<RingName | null>(null);
   const empty = board.item_count === 0;
+  const score = useCountUp(board.score, entrance ? 0 : null, settled);
+  const count = useCountUp(board.item_count, entrance ? 0 : null, settled);
 
   return (
     <div className="rings">
@@ -47,6 +65,16 @@ export function HealthRings({ board, onOpen }: HealthRingsProps) {
             const radius = RING_RADII[ring];
             const value = board.rings[ring].value;
             const dimmed = lit !== null && lit !== ring;
+            const full = 2 * Math.PI * radius;
+            const arc = {
+              cx: CENTRE,
+              cy: CENTRE,
+              r: radius,
+              strokeDasharray: `${full.toFixed(2)} ${full.toFixed(2)}`,
+              strokeDashoffset: arcOffset(value, radius).toFixed(2),
+              transform: `rotate(-90 ${CENTRE} ${CENTRE})`,
+              style: { "--arc-full": full.toFixed(2) } as CSSProperties,
+            };
             return (
               <g
                 key={ring}
@@ -59,23 +87,16 @@ export function HealthRings({ board, onOpen }: HealthRingsProps) {
                 <circle className="rings__edge" cx={CENTRE} cy={CENTRE} r={radius - STROKE / 2} />
                 {value !== null && value > 0 ? (
                   <>
-                    <circle
-                      className="rings__glow"
-                      cx={CENTRE}
-                      cy={CENTRE}
-                      r={radius}
-                      strokeDasharray={arcDash(value, radius)}
-                      transform={`rotate(-90 ${CENTRE} ${CENTRE})`}
-                      filter="url(#ring-glow)"
-                    />
-                    <circle
-                      className="rings__arc"
-                      cx={CENTRE}
-                      cy={CENTRE}
-                      r={radius}
-                      strokeDasharray={arcDash(value, radius)}
-                      transform={`rotate(-90 ${CENTRE} ${CENTRE})`}
-                    />
+                    <circle className="rings__glow" {...arc} filter="url(#ring-glow)" />
+                    <circle className="rings__arc" {...arc} />
+                    {pulse?.rings.includes(ring) ? (
+                      <circle
+                        key={pulse.key}
+                        className="rings__flare"
+                        {...arc}
+                        filter="url(#ring-glow)"
+                      />
+                    ) : null}
                   </>
                 ) : null}
               </g>
@@ -85,7 +106,7 @@ export function HealthRings({ board, onOpen }: HealthRingsProps) {
         </svg>
       </button>
       <div className="rings__centre">
-        <p className="rings__score">{board.score ?? "—"}</p>
+        <p className="rings__score">{score ?? "—"}</p>
         {empty ? (
           <Link className="rings__label rings__add" to="/camera?mode=add">
             Add your first item
@@ -93,7 +114,7 @@ export function HealthRings({ board, onOpen }: HealthRingsProps) {
         ) : (
           <>
             <p className="rings__label">Inventory health</p>
-            <p className="rings__count">• {itemsWord(board.item_count)}</p>
+            <p className="rings__count">• {itemsWord(count ?? board.item_count)}</p>
           </>
         )}
       </div>
