@@ -219,34 +219,39 @@ function ItemView({ item }: { item: ItemDetail }) {
           ))}
         </dl>
         {item.notes ? <p className="item-card__notes">{item.notes}</p> : null}
-        {active ? (
+        {active || !item.deleted_at ? (
+          // One wrapping row (Phase 8 polish): the lifecycle actions, then Edit and More.
           <div className="item-card__actions">
-            <Button loading={busy} onClick={() => void lifecycle("use")}>
-              Use it
-            </Button>
-            <Button variant="secondary" onClick={() => void lifecycle("expire")}>
-              Mark expired
-            </Button>
-            <Button variant="secondary" onClick={() => void lifecycle("discard")}>
-              Discard
-            </Button>
+            {active ? (
+              <>
+                <Button loading={busy} onClick={() => void lifecycle("use")}>
+                  Use it
+                </Button>
+                <Button variant="secondary" onClick={() => void lifecycle("expire")}>
+                  Mark expired
+                </Button>
+                <Button variant="secondary" onClick={() => void lifecycle("discard")}>
+                  Discard
+                </Button>
+              </>
+            ) : null}
+            {item.deleted_at ? null : (
+              <>
+                {/* Beside Use it, Edit steps back so the card has one main action. */}
+                <Button variant={active ? "secondary" : "primary"} onClick={() => setEditing(true)}>
+                  Edit
+                </Button>
+                <OverflowMenu
+                  label="More item actions"
+                  actions={[
+                    { label: "Duplicate", onSelect: () => setDuplicating(true) },
+                    { label: "Delete", onSelect: () => void remove() },
+                  ]}
+                />
+              </>
+            )}
           </div>
         ) : null}
-        {item.deleted_at ? null : (
-          <div className="item-card__actions">
-            {/* Beside Use it, Edit steps back so the card has one main action. */}
-            <Button variant={active ? "secondary" : "primary"} onClick={() => setEditing(true)}>
-              Edit
-            </Button>
-            <OverflowMenu
-              label="More item actions"
-              actions={[
-                { label: "Duplicate", onSelect: () => setDuplicating(true) },
-                { label: "Delete", onSelect: () => void remove() },
-              ]}
-            />
-          </div>
-        )}
       </GlassCard>
 
       <ItemFormSheet
@@ -496,6 +501,7 @@ function History({ publicId, timeZone }: { publicId: string; timeZone: string })
         <ErrorState message={events.error.message} onRetry={() => void events.refetch()} />
       ) : (
         <>
+          {all.length === 0 ? <p className="section-note">Nothing recorded yet.</p> : null}
           <ol className="history__list">
             {all.map((event, position) => (
               <li key={`${event.at}-${position}`}>

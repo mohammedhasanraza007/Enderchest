@@ -58,7 +58,9 @@ export function Road({ road, title, emptyText, savings, delivery = 0 }: RoadProp
         <div className="road__lanes" aria-hidden="true">
           <div
             className={`road__lane${moving ? " road__lane--moving" : ""}`}
-            style={{ transform: truckShift(dayPosition(days.indexOf(road.truck_date), days.length)) }}
+            style={{
+              transform: truckShift(dayPosition(days.indexOf(road.truck_date), days.length)),
+            }}
             aria-hidden="true"
           >
             <div
