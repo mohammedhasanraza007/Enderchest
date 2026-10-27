@@ -191,7 +191,9 @@ Phase 3: `POST /drafts` also queues one local reading per new draft (`ocr_status
 ### 2.16 Assistant
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
-| 9 | POST | /assistant/chat | `{messages:[{role:'user'\|'assistant', content}]}` | `{reply, cited:[{public_id,name}], tools_used:[string]}` | `gemini_disabled`, `upstream_unavailable` |
+| 9 | POST | /assistant/chat | `{messages:[{role:'user'\|'assistant', content}]}` (1 to 20, first and last `user`, each 1 to 2000 characters) | `{reply, segments:[{text, public_id\|null}], cited:[{public_id,name}], tools_used:[string], rows_checked}` | `gemini_disabled` (409, `details.reason` `no_key` or `assistant_off`), `upstream_unavailable` |
+
+`segments` split `reply` into plain text and the names of this turn's rows (`public_id` set), so the page draws links without parsing. `rows_checked` is the number of distinct item rows the tools returned this turn (the page's "From your inventory · N items checked"). A reply that names anything the tools did not return is replaced by "I couldn't find that in your inventory." (D-136). Read-only: nothing is written.
 
 ### 2.17 Test-only (exist only when `ENDERCHEST_ENV=test` **and** `meta.env_marker='test'`; otherwise 404)
 | Ph | Method | Path | Request | Success | Errors |

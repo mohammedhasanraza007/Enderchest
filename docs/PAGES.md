@@ -24,7 +24,7 @@ Shell data loaded on every page: `GET /api/v1/profile` (name, theme, time zone, 
 | `/notifications` | P-11 Notifications | 4 | bell |
 | `/` | P-12 Dashboard | 5 | nav, logo |
 | `/savings` | P-14 Savings | 6 | nav |
-| `/assistant` | P-15 Assistant | 9 | name pill menu |
+| `/assistant` | P-15 Assistant | 9 | Assistant tab after Savings (D-133) |
 | (server-rendered) | P-16 Boot pages | 0 | automatic when state is not `ok` |
 | `*` | P-17 Not found | 1 | automatic |
 
@@ -36,8 +36,8 @@ Shell data loaded on every page: `GET /api/v1/profile` (name, theme, time zone, 
 | 4 | Inventory, Camera, Tasks | bell, name pill | `/inventory` |
 | 5 | Dashboard, Inventory, Camera, Tasks | bell, name pill | Dashboard |
 | 6 to 8 | Dashboard, Inventory, Camera, Tasks, Savings | bell, name pill | Dashboard |
-| 9 | same | name pill menu gains "Ask Enderchest" | Dashboard |
-Name pill menu: Settings, theme (three small pills), Trash, backup status line, and from Phase 9 Ask Enderchest. No Sign out exists before the locked phase. The `LIVE` badge shows on the Camera item only while a camera stream is running.
+| 9 | Dashboard, Inventory, Camera, Tasks, Savings, Assistant (D-133) | bell, name pill | Dashboard |
+Name pill menu: Settings, theme (three small pills), Trash, backup status line, no Assistant entry (it is a tab from Phase 9, D-133). No Sign out exists before the locked phase. The `LIVE` badge shows on the Camera item only while a camera stream is running.
 
 ---
 
@@ -154,7 +154,9 @@ When the user owns it and decides not to buy: **I didn't buy it** → sheet aski
 Dominant element: the rupee total in the serif display type with segmented pills **This month / All time** (`GET /api/v1/savings?period=`). Below: frosted list of confirmed entries (date, item name or link, price, note) with **Remove** (`DELETE /api/v1/savings/{id}`, confirm, undo). Empty: "Nothing saved yet. When you skip a purchase because you already own it, it appears here." No estimates, ever.
 
 ## P-15 Assistant (`/assistant`, Phase 9)
-Chat column and input pill. Each answer lists the items it used as link chips (`cited`). States: Gemini off or no key (explains and links to Settings), offline, Gemini error with Retry. Read-only: the assistant cannot change data. A privacy line states what is sent. `POST /api/v1/assistant/chat`.
+As in the owner's reference (`docs/design/reference-assistant.md`, D-132): a centred column with the serif title "Assistant", the privacy line "This chat and the matching item rows are sent to Gemini. Notes, photos and prices stay on this laptop." with a Settings link (D-135), and one glass card. Questions are cream pills on the right; answers are darker 16 px boxes on the left whose item names (`segments` with a `public_id`) are underlined links to `/items/:id`, with "From your inventory · N items checked" under an answer when `rows_checked > 0`. The foot is a pill input "Ask about your things…" with a round cream ↗ Send button; an empty send says "Type a question first.".
+States: unavailable (no key, or "Use the assistant" off: explains which and links to `/settings#assistant-switch`, no input), empty, sending (input and Send disabled, "Checking your inventory…"), an answer, the honest miss, and an error (offline, bad key, limit) with Retry. The conversation lives in `sessionStorage` (this tab only), so an item link and Back keep it; "Start over" clears it; the newest 20 messages are sent. Read-only: the assistant cannot change data. `POST /api/v1/assistant/chat`.
+Settings → Gemini has the "Use the assistant" switch (`assistant_share_item_text`, default off) with a note saying what leaves; the photo mode's Off note reads "never called for photos" (D-136).
 
 ## P-16 Boot pages (server-rendered, Phase 0; styled with the tokens CSS from Phase 1)
 Served by the backend as plain HTML with a little JavaScript, **not** by the React app, so they work when the database does not. They read `GET /api/v1/boot`. One page per state of `DATA_SAFETY.md` section 11:
