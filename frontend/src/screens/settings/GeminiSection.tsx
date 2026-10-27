@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { fieldProblems } from "../../api/client";
 import { api } from "../../api/endpoints";
 import type { GeminiStatus, SettingsPatch } from "../../api/endpoints";
-import { keys, useGemini } from "../../api/queries";
+import { keys, useGemini, useSettings } from "../../api/queries";
 import { splitProblems } from "../../lib/formErrors";
 import { ErrorState } from "../../patterns/ErrorState";
 import { Button } from "../../primitives/Button";
@@ -18,10 +18,11 @@ import { useToast } from "../../primitives/Toast";
 
 // Settings, Gemini (PAGES.md P-02, Phase 3): optional help from Google's Gemini on the confirm
 // screen. The key is write-only (the page only ever learns "set" or "not set"); mode, model and
-// photo sharing are ordinary settings. The page says plainly what leaves this computer.
+// photo sharing are ordinary settings. The page says plainly what leaves this computer. The
+// "Use the assistant" switch (Phase 9, D-136) is separate from the photo mode: it needs only a key.
 
 const MODES: Array<{ value: GeminiStatus["mode"]; label: string; note: string }> = [
-  { value: "off", label: "Off", note: "Gemini is never called." },
+  { value: "off", label: "Off", note: "Gemini is never called for photos." },
   {
     value: "ask",
     label: "Ask each time",
@@ -78,6 +79,8 @@ function GeminiControls({ status }: { status: GeminiStatus }) {
     }
   }
 
+  const settings = useSettings();
+  const assistantOn = settings.data?.assistant_share_item_text ?? false;
   const patch = (body: SettingsPatch, done?: string) =>
     void run("settings", () => api.patchSettings(body), done);
 
@@ -130,6 +133,22 @@ function GeminiControls({ status }: { status: GeminiStatus }) {
         {status.share_images
           ? "On: the photo is sent too, scaled down and without its location or camera details."
           : "Off: only the text read on this computer is sent, never the photo."}
+      </p>
+
+      <div id="assistant-switch">
+        <Toggle
+          label="Use the assistant"
+          checked={assistantOn}
+          disabled={!settings.data}
+          disabledReason="Reading the settings…"
+          onChange={(next) => patch({ assistant_share_item_text: next })}
+        />
+      </div>
+      <p className="section-note">
+        {assistantOn
+          ? "On: your questions and the matching item rows (name, category, place, quantity, expiry) are sent to Gemini. Notes, photos and prices stay on this computer."
+          : "Off: the Assistant page sends nothing."}
+        {assistantOn && !status.key_set ? " It needs a key first." : ""}
       </p>
 
       <ModelForm model={status.model} />

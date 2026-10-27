@@ -1031,3 +1031,157 @@ body.entrance .nav__capsule {
 .savings-empty {
   margin: 0;
 }
+
+/* ------------------------------------------------------------------- Assistant (P-15) */
+/* One centred column, as in the owner's reference: serif title, privacy line, one glass card. */
+.assistant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: min(640px, 100%);
+  margin: 0 auto;
+}
+.assistant__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  text-align: center;
+}
+.assistant__privacy {
+  margin: 0;
+  color: var(--text-muted-page);
+  font-size: 0.875rem;
+  text-align: center;
+}
+.assistant__privacy a {
+  color: inherit;
+  text-decoration: underline;
+}
+.assistant__card {
+  width: 100%;
+}
+.assistant__unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.assistant__unavailable-text,
+.assistant__empty {
+  margin: 0;
+  color: var(--text-muted-glass);
+}
+.assistant__chat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.assistant__turns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.assistant__turn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+/* The owner's question: a cream pill on the right. */
+.assistant__question {
+  align-self: flex-end;
+  max-width: 80%;
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--cream-fill);
+  color: var(--on-cream);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+/* The answer: a darker rounded box on the left; item names are underlined links. */
+.assistant__answer-wrap {
+  align-self: flex-start;
+  max-width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.assistant__answer {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--hairline-panel);
+  border-radius: 16px;
+  background: var(--surface-road);
+  color: var(--text);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.assistant__answer a {
+  color: inherit;
+  text-decoration: underline;
+}
+.assistant__source,
+.assistant__thinking {
+  margin: 0;
+  color: var(--text-muted-glass);
+  font-size: 0.8125rem;
+}
+.assistant__ask {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-4);
+  border: 1px solid var(--hairline-pill);
+  border-radius: var(--radius-pill);
+  background: var(--surface-input);
+}
+.assistant__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+}
+.assistant__input::placeholder {
+  color: var(--text-muted-glass);
+}
+.assistant__input:focus {
+  outline: none;
+}
+.assistant__ask:focus-within {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.assistant__send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cream-fill);
+  color: var(--on-cream);
+  cursor: pointer;
+}
+.assistant__send:hover:not(:disabled) {
+  background: var(--cream-fill-hover);
+}
+.assistant__send:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.assistant__send:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.assistant__restart {
+  align-self: flex-end;
+}

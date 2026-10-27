@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/api/v1/assistant/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Chat */
+        post: operations["chat_api_v1_assistant_chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/backups": {
         parameters: {
             query?: never;
@@ -1147,6 +1164,37 @@ export interface components {
             /** Name */
             name?: string | null;
         };
+        /** ChatMessage */
+        ChatMessage: {
+            /** Content */
+            content: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "user" | "assistant";
+        };
+        /** ChatReply */
+        ChatReply: {
+            /** Cited */
+            cited: components["schemas"]["Cited"][];
+            /** Reply */
+            reply: string;
+            /** Rows Checked */
+            rows_checked: number;
+            /** Segments */
+            segments: components["schemas"]["Segment"][];
+            /** Tools Used */
+            tools_used: string[];
+        };
+        /**
+         * ChatRequest
+         * @description The conversation so far (the page keeps it); the server keeps nothing between turns.
+         */
+        ChatRequest: {
+            /** Messages */
+            messages: components["schemas"]["ChatMessage"][];
+        };
         /** CheckCandidate */
         CheckCandidate: {
             /**
@@ -1193,6 +1241,13 @@ export interface components {
             candidates: components["schemas"]["CheckCandidate"][];
             engine: components["schemas"]["CheckEngine"];
             query: components["schemas"]["CheckQuery"];
+        };
+        /** Cited */
+        Cited: {
+            /** Name */
+            name: string;
+            /** Public Id */
+            public_id: string;
         };
         /** Dashboard */
         Dashboard: {
@@ -2097,6 +2152,13 @@ export interface components {
             /** Total Paise */
             total_paise: number;
         };
+        /** Segment */
+        Segment: {
+            /** Public Id */
+            public_id: string | null;
+            /** Text */
+            text: string;
+        };
         /**
          * SettingsPatch
          * @description Any subset of the settings; a key that is present must carry a real value.
@@ -2311,6 +2373,39 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    chat_api_v1_assistant_chat_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatReply"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_backups_api_v1_backups_get: {
         parameters: {
             query?: never;

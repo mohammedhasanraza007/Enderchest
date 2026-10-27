@@ -6,6 +6,7 @@ import { BrandMark } from "./primitives/BrandMark";
 import { GlassCard } from "./primitives/Glass";
 import { Skeleton } from "./primitives/Skeleton";
 import { AddQueue } from "./screens/AddQueue";
+import { Assistant } from "./screens/Assistant";
 import { Camera } from "./screens/Camera";
 import { ConfirmDraft } from "./screens/ConfirmDraft";
 import { Dashboard } from "./screens/Dashboard";
@@ -79,6 +80,7 @@ export function AppRoutes() {
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/savings" element={<Savings />} />
+          <Route path="/assistant" element={<Assistant />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Route>

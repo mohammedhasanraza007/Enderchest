@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { useProfile } from "../api/queries";
 import { AboutSection } from "./settings/AboutSection";
@@ -17,6 +19,23 @@ import { ProfileSection } from "./settings/ProfileSection";
 export function Settings() {
   usePageTitle("Settings");
   const profile = useProfile().data;
+  const { hash } = useLocation();
+  // The Assistant page links to its switch (/settings#assistant-switch); the router does not
+  // scroll to a hash by itself, and the Gemini section renders after its query loads.
+  useEffect(() => {
+    if (hash === "") return;
+    const timer = window.setInterval(() => {
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return;
+      window.clearInterval(timer);
+      target.scrollIntoView({ block: "center" });
+    }, 50);
+    const stop = window.setTimeout(() => window.clearInterval(timer), 3000);
+    return () => {
+      window.clearInterval(timer);
+      window.clearTimeout(stop);
+    };
+  }, [hash]);
   if (profile === undefined || profile.name === null) return null; // the first-run gate has loaded it
   const named = { ...profile, name: profile.name };
 

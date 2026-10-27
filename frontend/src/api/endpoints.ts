@@ -65,6 +65,9 @@ export type SavingsPage = components["schemas"]["SavingsPage"];
 export type SavingView = components["schemas"]["SavingView"];
 export type SavingsPeriod = "month" | "all";
 export type FrameResult = components["schemas"]["FrameResult"];
+export type ChatMessage = components["schemas"]["ChatMessage"];
+export type ChatReply = components["schemas"]["ChatReply"];
+export type ChatSegment = components["schemas"]["Segment"];
 /** The Savings page lists the newest 200 entries and says so when there are more. */
 export const SAVINGS_SHOWN = 200;
 export type SnoozeOption = components["schemas"]["SnoozeBody"]["option"];
@@ -238,6 +241,10 @@ export const api = {
   /** One small JPEG frame, read in memory and kept nowhere; `busy` or `rate_limited` drop it. */
   captureFrame: (frame: Blob, signal: AbortSignal) =>
     upload<FrameResult>("/api/v1/capture/frame", form("image", [frame]), signal),
+
+  // Phase 9: the assistant (API 2.16). Read-only; the page keeps the conversation.
+  assistantChat: (messages: ChatMessage[]) =>
+    request<ChatReply>("POST", "/api/v1/assistant/chat", { messages }),
 };
 
 function form(field: string, files: Blob[]): FormData {
