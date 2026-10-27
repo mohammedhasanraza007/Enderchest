@@ -20,9 +20,8 @@
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition:
-    transform var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out);
+  /* Only transform moves (DESIGN.md 4.8); hover colours change at once. */
+  transition: transform var(--dur-fast) var(--ease-out);
 }
 
 /* The visible pill is 38 px; this keeps the pointer target at the 44 px minimum (DESIGN.md 14). */

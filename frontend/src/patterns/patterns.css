@@ -200,7 +200,6 @@
   color: var(--text-muted-glass);
   font-size: 1.0625rem;
   text-decoration: none;
-  transition: background-color var(--dur-fast) var(--ease-out);
 }
 .nav__item:hover {
   background: var(--surface-pill-hover);
@@ -443,7 +442,6 @@
   border-radius: var(--radius-pill);
   color: var(--text);
   text-decoration: none;
-  transition: background-color var(--dur-fast) var(--ease-out);
 }
 .bell:hover {
   background: var(--surface-pill-hover);

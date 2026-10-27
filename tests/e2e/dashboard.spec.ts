@@ -19,6 +19,8 @@ async function story(request: APIRequestContext, stage: 1 | 2 | 3): Promise<void
 async function settled(page: Page): Promise<void> {
   await page.waitForLoadState("networkidle");
   await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
+  // Phase 8: positions are measured at rest, after the once-per-session entrance (D-129).
+  await expect(page.locator(".dashboard--entrance")).toHaveCount(0);
 }
 
 test.afterEach(async ({ request }) => {
