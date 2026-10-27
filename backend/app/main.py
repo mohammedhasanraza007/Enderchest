@@ -9,6 +9,7 @@ from pathlib import Path
 from fastapi import FastAPI
 
 from .api import (
+    assistant,
     backups,
     boot,
     catalog,
@@ -89,6 +90,7 @@ def create_app(settings: Settings | None = None,
     app.include_router(dashboard.router)
     app.include_router(ownership.router)
     app.include_router(coach.router)
+    app.include_router(assistant.router)
     if settings.env == "test":
         app.include_router(test_support.router)
     app.include_router(pages.router)  # last: its catch-all must never shadow an API route

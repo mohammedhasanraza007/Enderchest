@@ -1,8 +1,9 @@
 """The Gemini REST call (`models/{model}:generateContent`), through `httpx` (D-102).
 
-The key travels in the `x-goog-api-key` header, never in the URL, and is never logged. The answer
-must be the strict JSON the schema asks for; it is validated here, and anything else is an error
-with a plain message. Every failure is a `GeminiError`; nothing here raises anything else.
+The key travels in the `x-goog-api-key` header, never in the URL, and is never logged. The label
+answer must be the strict JSON the schema asks for; it is validated here, and anything else is an
+error with a plain message. The assistant (Phase 9) uses `converse`, one function-calling step at
+a time. Every failure is a `GeminiError`; nothing here raises anything else.
 """
 
 import base64
@@ -56,14 +57,16 @@ class GeminiError(Exception):
 
 
 def _post(base_url: str, model: str, key: str, body: dict,
-          transport: httpx.BaseTransport | None) -> tuple[dict, int]:
+          transport: httpx.BaseTransport | None,
+          timeout: float = TIMEOUT_SECONDS) -> tuple[dict, int]:
     started = time.perf_counter()
     try:
-        with httpx.Client(timeout=TIMEOUT_SECONDS, transport=transport) as client:
+        with httpx.Client(timeout=timeout, transport=transport) as client:
             response = client.post(f"{base_url.rstrip('/')}/models/{model}:generateContent",
                                    headers={"x-goog-api-key": key}, json=body)
     except httpx.TimeoutException:
-        raise GeminiError("Gemini did not answer within 20 seconds. Try again later.") from None
+        raise GeminiError(f"Gemini did not answer within {round(timeout)} seconds. "
+                          "Try again later.") from None
     except httpx.HTTPError:
         raise GeminiError("Gemini could not be reached. Check the internet connection; "
                           "everything else keeps working without it.") from None
@@ -121,6 +124,50 @@ def extract(base_url: str, model: str, key: str, text: str, images: list[bytes],
         return GeminiValues.model_validate(json.loads(_answer_text(data))), elapsed
     except (ValueError, ValidationError):
         raise GeminiError("Gemini's answer did not have the expected fields.") from None
+
+
+def converse(base_url: str, model: str, key: str, *, system: str, contents: list[dict],
+             tools: list[dict], calling: str = "AUTO", timeout: float = TIMEOUT_SECONDS,
+             transport: httpx.BaseTransport | None = None) -> dict:
+    """One step of a function-calling conversation (the assistant, Phase 9).
+
+    Returns the model's content exactly as sent (`role` and `parts`), so it can go back in the
+    next step unchanged: newer models attach a thought signature to their calls and refuse a
+    conversation that drops it. `calling` is "AUTO" (tools allowed) or "NONE" (answer now).
+    """
+    body = {"systemInstruction": {"parts": [{"text": system}]},
+            "contents": contents,
+            "tools": [{"functionDeclarations": tools}],
+            "toolConfig": {"functionCallingConfig": {"mode": calling}}}
+    data, _ = _post(base_url, model, key, body, transport, timeout)
+    block = (data.get("promptFeedback") or {}).get("blockReason")
+    if block:
+        raise GeminiError(f"Gemini declined to answer ({block}).")
+    try:
+        parts = data["candidates"][0]["content"]["parts"]
+    except (KeyError, IndexError, TypeError):
+        raise GeminiError("Gemini sent an empty answer.") from None
+    if not isinstance(parts, list) or not all(isinstance(part, dict) for part in parts):
+        raise GeminiError("Gemini sent an answer in an unexpected shape.")
+    return {"role": "model", "parts": parts}
+
+
+def function_calls(content: dict) -> list[dict]:
+    """The tool calls in a model content, as `{name, args, id}` (id only when Gemini sent one)."""
+    calls = []
+    for part in content["parts"]:
+        call = part.get("functionCall")
+        if isinstance(call, dict) and isinstance(call.get("name"), str):
+            args = call.get("args")
+            calls.append({"name": call["name"], "args": args if isinstance(args, dict) else {},
+                          "id": call.get("id") if isinstance(call.get("id"), str) else None})
+    return calls
+
+
+def answer_text(content: dict) -> str:
+    """The visible answer: the text parts, without any thought summaries."""
+    return "".join(part["text"] for part in content["parts"]
+                   if isinstance(part.get("text"), str) and not part.get("thought"))
 
 
 def ping(base_url: str, model: str, key: str,

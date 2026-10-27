@@ -74,6 +74,9 @@ def _where(user_id: int, query: ItemQuery) -> tuple[str, list]:
     elif query.expiry == "today":
         clauses.append("i.expiry_mode = 'date' AND i.expiry_date = ?")
         params.append(query.today)
+    elif query.expiry == "within":  # the assistant's window: today up to `soon_until`
+        clauses.append("i.expiry_mode = 'date' AND i.expiry_date >= ? AND i.expiry_date <= ?")
+        params += [query.today, query.soon_until]
     elif query.expiry == "past":
         clauses.append("i.expiry_mode = 'date' AND i.expiry_date < ?")
         params.append(query.today)
@@ -100,6 +103,13 @@ def count(conn: sqlite3.Connection, user_id: int, query: ItemQuery) -> int:
 def get(conn: sqlite3.Connection, user_id: int, public_id: str) -> sqlite3.Row | None:
     return conn.execute(f"{_DETAIL} WHERE i.user_id = ? AND i.public_id = ?",
                         (user_id, public_id)).fetchone()
+
+
+def names(conn: sqlite3.Connection, user_id: int) -> list[str]:
+    """Every name the owner has given an item, in any state and in Trash (the assistant's
+    post-check looks for them in an answer, on this machine)."""
+    return [row["name"] for row in
+            conn.execute("SELECT DISTINCT name FROM items WHERE user_id = ?", (user_id,))]
 
 
 def get_by_id(conn: sqlite3.Connection, user_id: int, item_id: int) -> sqlite3.Row | None:
