@@ -155,3 +155,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Verdict: PASS WITH NOTES (N1 blur/glare on real frames, N2 isBlank wording). No product code changed.
 - Blocked on owner: gate 1 label captures, 60 fps and the live check, screenshot approval.
 - Next: Phase 8 build (`D:\Projects\phase8-next-prompt.txt`).
+
+## 2026-10-28 · phase8 · Phase 8 build (polish and motion), chain hand-off to the Phase 8 verification
+- Zip in: `phase7v.zip` (folder `D:\Projects\Enderchest-phase-8`, branch `phase-8`). Zip out: `D:\Projects\phase8.zip`, unzipped into `D:\Projects\Enderchest-phase-8v` on branch `phase-8-verify`.
+- The owner joined: paused the build for a commit in the main folder, then offered Gemini references; light dashboard, delivery storyboard and video, and an assistant page were made (D-132).
+- Built: streak, motion system, light pass fixes, references; D-127 to D-132.
+- Suites green (lint, unit 273 + 114, integration 332, e2e 150 + re-run 31, probes 1 to 27). A PyPI outage during the tools image build failed the first lint and unit runs; re-run green.
+- Blocked on owner: 60 fps on the laptop, light mode and truck approval.
+- Next: Phase 8 verification (`D:\Projects\phase8v-next-prompt.txt`).

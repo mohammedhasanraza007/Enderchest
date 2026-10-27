@@ -1,0 +1,2 @@
+dist/assets/index-DGqmZdho.css                                     48.27 kB │ gzip:  11.34 kB
+dist/assets/index-e4c09MCS.js                                     647.66 kB │ gzip: 202.94 kB
