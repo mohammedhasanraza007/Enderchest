@@ -1,0 +1,3 @@
+--- probe 17 ---
+PROBE 17: PASS - first run before=False; stopped=True; unreachable while stopped=True; after start: name=Mohammed timezone=Asia/Kolkata theme=dark step=categories; after step 2: first_run_complete=True
+ALL PASSED: 17

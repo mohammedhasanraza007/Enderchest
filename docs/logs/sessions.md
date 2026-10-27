@@ -163,3 +163,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Suites green (lint, unit 273 + 114, integration 332, e2e 150 + re-run 31, probes 1 to 27). A PyPI outage during the tools image build failed the first lint and unit runs; re-run green.
 - Blocked on owner: 60 fps on the laptop, light mode and truck approval.
 - Next: Phase 8 verification (`D:\Projects\phase8v-next-prompt.txt`).
+
+## 2026-10-28 · phase8v · Phase 8 verification, chain hand-off to the Phase 9 build
+- Zip in: `phase8.zip` (folder `D:\Projects\Enderchest-phase-8v`, branch `phase-8-verify`). Zip out: `D:\Projects\phase8v.zip`, unzipped into `D:\Projects\Enderchest-phase-9` on branch `phase-9`.
+- Probe list first (12 probes); own probes `tests/e2e/phase8-verification.spec.ts` V1 to V5 and a local-midnight streak test, all pass.
+- Re-run: lint, unit 273 + 114, integration 332, e2e 158 + 3, probes 1 to 27 green. No product code changed.
+- Verdict: PASS WITH NOTES (N1 reopened reminder and streak due days, N2 item actions wrap, N3 entrance test bound 2 s).
+- Blocked on owner: 60 fps on the laptop, light mode and truck approval.
+- Next: Phase 9 build (`D:\Projects\phase9-next-prompt.txt`).

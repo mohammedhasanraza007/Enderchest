@@ -1,0 +1,3 @@
+--- probe 1 ---
+PROBE 1: PASS - records before=298 after stop/up=298, consistent=True, quick_check=ok; item ENDR-8Z85PVWW with photo intact=True
+ALL PASSED: 1

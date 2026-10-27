@@ -3,16 +3,16 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase8.zip`, unzipped into `D:\Projects\Enderchest-phase-8v\Enderchest` on branch `phase-8-verify` (D-091). Never unzip over an existing repo or worktree (D-067).
+- Zip: `phase8v.zip`, unzipped into `D:\Projects\Enderchest-phase-9\Enderchest` on branch `phase-9` (D-091). Never unzip over an existing repo or worktree (D-067).
 - **Chain of sessions, no human in the loop (D-091, D-097):** build Phase N, a fresh session verifies Phase N, a fresh session builds Phase N+1, up to Phase 9; then one session on `main` merges, rebuilds and fixes bugs. Keep `D:\Projects\enderchest-chain-state.txt` current. UI bar "best" (D-097); `/design-sync` only after the Phase 9 final merge. If `start_session` is refused, message the top session "Enderchest phase 0 foundation". The owner makes reference images with Gemini on request: ask, never guess a visual (D-132).
-- Last built phase: **Phase 8 (polish and motion)**, Verification: **pending for phase 8**. Phase 7, 6, 5, 4: PASS WITH NOTES; 0 to 3: PASS for Claude's part. Owner checks pending for all.
-- Resume check: `git log --oneline -3` shows `pack: phase 8 build (phase8 zip)` on top.
+- Last built phase: **Phase 8 (polish and motion)**, Verification: **done for phase 8, PASS WITH NOTES** (`docs/reviews/phase-8-verification.md`, N1 to N3 minor). Phase 7, 6, 5, 4: PASS WITH NOTES; 0 to 3: PASS for Claude's part. Owner checks pending for all.
+- Resume check: `git log --oneline -3` shows `pack: phase 8 verification (phase8v zip)` on top.
 - Do not rebuild what exists. Read `docs/CODE_MAP.md` and extend through it.
 
 ## Next steps, in this order
-1. **Phase 8 verification** (fresh session, branch `phase-8-verify`, probe list first, `docs/reviews/phase-8-verification.md`).
-2. Phase 9 build (assistant; `docs/design/reference-assistant.md`, and `reference-assistant.png` if the owner saved it).
-3. Small TODOs: lazy-load camera modules; Phase 7 N1, N2; unload OCR and embedding models after 10 idle minutes; older notes as before.
+1. **Phase 9 build** (assistant; `docs/specs/phase-9-assistant.md`; `docs/design/reference-assistant.md`; no `reference-assistant.png` saved yet). Gemini key needed for its real gate: BLOCKED; tests use a recorded fake only.
+2. Phase 9 verification, then the final merge on `main`.
+3. Small TODOs: Phase 8v N1 (reopen history for the streak, needs a migration), N2 (item actions wrap at 1280); lazy-load camera modules; Phase 7 N1, N2; unload OCR and embedding models after 10 idle minutes; older notes as before.
 
 ## Current state (facts)
 - Phase 8 built (brief `docs/reviews/phase-8-brief.md`, D-127 to D-132): streak `{days}` on `GET /dashboard` (shown from 2 days, never a break); dashboard entrance once per tab session (any input ends it), ring sweep and glide by `stroke-dashoffset`, count-up on real changes, one flare per improved ring, milestone delivery (7, 30, 100 days); truck on a clipped transform lane, wheels turn only while moving; reminder rows slide out; page arrival on route change; save delivery from the road truck to the logo; shutter fill ring and coach pill lift (D-124); hover colour fades removed; item page one action row and History empty state.
