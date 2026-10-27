@@ -4,6 +4,7 @@ import { api } from "../api/endpoints";
 import type { NotificationAction, NotificationView, SnoozeOption } from "../api/endpoints";
 import { useRefreshInventory } from "../api/queries";
 import { formatDay } from "../lib/format";
+import { pause, tokenMs } from "../lib/motion";
 import { resolutionWord, rowName, splitActions } from "../lib/notifications";
 import { Button } from "../primitives/Button";
 import { Dialog } from "../primitives/Overlay";
@@ -31,21 +32,33 @@ export function ReminderList({ rows, onOpen }: ReminderListProps) {
   const refresh = useRefreshInventory();
   const toast = useToast();
   const [busy, setBusy] = useState<number | null>(null);
+  const [leaving, setLeaving] = useState<number | null>(null);
   const [failure, setFailure] = useState<{ id: number; message: string } | null>(null);
   const [snoozing, setSnoozing] = useState<NotificationView | null>(null);
   const [inspecting, setInspecting] = useState<NotificationView | null>(null);
 
-  async function act(row: NotificationView, work: () => Promise<string | null>) {
+  /** Runs a row action. When the action resolves the row (`work` answers `leaves: true`), the
+   * row slides out before the list refreshes (DESIGN.md 10.1: motion shows what changed); under
+   * reduced motion the pause is 0 ms. */
+  async function act(
+    row: NotificationView,
+    work: () => Promise<{ message: string | null; leaves: boolean }>,
+  ) {
     if (busy !== null) return;
     setBusy(row.id);
     setFailure(null);
     try {
-      const message = await work();
+      const { message, leaves } = await work();
+      if (leaves) {
+        setLeaving(row.id);
+        await pause(tokenMs("--dur-base"));
+      }
       await refresh();
       if (message) toast({ message });
     } catch (error) {
       setFailure({ id: row.id, message: error instanceof Error ? error.message : "Not done." });
     } finally {
+      setLeaving(null);
       setBusy(null);
     }
   }
@@ -78,7 +91,7 @@ export function ReminderList({ rows, onOpen }: ReminderListProps) {
       case "keep":
         void act(row, async () => {
           await api.dismiss(row.id);
-          return `${rowName(row)} stays in use.`;
+          return { message: `${rowName(row)} stays in use.`, leaves: true };
         });
         return;
       case "use":
@@ -102,7 +115,7 @@ export function ReminderList({ rows, onOpen }: ReminderListProps) {
                 ? "discarded"
                 : "marked expired";
           undoable(`${item.name} ${word}.`, event_id);
-          return null;
+          return { message: null, leaves: item.state !== "active" };
         });
         return;
       case "done":
@@ -113,7 +126,7 @@ export function ReminderList({ rows, onOpen }: ReminderListProps) {
             action.key === "done" ? await api.taskDone(taskId) : await api.taskSkip(taskId);
           const next = task.enabled ? ` Next due ${formatDay(task.next_due)}.` : "";
           undoable(`${action.key === "done" ? "Done" : "Skipped"}.${next}`, event_id);
-          return null;
+          return { message: null, leaves: true };
         });
     }
   }
@@ -124,7 +137,10 @@ export function ReminderList({ rows, onOpen }: ReminderListProps) {
         {rows.map((row) => {
           const { pills, more } = splitActions(row.actions);
           return (
-            <li key={row.id} className="reminder">
+            <li
+              key={row.id}
+              className={`reminder${leaving === row.id ? " reminder--leaving" : ""}`}
+            >
               <p className="reminder__text">
                 {row.item ? (
                   <Link to={`/items/${row.item.public_id}`} onClick={() => onOpen?.(row)}>

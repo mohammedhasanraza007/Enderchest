@@ -551,6 +551,17 @@
 .reminder__actions > .pill {
   min-width: 128px;
 }
+/* A resolved row slides out before the list refreshes (DESIGN.md 10.1); input elsewhere goes on. */
+.reminder {
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+.reminder--leaving {
+  opacity: 0;
+  transform: translateX(24px);
+  pointer-events: none;
+}
 
 /* ------------------------------------------------------------------ maintenance card (P-04) */
 .maintenance-card__suggested {
@@ -1035,10 +1046,14 @@
   line-height: 1.4;
   text-align: center;
   transform: translateX(-50%);
-  transition: opacity var(--dur-base) var(--ease-out);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 }
+/* Quiet: the pill sinks 6 px and fades; a new prompt rises into place (D-124, Phase 8). */
 .coach-pill--quiet {
   opacity: 0;
+  transform: translate(-50%, 6px);
 }
 .coach-chip {
   position: absolute;
@@ -1053,4 +1068,37 @@
 }
 .coach-chip--below {
   transform: translateY(var(--space-1));
+}
+
+/* ------------------------------------------------------------------ save delivery (10.3, D-130) */
+.delivery {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  overflow: hidden;
+  pointer-events: none;
+}
+.delivery__vehicle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 75px;
+  height: 42px;
+  opacity: 0;
+  transform-origin: center;
+}
+.delivery .road__truck {
+  transform: none;
+}
+/* The parcel sits on the box body's roof: cream, with a cocoa tape band. */
+.delivery__parcel {
+  position: absolute;
+  top: -14px;
+  left: 14px;
+  width: 22px;
+  height: 18px;
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, transparent 9px, var(--truck-cab) 9px 13px, transparent 13px),
+    var(--truck-window);
 }

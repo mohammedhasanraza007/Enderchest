@@ -14,6 +14,7 @@ import { Button, LinkButton } from "../primitives/Button";
 import { InnerPanel } from "../primitives/Glass";
 import { Input } from "../primitives/Input";
 import { StatusChip } from "../primitives/StatusChip";
+import { Shutter } from "../patterns/Shutter";
 
 // P-13, "Do I own this?": the camera hub's third mode. A desk-side check before ordering: a
 // photo (shutter, upload, paste or drop) and/or typed words go to POST /ownership/check, which
@@ -101,13 +102,11 @@ export function OwnControls({
         decide; nothing is saved unless you tap.
       </p>
       {live ? (
-        <button
-          type="button"
-          className="shutter"
-          aria-label="Take photo to check"
-          disabled={busy}
-          onClick={() =>
-            void capture().then((blob) => {
+        <Shutter
+          label="Take photo to check"
+          busy={busy}
+          onShoot={() =>
+            capture().then((blob) => {
               if (blob) choose(blob);
               else setMessage("The camera has no picture yet. Wait a moment and try again.");
             })

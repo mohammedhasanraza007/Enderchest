@@ -19,6 +19,7 @@ import { Chip } from "../primitives/Chip";
 import { GlassCard, InnerPanel } from "../primitives/Glass";
 import { Input, Select } from "../primitives/Input";
 import { OwnControls } from "./OwnCheck";
+import { Shutter } from "../patterns/Shutter";
 
 // P-06, the camera hub. Add mode: the shutter, Upload photos, drag and drop and paste all make
 // drafts (one per photo, up to 20) and open the review. Scan mode reads printed QR labels with a
@@ -242,13 +243,11 @@ function AddControls({ live, capture }: { live: boolean; capture: () => Promise<
       }}
     >
       {live ? (
-        <button
-          type="button"
-          className="shutter"
-          aria-label="Take photo"
-          disabled={busy}
-          onClick={() =>
-            void capture().then((blob) => {
+        <Shutter
+          label="Take photo"
+          busy={busy}
+          onShoot={() =>
+            capture().then((blob) => {
               if (blob) void addFiles([blob]);
               else setMessage("The camera has no picture yet. Wait a moment and try again.");
             })

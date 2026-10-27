@@ -557,6 +557,53 @@
 .shutter:disabled {
   opacity: 0.5;
 }
+/* The shutter's ring (DESIGN.md 9, D-124): a faint track and an arc that fills while the capture
+   completes; only stroke-dashoffset moves. The button keeps full opacity while it works. */
+.shutter-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  width: 88px;
+  height: 88px;
+}
+.shutter-wrap .shutter {
+  grid-area: 1 / 1;
+}
+.shutter-wrap .shutter[aria-busy="true"] {
+  opacity: 1;
+  cursor: progress;
+}
+.shutter__ring {
+  grid-area: 1 / 1;
+  width: 88px;
+  height: 88px;
+  pointer-events: none;
+}
+.shutter__track,
+.shutter__fill {
+  fill: none;
+  stroke-width: 3;
+}
+.shutter__track {
+  stroke: var(--ring-hairline);
+}
+.shutter__fill {
+  stroke: var(--ring-arc);
+  stroke-linecap: round;
+  opacity: 0;
+  transition:
+    stroke-dashoffset 1.6s var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+.shutter__fill--on {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shutter__fill {
+    transition: none;
+  }
+}
 /* Switch camera (D-126): a round button on the picture, the nav's opaque fill (D-059). */
 .camera-switch {
   position: absolute;

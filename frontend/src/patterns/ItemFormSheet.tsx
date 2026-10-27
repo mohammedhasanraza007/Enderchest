@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { announceDelivery } from "../lib/motion";
 import { api } from "../api/endpoints";
 import type { ItemDetail } from "../api/endpoints";
 import { idempotencyKey } from "../api/client";
@@ -86,6 +87,7 @@ function OpenSheet({ onClose, editing, initial, onSaved }: ItemFormSheetProps) {
         .then(async (item) => {
           await refresh();
           toast({ message: editing ? "Changes saved." : "Item saved." });
+          if (!editing) announceDelivery();
           onSaved(item);
           onClose();
         })

@@ -76,3 +76,30 @@ export function entranceDue(): boolean {
     return false;
   }
 }
+
+/** Waits `ms` milliseconds (0 resolves on the next task); used to let an exit finish. */
+export function pause(ms: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+/** The window event that starts the save delivery (D-130); the shell's DeliveryLayer plays it. */
+export const DELIVERY_EVENT = "enderchest:delivery";
+
+/** A new item was saved: a box rides the truck to the brand mark (DESIGN.md 10.3, D-130). */
+export function announceDelivery(): void {
+  window.dispatchEvent(new Event(DELIVERY_EVENT));
+}
+
+/** A page's content arriving after a route change: fade and a 6 px lift, nothing under reduced
+ * motion. Returns the running animation so the caller can cancel it. */
+export function pageArrival(element: HTMLElement): Animation | null {
+  const ms = tokenMs("--dur-base");
+  if (ms === 0 || reducedMotion() || typeof element.animate !== "function") return null;
+  return element.animate(
+    [
+      { opacity: 0, transform: "translateY(6px)" },
+      { opacity: 1, transform: "none" },
+    ],
+    { duration: ms, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+  );
+}

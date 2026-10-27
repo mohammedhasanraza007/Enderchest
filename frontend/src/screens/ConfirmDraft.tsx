@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { announceDelivery } from "../lib/motion";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApiError, idempotencyKey } from "../api/client";
 import { api, fileUrl } from "../api/endpoints";
@@ -184,6 +185,7 @@ function ConfirmForm({ draft }: { draft: Draft }) {
       const item = await api.commitDraft(draft.id, key);
       await refresh();
       toast({ message: "Item saved." });
+      announceDelivery();
       if (next === "item") {
         navigate(`/items/${item.public_id}`);
         return;
