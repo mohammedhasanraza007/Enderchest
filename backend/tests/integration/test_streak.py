@@ -77,6 +77,17 @@ def test_a_missed_due_day_ends_the_streak(stack: Stack):
     assert streak(stack) == 0
 
 
+def test_actions_either_side_of_local_midnight_are_two_days(stack: Stack):
+    """Phase 8 verification: the day is the owner's local day (Asia/Kolkata, UTC+5:30), not UTC."""
+    setup(stack)
+    post(stack, "/test/clock", {"now": "2026-10-16T18:20:00Z"})  # 23:50 on the 16th, local
+    post(stack, f"/items/{expiring(stack, 'Oat milk', 1)}/use")
+    assert streak(stack) == 1
+    post(stack, "/test/clock", {"now": "2026-10-16T18:40:00Z"})  # 00:10 on the 17th, local
+    post(stack, f"/items/{expiring(stack, 'Yogurt', 2)}/use")
+    assert streak(stack) == 2
+
+
 def test_an_undone_action_does_not_count(stack: Stack):
     setup(stack)
     used = post(stack, f"/items/{expiring(stack, 'Oat milk', 1)}/use")
