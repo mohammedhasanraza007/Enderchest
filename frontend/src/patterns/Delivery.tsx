@@ -33,15 +33,31 @@ export function DeliveryLayer() {
       setTrip(0);
       return;
     }
-    const from = `${window.innerWidth / 2 - TRUCK.width / 2}px, ${window.innerHeight - 120}px`;
-    const to = `${brand.left + brand.width / 2 - TRUCK.width / 2}px, ${brand.top + brand.height / 2 - TRUCK.height / 2}px`;
+    // Start on the road's own truck when the dashboard shows one (owner's storyboard video,
+    // docs/design/delivery-storyboard.jpg); else at the bottom centre of the window.
+    const parked = document.querySelector(".road__truck")?.getBoundingClientRect();
+    const start = parked
+      ? { x: parked.left, y: parked.top }
+      : { x: window.innerWidth / 2 - TRUCK.width / 2, y: window.innerHeight - 120 };
+    const end = {
+      x: brand.left + brand.width / 2 - TRUCK.width / 2,
+      y: brand.top + brand.height / 2 - TRUCK.height / 2,
+    };
+    // The truck turns to face the brand mark and tilts along its path, as in the storyboard.
+    const left = end.x < start.x;
+    const angle = (Math.atan2(end.y - start.y, Math.abs(end.x - start.x)) * 180) / Math.PI;
+    const face = left ? "scaleX(-1)" : "";
+    const tilt = `rotate(${(left ? -angle : angle).toFixed(1)}deg)`;
+    const mid = { x: start.x + (end.x - start.x) * 0.45, y: start.y + (end.y - start.y) * 0.6 };
+    const at = (p: { x: number; y: number }) => `translate(${p.x}px, ${p.y}px)`;
     const drive = car.animate(
       [
-        { transform: `translate(${from})`, opacity: 0 },
-        { transform: `translate(${from})`, opacity: 1, offset: 0.12 },
-        { transform: `translate(${from})`, opacity: 1, offset: 0.38 },
-        { transform: `translate(${to}) scale(0.45)`, opacity: 1, offset: 0.9 },
-        { transform: `translate(${to}) scale(0.4)`, opacity: 0 },
+        { transform: `${at(start)}`, opacity: 0 },
+        { transform: `${at(start)}`, opacity: 1, offset: 0.1 },
+        { transform: `${at(start)}`, opacity: 1, offset: 0.36 },
+        { transform: `${at(mid)} ${face} ${tilt} scale(0.8)`, opacity: 1, offset: 0.66 },
+        { transform: `${at(end)} ${face} scale(0.45)`, opacity: 1, offset: 0.9 },
+        { transform: `${at(end)} ${face} scale(0.4)`, opacity: 0 },
       ],
       { duration: DELIVERY_MS, easing: "cubic-bezier(0.65, 0, 0.35, 1)", fill: "both" },
     );
@@ -59,9 +75,11 @@ export function DeliveryLayer() {
       drop.finish();
     };
     INPUTS.forEach((name) => window.addEventListener(name, finish, { passive: true }));
+    document.body.classList.add("delivering");
     drive.onfinish = () => setTrip(0);
     return () => {
       INPUTS.forEach((name) => window.removeEventListener(name, finish));
+      document.body.classList.remove("delivering");
       drive.cancel();
       drop.cancel();
     };

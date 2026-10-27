@@ -270,7 +270,10 @@ test("reduced motion: the prompt appears without a fade", async ({ page }) => {
   const duration = await pill(page).evaluate(
     (el) => getComputedStyle(el).transitionDuration,
   );
-  expect(duration).toBe("0s");
+  // Phase 8 adds the pill's lift (transform) beside its fade: every duration must be 0 s.
+  expect(duration.split(",").map((part) => part.trim())).toEqual(
+    duration.split(",").map(() => "0s"),
+  );
 });
 
 // Shots for the look check (D-097): the coach over the camera, both themes, 1280 and 1024 px.

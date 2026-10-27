@@ -1098,6 +1098,10 @@
 .delivery .road__truck {
   transform: none;
 }
+/* The road's own truck lifts off: it is hidden while its flying copy is on screen. */
+body.delivering .road__lanes {
+  opacity: 0;
+}
 /* The parcel sits on the box body's roof: cream, with a cocoa tape band. */
 .delivery__parcel {
   position: absolute;
