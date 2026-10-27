@@ -1,0 +1,3 @@
+--- probe 14 ---
+PROBE 14: PASS - kills=1; a .partial was seen after a kill=True; listed as backup=False; left after restart=False; next backup status=201
+ALL PASSED: 14

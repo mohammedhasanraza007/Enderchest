@@ -1,0 +1,3 @@
+--- probe 5 ---
+PROBE 5: PASS - container removed=True; records before=299 after=299, consistent=True
+ALL PASSED: 5

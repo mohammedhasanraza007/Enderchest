@@ -1,0 +1,3 @@
+--- probe 2 ---
+PROBE 2: PASS - container removed=True; records before=300 after=300, consistent=True
+ALL PASSED: 2

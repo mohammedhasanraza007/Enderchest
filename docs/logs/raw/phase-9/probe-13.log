@@ -1,0 +1,3 @@
+--- probe 13 ---
+PROBE 13: PASS - live config on test data: locked/env_mismatch; test config on live-marked data: locked/env_mismatch; files unchanged: test=True live-marked=True
+ALL PASSED: 13

@@ -1,0 +1,3 @@
+--- probe 22 ---
+PROBE 22: PASS - day D rows=1; after restart + D+1: expiry_soon same row=True, task rows=1; after restart (real clock D): task row=superseded; at D+3: expired=1, old expiry_soon=superseded, task row reopened=True '2 days overdue'; rows=3, keys unique=True, second read unchanged=True
+ALL PASSED: 22

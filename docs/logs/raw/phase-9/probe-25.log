@@ -1,0 +1,3 @@
+--- probe 25 ---
+PROBE 25: PASS - honest and read-only: {"forbidden_words": [], "page_status": 200, "before": [2, 0, 0, 0], "after_checks": [2, 0, 0, 0], "refused": [422, 422, 422, 422, 422], "after_refusals": [2, 0, 0, 0], "total": 173950, "listed": 173950, "month": 173950, "passed": true}
+ALL PASSED: 25

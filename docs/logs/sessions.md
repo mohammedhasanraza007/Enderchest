@@ -177,3 +177,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Brief `docs/reviews/phase-9-brief.md`; owner sent the assistant reference image in chat (not on disk) and asked for a real-API test.
 - Built: assistant backend (4 read-only tools, post-check, `POST /assistant/chat`), recorded fake Gemini, 13 integration tests green, ruff clean; `tests/live` real-Gemini check (needs the owner's key, skipped otherwise).
 - Not done: frontend, e2e, probe 28, docs, full suites. Next: part 2 (`D:\Projects\phase9-2-next-prompt.txt`).
+
+## 2026-10-28 · phase9 part 2 · Phase 9 build closed (frontend, tests, docs)
+- Zip in: `phase9-2.zip` (`D:\Projects\Enderchest-phase-9-2`). Zip out: `D:\Projects\phase9.zip`, unzipped into `D:\Projects\Enderchest-phase-9v` on branch `phase-9-verify`.
+- Built: unit tests for the post-check and client; API types; Assistant page (P-15) per the owner's reference; nav tab (D-133); "Use the assistant" switch in Settings → Gemini with a direct link from the page; vitest, e2e, shots, crawler and contrast coverage; probe 28; docs D-133 to D-136, API 2.16, PAGES, CODE_MAP.
+- Fixed: crash on send (effect returned a Promise), nav overflow at 1024 px.
+- Suites green: lint, unit 291 + 119, integration 346, e2e 168 + 3, probes 1 to 28.
+- Blocked on owner: real Gemini (tests/live), screenshot approval, reference PNG on disk.
+- Next: Phase 9 verification (`D:\Projects\phase9v-next-prompt.txt`).

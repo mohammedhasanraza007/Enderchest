@@ -1,0 +1,3 @@
+--- probe 6 ---
+PROBE 6: PASS - round 1 killed at ~160 rows, after restart rows=170 consistent=True quick_check=ok; round 2 killed at ~368 rows, after restart rows=377 consistent=True quick_check=ok; round 3 killed at ~623 rows, after restart rows=632 consistent=True quick_check=ok
+ALL PASSED: 6
