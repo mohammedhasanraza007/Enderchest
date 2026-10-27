@@ -171,3 +171,9 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Verdict: PASS WITH NOTES (N1 reopened reminder and streak due days, N2 item actions wrap, N3 entrance test bound 2 s).
 - Blocked on owner: 60 fps on the laptop, light mode and truck approval.
 - Next: Phase 9 build (`D:\Projects\phase9-next-prompt.txt`).
+
+## 2026-10-28 · phase9 part 1 · Phase 9 build checkpoint (backend done)
+- Zip in: `phase8v.zip` (`D:\Projects\Enderchest-phase-9`). Zip out: `D:\Projects\phase9-2.zip` (checkpoint, step 7 of the prompt).
+- Brief `docs/reviews/phase-9-brief.md`; owner sent the assistant reference image in chat (not on disk) and asked for a real-API test.
+- Built: assistant backend (4 read-only tools, post-check, `POST /assistant/chat`), recorded fake Gemini, 13 integration tests green, ruff clean; `tests/live` real-Gemini check (needs the owner's key, skipped otherwise).
+- Not done: frontend, e2e, probe 28, docs, full suites. Next: part 2 (`D:\Projects\phase9-2-next-prompt.txt`).
