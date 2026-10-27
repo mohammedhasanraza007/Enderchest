@@ -5,13 +5,14 @@ ring's count always equals the length of its breakdown list (F-020).
 """
 
 import sqlite3
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from .. import clock
 from ..derived import (
     RINGS,
     dashboard_subtitle,
+    due_days,
     greeting_part,
     health_score,
     is_documented,
@@ -19,6 +20,7 @@ from ..derived import (
     ring_value,
     road,
     short_date,
+    streak_days,
 )
 from ..errors import AppError
 from ..repositories import dashboard as dashboard_repo
@@ -125,6 +127,23 @@ def _greeting(conn: sqlite3.Connection, user_id: int) -> dict:
             "name": (user["name"] if user else None) or ""}
 
 
+def _streak(conn: sqlite3.Connection, user_id: int, today: date) -> int:
+    """DATA_MODEL 3.7 with D-127's facts: actions not undone; days a reminder was open."""
+    user = users_repo.get(conn, user_id)
+    zone = ZoneInfo(user["timezone"] if user else "UTC")
+
+    def local(stamp: str | None) -> date | None:
+        if stamp is None:
+            return None
+        return datetime.fromisoformat(stamp.replace("Z", "+00:00")).astimezone(zone).date()
+
+    spans = [(local(row["created_at"]), local(row["resolved_at"]))
+             for row in dashboard_repo.reminder_spans(conn, user_id)]
+    due = due_days([(created, resolved) for created, resolved in spans if created], today)
+    acted = {date.fromisoformat(day) for day in dashboard_repo.acted_days(conn, user_id)}
+    return streak_days(today, acted, due.__contains__)
+
+
 def dashboard(conn: sqlite3.Connection, user_id: int) -> dict:
     """GET /dashboard: one request for the whole home screen (P-12)."""
     notifications_service.refresh(conn, user_id, FRESH_RECONCILE)
@@ -142,7 +161,7 @@ def dashboard(conn: sqlite3.Connection, user_id: int) -> dict:
                       "total": total},
         "road": counted.road(DASHBOARD_ROAD_DAYS),
         "savings": savings_service.for_dashboard(conn, user_id, today),
-        "streak": None,  # a later phase (API 2.13)
+        "streak": {"days": _streak(conn, user_id, today)},
     }
 
 

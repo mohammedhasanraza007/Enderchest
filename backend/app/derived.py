@@ -3,6 +3,7 @@
 Every comparison with an expiry date uses the owner's local `today`, never UTC (3.1).
 """
 
+from collections.abc import Callable
 from datetime import date, timedelta
 
 SNOOZE_DAYS = {"tomorrow": 1, "3days": 3, "week": 7}
@@ -207,3 +208,35 @@ def road(today: date, days: int, expiries: list[dict], tasks: list[dict]) -> dic
     truck = next_task or (later[0] if later else None)
     return {"start": today.isoformat(), "end": end.isoformat(), "events": events,
             "truck_date": truck["date"] if truck else today.isoformat()}
+
+
+# ---- Phase 8: the streak (DATA_MODEL 3.7, D-127) ----------------------------------------------
+
+
+def due_days(rows: list[tuple[date, date | None]], today: date) -> set[date]:
+    """Local days on which a reminder row was open or snoozed: from its creation day to its
+    resolution day, or to today while it is unresolved."""
+    days: set[date] = set()
+    for created, resolved in rows:
+        day, last = created, min(resolved or today, today)
+        while day <= last:
+            days.add(day)
+            day += timedelta(days=1)
+    return days
+
+
+def streak_days(today: date, acted: set[date], was_due: Callable[[date], bool]) -> int:
+    """Consecutive counting days ending today or yesterday. A day with nothing due is skipped;
+    today not counting yet breaks nothing; the walk stops at the first day anything was done."""
+    if not acted:
+        return 0
+    first = min(acted)
+    day = today if today in acted else today - timedelta(days=1)
+    days = 0
+    while day >= first:
+        if day in acted:
+            days += 1
+        elif was_due(day):
+            break
+        day -= timedelta(days=1)
+    return days

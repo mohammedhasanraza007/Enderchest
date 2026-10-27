@@ -25,3 +25,25 @@ def counted_tasks(conn: sqlite3.Connection, user_id: int) -> list[sqlite3.Row]:
         "WHERE t.user_id = ? AND t.deleted_at IS NULL AND t.enabled = 1 "
         "AND (t.item_id IS NULL OR (i.state = 'active' AND i.deleted_at IS NULL)) "
         "ORDER BY t.next_due, t.title COLLATE NOCASE, t.id", (user_id,)).fetchall()
+
+
+STREAK_KINDS = ("item_used", "item_expired_marked", "item_discarded", "task_done",
+                "inspection_done", "notification_resolved")
+
+
+def acted_days(conn: sqlite3.Connection, user_id: int) -> list[str]:
+    """Local dates of the actions that count for the streak and were not undone (D-127)."""
+    marks = ", ".join("?" for _ in STREAK_KINDS)
+    rows = conn.execute(
+        f"SELECT DISTINCT e.local_date FROM events e WHERE e.user_id = ? AND e.kind IN ({marks}) "
+        "AND NOT EXISTS (SELECT 1 FROM events u WHERE u.user_id = e.user_id "
+        "AND json_extract(u.payload, '$.undo_of') = e.id)",
+        (user_id, *STREAK_KINDS)).fetchall()
+    return [row[0] for row in rows]
+
+
+def reminder_spans(conn: sqlite3.Connection, user_id: int) -> list[sqlite3.Row]:
+    """When each reminder row was created and resolved (UTC stamps), for the streak's due days."""
+    return conn.execute(
+        "SELECT created_at, resolved_at FROM notifications WHERE user_id = ?",
+        (user_id,)).fetchall()

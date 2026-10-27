@@ -102,7 +102,8 @@ def test_each_storyboard_fixture_computes_its_frame_and_its_breakdowns_add_up(
     assert frame(board) == expected
     assert board["greeting"] == {"part": "evening", "name": "Mohammed"}
     assert board["today"] == board["road"]["start"] == "2026-10-16"
-    assert board["savings"] is None and board["streak"] is None
+    # Frame 1 holds no actions; frames 2 and 3 hold today's task done and item used (D-127).
+    assert board["savings"] is None and board["streak"] == {"days": 0 if stage == 1 else 1}
     truck = next(e for e in board["road"]["events"] if e["date"] == board["road"]["truck_date"])
     assert truck["label"] == {1: "Pantry Refill", 2: "Clean PC", 3: "Blade check"}[stage]
 
