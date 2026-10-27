@@ -93,6 +93,7 @@ for (const theme of ["dark", "light"] as const) {
       "/tasks",
       "/notifications",
       "/savings",
+      "/assistant",
     ];
     const failures: string[] = [];
     let checked = 0;

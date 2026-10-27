@@ -9,13 +9,14 @@
 # container and moves the test clock forward and back (no duplicate or lost reminder), 23 sends ten
 # browser-notification claims at once (exactly one wins). Probes 24 and 25 are Phase 6 gates;
 # 26 and 27 are Phase 7 gates: /health under coach frames (none stored), ten frames at once.
-#   run-probes.ps1                run probes 1 to 27
+# 28 is a Phase 9 gate: the assistant sends only its tools' rows and changes nothing.
+#   run-probes.ps1                run probes 1 to 28
 #   run-probes.ps1 -Only "6,12"   run only those
 #   run-probes.ps1 -Live          probes 4 and 9 use the live build.bat/run.bat (the owner's choice)
 param([string]$Only = '', [switch]$Live)   # -Only is a string: "6,12" (powershell -File does not build arrays)
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
-$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..27 }
+$numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..28 }
 $out = Join-Path $root 'test-results'
 New-Item -ItemType Directory -Force $out | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $root '.test-backups') | Out-Null

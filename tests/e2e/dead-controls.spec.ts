@@ -259,6 +259,25 @@ test.describe("dead-control crawler", () => {
     expect(result.dead).toEqual([]);
   });
 
+  test("/assistant has no dead controls, off and on", async ({ page, request }) => {
+    await resetApp(request);
+    await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata" });
+    const off = await crawl(page, "/assistant");
+    expect(off.tested).toBeGreaterThan(1);
+    expect(off.dead).toEqual([]);
+    await request.put("/api/v1/gemini/key", {
+      headers: { "X-Enderchest": "1" },
+      data: { key: "AIzaTestKeyThatIsNotReal_0123456789" },
+    });
+    await request.patch("/api/v1/settings", {
+      headers: { "X-Enderchest": "1" },
+      data: { assistant_share_item_text: true },
+    });
+    const on = await crawl(page, "/assistant");
+    expect(on.tested).toBeGreaterThan(1);
+    expect(on.dead).toEqual([]);
+  });
+
   test("the not-found page has no dead controls", async ({ page, request }) => {
     await resetApp(request);
     await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata" });

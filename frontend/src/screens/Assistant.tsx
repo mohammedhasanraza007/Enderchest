@@ -75,11 +75,18 @@ function Conversation() {
   const [turns, setTurns] = useState<Turn[]>(loadTurns);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  const [hint, setHint] = useState(false);
   const [failure, setFailure] = useState<{ message: string; disabled: boolean } | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => saveTurns(turns), [turns]);
-  useEffect(() => endRef.current?.scrollIntoView?.({ block: "nearest" }), [turns, sending]);
+  useEffect(() => {
+    saveTurns(turns);
+  }, [turns]);
+  // A block body: newer browsers return a Promise from scrollIntoView, and React would call an
+  // effect's returned value as its cleanup.
+  useEffect(() => {
+    void endRef.current?.scrollIntoView({ block: "nearest" });
+  }, [turns, sending]);
 
   async function ask(question: string, earlier: Turn[]) {
     setSending(true);
@@ -103,7 +110,11 @@ function Conversation() {
   function submit(event: FormEvent) {
     event.preventDefault();
     const question = draft.trim();
-    if (question === "" || sending) return;
+    if (sending) return;
+    if (question === "") {
+      setHint(true); // a visible answer to an empty send, so the button is never dead
+      return;
+    }
     void ask(
       question,
       turns.filter((turn) => turn.reply),
@@ -130,7 +141,7 @@ function Conversation() {
         </ol>
       )}
       {sending ? (
-        <p className="assistant__thinking" role="status">
+        <p id="assistant-sending" className="assistant__thinking" role="status">
           Checking your inventory…
         </p>
       ) : null}
@@ -159,14 +170,18 @@ function Conversation() {
           autoComplete="off"
           value={draft}
           disabled={sending}
-          onChange={(event) => setDraft(event.target.value)}
+          aria-describedby={hint ? "assistant-hint" : undefined}
+          onChange={(event) => {
+            setDraft(event.target.value);
+            setHint(false);
+          }}
         />
         <button
           type="submit"
           className="assistant__send"
           aria-label="Send"
-          disabled={sending || draft.trim() === ""}
-          title={draft.trim() === "" ? "Type a question first." : undefined}
+          disabled={sending}
+          aria-describedby={sending ? "assistant-sending" : undefined}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
             <path
@@ -180,6 +195,11 @@ function Conversation() {
           </svg>
         </button>
       </form>
+      {hint ? (
+        <p id="assistant-hint" className="assistant__source" role="status">
+          Type a question first.
+        </p>
+      ) : null}
       {turns.length > 0 && !sending ? (
         <Button
           variant="ghost"

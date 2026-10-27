@@ -222,6 +222,19 @@
     padding: 0 var(--space-3);
   }
 }
+/* Six tabs since Phase 9 (Assistant, D-133): at 1024 px they sit closer still. */
+@media (max-width: 1099px) {
+  .nav__capsule {
+    gap: var(--space-2);
+    padding-left: var(--space-4);
+  }
+  .nav__items {
+    gap: 0;
+  }
+  .nav__item {
+    padding: 0 var(--space-2);
+  }
+}
 
 /* ------------------------------------------------------------------ overflow menu */
 .overflow-menu {

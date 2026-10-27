@@ -85,14 +85,16 @@ test("the navigation capsule matches the reference frame within 12 px", async ({
   // No star or sparkle anywhere (DESIGN.md 2.2).
   expect(star).toBe(0);
   // After Phase 6 the centre holds Dashboard, Inventory, Camera, Tasks and Savings, as in the
-  // reference; the bell sits beside the name pill (PAGES.md 1, D-034).
-  await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(8); // + brand, bell, name
+  // reference, and from Phase 9 Assistant (the owner's reference, D-133); the bell sits beside
+  // the name pill (PAGES.md 1, D-034).
+  await expect(page.locator(".nav__capsule a, .nav__capsule button")).toHaveCount(9); // + brand, bell, name
   await expect(page.locator(".nav__item")).toHaveText([
     "Dashboard",
     "Inventory",
     "Camera",
     "Tasks",
     "Savings",
+    "Assistant",
   ]);
   await expect(page.getByRole("link", { name: "Notifications" })).toBeVisible();
   await page.screenshot({ path: `${SHOTS}/settings-dark-1376x768.png` });
