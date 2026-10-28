@@ -131,7 +131,7 @@ Phase 3: `POST /drafts` also queues one local reading per new draft (`ocr_status
 | Ph | Method | Path | Request | Success | Errors |
 |---|---|---|---|---|---|
 | 3 | GET | /gemini | none | `{key_set, model, mode, share_images}` (never the key) | |
-| 3 | PUT | /gemini/key | `{key}` (20 to 200 letters, digits, `-`, `_`; spaces trimmed) | `{key_set:true}` | `validation_error` |
+| 3 | PUT | /gemini/key | `{key}` (20 to 400 visible ASCII characters, no spaces; surrounding spaces, quotes, invisible marks and a `GEMINI_API_KEY=` label removed; D-139) | `{key_set:true}` | `validation_error` |
 | 3 | DELETE | /gemini/key | none | 204 | |
 | 3 | POST | /gemini/test | none | `{ok:true, model, latency_ms}` (a real call) | `gemini_disabled`, `upstream_unavailable` |
 

@@ -34,7 +34,11 @@ from . import inflight
 from . import profile as profile_service
 from .expiry_parser import parse_expiry
 
-_KEY_SHAPE = re.compile(r"^[A-Za-z0-9_\-]{20,200}$")
+# Any visible ASCII is safe in the request header; Gemini itself says whether a key works, and
+# Google's key formats change (D-139). Copying adds what `clean_key` removes.
+_KEY_SHAPE = re.compile(r"^[\x21-\x7e]{20,400}$")
+_KEY_LABEL = re.compile(r"^(?:GEMINI|GOOGLE)_API_KEY\s*[=:]\s*", re.IGNORECASE)
+_INVISIBLE = dict.fromkeys(map(ord, "​‌‍⁠﻿"))
 SEND_EDGE = 1024  # photos sent to Gemini are scaled down: enough to read, less to upload
 SEND_PHOTOS = 3
 NOTHING_TO_SEND = ("There is nothing to send: no text was read from the photo, and sending "
@@ -57,14 +61,22 @@ def read_key(settings: Settings) -> str | None:
         return None
 
 
+def clean_key(raw: str) -> str:
+    """The key as pasted, without what copying adds: invisible marks, surrounding spaces and
+    quotes, and a `GEMINI_API_KEY=` label from a settings file."""
+    key = _KEY_LABEL.sub("", raw.translate(_INVISIBLE).strip())
+    return key.strip().strip("\"'`").strip()
+
+
 def save_key(settings: Settings, key: str) -> None:
     """Write the key with owner-only permissions, atomically (temporary file, then rename)."""
-    key = key.strip()
+    key = clean_key(key)
     if not _KEY_SHAPE.match(key):
+        problem = ("The key has a space or line break inside it. Copy it again in one piece."
+                   if any(ch.isspace() for ch in key) else
+                   "Paste the whole key: 20 to 400 characters, with no spaces.")
         raise AppError("validation_error", 422, "Some values are not valid.",
-                       {"problems": [{"field": "key", "problem":
-                                      "Paste the whole key: 20 to 200 letters, digits, "
-                                      "dashes or underscores."}]})
+                       {"problems": [{"field": "key", "problem": problem}]})
     settings.secrets_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
     final = key_path(settings)
     partial = final.with_name("gemini.key.partial")

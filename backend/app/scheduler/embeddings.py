@@ -50,3 +50,7 @@ class Embedder:
         except sqlite3.Error as exc:
             log_event("warning", "embedding_tick_failed", error=type(exc).__name__)
             return 0
+        except Exception as exc:
+            # Anything else (an ONNX Runtime error, say) must not end the loop until a restart.
+            log_event("error", "embedding_tick_failed", error=type(exc).__name__)
+            return 0
