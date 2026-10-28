@@ -1,0 +1,3 @@
+--- probe 21 ---
+PROBE 21: PASS - readings queued at once: {"readings": [["done", 1396], ["done", 439], ["done", 504]], "health_samples": 31, "health_ms": {"median": 3.6, "max": 124.9}, "passed": true}
+ALL PASSED: 21

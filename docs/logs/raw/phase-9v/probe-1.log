@@ -1,0 +1,3 @@
+--- probe 1 ---
+PROBE 1: PASS - records before=302 after stop/up=302, consistent=True, quick_check=ok; item ENDR-MDYM0Q8R with photo intact=True
+ALL PASSED: 1

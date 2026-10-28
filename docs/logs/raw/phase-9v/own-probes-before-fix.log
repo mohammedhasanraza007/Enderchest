@@ -1,0 +1,52 @@
+﻿
+FF...F......F
+=================================== FAILURES ===================================
+E   assert ('Yes, you hav...n the garage.' == "I couldn't f...ur inventory."
+      
+      - I couldn't find that in your inventory.
+      + Yes, you have a 13 mm spanner in the garage.)
+---------------------------- Captured stdout setup -----------------------------
+----------------------------- Captured stdout call -----------------------------
+/app/tests/integration/test_phase9_verification.py:63: assert ('Yes, you hav...n the garage.' == "I couldn't f...ur 
+inventory."
+E   AssertionError: assert ['AUTO', 'AUTO'] == ['ANY', 'AUTO']
+      
+      At index 0 diff: 'AUTO' != 'ANY'
+      Use -v to get more diff
+---------------------------- Captured stdout setup -----------------------------
+----------------------------- Captured stdout call -----------------------------
+/app/tests/integration/test_phase9_verification.py:75: AssertionError: assert ['AUTO', 'AUTO'] == ['ANY', 'AUTO']
+E   AssertionError: {"error":{"code":"internal_error","message":"Something went wrong. Nothing was 
+lost.","details":{}}}
+    assert 500 == 200
+     +  where 500 = <Response [500 Internal Server Error]>.status_code
+---------------------------- Captured stdout setup -----------------------------
+----------------------------- Captured stdout call -----------------------------
+/app/tests/integration/test_phase9_verification.py:180: AssertionError: 
+{"error":{"code":"internal_error","message":"Something went wrong. Nothing was lost.","details":{}}}
+E   assert 'Yes, your Br... the kitchen.' == "I couldn't f...ur inventory."
+      
+      - I couldn't find that in your inventory.
+      + Yes, your Bread is in the kitchen.
+---------------------------- Captured stdout setup -----------------------------
+----------------------------- Captured stdout call -----------------------------
+/app/tests/integration/test_phase9_verification.py:313: assert 'Yes, your Br... the kitchen.' == "I couldn't f...ur 
+inventory."
+=============================== warnings summary ===============================
+../usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /usr/local/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with 
+`starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED 
+tests/integration/test_phase9_verification.py::test_v1_an_answer_given_without_any_tool_call_is_never_shown[gemini0]
+FAILED tests/integration/test_phase9_verification.py::test_v1_a_count_is_still_answered[gemini0]
+FAILED 
+tests/integration/test_phase9_verification.py::test_v4_a_number_that_is_not_finite_is_a_tool_error_not_a_crash[gemini0]
+FAILED tests/integration/test_phase9_verification.py::test_v10_an_owned_name_from_the_question_alone_is_not_enough_with
+out_looking[gemini0]
+4 failed, 9 passed, 1 warning in 11.56s
+
+
