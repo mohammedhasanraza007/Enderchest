@@ -1,0 +1,245 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 576B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 1.0s
+
+#4 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#4 CACHED
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 0.9s
+
+#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#5 DONE 0.9s
+
+#7 [internal] load .dockerignore
+#7 transferring context: 320B done
+#7 DONE 0.0s
+
+#8 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#8 DONE 0.0s
+
+#9 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:3ed748ce9dea62d2f0f0205cdbb6823106d9f973a6f555c402fe2575f8d6e1ae
+#9 resolve docker.io/library/node:22-bookworm-slim@sha256:3ed748ce9dea62d2f0f0205cdbb6823106d9f973a6f555c402fe2575f8d6e1ae 0.0s done
+#9 DONE 0.0s
+
+#10 [internal] load build context
+#10 transferring context: 867.72kB 0.1s done
+#10 DONE 0.1s
+
+#11 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:93498f36dc7e24ef233bfdf6cc17d4b8bd32d94ee737143e906460d5f5a914c5
+#11 resolve docker.io/library/python:3.13-slim-bookworm@sha256:93498f36dc7e24ef233bfdf6cc17d4b8bd32d94ee737143e906460d5f5a914c5 0.0s done
+#11 DONE 0.0s
+
+#12 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#12 CACHED
+
+#13 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#13 CACHED
+
+#14 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#14 CACHED
+
+#15 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#15 CACHED
+
+#16 [tools  5/11] RUN pip install -r requirements-dev.lock
+#16 CACHED
+
+#17 [python-base 3/7] WORKDIR /app
+#17 CACHED
+
+#18 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#18 CACHED
+
+#19 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#19 CACHED
+
+#20 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#20 CACHED
+
+#21 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#21 CACHED
+
+#22 [frontend-deps 2/4] WORKDIR /frontend
+#22 CACHED
+
+#23 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#23 CACHED
+
+#24 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#24 CACHED
+
+#25 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#25 CACHED
+
+#26 [python-base 5/7] RUN pip install -r requirements.lock
+#26 CACHED
+
+#27 [tools  7/11] COPY assets/logo /assets/logo
+#27 CACHED
+
+#28 [tools  8/11] COPY frontend/ /frontend/
+#28 DONE 0.1s
+
+#29 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#29 DONE 0.0s
+
+#30 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#30 DONE 0.0s
+
+#31 [tools 11/11] COPY backend/ ./
+#31 DONE 0.1s
+
+#32 exporting to image
+#32 exporting layers 0.1s done
+#32 exporting manifest sha256:603bd40788bd67c758f8cb643b4a1351ac528ef0a65f3681d932639c358fa7e9 0.0s done
+#32 exporting config sha256:cb549f9580d8986fe4cd77ab4be17bf3d44c9f85264adccb5925c587a025dbd2 0.0s done
+#32 exporting attestation manifest sha256:b349474426b4230eb9879ce75b3d76fa32838a0e0526b2e9604e680b0af1ee1a 0.0s done
+#32 exporting manifest list sha256:2a5fd00308e8b2e84f4f27fd2d184ee36293cbc9d12ac12c04f2bdbc7845c385 0.0s done
+#32 naming to docker.io/library/enderchest-tools:latest done
+#32 unpacking to docker.io/library/enderchest-tools:latest 0.1s done
+#32 DONE 0.4s
+
+#33 resolving provenance for metadata file
+#33 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-e62fe7403e28 Creating 
+ Container enderchest-test-tools-run-e62fe7403e28 Created 
+.prettierrc.json 31ms (unchanged)
+eslint.config.js 12ms (unchanged)
+gallery.html 49ms (unchanged)
+index.html 9ms (unchanged)
+package.json 2ms (unchanged)
+playwright.config.ts 54ms (unchanged)
+src/api/client.test.ts 26ms (unchanged)
+src/api/client.ts 31ms (unchanged)
+src/api/endpoints.ts 89ms (unchanged)
+src/api/queries.ts 28ms (unchanged)
+src/App.tsx 8ms (unchanged)
+src/gallery/gallery.css 24ms (unchanged)
+src/gallery/main.tsx 26ms (unchanged)
+src/hooks/useCamera.ts 45ms (unchanged)
+src/hooks/useChooseTheme.ts 4ms (unchanged)
+src/hooks/useCoach.ts 21ms (unchanged)
+src/hooks/useCountUp.ts 5ms (unchanged)
+src/hooks/usePageTitle.ts 3ms (unchanged)
+src/hooks/useSingleFlight.ts 3ms (unchanged)
+src/hooks/useThemeSync.ts 2ms (unchanged)
+src/hooks/useUnsavedGuard.ts 2ms (unchanged)
+src/lib/assistant.test.ts 8ms (unchanged)
+src/lib/assistant.ts 8ms (unchanged)
+src/lib/backupText.test.ts 6ms (unchanged)
+src/lib/backupText.ts 5ms (unchanged)
+src/lib/cameras.test.ts 6ms (unchanged)
+src/lib/cameras.ts 5ms (unchanged)
+src/lib/coach.test.ts 32ms (unchanged)
+src/lib/coach.ts 23ms (unchanged)
+src/lib/dashboard.test.ts 8ms (unchanged)
+src/lib/dashboard.ts 9ms (unchanged)
+src/lib/format.test.ts 4ms (unchanged)
+src/lib/format.ts 11ms (unchanged)
+src/lib/formErrors.ts 5ms (unchanged)
+src/lib/ids.ts 2ms (unchanged)
+src/lib/inventory.test.ts 9ms (unchanged)
+src/lib/inventoryQuery.ts 6ms (unchanged)
+src/lib/itemForm.ts 19ms (unchanged)
+src/lib/lifecycle.test.ts 10ms (unchanged)
+src/lib/money.ts 5ms (unchanged)
+src/lib/motion.test.ts 7ms (unchanged)
+src/lib/motion.ts 8ms (unchanged)
+src/lib/notifications.ts 5ms (unchanged)
+src/lib/ownership.test.ts 4ms (unchanged)
+src/lib/ownership.ts 4ms (unchanged)
+src/lib/proposals.test.ts 11ms (unchanged)
+src/lib/proposals.ts 12ms (unchanged)
+src/lib/taskForm.ts 7ms (unchanged)
+src/lib/theme.test.ts 2ms (unchanged)
+src/lib/theme.ts 4ms (unchanged)
+src/lib/timezones.test.ts 4ms (unchanged)
+src/lib/timezones.ts 4ms (unchanged)
+src/lib/title.ts 3ms (unchanged)
+src/main.tsx 2ms (unchanged)
+src/patterns/AppShell.tsx 4ms (unchanged)
+src/patterns/BackupBanner.tsx 5ms (unchanged)
+src/patterns/Bell.tsx 7ms (unchanged)
+src/patterns/CameraLive.tsx 3ms (unchanged)
+src/patterns/CoachPill.tsx 3ms (unchanged)
+src/patterns/Delivery.tsx 14ms
+src/patterns/ErrorBoundary.tsx 4ms (unchanged)
+src/patterns/ErrorState.tsx 2ms (unchanged)
+src/patterns/HealthRings.tsx 11ms (unchanged)
+src/patterns/InspectionSheet.tsx 15ms (unchanged)
+src/patterns/ItemFields.tsx 34ms (unchanged)
+src/patterns/ItemFormSheet.tsx 10ms (unchanged)
+src/patterns/ItemVisuals.tsx 6ms (unchanged)
+src/patterns/MaintenanceCard.tsx 32ms (unchanged)
+src/patterns/NameMenu.tsx 6ms (unchanged)
+src/patterns/NavCapsule.tsx 6ms (unchanged)
+src/patterns/OverflowMenu.tsx 6ms (unchanged)
+src/patterns/patterns.css 99ms (unchanged)
+src/patterns/Reading.tsx 8ms (unchanged)
+src/patterns/Reminders.tsx 20ms (unchanged)
+src/patterns/RingSheet.tsx 7ms (unchanged)
+src/patterns/Road.tsx 13ms (unchanged)
+src/patterns/SavingSheet.tsx 7ms (unchanged)
+src/patterns/Shutter.tsx 4ms (unchanged)
+src/patterns/TaskFormSheet.tsx 24ms (unchanged)
+src/primitives/BrandMark.tsx 2ms (unchanged)
+src/primitives/Button.tsx 5ms (unchanged)
+src/primitives/Chip.tsx 3ms (unchanged)
+src/primitives/Glass.tsx 4ms (unchanged)
+src/primitives/Input.tsx 7ms (unchanged)
+src/primitives/LiveBadge.tsx 1ms (unchanged)
+src/primitives/Overlay.tsx 4ms (unchanged)
+src/primitives/primitives.css 31ms (unchanged)
+src/primitives/primitives.test.tsx 15ms (unchanged)
+src/primitives/Skeleton.tsx 2ms (unchanged)
+src/primitives/StatusChip.tsx 3ms (unchanged)
+src/primitives/Toast.tsx 6ms (unchanged)
+src/primitives/Toggle.tsx 3ms (unchanged)
+src/routes.tsx 5ms (unchanged)
+src/screens/AddQueue.tsx 9ms (unchanged)
+src/screens/Assistant.tsx 14ms (unchanged)
+src/screens/Camera.tsx 29ms (unchanged)
+src/screens/ConfirmDraft.tsx 37ms (unchanged)
+src/screens/Dashboard.tsx 13ms (unchanged)
+src/screens/Inventory.tsx 41ms (unchanged)
+src/screens/Item.tsx 35ms (unchanged)
+src/screens/Labels.tsx 14ms (unchanged)
+src/screens/NotFound.tsx 2ms (unchanged)
+src/screens/Notifications.tsx 7ms (unchanged)
+src/screens/OwnCheck.tsx 17ms (unchanged)
+src/screens/Savings.tsx 9ms (unchanged)
+src/screens/screens.css 64ms (unchanged)
+src/screens/Settings.tsx 4ms (unchanged)
+src/screens/settings/AboutSection.tsx 3ms (unchanged)
+src/screens/settings/AppearanceSection.tsx 3ms (unchanged)
+src/screens/settings/BackupSection.tsx 7ms (unchanged)
+src/screens/settings/CategoriesSection.tsx 14ms (unchanged)
+src/screens/settings/CoachSection.tsx 5ms (unchanged)
+src/screens/settings/DataSection.tsx 2ms (unchanged)
+src/screens/settings/GeminiSection.tsx 20ms (unchanged)
+src/screens/settings/LocationsSection.tsx 12ms (unchanged)
+src/screens/settings/NotificationsSection.tsx 14ms (unchanged)
+src/screens/settings/ProfileSection.tsx 6ms (unchanged)
+src/screens/Tasks.tsx 12ms (unchanged)
+src/screens/Trash.tsx 12ms (unchanged)
+src/screens/Welcome.tsx 9ms (unchanged)
+src/styles/base.css 7ms (unchanged)
+src/tokens/tokens.css 18ms (unchanged)
+tsconfig.json 2ms (unchanged)
+vite.config.ts 2ms (unchanged)
+vite.gallery.config.ts 2ms (unchanged)
+vite.shared.ts 5ms (unchanged)

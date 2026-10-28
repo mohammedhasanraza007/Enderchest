@@ -167,6 +167,41 @@ test("saving a new item sends the box to the brand mark and clears itself", asyn
   await expect(layer).toHaveCount(0, { timeout: 1_500 });
 });
 
+test("the delivery drops the box from under the nav, draws a trail and shrinks into the mark (D-138)", async ({
+  page,
+  request,
+}) => {
+  await resetApp(request);
+  await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata", theme: "dark" });
+  await addByHand(page, "Lamp");
+  await expect(page.locator(".delivery")).toHaveCount(1);
+  await expect(page.locator(".delivery__trail")).toHaveCount(1);
+  await expect(page.locator(".delivery__star")).toHaveCount(1);
+  const beats = await page.evaluate(() => {
+    const frames = (selector: string) =>
+      (document.querySelector(selector)?.getAnimations()[0]?.effect as KeyframeEffect).getKeyframes();
+    const drive = frames(".delivery__vehicle");
+    const fall = Number(/translateY\(-(\d+(?:\.\d+)?)px\)/.exec(String(frames(".delivery__parcel")[0].transform))![1]);
+    const props = [...document.querySelectorAll(".delivery *")]
+      .flatMap((el) => el.getAnimations())
+      .flatMap((a) => (a.effect as KeyframeEffect).getKeyframes())
+      .flatMap((k) => Object.keys(k))
+      .filter((key) => !["offset", "easing", "composite", "computedOffset"].includes(key));
+    return {
+      fall,
+      turns: drive.some((k) => String(k.transform).includes("scaleX(0.15)")),
+      last: String(drive[drive.length - 1].transform),
+      props: [...new Set(props)],
+    };
+  });
+  // Off the dashboard the trip starts at the bottom centre, never on its own copy at the top left.
+  expect(beats.fall).toBeGreaterThan(200);
+  expect(beats.turns).toBe(true);
+  expect(beats.last).toContain("scale(0.05)");
+  for (const prop of beats.props) expect(["transform", "opacity", "strokeDashoffset"]).toContain(prop);
+  await expect(page.locator(".delivery")).toHaveCount(0, { timeout: 1_500 });
+});
+
 test("the streak line shows from two days and never speaks of a break", async ({ page, request }) => {
   await resetApp(request);
   await saveProfile(request, { name: "Mohammed", timezone: "Asia/Kolkata", theme: "dark" });

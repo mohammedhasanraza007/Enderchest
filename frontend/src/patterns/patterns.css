@@ -1111,6 +1111,22 @@
 .delivery .road__truck {
   transform: none;
 }
+/* The trail and the lift-off star (D-138): thin muted dashes, hidden until their beat. */
+.delivery__sky {
+  position: absolute;
+  inset: 0;
+}
+.delivery__trail {
+  stroke: var(--text-muted-page);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+  stroke-linecap: round;
+  opacity: 0;
+}
+.delivery__star {
+  fill: var(--text-muted-page);
+  opacity: 0;
+}
 /* The road's own truck lifts off: it is hidden while its flying copy is on screen. */
 body.delivering .road__lanes {
   opacity: 0;
