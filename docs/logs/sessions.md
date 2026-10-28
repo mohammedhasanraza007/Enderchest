@@ -185,3 +185,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Suites green: lint, unit 291 + 119, integration 346, e2e 168 + 3, probes 1 to 28.
 - Blocked on owner: real Gemini (tests/live), screenshot approval, reference PNG on disk.
 - Next: Phase 9 verification (`D:\Projects\phase9v-next-prompt.txt`).
+
+## 2026-10-28 · phase9v · Phase 9 verification, chain hand-off to the final merge
+- Zip in: `phase9.zip` (`D:\Projects\Enderchest-phase-9v`). Zip out: `D:\Projects\phase9v.zip`, unzipped into `D:\Projects\Enderchest-final` on branch `main`.
+- Probe list first (14 probes); own probes: unit 5, integration 13, e2e 11.
+- Failed and fixed with tests: an answer given with no tool call skipped the post-check (major, D-137: first step `ANY`, rule `no_tool`); NaN from Gemini gave a 500 (strict JSON in `converse`); damaged stored chat crashed the page (every drawn field checked). F-043 to F-045.
+- Suites green (`raw/phase-9v/`): lint, unit 296 + 120, integration 359, e2e 179 + 3, probes 1 to 28.
+- Verdict: PASS WITH NOTES (N1 to N5 minor). Blocked on owner: real Gemini gates 1 to 3, screenshot approval, reference PNG.
+- Next: final merge on `main` with the delivery-video comparison first (`D:\Projects\final-next-prompt.txt`).
