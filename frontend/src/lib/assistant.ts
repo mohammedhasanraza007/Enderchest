@@ -21,12 +21,24 @@ function storage(): Storage | null {
   }
 }
 
+function isSegment(value: unknown): boolean {
+  return (
+    typeof value === "object" && value !== null && typeof (value as ChatSegment).text === "string"
+  );
+}
+
+// Every part the page draws is checked, so a damaged entry starts an empty chat, not a crash.
 function isTurn(value: unknown): value is Turn {
   if (typeof value !== "object" || value === null) return false;
   const turn = value as Turn;
+  if (typeof turn.question !== "string") return false;
+  if (turn.reply === undefined) return true;
   return (
-    typeof turn.question === "string" &&
-    (turn.reply === undefined || Array.isArray(turn.reply.segments))
+    typeof turn.reply === "object" &&
+    turn.reply !== null &&
+    typeof turn.reply.rowsChecked === "number" &&
+    Array.isArray(turn.reply.segments) &&
+    turn.reply.segments.every(isSegment)
   );
 }
 

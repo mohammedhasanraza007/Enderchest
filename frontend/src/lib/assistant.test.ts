@@ -57,4 +57,16 @@ describe("saved conversation", () => {
     window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify([{ nope: 1 }]));
     expect(loadTurns()).toEqual([]);
   });
+
+  it("ignores a damaged answer instead of drawing it (Phase 9 verification)", () => {
+    for (const reply of [
+      null,
+      { segments: [null], rowsChecked: 0 },
+      { segments: [{}], rowsChecked: 0 },
+      { segments: [] },
+    ]) {
+      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify([{ question: "x", reply }]));
+      expect(loadTurns()).toEqual([]);
+    }
+  });
 });
