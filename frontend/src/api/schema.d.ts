@@ -1178,6 +1178,8 @@ export interface components {
         ChatReply: {
             /** Cited */
             cited: components["schemas"]["Cited"][];
+            /** Prices */
+            prices: components["schemas"]["Price"][];
             /** Reply */
             reply: string;
             /** Rows Checked */
@@ -1921,6 +1923,15 @@ export interface components {
             is_primary: boolean;
             /** Width */
             width: number;
+        };
+        /** Price */
+        Price: {
+            /** Name */
+            name: string;
+            /** Price Paise */
+            price_paise: number | null;
+            /** Public Id */
+            public_id: string;
         };
         /** PrimaryPhoto */
         PrimaryPhoto: {

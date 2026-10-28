@@ -9,6 +9,7 @@ did not return. The assistant needs a key and the owner's "Use the assistant" sw
 (`assistant_share_item_text`, default off; D-136). It cannot change data: nothing here writes.
 """
 
+import re
 import sqlite3
 import time
 
@@ -23,6 +24,10 @@ from . import profile as profile_service
 
 MAX_ROUNDS = 5  # round 1 must call a tool; rounds 2 to 4 may; round 5 has tools off and answers
 TURN_SECONDS = 45.0
+# A question about money: the page then shows the named items' prices from this laptop.
+_ASKS_PRICE = re.compile(r"\b(?:prices?|priced|costs?|cost|paid|pay|worth|spent|rupees?|rs)\b|₹",
+                         re.IGNORECASE)
+
 SYSTEM = (
     "You are the assistant inside Enderchest, the owner's personal home inventory. You answer "
     "questions about the owner's own things, and only from what the tools return in this turn. "
@@ -32,8 +37,9 @@ SYSTEM = (
     "nothing that answers the question, reply exactly: " + assistant_check.MISS + " "
     "Search with the main thing the owner names (for 'my PS5 controller' search 'controller'); "
     "words also match the owner's notes and an item's brand and model. Prices stay on this "
-    "laptop and are never in the tool results: if asked what something cost, say that, name "
-    "the item so the owner can open it, and answer the rest of the question. "
+    "laptop and are never in the tool results: if asked what something cost, find the item and "
+    "name it; the page shows what it cost under your answer, so never guess an amount and "
+    "never say the item is missing because no amount came back. "
     "You cannot change anything (add, edit, use up or delete items); say so if asked. Keep "
     "answers short and plain: one sentence, or a short list with one item per line such as "
     "'Oat Milk — expires today'. Do not show item ids. Do not give buying, safety or health "
@@ -121,4 +127,17 @@ def chat(conn: sqlite3.Connection, user_id: int, settings: Settings,
               rounds=rounds, ms=int((time.perf_counter() - started) * 1000),
               replaced=checked.replaced)
     return {"reply": checked.reply, "segments": checked.segments, "cited": checked.cited,
+            "prices": _prices(conn, user_id, checked.cited, messages[-1]["content"]),
             "tools_used": box.found.tools, "rows_checked": len(box.found.rows)}
+
+
+def _prices(conn: sqlite3.Connection, user_id: int, cited: list[dict],
+            question: str) -> list[dict]:
+    """The cited items' prices from this laptop, for a money question only (D-141)."""
+    if not _ASKS_PRICE.search(question):
+        return []
+    prices = []
+    for item in cited:
+        row = items_repo.get(conn, user_id, item["public_id"])
+        prices.append({**item, "price_paise": row["price_paise"] if row is not None else None})
+    return prices

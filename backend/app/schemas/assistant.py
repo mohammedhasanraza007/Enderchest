@@ -55,9 +55,18 @@ class Cited(BaseModel):
     name: str
 
 
+class Price(BaseModel):
+    public_id: str
+    name: str
+    price_paise: int | None  # None: no price saved for this item
+
+
 class ChatReply(BaseModel):
     reply: str
     segments: list[Segment]
     cited: list[Cited]
+    # The cited items' prices when the question is about money, read here after Gemini answered;
+    # prices never go to Gemini (D-134, D-141). Empty for any other question.
+    prices: list[Price]
     tools_used: list[str]
     rows_checked: int

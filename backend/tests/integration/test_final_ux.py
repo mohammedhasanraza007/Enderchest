@@ -50,12 +50,35 @@ def test_the_assistant_finds_the_controller_and_no_note_or_price_leaves(gemini):
 
 
 @pytest.mark.parametrize("gemini", [(fake.call("search_items", {"q": "Supernova"}),
-                                     fake.text("Ok."))], indirect=True)
-def test_the_assistant_is_told_how_to_answer_a_price_question(gemini):
+                                     fake.text("Supernova."))], indirect=True)
+def test_a_price_question_shows_the_saved_price_from_this_laptop_only(gemini):
     stack, stand_in = gemini
     household(stack)
-    _controller(stack)
-    ask(stack, "check its price")
+    supernova = _controller(stack)
+    answer = ask(stack, "check its price").json()
+    assert answer["prices"] == [{"public_id": supernova, "name": "Supernova",
+                                 "price_paise": PRICE}]
     system = str(stand_in.requests[0]["body"]["systemInstruction"])
     assert "Prices stay on this laptop" in system
     assert "notes" in system
+    everything = "\n".join(r["raw"] for r in stand_in.requests)
+    assert str(PRICE) not in everything
+
+
+@pytest.mark.parametrize("gemini", [(fake.call("search_items", {"q": "Supernova"}),
+                                     fake.text("Supernova."))], indirect=True)
+def test_any_other_question_shows_no_prices(gemini):
+    stack, _stand_in = gemini
+    household(stack)
+    _controller(stack)
+    assert ask(stack, "where is Supernova").json()["prices"] == []
+
+
+@pytest.mark.parametrize("gemini", [(fake.call("search_items", {"q": "lamp"}),
+                                     fake.text("Desk lamp."))], indirect=True)
+def test_an_item_without_a_price_says_so(gemini):
+    stack, _stand_in = gemini
+    household(stack)
+    lamp = item(stack, "Desk lamp")
+    assert ask(stack, "how much did my lamp cost").json()["prices"] == [
+        {"public_id": lamp, "name": "Desk lamp", "price_paise": None}]

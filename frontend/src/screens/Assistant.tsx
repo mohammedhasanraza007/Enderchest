@@ -7,6 +7,7 @@ import { useGemini, useSettings } from "../api/queries";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { loadTurns, messagesFor, saveTurns, toReply } from "../lib/assistant";
 import type { Turn } from "../lib/assistant";
+import { formatRupees } from "../lib/money";
 import { ErrorState } from "../patterns/ErrorState";
 import { Button, LinkButton } from "../primitives/Button";
 import { GlassCard } from "../primitives/Glass";
@@ -230,6 +231,18 @@ function Answer({ reply }: { reply: NonNullable<Turn["reply"]> }) {
           ),
         )}
       </p>
+      {reply.prices?.length ? (
+        <p className="assistant__source assistant__prices">
+          Saved price, kept on this laptop:{" "}
+          {reply.prices.map((price, index) => (
+            <span key={price.publicId}>
+              {index > 0 ? " · " : ""}
+              <Link to={`/items/${price.publicId}`}>{price.name}</Link>{" "}
+              {price.paise === null ? "no price saved" : formatRupees(price.paise)}
+            </span>
+          ))}
+        </p>
+      ) : null}
       {reply.rowsChecked > 0 ? (
         <p className="assistant__source">
           From your inventory · {reply.rowsChecked} {reply.rowsChecked === 1 ? "item" : "items"}{" "}

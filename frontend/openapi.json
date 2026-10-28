@@ -441,6 +441,13 @@
             "title": "Cited",
             "type": "array"
           },
+          "prices": {
+            "items": {
+              "$ref": "#/components/schemas/Price"
+            },
+            "title": "Prices",
+            "type": "array"
+          },
           "reply": {
             "title": "Reply",
             "type": "string"
@@ -468,6 +475,7 @@
           "reply",
           "segments",
           "cited",
+          "prices",
           "tools_used",
           "rows_checked"
         ],
@@ -3061,6 +3069,36 @@
           "height"
         ],
         "title": "PhotoView",
+        "type": "object"
+      },
+      "Price": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "price_paise": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Paise"
+          },
+          "public_id": {
+            "title": "Public Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "public_id",
+          "name",
+          "price_paise"
+        ],
+        "title": "Price",
         "type": "object"
       },
       "PrimaryPhoto": {

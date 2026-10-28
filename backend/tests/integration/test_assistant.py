@@ -175,7 +175,8 @@ def test_the_trap_a_spanner_that_does_not_exist_is_never_invented(gemini):
     household(stack)
     answer = ask(stack, "Do I have a 13 mm spanner?").json()
     assert answer == {"reply": MISS, "segments": [{"text": MISS, "public_id": None}],
-                      "cited": [], "tools_used": ["search_items"], "rows_checked": 0}
+                      "cited": [], "prices": [], "tools_used": ["search_items"],
+                      "rows_checked": 0}
     assert tool_rows(stand_in.requests[1]) == []
 
 

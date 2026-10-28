@@ -7,10 +7,24 @@ export const STORAGE_KEY = "enderchest.assistant";
 /** The API takes at most 20 messages (API 2.16). */
 export const SENT_MAX = 20;
 
+/** A named item's saved price, read on this laptop after Gemini answered (D-141). */
+export interface SavedPrice {
+  publicId: string;
+  name: string;
+  /** null: no price saved for this item. */
+  paise: number | null;
+}
+
 export interface Turn {
   question: string;
   /** The checked answer; absent while it is on its way or after a failure. */
-  reply?: { text: string; segments: ChatSegment[]; rowsChecked: number };
+  reply?: {
+    text: string;
+    segments: ChatSegment[];
+    rowsChecked: number;
+    /** Only for a question about money; absent in answers saved before D-141. */
+    prices?: SavedPrice[];
+  };
 }
 
 function storage(): Storage | null {
@@ -27,6 +41,16 @@ function isSegment(value: unknown): boolean {
   );
 }
 
+function isPrice(value: unknown): boolean {
+  if (typeof value !== "object" || value === null) return false;
+  const price = value as SavedPrice;
+  return (
+    typeof price.publicId === "string" &&
+    typeof price.name === "string" &&
+    (price.paise === null || typeof price.paise === "number")
+  );
+}
+
 // Every part the page draws is checked, so a damaged entry starts an empty chat, not a crash.
 function isTurn(value: unknown): value is Turn {
   if (typeof value !== "object" || value === null) return false;
@@ -38,7 +62,9 @@ function isTurn(value: unknown): value is Turn {
     turn.reply !== null &&
     typeof turn.reply.rowsChecked === "number" &&
     Array.isArray(turn.reply.segments) &&
-    turn.reply.segments.every(isSegment)
+    turn.reply.segments.every(isSegment) &&
+    (turn.reply.prices === undefined ||
+      (Array.isArray(turn.reply.prices) && turn.reply.prices.every(isPrice)))
   );
 }
 
@@ -63,7 +89,12 @@ export function saveTurns(turns: Turn[]): void {
 }
 
 export function toReply(reply: ChatReply): NonNullable<Turn["reply"]> {
-  return { text: reply.reply, segments: reply.segments, rowsChecked: reply.rows_checked };
+  const prices = (reply.prices ?? []).map((price) => ({
+    publicId: price.public_id,
+    name: price.name,
+    paise: price.price_paise,
+  }));
+  return { text: reply.reply, segments: reply.segments, rowsChecked: reply.rows_checked, prices };
 }
 
 /**

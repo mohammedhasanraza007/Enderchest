@@ -1125,6 +1125,10 @@ body.entrance .nav__capsule {
   color: inherit;
   text-decoration: underline;
 }
+.assistant__prices a {
+  color: inherit;
+  text-decoration: underline;
+}
 .assistant__source,
 .assistant__thinking {
   margin: 0;

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { loadTurns, messagesFor, saveTurns, SENT_MAX, STORAGE_KEY } from "./assistant";
+import { loadTurns, messagesFor, saveTurns, SENT_MAX, STORAGE_KEY, toReply } from "./assistant";
 import type { Turn } from "./assistant";
 
 const answered = (n: number): Turn => ({
@@ -68,5 +68,30 @@ describe("saved conversation", () => {
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify([{ question: "x", reply }]));
       expect(loadTurns()).toEqual([]);
     }
+  });
+});
+
+describe("saved prices (D-141)", () => {
+  const reply = {
+    reply: "Supernova.",
+    segments: [{ text: "Supernova", public_id: "ENDR-AB0Y5YZN" }],
+    cited: [{ public_id: "ENDR-AB0Y5YZN", name: "Supernova" }],
+    prices: [{ public_id: "ENDR-AB0Y5YZN", name: "Supernova", price_paise: 179900 }],
+    tools_used: ["search_items"],
+    rows_checked: 1,
+  };
+
+  it("keeps the prices the server read on this laptop", () => {
+    expect(toReply(reply).prices).toEqual([
+      { publicId: "ENDR-AB0Y5YZN", name: "Supernova", paise: 179900 },
+    ]);
+  });
+
+  it("still loads an answer saved before prices existed, and drops a damaged price", () => {
+    saveTurns([answered(1)]);
+    expect(loadTurns()).toEqual([answered(1)]);
+    const damaged = { ...toReply(reply), prices: [{ publicId: "x", name: "y", paise: "1799" }] };
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify([{ question: "x", reply: damaged }]));
+    expect(loadTurns()).toEqual([]);
   });
 });
