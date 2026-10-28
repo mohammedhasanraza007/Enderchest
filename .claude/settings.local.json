@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(rm -rf skills/continuous-learning skills/strategic-compact)",
+      "Bash(ls agents *)",
+      "PowerShell($f='D:\\\\Projects\\\\enderchest-chain-log.txt'; $t=Get-Date; while \\(\\(\\(Get-Date\\)-$t\\).TotalSeconds -lt 180\\) { if \\(Test-Path $f\\) { break }; Start-Sleep -Seconds 5 }; if \\(Test-Path $f\\) { Get-Content $f } else { 'no log line yet after 3 minutes' })"
     ]
   }
 }
