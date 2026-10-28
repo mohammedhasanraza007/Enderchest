@@ -137,7 +137,7 @@ def test_what_expires_this_week_is_answered_from_the_rows_and_cited(gemini):
     first, second = stand_in.requests
     assert first["path"] == "/v1beta/models/gemini-3.5-flash-lite:generateContent"
     assert first["headers"]["x-goog-api-key"] == KEY and KEY not in first["path"]
-    assert first["body"]["toolConfig"]["functionCallingConfig"]["mode"] == "AUTO"
+    assert first["body"]["toolConfig"]["functionCallingConfig"]["mode"] == "ANY"  # look first
     assert [d["name"] for d in first["body"]["tools"][0]["functionDeclarations"]] == [
         "search_items", "items_expiring", "count_items", "get_item"]
     assert first["body"]["contents"] == [{"role": "user",
@@ -255,7 +255,7 @@ def test_a_model_that_keeps_calling_tools_is_stopped_after_five_calls(gemini):
     assert "did not finish" in response.json()["error"]["message"]
     modes = [r["body"]["toolConfig"]["functionCallingConfig"]["mode"]
              for r in stand_in.requests]
-    assert modes == ["AUTO", "AUTO", "AUTO", "AUTO", "NONE"]
+    assert modes == ["ANY", "AUTO", "AUTO", "AUTO", "NONE"]
 
 
 # ---- read-only, and what leaves the machine (gate 4's evidence on our side) ---------------------

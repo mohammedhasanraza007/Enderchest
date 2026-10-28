@@ -2,6 +2,7 @@
 returned. Pure functions, no database and no network, so every rule is unit-tested.
 
 An answer is replaced by MISS when
+  0. no tool ran in this turn: nothing was looked up, so nothing in it can be checked (D-137);
   1. it carries an item id (`ENDR-…`) that is not in this turn's rows;
   2. it names an item the owner has (any state, Trash included) that is not in this turn's
      rows, unless those words also appear in a row's own text or in the owner's question;
@@ -85,11 +86,13 @@ def link(reply: str, rows: dict[str, dict]) -> tuple[list[dict], list[dict]]:
 
 
 def check(answer: str, rows: dict[str, dict], searched: bool, inventory_names: Iterable[str],
-          question: str) -> Checked:
+          question: str, *, looked: bool = True) -> Checked:
     reply = answer.strip()
     if len(reply) > REPLY_MAX:
         reply = reply[:REPLY_MAX - 1].rstrip() + "…"
-    if searched and not rows:
+    if not looked:
+        replaced = "no_tool"
+    elif searched and not rows:
         replaced = "nothing_found"
     elif _unknown_id(reply, rows):
         replaced = "unknown_id"

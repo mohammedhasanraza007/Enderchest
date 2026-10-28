@@ -1,8 +1,9 @@
 """The assistant: a narrow chat over the inventory (Phase 9 spec; API 2.16; P-15).
 
 Gemini gets the conversation and four read-only tools (`assistant_tools`), never the inventory.
-Each turn: ask Gemini; while it calls tools, run them here and send back only their rows; at most
-four rounds may call tools, the fifth must answer (tools off); the whole turn has 45 seconds.
+Each turn: ask Gemini; while it calls tools, run them here and send back only their rows; the
+first round must call a tool (an answer that never looked cannot be checked, D-137), at most four
+rounds may call tools, the fifth must answer (tools off); the whole turn has 45 seconds.
 Then the post-check (`assistant_check`) keeps the answer only if it names nothing the turn's tools
 did not return. The assistant needs a key and the owner's "Use the assistant" switch
 (`assistant_share_item_text`, default off; D-136). It cannot change data: nothing here writes.
@@ -20,7 +21,7 @@ from . import assistant_check, assistant_tools
 from . import gemini as gemini_service
 from . import profile as profile_service
 
-MAX_ROUNDS = 5  # rounds 1 to 4 may call tools; round 5 has tools off and must answer
+MAX_ROUNDS = 5  # round 1 must call a tool; rounds 2 to 4 may; round 5 has tools off and answers
 TURN_SECONDS = 45.0
 SYSTEM = (
     "You are the assistant inside Enderchest, the owner's personal home inventory. You answer "
@@ -62,6 +63,13 @@ def _response(call: dict, result: dict) -> dict:
     return {"functionResponse": answer}
 
 
+def _calling(round_number: int) -> str:
+    """Gemini's function-calling mode for a round: look first, then free, then answer."""
+    if round_number == 1:
+        return "ANY"
+    return "NONE" if round_number == MAX_ROUNDS else "AUTO"
+
+
 def _converse(settings: Settings, model: str, key: str, box: assistant_tools.Toolbox,
               messages: list[dict]) -> tuple[str, int]:
     """Run the tool rounds; returns Gemini's final text and the number of calls made."""
@@ -74,7 +82,7 @@ def _converse(settings: Settings, model: str, key: str, box: assistant_tools.Too
             break
         content = client.converse(settings.gemini_url, model, key, system=system,
                                   contents=contents, tools=assistant_tools.DECLARATIONS,
-                                  calling="NONE" if round_number == MAX_ROUNDS else "AUTO",
+                                  calling=_calling(round_number),
                                   timeout=min(client.TIMEOUT_SECONDS, remaining))
         calls = client.function_calls(content)
         if not calls:
@@ -103,7 +111,8 @@ def chat(conn: sqlite3.Connection, user_id: int, settings: Settings,
                   rows=len(box.found.rows), reason=failed.message)
         raise AppError("upstream_unavailable", 502, failed.message) from None
     checked = assistant_check.check(text, box.found.rows, box.found.searched,
-                                    items_repo.names(conn, user_id), messages[-1]["content"])
+                                    items_repo.names(conn, user_id), messages[-1]["content"],
+                                    looked=bool(box.found.tools))
     log_event("info", "assistant_answered", tools=box.found.tools, rows=len(box.found.rows),
               rounds=rounds, ms=int((time.perf_counter() - started) * 1000),
               replaced=checked.replaced)
