@@ -1,0 +1,30 @@
+# The release zip: the smallest set of committed files that build.bat and run.bat need.
+# Git pathspecs, one per line; ":(exclude)" lines drop files from the line above them.
+# Docs, tests, logs, history and dev tools stay in the repo. Build (Git Bash, from the repo root):
+#   grep -v '^#' release/files.txt | tr -d '\r' | xargs -d '\n' git archive --format=zip \
+#     --prefix=Enderchest/ --add-file=release/README.md -o <zip> HEAD --
+# release/README.md becomes the zip's Enderchest/README.md (the repo's README is the pack's).
+Dockerfile
+.dockerignore
+compose.yaml
+build.bat
+run.bat
+stop.bat
+backup.bat
+restore.bat
+scripts/health.ps1
+scripts/post-backup.ps1
+backend/app
+backend/requirements.lock
+frontend/package.json
+frontend/package-lock.json
+frontend/tsconfig.json
+frontend/vite.config.ts
+frontend/vite.shared.ts
+frontend/index.html
+frontend/src
+:(exclude)frontend/src/**/*.test.ts
+:(exclude)frontend/src/**/*.test.tsx
+:(exclude)frontend/src/gallery
+assets/logo
+:(exclude)assets/logo/enderchest-logo.original.svg
