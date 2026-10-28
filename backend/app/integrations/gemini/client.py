@@ -149,6 +149,10 @@ def converse(base_url: str, model: str, key: str, *, system: str, contents: list
         raise GeminiError("Gemini sent an empty answer.") from None
     if not isinstance(parts, list) or not all(isinstance(part, dict) for part in parts):
         raise GeminiError("Gemini sent an answer in an unexpected shape.")
+    try:  # it goes back verbatim in the next step, and NaN or Infinity cannot be sent as JSON
+        json.dumps(parts, allow_nan=False)
+    except ValueError:
+        raise GeminiError("Gemini sent an answer in an unexpected shape.") from None
     return {"role": "model", "parts": parts}
 
 
