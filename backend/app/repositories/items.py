@@ -54,11 +54,13 @@ def _where(user_id: int, query: ItemQuery) -> tuple[str, list]:
     for word in query.words:
         pattern = f"%{_escape_like(word)}%"
         # Attribute values only (json_tree's `atom`), never the keys or the JSON punctuation:
-        # otherwise "size" would match every item that has a size.
+        # otherwise "size" would match every item that has a size. Notes match too (D-140): an
+        # item called "Supernova" whose note says "controller" is found by "controller".
         clauses.append("(i.name LIKE ? ESCAPE '\\' OR i.public_id LIKE ? ESCAPE '\\' "
+                       "OR i.notes LIKE ? ESCAPE '\\' "
                        "OR EXISTS (SELECT 1 FROM json_tree(i.attributes) AS a "
                        "WHERE a.atom LIKE ? ESCAPE '\\'))")
-        params += [pattern, pattern, pattern]
+        params += [pattern, pattern, pattern, pattern]
     if query.category_id is not None:
         clauses.append("i.category_id = ?")
         params.append(query.category_id)
