@@ -1,23 +1,33 @@
 @echo off
-REM The work is in :main, so that every "exit /b" comes back here and a double-clicked window stays
-REM open to show its message.
-call :main %*
+REM The work is in :main. This outer part saves everything to logs\build-<time>.txt and always keeps
+REM the window open at the end; only ENDERCHEST_NO_PAUSE=1 (automation) turns that off.
+if "%~1"=="--inner" goto :main
+cd /d "%~dp0"
+set "ENDERCHEST_SELF=%~f0"
+set "STAMP=latest"
+for /f "usebackq delims=" %%T in (`powershell -NoProfile -Command "Get-Date -Format yyyyMMdd-HHmmss"`) do set "STAMP=%%T"
+set "LOG=%~dp0logs\build-%STAMP%.txt"
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\logged.ps1" -Log "%LOG%"
 set "CODE=%errorlevel%"
-call :hold
+if exist "%LOG%" goto :logged
+echo The log could not be started, so this run has no log file.
+call :main
+set "CODE=%errorlevel%"
+goto :finish
+:logged
+echo.
+echo Log saved: "%LOG%"
+:finish
+if not "%ENDERCHEST_NO_PAUSE%"=="1" pause
 exit /b %CODE%
-
-:hold
-if defined ENDERCHEST_NO_PAUSE exit /b 0
-setlocal enabledelayedexpansion
-for %%A in (!cmdcmdline!) do if /i "%%~A"=="/c" set "DOUBLE_CLICKED=1"
-if defined DOUBLE_CLICKED pause
-endlocal
-exit /b 0
 
 :main
 REM Before delayed expansion: it would eat a "!" in a folder or user name.
 cd /d "%~dp0"
 set "BACKUPDIR=%USERPROFILE%\Enderchest-Backups"
+REM .env decides these: a value left in the shell must not win over it.
+set "ENDERCHEST_PORT="
+set "ENDERCHEST_BACKUP_DIR="
 setlocal enabledelayedexpansion
 echo Enderchest build. Safe to run again at any time; it never deletes anything.
 
@@ -28,18 +38,31 @@ if errorlevel 1 (
 )
 docker info >nul 2>&1
 if errorlevel 1 (
-  echo Docker is not running. Start Docker Desktop, wait until it says the engine is running, then run build.bat again.
+  echo Docker is not running, or this user cannot reach it. Start Docker Desktop, wait until it says the engine is running, then run build.bat again.
+  echo What Docker says:
+  docker version
   exit /b 1
 )
-
-REM Always !BACKUPDIR! in these blocks: a ")" in a user name would end a block if expanded early.
-if not exist "!BACKUPDIR!" (
-  mkdir "!BACKUPDIR!"
-  if errorlevel 1 (
-    echo Could not create the backup folder !BACKUPDIR!.
+set "ENGINE="
+for /f "usebackq delims=" %%O in (`docker info --format "{{.OSType}}"`) do set "ENGINE=%%O"
+if defined ENGINE if /i not "!ENGINE!"=="linux" (
+  echo Docker is using !ENGINE! containers. Enderchest needs Linux containers: right-click the Docker icon and choose Switch to Linux containers.
+  exit /b 1
+)
+docker compose version >nul 2>&1
+if errorlevel 1 (
+  echo Docker Compose is missing. Update Docker Desktop, then run build.bat again.
+  exit /b 1
+)
+REM run.bat needs "up --wait-timeout", which came in Compose 2.17.
+set "MAJOR=" & set "MINOR="
+for /f "usebackq tokens=1,2 delims=.v" %%A in (`docker compose version --short`) do set "MAJOR=%%A" & set "MINOR=%%B"
+if defined MAJOR (
+  set /a "COMPOSE=MAJOR*1000+MINOR"
+  if !COMPOSE! LSS 2017 (
+    echo Docker Compose is too old: version !MAJOR!.!MINOR!. Enderchest needs 2.17 or newer. Update Docker Desktop, then run build.bat again.
     exit /b 1
   )
-  echo Created the backup folder !BACKUPDIR!
 )
 
 if not exist ".env" (
@@ -51,6 +74,8 @@ if not exist ".env" (
   )
   echo Wrote .env with the backup folder !BACKUPDIR!
 )
+powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\backup-folder.ps1"
+if errorlevel 1 exit /b 1
 
 REM The data volume is created once and never touched again. If it already exists, nothing happens.
 docker volume inspect enderchest_data >nul 2>&1
@@ -69,7 +94,7 @@ REM The image reports this date in Settings, About. Without it the page says it 
 for /f "usebackq delims=" %%D in (`powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"`) do set "BUILD_DATE=%%D"
 docker compose build app
 if errorlevel 1 (
-  echo The build failed. Nothing was deleted. Read the message above.
+  echo The build failed. Nothing was deleted. The first error above says why; a failed download usually means the internet connection, and "no space left" means the disk is full.
   exit /b 1
 )
 echo Build finished. Next: run.bat

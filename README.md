@@ -72,7 +72,9 @@ You need **Windows 10 or 11** with [Docker Desktop](https://www.docker.com/produ
 | `backup.bat` | Makes and verifies a backup right now. |
 | `restore.bat` | Lists your backups and restores the one you pick, after copying your current data to a safety backup. |
 
-To change the port or the backup folder, edit the `.env` file that `build.bat` writes next to it.
+To change the port or the backup folder, edit the `.env` file that `build.bat` writes next to it. There is no login: the first run just asks your name and time zone.
+
+If something fails, the window stays open and `build.bat` and `run.bat` save everything they print to a `.txt` file in the `logs` folder. Docker Desktop must use Linux containers and include Compose 2.17 or newer. So far the install has only been run on the developer's PC; a clean second machine is not yet verified.
 
 ### Your data
 

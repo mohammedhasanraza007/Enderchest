@@ -30,6 +30,7 @@ Everything runs on your own computer. It works with no internet and no account.
 Reading photos and the Assistant can use Google Gemini with your own API key: Settings, then Gemini. It is off until you add a key and switch it on, and the screen says exactly what leaves your computer. Without a key everything else works.
 
 ## If something goes wrong
+- `build.bat` and `run.bat` save everything they print to a `.txt` file in the `logs` folder, and the window stays open on a problem. Send that file to whoever is helping you. Docker Desktop must use Linux containers and include Compose 2.17 or newer.
 - "Port 8470 is already in use": close the other program, or change `ENDERCHEST_PORT` in the `.env` file, then run `run.bat` again.
 - "Docker is not running": start Docker Desktop, wait until it says the engine is running, then try again.
 - If Enderchest starts but shows a problem page, your data has not been changed; the page says what is wrong and what to do.

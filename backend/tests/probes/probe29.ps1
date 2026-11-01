@@ -15,6 +15,10 @@ $savedPath = $env:PATH
 try {
     foreach ($dir in @($folder, $user, $stand)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
     Copy-Item -LiteralPath (Join-Path $script:Root 'build.bat') -Destination $folder
+    New-Item -ItemType Directory -Force -Path (Join-Path $folder 'scripts') | Out-Null
+    foreach ($helper in 'logged.ps1', 'backup-folder.ps1') {
+        Copy-Item -LiteralPath (Join-Path $script:Root "scripts\$helper") -Destination (Join-Path $folder 'scripts')
+    }
     # An .exe: a batch file that runs a .cmd without "call" would never come back from it.
     Add-Type -TypeDefinition 'public class P { public static int Main() { return System.Environment.GetEnvironmentVariable("STAND_IN_FAILS") == "1" ? 1 : 0; } }' `
         -OutputAssembly (Join-Path $stand 'docker.exe') -OutputType ConsoleApplication
@@ -59,8 +63,18 @@ try {
     $held = ($failCode -eq 1) -and ($failedText -match 'Docker is not running') -and ($failedText -match 'Press any key')
     $free = ($quietCode -eq 1) -and ($quietText -match 'Docker is not running') -and ($quietText -notmatch 'Press any key')
 
-    $ok = ($code -eq 0) -and $made -and $noBom -and $named -and $held -and $free
-    [void](Result 29 $ok "build.bat exit $code, backup folder made: $made, .env UTF-8 no BOM: $noBom, names the folder: $named; on failure the window waits: $held, and not when told: $free")
+    # D-145: every run leaves a .txt log holding the failure; the .env.example placeholder is refused.
+    $logs = @(Get-ChildItem -LiteralPath (Join-Path $folder 'logs') -Filter 'build-*.txt' -ErrorAction SilentlyContinue)
+    $logged = ($logs | Where-Object { (Get-Content -LiteralPath $_.FullName -Raw) -match 'Docker is not running' }).Count -ge 1
+    Set-Content -LiteralPath $envFile -Value "ENDERCHEST_PORT=8470`nENDERCHEST_BACKUP_DIR=C:/Users/YOUR_NAME/Enderchest-Backups" -Encoding ascii
+    $env:PATH = "$stand;$savedPath"
+    $placeholder = cmd /c "`"$bat`" 2>&1"
+    $placeholderCode = $LASTEXITCODE
+    $env:PATH = $savedPath
+    $refused = ($placeholderCode -eq 1) -and (($placeholder -join ' ') -match 'not set')
+
+    $ok = ($code -eq 0) -and $made -and $noBom -and $named -and $held -and $free -and $logged -and $refused
+    [void](Result 29 $ok "build.bat exit $code, backup folder made: $made, .env UTF-8 no BOM: $noBom, names the folder: $named; on failure the window waits: $held, and not when told: $free; log kept: $logged; placeholder refused: $refused")
 }
 catch {
     [void](Result 29 $false "error: $_")

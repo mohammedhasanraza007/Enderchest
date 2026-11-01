@@ -7,11 +7,7 @@ call :hold
 exit /b %CODE%
 
 :hold
-if defined ENDERCHEST_NO_PAUSE exit /b 0
-setlocal enabledelayedexpansion
-for %%A in (!cmdcmdline!) do if /i "%%~A"=="/c" set "DOUBLE_CLICKED=1"
-if defined DOUBLE_CLICKED pause
-endlocal
+if not "%ENDERCHEST_NO_PAUSE%"=="1" pause
 exit /b 0
 
 :main

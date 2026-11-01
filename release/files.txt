@@ -14,6 +14,8 @@ backup.bat
 restore.bat
 scripts/health.ps1
 scripts/post-backup.ps1
+scripts/logged.ps1
+scripts/backup-folder.ps1
 backend/app
 backend/requirements.lock
 frontend/package.json
