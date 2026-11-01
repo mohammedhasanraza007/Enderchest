@@ -139,6 +139,7 @@ The app is feature complete for its laptop scope. Each of the ten build phases w
 
 Still open: a final click-through of every control on a fresh install, which was started but not finished, and the checks only the owner can do (real-camera and printer runs, photos of real belongings, and a full run with a real Gemini key). A website and phone version are out of scope for now. Windows is the only platform the scripts support.
 
-## Built with
+## Contributors
 
-Designed and owned by Mohammed Hasan Raza, a mechanical engineering student aiming at SAP QM/PM, as a real daily-use project. Built with [Claude Code](https://claude.com/claude-code) through a chain of build and verification sessions, all recorded in [`docs/logs/`](docs/logs/).
+- **[Mohammed Hasan Raza](https://github.com/mohammedhasanraza007)**: owner. Idea, product decisions, design direction and real-world testing, as a mechanical engineering student aiming at SAP QM/PM, for real daily use.
+- **Claude** (Anthropic), through [Claude Code](https://claude.com/claude-code): co-worker. Wrote the code, tests and docs with Mohammed through a chain of build and verification sessions, all recorded in [`docs/logs/`](docs/logs/).
