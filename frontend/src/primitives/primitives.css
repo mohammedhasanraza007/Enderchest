@@ -317,9 +317,15 @@
 .overlay::backdrop {
   background: var(--scrim);
 }
+/* Not clipped to a square, or the panel's shadow shows square corners; the panel itself scrolls. */
+.overlay--dialog > .overlay__body {
+  max-height: calc(100vh - 2 * var(--space-4));
+  overflow: auto;
+}
 .overlay--dialog {
   width: min(520px, calc(100vw - 2 * var(--space-4)));
   margin: auto;
+  overflow: visible;
 }
 .overlay--sheet {
   width: min(440px, 100vw);

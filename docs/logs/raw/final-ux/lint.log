@@ -4,6 +4,9 @@
 #1 DONE 0.0s
 
 #2 [internal] load build definition from Dockerfile
+#2 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
 #2 transferring dockerfile: 6.16kB done
 #2 DONE 0.0s
 
@@ -14,11 +17,14 @@
 #4 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
 #4 CACHED
 
-#5 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
-#5 DONE 0.4s
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 ...
 
-#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
 #6 DONE 0.4s
+
+#5 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#5 DONE 0.4s
 
 #7 [internal] load .dockerignore
 #7 transferring context: 327B done
@@ -36,87 +42,87 @@
 #10 DONE 0.0s
 
 #11 [internal] load build context
-#11 transferring context: 25.24kB 0.0s done
+#11 transferring context: 21.01kB 0.0s done
 #11 DONE 0.0s
 
-#12 [python-base 5/7] RUN pip install -r requirements.lock
+#12 [tools  7/11] COPY assets/logo /assets/logo
 #12 CACHED
 
-#13 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#13 [python-base 5/7] RUN pip install -r requirements.lock
 #13 CACHED
 
-#14 [python-base 3/7] WORKDIR /app
+#14 [frontend-deps 2/4] WORKDIR /frontend
 #14 CACHED
 
-#15 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#15 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
 #15 CACHED
 
-#16 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#16 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
 #16 CACHED
 
-#17 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#17 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 #17 CACHED
 
-#18 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#18 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
 #18 CACHED
 
-#19 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#19 [tools  8/11] COPY frontend/ /frontend/
 #19 CACHED
 
 #20 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
 #20 CACHED
 
-#21 [tools  5/11] RUN pip install -r requirements-dev.lock
+#21 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
 #21 CACHED
 
-#22 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#22 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
 #22 CACHED
 
-#23 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#23 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
 #23 CACHED
 
-#24 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#24 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
 #24 CACHED
 
-#25 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#25 [tools  5/11] RUN pip install -r requirements-dev.lock
 #25 CACHED
 
-#26 [frontend-deps 2/4] WORKDIR /frontend
+#26 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
 #26 CACHED
 
-#27 [tools  7/11] COPY assets/logo /assets/logo
+#27 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
 #27 CACHED
 
-#28 [tools  8/11] COPY frontend/ /frontend/
-#28 DONE 0.0s
+#28 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#28 CACHED
 
-#29 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
-#29 DONE 0.0s
+#29 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#29 CACHED
 
-#30 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
-#30 DONE 0.0s
+#30 [python-base 3/7] WORKDIR /app
+#30 CACHED
 
 #31 [tools 11/11] COPY backend/ ./
-#31 DONE 0.1s
+#31 CACHED
 
 #32 exporting to image
-#32 exporting layers 0.1s done
-#32 exporting manifest sha256:75248d69202d4e24f331e4770a61528e561e5513174641da0e89a9fbde149616 0.0s done
-#32 exporting config sha256:0d30153c515e498dba88d00f3420b72ef86d2e9b20d865d5d58f105c66b070d3 done
-#32 exporting attestation manifest sha256:2ece0ba44ab677a274264fb0588247b8623c9a457cc92ab521fcee7a775b192f 0.0s done
-#32 exporting manifest list sha256:dc46f2653a58537e5c0efb0dfe69f918db1e0a34c50fa128e90f87dd709a8d10 done
+#32 exporting layers done
+#32 exporting manifest sha256:1d6feb9c6b9cd13016add24a888b2bf19baade80c79f8d5eb6c0fc291362ef1d done
+#32 exporting config sha256:6121c1bcc2a3cd2769a6c770a45ec78baf8ebb425728e66faa8b075d8202df13 done
+#32 exporting attestation manifest sha256:a171966baaef6a7e0b3922d64df93c7aea495c9b1794e5a880d8ca1404feebb0 0.0s done
+#32 exporting manifest list sha256:cbfe01c085959da2bf8faefa368cd4b1ad2c1d86c0a7a337a60055732a1d4a15 0.0s done
 #32 naming to docker.io/library/enderchest-tools:latest done
-#32 unpacking to docker.io/library/enderchest-tools:latest 0.1s done
-#32 DONE 0.4s
+#32 unpacking to docker.io/library/enderchest-tools:latest 0.0s done
+#32 DONE 0.1s
 
 #33 resolving provenance for metadata file
 #33 DONE 0.0s
  Image enderchest-tools:latest Built 
- Container enderchest-test-tools-run-b8c17da4d55f Creating 
- Container enderchest-test-tools-run-b8c17da4d55f Created 
+ Container enderchest-test-tools-run-8b0bc51280c6 Creating 
+ Container enderchest-test-tools-run-8b0bc51280c6 Created 
 All checks passed!
- Container enderchest-test-tools-run-c6dd117a8fac Creating 
- Container enderchest-test-tools-run-c6dd117a8fac Created 
+ Container enderchest-test-tools-run-b577cb6f562c Creating 
+ Container enderchest-test-tools-run-b577cb6f562c Created 
 npm notice
 npm notice New major version of npm available! 10.9.9 -> 12.2.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1

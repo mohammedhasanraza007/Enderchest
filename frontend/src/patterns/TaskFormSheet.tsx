@@ -288,9 +288,34 @@ function ItemPicker({
         onChange={(event) => setText(event.target.value)}
         error={error}
         aria-controls={listId}
+        // Enter must not save the task with a half-typed item: it picks the only match, if one.
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            const only = found.length === 1 ? found[0] : undefined;
+            if (only) {
+              onChange({ public_id: only.public_id, name: only.name });
+              setText("");
+            }
+          } else if (event.key === "ArrowDown") {
+            event.preventDefault();
+            document.getElementById(listId)?.querySelector("button")?.focus();
+          }
+        }}
       />
       {words.length > 0 ? (
-        <ul id={listId} className="picker-list" aria-label="Matching items">
+        <ul
+          id={listId}
+          className="picker-list"
+          aria-label="Matching items"
+          onKeyDown={(event) => {
+            if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+            event.preventDefault();
+            const options = [...event.currentTarget.querySelectorAll("button")];
+            const here = options.indexOf(document.activeElement as HTMLButtonElement);
+            options[here + (event.key === "ArrowDown" ? 1 : -1)]?.focus();
+          }}
+        >
           {matches.isPending ? (
             <li className="section-note">Looking…</li>
           ) : found.length === 0 ? (

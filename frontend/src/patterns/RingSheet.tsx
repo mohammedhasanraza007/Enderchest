@@ -50,7 +50,8 @@ export function RingSheet({ ring, rings, onChoose, onClose }: RingSheetProps) {
         ) : (
           <>
             <p className="ring-sheet__sum">
-              {sheet.data.num} of {sheet.data.den} count: {sheet.data.value}
+              {sheet.data.num} of {sheet.data.den}{" "}
+              {sheet.data.ring === "on_time" ? "tasks" : "items"}, {sheet.data.value}%
             </p>
             <EntryList
               title="Not counted"
