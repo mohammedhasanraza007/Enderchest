@@ -21,7 +21,7 @@ Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end 
 - `lint.log`, `unit.log`, `integration.log` exit 0. `e2e.log`: 175 passed, 6 failed.
 - Five failures were my own `delivery-shots.spec.ts` leaving the test clock on 16 October (fixed); `e2e-rerun-lifecycle.log` 8 passed.
 - The sixth is `coach.spec.ts` frame rate (median gap 49.9 ms, limit 35.4 ms) in the full run; `e2e-rerun-coach.log` 14 passed alone. A timing test that is sensitive to load; not investigated further. The whole e2e suite has not been re-run in one go since the clock fix.
-- Probes 1 to 29: see `exit-codes.txt` and `probe-N.log`.
+- Probes 1 to 29: all pass (`probe-N.log`). Probe 7 first failed only because the owner's test copy held its port 8472; `probe-7-rerun.log` passes with that copy paused.
 - Drive check (`raw/final-ux/`): real `build.bat`, `run.bat`, `backup.bat`, `stop.bat` from `C:\Ender Test (C drive)` with backups on D:, and from a virtual `Z:`. Passed. `restore.bat`'s prompts could not be driven (Docker holds redirected input during its listing), so its prompt path was not run here.
 
 ## Stacks and folders left from the tests (test data only; the owner may remove them)

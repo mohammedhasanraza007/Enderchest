@@ -1,0 +1,3 @@
+--- probe 7 ---
+PROBE 7: PASS - state=locked/no_data_volume; /data contents=[]; API status 503
+ALL PASSED: 7

@@ -1,0 +1,3 @@
+--- probe 7 ---
+PROBE 7: FAIL - could not start the container without a volume
+FAILED: 7

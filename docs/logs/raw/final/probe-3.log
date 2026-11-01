@@ -1,0 +1,3 @@
+--- probe 3 ---
+PROBE 3: PASS - no-cache build ok=True; records before=307 after=307, consistent=True; item with photo intact=True
+ALL PASSED: 3
