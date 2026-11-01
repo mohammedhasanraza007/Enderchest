@@ -1,6 +1,8 @@
 @echo off
-setlocal enabledelayedexpansion
+REM Before delayed expansion: it would eat a "!" in a folder or user name.
 cd /d "%~dp0"
+set "BACKUPDIR=%USERPROFILE%\Enderchest-Backups"
+setlocal enabledelayedexpansion
 echo Enderchest build. Safe to run again at any time; it never deletes anything.
 
 where docker >nul 2>&1
@@ -14,21 +16,24 @@ if errorlevel 1 (
   exit /b 1
 )
 
-set "BACKUPDIR=%USERPROFILE%\Enderchest-Backups"
-if not exist "%BACKUPDIR%" (
-  mkdir "%BACKUPDIR%"
+REM Always !BACKUPDIR! in these blocks: a ")" in a user name would end a block if expanded early.
+if not exist "!BACKUPDIR!" (
+  mkdir "!BACKUPDIR!"
   if errorlevel 1 (
-    echo Could not create the backup folder %BACKUPDIR%.
+    echo Could not create the backup folder !BACKUPDIR!.
     exit /b 1
   )
-  echo Created the backup folder %BACKUPDIR%
+  echo Created the backup folder !BACKUPDIR!
 )
 
 if not exist ".env" (
-  set "FWD=!BACKUPDIR:\=/!"
-  > ".env" echo ENDERCHEST_PORT=8470
-  >> ".env" echo ENDERCHEST_BACKUP_DIR=!FWD!
-  echo Wrote .env with the backup folder %BACKUPDIR%
+  REM UTF-8 without a BOM, as Docker Compose reads it: echo would write the console's old code page.
+  powershell -NoProfile -Command "$utf8 = New-Object Text.UTF8Encoding $false; $dir = $env:BACKUPDIR -replace '\\','/'; [IO.File]::WriteAllLines((Join-Path $PWD '.env'), [string[]]@('ENDERCHEST_PORT=8470', ('ENDERCHEST_BACKUP_DIR=' + $dir)), $utf8)"
+  if errorlevel 1 (
+    echo Could not write the .env settings file.
+    exit /b 1
+  )
+  echo Wrote .env with the backup folder !BACKUPDIR!
 )
 
 REM The data volume is created once and never touched again. If it already exists, nothing happens.

@@ -1,6 +1,7 @@
 @echo off
-setlocal enabledelayedexpansion
+REM Before delayed expansion: it would eat a "!" in the folder name.
 cd /d "%~dp0"
+setlocal enabledelayedexpansion
 echo Enderchest restore (docs/DATA_SAFETY.md 12).
 echo Your current data is copied to a safety backup first. Old files are moved aside, never deleted.
 echo.
@@ -64,7 +65,7 @@ if errorlevel 1 (
   exit /b 1
 )
 set "STATE=unreachable"
-for /f "usebackq delims=" %%S in (`powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\health.ps1" -Port %PORT%`) do set "STATE=%%S"
+for /f "usebackq delims=" %%S in (`powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\health.ps1" -Port %PORT%`) do set "STATE=%%S"
 echo Restore finished. Enderchest state: !STATE!
 start "" "http://127.0.0.1:%PORT%"
 exit /b 0

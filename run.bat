@@ -1,6 +1,7 @@
 @echo off
-setlocal enabledelayedexpansion
+REM Before delayed expansion: it would eat a "!" in the folder name.
 cd /d "%~dp0"
+setlocal enabledelayedexpansion
 
 docker info >nul 2>&1
 if errorlevel 1 (
@@ -45,7 +46,7 @@ if errorlevel 1 (
 )
 
 set "STATE=unreachable"
-for /f "usebackq delims=" %%S in (`powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\health.ps1" -Port %PORT%`) do set "STATE=%%S"
+for /f "usebackq delims=" %%S in (`powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\health.ps1" -Port %PORT%`) do set "STATE=%%S"
 
 if "!STATE!"=="ok" (
   start "" "http://127.0.0.1:%PORT%"
