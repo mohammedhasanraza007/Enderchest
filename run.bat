@@ -29,6 +29,11 @@ set "ENDERCHEST_PORT="
 set "ENDERCHEST_BACKUP_DIR="
 setlocal enabledelayedexpansion
 
+where docker >nul 2>&1
+if errorlevel 1 (
+  echo Docker Desktop is not installed. Double-click build.bat: it explains how to get it.
+  exit /b 1
+)
 docker info >nul 2>&1
 if errorlevel 1 (
   echo Docker is not running, or this user cannot reach it. Start Docker Desktop, then run run.bat again.

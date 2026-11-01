@@ -73,6 +73,15 @@ try {
     $env:PATH = $savedPath
     $refused = ($placeholderCode -eq 1) -and (($placeholder -join ' ') -match 'not set')
 
+    # D-147: with no Docker at all, each script says so instead of "not running".
+    Copy-Item -LiteralPath (Join-Path $script:Root 'run.bat') -Destination $folder
+    $env:PATH = "$env:SystemRoot\system32;$env:SystemRoot\system32\WindowsPowerShell\v1.0"
+    $noDockerBuild = (cmd /c "`"$bat`" 2>&1") -join ' '
+    $noDockerRun = (cmd /c "`"$(Join-Path $folder 'run.bat')`" 2>&1") -join ' '
+    $env:PATH = $savedPath
+    $absent = ($noDockerBuild -match 'docker-desktop') -and ($noDockerRun -match 'not installed') -and ($noDockerRun -notmatch 'not running')
+    $refused = $refused -and $absent
+
     $ok = ($code -eq 0) -and $made -and $noBom -and $named -and $held -and $free -and $logged -and $refused
     [void](Result 29 $ok "build.bat exit $code, backup folder made: $made, .env UTF-8 no BOM: $noBom, names the folder: $named; on failure the window waits: $held, and not when told: $free; log kept: $logged; placeholder refused: $refused")
 }

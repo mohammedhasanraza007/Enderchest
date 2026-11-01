@@ -58,11 +58,12 @@ The ideas are borrowed from industrial maintenance and quality management (the p
 
 ## Install
 
-You need **Windows 10 or 11** with [Docker Desktop](https://www.docker.com/products/docker-desktop/) running, a few GB of free disk space, and internet for the first build. Chrome or Edge works best, and a webcam (or a phone used as a webcam) is needed for the camera features.
+You need **Windows 10 or 11**, internet for the first build, and free disk space (Docker Desktop itself, plus about 1.1 GB for the Enderchest image). Chrome or Edge works best, and a webcam (or a phone used as a webcam) is needed for the camera features.
 
-1. Download this repository, or clone it, onto **any drive and into any folder**: `C:\Enderchest`, `E:\Apps\Enderchest`, wherever you like.
-2. Double-click **`build.bat`**. The first build takes several minutes.
-3. Double-click **`run.bat`**. Your browser opens the app at http://127.0.0.1:8470.
+1. **Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) first.** Enderchest runs inside it. Accept the default settings. The installer may ask for administrator permission, set up WSL 2, or ask you to restart Windows. Open Docker Desktop and wait until it says the engine is running.
+2. **Get Enderchest.** On GitHub choose **Code**, then **Download ZIP**, and unzip it on **any drive, in any folder you will keep**: `C:\Enderchest`, `E:\Apps\Enderchest`, wherever you like. (Or use `git clone`.)
+3. Double-click **`build.bat`**. The first build takes several minutes.
+4. Double-click **`run.bat`**. Your browser opens the app at http://127.0.0.1:8470.
 
 | Script | What it does |
 |---|---|
@@ -107,7 +108,7 @@ flowchart LR
 | Database | SQLite with numbered SQL migrations, no ORM | One file that is easy to back up, with a verified backup before every migration |
 | Frontend | React, TypeScript (strict), Vite | Typed from the backend's OpenAPI description |
 | OCR and matching | Pretrained models on the CPU, baked into the image | Works offline on an ordinary laptop |
-| Packaging | Docker Compose and `.bat` scripts | One double-click for the user, nothing else to install |
+| Packaging | Docker Compose and `.bat` scripts | With Docker Desktop installed, a double-click builds and starts everything |
 
 ## Repository map
 
