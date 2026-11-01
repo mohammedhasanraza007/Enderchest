@@ -201,3 +201,8 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Not done: the full click-through (usage limit stopped its testers, no report exists). Chain NOT marked done; keeper task still in place.
 - New sessions could not get a worktree in this folder, so the work stayed in this session on `main`.
 - Next: the click-through (`docs/logs/handoff.md`).
+
+## 2026-11-01 · final, part 2 · Click-through, second PC, public
+- Click-through groups 1 to 4 on fresh release copies: 24 real issues fixed (D-144, D-146, D-149, D-150). Installer log, Docker auto-install, Gemini 60 s (D-145, D-148, D-151).
+- Second PC: installed and ran. Full e2e 200 passed in one run. Repository made public by the owner.
+- Chain marked done. Next: `docs/logs/handoff.md`, "Owner runs next".

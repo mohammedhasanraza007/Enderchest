@@ -165,7 +165,7 @@ Everything runs in containers against a separate test stack on its own port and 
 
 The app is feature complete for its laptop scope. Each of the ten build phases was checked by a separate verification pass, and the reports are in [`docs/reviews/`](docs/reviews/).
 
-Still open: a final click-through of every control on a fresh install, which was started but not finished, and the checks only the owner can do (real-camera and printer runs, photos of real belongings, and a full run with a real Gemini key). A website and phone version are out of scope for now. Windows is the only platform the scripts support.
+A click-through on a fresh release install is recorded in [`docs/reviews/final-ux/`](docs/reviews/final-ux/). Still open: the checks that need real hardware or the owner (real camera and QR scanning, printing, uploading through the file picker, `restore.bat`'s prompts, and browser notifications), and an install on a completely clean PC. A website and phone version are out of scope for now. Windows is the only platform the scripts support.
 
 ## Contributors
 

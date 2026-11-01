@@ -1,5 +1,5 @@
 ﻿docker :  Container enderchest-test-app-1 Running 
-At line:1 char:584
+At line:1 char:645
 + ... ct -Last 1; docker compose -f $f --profile e2e run --rm e2e npx playw ...
 +                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : NotSpecified: ( Container ende...-app-1 Running :String) [], RemoteException
@@ -7,11 +7,80 @@ At line:1 char:584
  
  Container enderchest-test-app-1 Waiting 
  Container enderchest-test-app-1 Healthy 
- Container enderchest-test-e2e-run-a4148f0c2d38 Creating 
- Container enderchest-test-e2e-run-a4148f0c2d38 Created 
+ Container enderchest-test-e2e-run-f8b043c7c2d8 Creating 
+ Container enderchest-test-e2e-run-f8b043c7c2d8 Created 
 [WebServer] 
 [WebServer] /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
 
 
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
@@ -36,9 +105,11 @@ At line:1 char:584
 [WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [WebServer] ───╯
 [WebServer] 
+
+
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+"node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
 [WebServer]    │
 [WebServer]  1 │ "use client";
 [WebServer]    │ ──────┬──────  
@@ -49,8 +120,8 @@ At line:1 char:584
 [WebServer] 
 
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+"node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
 [WebServer]    │
 [WebServer]  1 │ "use client";
 [WebServer]    │ ──────┬──────  
@@ -59,10 +130,12 @@ At line:1 char:584
 [WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [WebServer] ───╯
 [WebServer] 
-
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+"node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+
+
+
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
 [WebServer]    │
 [WebServer]  1 │ "use client";
 [WebServer]    │ ──────┬──────  
@@ -71,10 +144,9 @@ At line:1 char:584
 [WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [WebServer] ───╯
 [WebServer] 
-
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+"node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
 [WebServer]    │
 [WebServer]  1 │ "use client";
 [WebServer]    │ ──────┬──────  
@@ -83,10 +155,26 @@ At line:1 char:584
 [WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [WebServer] ───╯
 [WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+
+[WebServer] 
+
+
+
+
 
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+"node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
 [WebServer]    │
 [WebServer]  1 │ "use client";
 [WebServer]    │ ──────┬──────  
@@ -117,98 +205,9 @@ At line:1 char:584
 [WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
 [WebServer] ───╯
 [WebServer] 
-
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
-[WebServer]    │
-[WebServer]  1 │ "use client";
-[WebServer]    │ ──────┬──────  
-[WebServer]    │       ╰──────── module level directive may not be preserved
-[WebServer]    │ 
-[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ───╯
-[WebServer] 
-
-
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
-[WebServer]    │
-[WebServer]  1 │ "use client";
-
-[WebServer]    │ ──────┬──────  
-[WebServer]    │       ╰──────── module level directive may not be preserved
-[WebServer]    │ 
-[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ───╯
-[WebServer] 
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
-[WebServer]    │
-[WebServer]  1 │ "use client";
-[WebServer]    │ ──────┬──────  
-[WebServer]    │       ╰──────── module level directive may not be preserved
-[WebServer]    │ 
-[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ───╯
-[WebServer] 
-
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
-[WebServer]    │
-[WebServer]  1 │ "use client";
-[WebServer]    │ ──────┬──────  
-[WebServer]    │       ╰──────── module level directive may not be preserved
-[WebServer]    │ 
-[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ───╯
-[WebServer] 
-
-
-
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
-[WebServer]    │
-[WebServer]  1 │ "use client";
-[WebServer]    │ ──────┬──────  
-[WebServer]    │       ╰──────── module level directive may not be preserved
-
-
-
-
-[WebServer]    │ 
-[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ───╯
-[WebServer] 
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
-[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
-[WebServer]    │
-[WebServer]  1 │ "use client";
-[WebServer]    │ ──────┬──────  
-[WebServer]    │       ╰──────── module level directive may not be preserved
-[WebServer]    │ 
-[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ───╯
-[WebServer] 
 [WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
 "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
 [WebServer]     ╭─[ node_modules/react-router/dist/development/dom-export.mjs:11:1 ]
-[WebServer]     │
-[WebServer]  11 │ "use client";
-[WebServer]     │ ──────┬──────  
-[WebServer]     │       ╰──────── module level directive may not be preserved
-[WebServer]     │ 
-[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
-[WebServer] ────╯
-[WebServer] 
-[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
-"node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
-[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
 [WebServer]     │
 [WebServer]  11 │ "use client";
 [WebServer]     │ ──────┬──────  
@@ -285,7 +284,171 @@ Running 200 tests using 1 worker
 [41/200] ../tests/e2e/coach.spec.ts:175:5 › a busy answer drops the frame and the coach carries on
 [42/200] ../tests/e2e/coach.spec.ts:202:5 › frame rate and /health while frames are read (measured, gate 2)
 ../tests/e2e/coach.spec.ts:202:5 › frame rate and /health while frames are read (measured, gate 2)
-COACH-FPS coach-off median=33.3ms coach-on frames=128 median=33.4ms p95=83.4ms health max=12ms
+COACH-FPS coach-off median=33.3ms coach-on frames=154 median=33.4ms p95=66.7ms health max=6ms
 
 [43/200] ../tests/e2e/coach.spec.ts:265:5 › reduced motion: the prompt appears without a fade
 [44/200] ../tests/e2e/coach.spec.ts:282:7 › coach shots (dark)
+[45/200] ../tests/e2e/coach.spec.ts:282:7 › coach shots (light)
+[46/200] ../tests/e2e/contrast.spec.ts:77:9 › dark theme › every piece of text on every primitive passes WCAG AA
+[47/200] ../tests/e2e/contrast.spec.ts:111:9 › dark theme › the ratios match the tables in DESIGN.md
+[48/200] ../tests/e2e/contrast.spec.ts:77:9 › light theme › every piece of text on every primitive passes WCAG AA
+[49/200] ../tests/e2e/contrast.spec.ts:111:9 › light theme › the ratios match the tables in DESIGN.md
+[50/200] ../tests/e2e/contrast.spec.ts:133:5 › light theme text on its surfaces also clears 4.5:1 (no table exists for these)
+[51/200] ../tests/e2e/dashboard-keyboard.spec.ts:14:5 › Tab walks the rings, the card and the road; the sheet opens and closes by keys
+[52/200] ../tests/e2e/dashboard-shots.spec.ts:65:5 › the reference frame on the three storyboard fixtures
+[53/200] ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (dark)
+[54/200] ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (light)
+[55/200] ../tests/e2e/dashboard.spec.ts:30:5 › frame 1: greeting, score, count, card rows and the truck on the 18th
+[56/200] ../tests/e2e/dashboard.spec.ts:62:5 › frames 2 and 3 move the score, the card and the truck
+[57/200] ../tests/e2e/dashboard.spec.ts:79:5 › using an item from the card takes its row out, and Undo brings it back
+[58/200] ../tests/e2e/dashboard.spec.ts:100:5 › the rings open a sheet whose lists match the ring's numbers
+[59/200] ../tests/e2e/dashboard.spec.ts:118:5 › a day on the road opens what is on it
+[60/200] ../tests/e2e/dashboard.spec.ts:137:5 › an empty inventory shows the real empty dashboard
+[61/200] ../tests/e2e/dashboard.spec.ts:151:5 › more than three reminders: two rows and View all
+[62/200] ../tests/e2e/dashboard.spec.ts:168:5 › loading shows the page's shape; a failed load says so and retries
+[63/200] ../tests/e2e/dashboard.spec.ts:195:5 › the Tasks page has the same road over 30 days
+[64/200] ../tests/e2e/dead-controls.spec.ts:247:7 › dead-control crawler › /welcome has no dead controls
+[65/200] ../tests/e2e/dead-controls.spec.ts:254:7 › dead-control crawler › /settings has no dead controls
+[66/200] ../tests/e2e/dead-controls.spec.ts:262:7 › dead-control crawler › /assistant has no dead controls, off and on
+[67/200] ../tests/e2e/dead-controls.spec.ts:281:7 › dead-control crawler › the not-found page has no dead controls
+[68/200] ../tests/e2e/dead-controls.spec.ts:289:7 › dead-control crawler › the empty dashboard has no dead controls
+[69/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › the dashboard has no dead controls
+[70/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Inventory has no dead controls
+[71/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › an item has no dead controls
+[72/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › an item in Trash has no dead controls
+[73/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Camera, add has no dead controls
+[74/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Camera, scan has no dead controls
+[75/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Camera, do I own this has no dead controls
+[76/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › the review queue has no dead controls
+[77/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › a draft has no dead controls
+[78/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Labels has no dead controls
+[79/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Trash has no dead controls
+[80/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Tasks has no dead controls
+[81/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Notifications has no dead controls
+[82/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Savings has no dead controls
+[83/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › an item with a worn inspection has no dead controls
+[84/200] ../tests/e2e/dead-controls.spec.ts:316:9 › dead-control crawler › Settings with data has no dead controls
+[85/200] ../tests/e2e/dead-controls.spec.ts:324:7 › dead-control crawler › the skip link moves to the main content
+[86/200] ../tests/e2e/delivery-shots.spec.ts:17:5 › the save delivery, paused at each beat, dark and light
+[87/200] ../tests/e2e/final-ux-camera.spec.ts:14:5 › an unknown typed ID says so with the camera off
+[88/200] ../tests/e2e/final-ux-camera.spec.ts:22:5 › a missing draft offers the way back, not a useless Retry
+[89/200] ../tests/e2e/final-ux-camera.spec.ts:28:5 › the ownership check: a new item is not a duplicate, and a saving shows on its row
+[90/200] ../tests/e2e/final-ux-dashboard.spec.ts:14:5 › Enter in the task item picker never saves a half-typed item
+[91/200] ../tests/e2e/final-ux-dashboard.spec.ts:37:5 › Enter picks the only match
+[92/200] ../tests/e2e/final-ux-dashboard.spec.ts:49:5 › a dialog does not clip its panel's shadow
+[93/200] ../tests/e2e/final-ux-inventory.spec.ts:14:5 › the Sort select shows its whole label
+[94/200] ../tests/e2e/final-ux-inventory.spec.ts:27:5 › an attribute's name and a long value both fit their boxes
+[95/200] ../tests/e2e/final-ux-settings.spec.ts:15:5 › the welcome error goes when the name is typed, and each step takes the focus
+[96/200] ../tests/e2e/final-ux-settings.spec.ts:40:7 › a long name › stays inside the nav capsule at 1024 px
+[97/200] ../tests/e2e/final-ux-settings.spec.ts:48:7 › a long name › wraps in the greeting instead of reaching the rings
+[98/200] ../tests/e2e/final-ux-settings.spec.ts:64:7 › Settings › the three theme chips share one row in both themes
+[99/200] ../tests/e2e/final-ux-settings.spec.ts:77:7 › Settings › Use my time zone saves at once
+[100/200] ../tests/e2e/final-ux-settings.spec.ts:85:7 › Settings › the key error goes when the key field changes
+[101/200] ../tests/e2e/final-ux-settings.spec.ts:95:7 › Settings › Escape leaves a rename, and focus returns to Rename
+[102/200] ../tests/e2e/final-ux-settings.spec.ts:109:7 › Settings › the reassign dialog gives the focus back when it goes
+[103/200] ../tests/e2e/final-ux-settings.spec.ts:123:7 › Settings › a row's old message goes when another action starts
+[104/200] ../tests/e2e/final-ux-settings.spec.ts:137:7 › Settings › an off switch can be seen in the light theme
+[105/200] ../tests/e2e/final-ux-settings.spec.ts:155:5 › Enter in New location name adds the place and keeps the item form open
+[106/200] ../tests/e2e/first-run.spec.ts:12:5 › a new database sends the owner to the welcome screen from any address
+[107/200] ../tests/e2e/first-run.spec.ts:20:5 › an empty or too long name is refused with a message and nothing is saved
+[108/200] ../tests/e2e/first-run.spec.ts:34:5 › name, then starter categories, then a greeting and the app
+[109/200] ../tests/e2e/first-run.spec.ts:64:5 › Skip on step 2 makes no categories
+[110/200] ../tests/e2e/first-run.spec.ts:73:5 › closing the tab on step 2 and reopening resumes at step 2 with the name kept
+[111/200] ../tests/e2e/first-run.spec.ts:100:5 › the name can be changed later in Settings and shows in the capsule
+[112/200] ../tests/e2e/first-run.spec.ts:120:5 › a failed first-run save keeps the typed name, says why, and the button works again
+[113/200] ../tests/e2e/first-run.spec.ts:144:5 › a failed save in Settings keeps the change, says why, and changes nothing
+[114/200] ../tests/e2e/inventory-shots.spec.ts:13:7 › every inventory screen at 1280 px (dark)
+[115/200] ../tests/e2e/inventory-shots.spec.ts:13:7 › every inventory screen at 1280 px (light)
+[116/200] ../tests/e2e/inventory.spec.ts:26:5 › an item added by hand shows in Inventory with its category, location and details
+[117/200] ../tests/e2e/inventory.spec.ts:63:5 › Save stays disabled with the reason while the form is wrong; closing with edits asks
+[118/200] ../tests/e2e/inventory.spec.ts:81:5 › a server problem on a field the form does not show becomes a general message (F-024)
+[119/200] ../tests/e2e/inventory.spec.ts:110:5 › search and filters live in the URL, Back restores them, and 1,000 items stay light
+[120/200] ../tests/e2e/inventory.spec.ts:167:5 › photos on the item page: add, make main, hide; the file stays on disk
+[121/200] ../tests/e2e/inventory.spec.ts:197:5 › delete from the item page, then Undo brings it back
+[122/200] ../tests/e2e/inventory.spec.ts:209:5 › select mode deletes several items with one Undo, and moves them
+[123/200] ../tests/e2e/inventory.spec.ts:238:5 › Trash: restore, then permanent delete after a fresh backup
+[124/200] ../tests/e2e/inventory.spec.ts:263:5 › labels render at their physical sizes, print, and are marked printed only on Yes
+[125/200] ../tests/e2e/inventory.spec.ts:305:5 › categories: a delete in use asks where the items go; locations refuse a cycle
+[126/200] ../tests/e2e/labels-print.spec.ts:26:5 › the A4 sheet prints one A4 page per 21 labels at the standard 21-up pitch
+[127/200] ../tests/e2e/labels-print.spec.ts:56:5 › single labels print one 50 × 30 mm page each
+[128/200] ../tests/e2e/labels-print.spec.ts:74:5 › the served QR decodes to the public id and nothing else
+[129/200] ../tests/e2e/lifecycle-shots.spec.ts:19:7 › lifecycle screens (dark)
+[130/200] ../tests/e2e/lifecycle-shots.spec.ts:19:7 › lifecycle screens (light)
+[131/200] ../tests/e2e/lifecycle.spec.ts:30:5 › a task made on the Tasks page is due today, done, and undone
+[132/200] ../tests/e2e/lifecycle.spec.ts:58:5 › a reminder is snoozed, and Use it with Undo restores the quantity
+[133/200] ../tests/e2e/lifecycle.spec.ts:90:5 › the item page: use, mark expired, reactivate, plan and inspect
+[134/200] ../tests/e2e/lifecycle.spec.ts:132:5 › Settings -> Notifications saves the lead days and says the honest limit
+[135/200] ../tests/e2e/lifecycle.spec.ts:154:5 › a write without the safety header is refused for the new endpoints
+[136/200] ../tests/e2e/motion.spec.ts:46:5 › the entrance plays once, moves only transform, opacity and dash offset, and ends in time
+[137/200] ../tests/e2e/motion.spec.ts:66:5 › any input ends the entrance at the final state and is not blocked
+[138/200] ../tests/e2e/motion.spec.ts:80:7 › reduced motion › shows final states with nothing animating
+[139/200] ../tests/e2e/motion.spec.ts:93:5 › a used item's row slides out, the score glides up and its ring flares once
+[140/200] ../tests/e2e/motion.spec.ts:121:5 › the truck drives by transform when its day changes, never by left
+[141/200] ../tests/e2e/motion.spec.ts:157:5 › saving a new item sends the box to the brand mark and clears itself
+[142/200] ../tests/e2e/motion.spec.ts:170:5 › the delivery drops the box from under the nav, draws a trail and shrinks into the mark (D-138)
+[143/200] ../tests/e2e/motion.spec.ts:205:5 › the streak line shows from two days and never speaks of a break
+[144/200] ../tests/e2e/name-menu.spec.ts:23:5 › the name menu works by keyboard alone
+[145/200] ../tests/e2e/ownership-shots.spec.ts:14:7 › ownership screens (dark)
+[146/200] ../tests/e2e/ownership-shots.spec.ts:14:7 › ownership screens (light)
+[147/200] ../tests/e2e/ownership.spec.ts:30:5 › words find the right size, never say certain, and Not the same hides it
+[148/200] ../tests/e2e/ownership.spec.ts:58:5 › I didn't buy it needs a typed price, records it, and Undo takes it back
+[149/200] ../tests/e2e/ownership.spec.ts:80:5 › None of these: words open the new-item form, a photo makes a draft
+[150/200] ../tests/e2e/ownership.spec.ts:107:5 › Savings: totals equal the list, Remove asks, and Undo brings it back
+[151/200] ../tests/e2e/ownership.spec.ts:137:5 › the dashboard road shows the savings pill only on the day of a saving
+[152/200] ../tests/e2e/phase6-verification.spec.ts:52:5 › a pasted image becomes the photo to check
+[153/200] ../tests/e2e/phase6-verification.spec.ts:62:5 › a dropped image becomes the photo to check
+[154/200] ../tests/e2e/phase6-verification.spec.ts:69:5 › own mode by keyboard only: type, check, record a saving, Escape returns focus
+[155/200] ../tests/e2e/phase6-verification.spec.ts:97:5 › Savings by keyboard only: period, Remove with confirm, Undo
+[156/200] ../tests/e2e/phase6-verification.spec.ts:115:5 › Savings shows its shape while loading and a Retry when the read fails
+[157/200] ../tests/e2e/phase6-verification.spec.ts:139:5 › the savings pill and the truck on today do not overlap each other or the title
+[158/200] ../tests/e2e/phase8-shots.spec.ts:21:5 › every screen, both themes, 1280 and 1024 px
+[159/200] ../tests/e2e/phase8-verification.spec.ts:37:5 › V1 every screen's page arrival moves only transform and opacity
+[160/200] ../tests/e2e/phase8-verification.spec.ts:55:7 › V2 reduced motion on every screen › nothing animates after arriving on any screen
+[161/200] ../tests/e2e/phase8-verification.spec.ts:71:5 › V3 two quick saves never stack a second delivery, and it clears
+[162/200] ../tests/e2e/phase8-verification.spec.ts:83:5 › V4 a click during the delivery lands and finishes it
+[163/200] ../tests/e2e/phase8-verification.spec.ts:95:7 › V5 the road never widens the dashboard at 1024 px
+[164/200] ../tests/e2e/phase8-verification.spec.ts:95:7 › V5 the road never widens the dashboard at 1280 px
+[165/200] ../tests/e2e/phase8-verification.spec.ts:95:7 › V5 the road never widens the dashboard at 1536 px
+[166/200] ../tests/e2e/phase9-shots.spec.ts:38:7 › assistant screens (dark)
+[167/200] ../tests/e2e/phase9-shots.spec.ts:38:7 › assistant screens (light)
+[168/200] ../tests/e2e/phase9-verification.spec.ts:53:7 › V1 at 1024 px the six tabs sit on one line in order and the page never widens
+[169/200] ../tests/e2e/phase9-verification.spec.ts:53:7 › V1 at 1280 px the six tabs sit on one line in order and the page never widens
+[170/200] ../tests/e2e/phase9-verification.spec.ts:53:7 › V1 at 1536 px the six tabs sit on one line in order and the page never widens
+[171/200] ../tests/e2e/phase9-verification.spec.ts:70:5 › V2 the conversation survives a reload and an item link, and Start over forgets it
+[172/200] ../tests/e2e/phase9-verification.spec.ts:95:7 › V3 a stored conversation that is not JSON never breaks the page
+[173/200] ../tests/e2e/phase9-verification.spec.ts:95:7 › V3 a stored conversation that is an object never breaks the page
+[174/200] ../tests/e2e/phase9-verification.spec.ts:95:7 › V3 a stored conversation that is a null reply never breaks the page
+[175/200] ../tests/e2e/phase9-verification.spec.ts:95:7 › V3 a stored conversation that is a null segment never breaks the page
+[176/200] ../tests/e2e/phase9-verification.spec.ts:107:5 › V4 a switch turned off mid-conversation says so and links to it
+[177/200] ../tests/e2e/phase9-verification.spec.ts:126:5 › V5 pressing Enter twice sends one request
+[178/200] ../tests/e2e/phase9-verification.spec.ts:148:5 › V6 the switch is reached by its link, is off by default and stays on
+[179/200] ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the dark theme
+[180/200] ../tests/e2e/primitives.spec.ts:9:7 › every primitive renders in the light theme
+[181/200] ../tests/e2e/primitives.spec.ts:75:5 › shape rules: pills everywhere, soft capsules for tall boxes in light, 24 px cards in dark
+[182/200] ../tests/e2e/primitives.spec.ts:123:5 › the rupee sign renders from a real font in every family (gate 7)
+[183/200] ../tests/e2e/routes-contrast.spec.ts:24:7 › text on every inventory route passes WCAG AA (dark)
+[184/200] ../tests/e2e/routes-contrast.spec.ts:24:7 › text on every inventory route passes WCAG AA (light)
+[185/200] ../tests/e2e/shell-reference.spec.ts:25:5 › the navigation capsule matches the reference frame within 12 px
+[186/200] ../tests/e2e/shell-reference.spec.ts:103:5 › screenshots of the shell for the owner to approve
+[187/200] ../tests/e2e/theme.spec.ts:19:5 › the choice is saved on the server and survives a reload
+[188/200] ../tests/e2e/theme.spec.ts:30:5 › there is no flash: the theme is on the page before any script of the app runs
+[189/200] ../tests/e2e/theme.spec.ts:73:5 › on a slow load nothing is painted before the stylesheets, and System is already resolved
+[190/200] ../tests/e2e/theme.spec.ts:105:5 › System follows the operating system, live
+[191/200] ../tests/e2e/theme.spec.ts:115:5 › the name menu changes the theme too
+[192/200] ../tests/e2e/theme.spec.ts:122:5 › reduced motion is honoured: no crossfade, no transitions, no running animations
+[193/200] ../tests/e2e/theme.spec.ts:153:5 › without reduced motion the theme change crossfades briefly
+[194/200] ../tests/e2e/browser-notifications.spec.ts:49:5 › a browser notification fires once per row across reloads and two tabs
+[195/200] ../tests/e2e/camera.spec.ts:18:5 › Add mode: the shutter makes a draft, confirm saves the item with its photo; LIVE only while streaming
+[196/200] ../tests/e2e/camera.spec.ts:39:5 › a hidden tab stops the stream and showing it starts it again
+[197/200] ../tests/e2e/camera.spec.ts:55:5 › several uploads make a review queue; drafts count nowhere until saved
+[198/200] ../tests/e2e/camera.spec.ts:84:5 › HEIC and oversize files get a clear refusal and add nothing
+[199/200] ../tests/e2e/camera.spec.ts:108:5 › Scan mode opens the item whose QR is in front of the camera
+[200/200] ../tests/e2e/camera.spec.ts:135:5 › typed IDs: lowercase and look-alikes open the item, an unknown code says so
+  Slow test file: ../tests/e2e/dead-controls.spec.ts (15.7m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  200 passed (22.1m)
+npm notice
+npm notice New major version of npm available! 11.19.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
