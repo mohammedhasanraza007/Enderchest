@@ -16,7 +16,7 @@ try {
     foreach ($dir in @($folder, $user, $stand)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
     Copy-Item -LiteralPath (Join-Path $script:Root 'build.bat') -Destination $folder
     New-Item -ItemType Directory -Force -Path (Join-Path $folder 'scripts') | Out-Null
-    foreach ($helper in 'logged.ps1', 'backup-folder.ps1') {
+    foreach ($helper in 'logged.ps1', 'backup-folder.ps1', 'install-docker.ps1') {
         Copy-Item -LiteralPath (Join-Path $script:Root "scripts\$helper") -Destination (Join-Path $folder 'scripts')
     }
     # An .exe: a batch file that runs a .cmd without "call" would never come back from it.

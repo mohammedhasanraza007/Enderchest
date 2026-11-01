@@ -21,17 +21,6 @@ echo Log saved: "%LOG%"
 if not "%ENDERCHEST_NO_PAUSE%"=="1" pause
 exit /b %CODE%
 
-:no_docker
-echo.
-echo Docker Desktop is not installed. Enderchest runs inside it, and it is free for personal use.
-echo   1. Download it: https://www.docker.com/products/docker-desktop/
-echo   2. Run the installer and accept its default settings. It may ask for administrator
-echo      permission, set up WSL 2, or ask you to restart Windows.
-echo   3. Open Docker Desktop and wait until it says the engine is running.
-echo   4. Double-click build.bat again.
-echo Nothing was changed on this computer.
-exit /b 0
-
 :main
 REM Before delayed expansion: it would eat a "!" in a folder or user name.
 cd /d "%~dp0"
@@ -44,9 +33,13 @@ echo Enderchest build. Safe to run again at any time; it never deletes anything.
 
 where docker >nul 2>&1
 if errorlevel 1 (
-  call :no_docker
-  exit /b 1
+  powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\install-docker.ps1"
+  if errorlevel 1 exit /b 1
 )
+REM A new install is not on this window's PATH yet. Added last, so a docker already found still wins.
+set "PATH=%PATH%;%ProgramFiles%\Docker\Docker\resources\bin"
+docker info >nul 2>&1
+if errorlevel 1 powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\install-docker.ps1" -StartOnly
 docker info >nul 2>&1
 if errorlevel 1 (
   echo Docker is not running, or this user cannot reach it. Start Docker Desktop, wait until it says the engine is running, then run build.bat again.

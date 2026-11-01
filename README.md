@@ -60,10 +60,9 @@ The ideas are borrowed from industrial maintenance and quality management (the p
 
 You need **Windows 10 or 11**, internet for the first build, and free disk space (Docker Desktop itself, plus about 1.1 GB for the Enderchest image). Chrome or Edge works best, and a webcam (or a phone used as a webcam) is needed for the camera features.
 
-1. **Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) first.** Enderchest runs inside it. Accept the default settings. The installer may ask for administrator permission, set up WSL 2, or ask you to restart Windows. Open Docker Desktop and wait until it says the engine is running.
-2. **Get Enderchest.** On GitHub choose **Code**, then **Download ZIP**, and unzip it on **any drive, in any folder you will keep**: `C:\Enderchest`, `E:\Apps\Enderchest`, wherever you like. (Or use `git clone`.)
-3. Double-click **`build.bat`**. The first build takes several minutes.
-4. Double-click **`run.bat`**. Your browser opens the app at http://127.0.0.1:8470.
+1. **Get Enderchest.** On GitHub choose **Code**, then **Download ZIP**, and unzip it on **any drive, in any folder you will keep**: `C:\Enderchest`, `E:\Apps\Enderchest`, wherever you like. (Or use `git clone`.)
+2. Double-click **`build.bat`**. If [Docker Desktop](https://www.docker.com/products/docker-desktop/) is missing, it offers to install it: type Y, approve the Windows permission prompt, and restart if it asks, then double-click `build.bat` again. The first build takes several minutes.
+3. Double-click **`run.bat`**. Your browser opens the app at http://127.0.0.1:8470.
 
 | Script | What it does |
 |---|---|

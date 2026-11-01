@@ -31,9 +31,16 @@ setlocal enabledelayedexpansion
 
 where docker >nul 2>&1
 if errorlevel 1 (
-  echo Docker Desktop is not installed. Double-click build.bat: it explains how to get it.
-  exit /b 1
+  powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\install-docker.ps1" -StartOnly
+  if errorlevel 1 (
+    echo Docker Desktop is not installed. Double-click build.bat: it installs it for you.
+    exit /b 1
+  )
 )
+REM A docker already found still wins: this is added last.
+set "PATH=%PATH%;%ProgramFiles%\Docker\Docker\resources\bin"
+docker info >nul 2>&1
+if errorlevel 1 powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\install-docker.ps1" -StartOnly
 docker info >nul 2>&1
 if errorlevel 1 (
   echo Docker is not running, or this user cannot reach it. Start Docker Desktop, then run run.bat again.

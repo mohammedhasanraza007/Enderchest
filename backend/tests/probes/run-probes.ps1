@@ -17,7 +17,8 @@
 param([string]$Only = '', [switch]$Live)   # -Only is a string: "6,12" (powershell -File does not build arrays)
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
-$env:ENDERCHEST_NO_PAUSE = '1'   # the .bat files wait for a key only in a double-clicked window
+$env:ENDERCHEST_NO_PAUSE = '1'    # the .bat files otherwise wait for a key
+$env:ENDERCHEST_NO_INSTALL = '1'  # and they otherwise offer to install or start Docker
 $numbers = if ($Only) { @($Only -split ',' | ForEach-Object { [int]$_ }) } else { 1..29 }
 $out = Join-Path $root 'test-results'
 New-Item -ItemType Directory -Force $out | Out-Null
