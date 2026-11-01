@@ -1,0 +1,102 @@
+Enderchest build. Safe to run again at any time; it never deletes anything.
+The data volume already exists. Left as it is.
+ Image enderchest-app:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 627B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB 0.0s done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.4s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 0.9s
+
+#7 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#7 DONE 1.2s
+
+#8 [internal] load .dockerignore
+#8 transferring context: 320B done
+#8 DONE 0.0s
+
+#9 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#9 DONE 0.0s
+
+#10 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f
+#10 resolve docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f 0.0s done
+#10 DONE 0.0s
+
+#11 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+#11 resolve docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da 0.0s done
+#11 DONE 0.0s
+
+#12 [internal] load build context
+#12 transferring context: 1.52MB 0.5s done
+#12 DONE 0.5s
+
+#13 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#13 CACHED
+
+#14 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#14 CACHED
+
+#15 [python-base 3/7] WORKDIR /app
+#15 CACHED
+
+#16 [python-base 5/7] RUN pip install -r requirements.lock
+#16 CACHED
+
+#17 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#17 CACHED
+
+#18 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#18 CACHED
+
+#19 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#19 CACHED
+
+#20 [frontend-build 2/3] COPY frontend/ ./
+#20 CACHED
+
+#21 [frontend-build 1/3] COPY assets/logo /assets/logo
+#21 CACHED
+
+#22 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#22 CACHED
+
+#23 [frontend-build 3/3] RUN npm run build
+#23 CACHED
+
+#24 [frontend-deps 2/4] WORKDIR /frontend
+#24 CACHED
+
+#25 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#25 CACHED
+
+#26 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#26 CACHED
+
+#27 exporting to image
+#27 exporting layers done
+#27 exporting manifest sha256:28f1ea7dd6ab7f90253b38fc81d4a8569eca2beb0a22ddf8aee75e71031c26db 0.0s done
+#27 exporting config sha256:cc7225258cf846fc8b822de08520d4c2c59aca5cc60e40a0eec31ce1641b0389 0.0s done
+#27 exporting attestation manifest sha256:f700b7a0ec2324874e4776bcc3378d310e7bcb56ae9e4c8200777d3c290c64e3 0.0s done
+#27 exporting manifest list sha256:c382f39b630d8027fd4ba0cc11d75d8233993e8d4b2962a888974311b863aeef 0.0s done
+#27 naming to docker.io/library/enderchest-app:latest done
+#27 unpacking to docker.io/library/enderchest-app:latest 0.0s done
+#27 DONE 0.1s
+
+#28 resolving provenance for metadata file
+#28 DONE 0.0s
+ Image enderchest-app:latest Built 
+Build finished. Next: run.bat

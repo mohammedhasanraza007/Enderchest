@@ -199,7 +199,8 @@
   grid-column: 1 / -1;
   height: 52px;
 }
-@media (max-width: 1000px) {
+/* Six 140 px columns cut labels such as "Newest first", so laptops at 1024 px get three. */
+@media (max-width: 1150px) {
   .filters {
     grid-template-columns: repeat(3, minmax(140px, 1fr));
   }
