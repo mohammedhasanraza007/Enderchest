@@ -1,0 +1,11 @@
+Enderchest restore (docs/DATA_SAFETY.md 12).
+Your current data is copied to a safety backup first. Old files are moved aside, never deleted.
+
+Backups found:
+ Container enderchest-uxc-app-run-d9d3b1464c4e Creating 
+ Container enderchest-uxc-app-run-d9d3b1464c4e Created 
+  1. 2026-11-01 11:34 UTC  manual  204800 bytes  [manual-20261101T113439Z]
+
+Number of the backup to restore (anything else cancels): ']' is not recognized as an internal or external command,
+operable program or batch file.
+Cancelled. Nothing was changed.

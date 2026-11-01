@@ -1,0 +1,8 @@
+ Container enderchest-ux-app-1 Recreate 
+ Container enderchest-ux-app-1 Recreated 
+ Container enderchest-ux-app-1 Starting 
+ Container enderchest-ux-app-1 Started 
+ Container enderchest-ux-app-1 Waiting 
+ Container enderchest-ux-app-1 Healthy 
+Enderchest is running at http://127.0.0.1:8472
+To stop it: stop.bat    To back up now: backup.bat

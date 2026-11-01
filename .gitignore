@@ -27,6 +27,9 @@ playwright-report/
 test-results/
 coverage/
 
+# The final UX test's working screenshots: local only, the README's chosen ones are in docs/images.
+docs/logs/raw/final-ux/shots/
+
 # OS and editor
 .DS_Store
 Thumbs.db

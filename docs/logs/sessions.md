@@ -193,3 +193,11 @@ Entry fields: date · zip in · zip out · phase worked on · built · checks ru
 - Suites green (`raw/phase-9v/`): lint, unit 296 + 120, integration 359, e2e 179 + 3, probes 1 to 28.
 - Verdict: PASS WITH NOTES (N1 to N5 minor). Blocked on owner: real Gemini gates 1 to 3, screenshot approval, reference PNG.
 - Next: final merge on `main` with the delivery-video comparison first (`D:\Projects\final-next-prompt.txt`).
+
+## 2026-10-28 to 2026-11-01 · final · Final merge, release zip, drive check, GitHub
+- Zip in: `phase9v.zip`. Delivery video comparison done (D-138). Slim release zip: `release/files.txt` (`D:\Projects\enderchest-release-5.zip`).
+- Owner's own testing found the key refusal and the assistant's miss: fixed (D-139 to D-141). Owner's drive check: real runs from C: and Z: passed; `build.bat` bracket crash fixed (D-142, probe 29).
+- Suites: lint, unit, integration clean; e2e 175 passed, 6 failed, the failed specs pass on re-run (my clock leak; one load-sensitive timing test). Probes: `raw/final/exit-codes.txt`.
+- Not done: the full click-through (usage limit stopped its testers, no report exists). Chain NOT marked done; keeper task still in place.
+- New sessions could not get a worktree in this folder, so the work stayed in this session on `main`.
+- Next: the click-through (`docs/logs/handoff.md`).

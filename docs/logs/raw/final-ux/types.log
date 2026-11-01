@@ -1,0 +1,136 @@
+ Image enderchest-tools:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 576B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB 0.0s done
+#2 DONE 0.0s
+
+#3 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#4 DONE 1.5s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/node:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 1.2s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 1.2s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#11 DONE 0.0s
+
+#12 [internal] load build context
+#12 ...
+
+#13 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:3ed748ce9dea62d2f0f0205cdbb6823106d9f973a6f555c402fe2575f8d6e1ae
+#13 resolve docker.io/library/node:22-bookworm-slim@sha256:3ed748ce9dea62d2f0f0205cdbb6823106d9f973a6f555c402fe2575f8d6e1ae 0.0s done
+#13 DONE 0.0s
+
+#14 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:93498f36dc7e24ef233bfdf6cc17d4b8bd32d94ee737143e906460d5f5a914c5
+#14 resolve docker.io/library/python:3.13-slim-bookworm@sha256:93498f36dc7e24ef233bfdf6cc17d4b8bd32d94ee737143e906460d5f5a914c5 0.0s done
+#14 DONE 0.1s
+
+#12 [internal] load build context
+#12 transferring context: 2.24MB 0.2s done
+#12 DONE 0.2s
+
+#15 [tools  3/11] RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+#15 CACHED
+
+#16 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#16 CACHED
+
+#17 [tools  7/11] COPY assets/logo /assets/logo
+#17 CACHED
+
+#18 [python-base 3/7] WORKDIR /app
+#18 CACHED
+
+#19 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#19 CACHED
+
+#20 [tools  4/11] COPY backend/requirements-dev.lock ./requirements-dev.lock
+#20 CACHED
+
+#21 [tools  9/11] COPY scripts/export_openapi.py ./scripts/export_openapi.py
+#21 CACHED
+
+#22 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#22 CACHED
+
+#23 [frontend-deps 2/4] WORKDIR /frontend
+#23 CACHED
+
+#24 [python-base 5/7] RUN pip install -r requirements.lock
+#24 CACHED
+
+#25 [tools  8/11] COPY frontend/ /frontend/
+#25 CACHED
+
+#26 [tools  5/11] RUN pip install -r requirements-dev.lock
+#26 CACHED
+
+#27 [tools  2/11] COPY --from=frontend-deps /usr/local/lib/node_modules /usr/local/lib/node_modules
+#27 CACHED
+
+#28 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#28 CACHED
+
+#29 [tools  6/11] COPY --from=frontend-deps /frontend/node_modules /frontend/node_modules
+#29 CACHED
+
+#30 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#30 CACHED
+
+#31 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#31 CACHED
+
+#32 [tools  1/11] COPY --from=frontend-deps /usr/local/bin/node /usr/local/bin/node
+#32 CACHED
+
+#33 [tools 10/11] COPY tests/fixtures/expiry_cases.csv /fixtures/expiry_cases.csv
+#33 CACHED
+
+#34 [tools 11/11] COPY backend/ ./
+#34 DONE 0.1s
+
+#35 exporting to image
+#35 exporting layers 0.1s done
+#35 exporting manifest sha256:d7348a097eb0c354ed30f684271678c79e5a6bbc4b56f651e6eb529f14a27c1e 0.0s done
+#35 exporting config sha256:33be4fddac022a44d4720efdb52bd23605301214436e09506cf5b212b3a17d62 0.0s done
+#35 exporting attestation manifest sha256:47f6cda290825217dde0860882455b9e5bc0ff2d4d53fd2214b51ec838e139f3 0.0s done
+#35 exporting manifest list sha256:567b0e0bf8a466e488cf6bb5d5595b1b9b89b417fdde40fbcc03ea2390f063b1 0.0s done
+#35 naming to docker.io/library/enderchest-tools:latest done
+#35 unpacking to docker.io/library/enderchest-tools:latest 0.1s done
+#35 DONE 0.3s
+
+#36 resolving provenance for metadata file
+#36 DONE 0.0s
+ Image enderchest-tools:latest Built 
+ Container enderchest-test-tools-run-84ebecb5df09 Creating 
+ Container enderchest-test-tools-run-84ebecb5df09 Created 
+✨ openapi-typescript 7.13.0
+🚀 /frontend-host/openapi.json → /frontend-host/src/api/schema.d.ts [271ms]

@@ -3,38 +3,44 @@
 Read by every new chat right after `CLAUDE.md` section 0. Rewrite it at the end of every chat; keep it under 60 lines. The chat's own entry goes in `sessions.md`.
 
 ## Resume here
-- Zip: `phase9v.zip`, unzipped into `D:\Projects\Enderchest-final\Enderchest` on branch `main` (created from `phase-9-verify`, which carries every phase). Never unzip over an existing folder (D-067).
-- **Chain of sessions, no human in the loop (D-091, D-097):** the next and last step is the **final merge on `main`**: the delivery-video comparison (owner, 2026-10-28), rebuild, every suite, bug sweep, then "status: done". Keep `D:\Projects\enderchest-chain-state.txt` current. If `start_session` is refused, message the top session "Enderchest phase 0 foundation" (local_c7445ab0-a8d2-4c45-8f9f-39bd2b0ce33f).
-- Last built phase: **Phase 9** (the narrow Gemini assistant). **Verification: done for phase 9, PASS WITH NOTES** (`docs/reviews/phase-9-verification.md`).
-- Resume check: `git log --oneline -3` shows `pack: phase 9 verification (phase9v zip): ...` on top.
+- Folder: `D:\Projects\Enderchest-final\Enderchest`, branch `main`. Remote `github`: `mohammedhasanraza007/Enderchest` (private; the owner can make it public in GitHub's settings).
+- All phases are built and verified, and the final merge's fixes are in. **Next task: finish the owner's full click-through of every control.** The workflow's four testers stopped at the weekly usage limit (2026-10-28) before writing any report, so no result exists. The prompt is `D:\Projects\final-ux-next-prompt.txt`; steps 2 and 3 are done, step 4 onward is not. `status: done` in the chain file, `ENDERCHEST-CHAIN-DONE.txt` and deleting the keeper task wait for that pass (the owner: "only then work done").
+- Verification: phase 9 PASS WITH NOTES (`docs/reviews/phase-9-verification.md`). The final merge's fixes have tests but no separate verification report.
+- Resume check: `git log --oneline -3` shows the `pack: final merge` commit on or near the top.
 
-## What the Phase 9 verification changed
-- D-137: the first Gemini step of a turn must call a tool (`ANY`); the post-check replaces an answer from a turn with no tool call (`no_tool`). `services/assistant.py`, `services/assistant_check.py`.
-- `integrations/gemini/client.converse` refuses content that cannot go back as strict JSON (NaN, Infinity): 502 in plain words, not a 500.
-- `frontend/src/lib/assistant.ts`: a damaged stored conversation starts empty instead of crashing the page.
-- New tests: `backend/tests/unit/test_phase9_verification_rules.py`, `backend/tests/integration/test_phase9_verification.py`, `tests/e2e/phase9-verification.spec.ts`. Failure kinds F-043 to F-045.
-- Notes left (minor): N1 lexical post-check limit; N2 privacy line wording (owner's call, D-135); N3 word search matches attribute values; N4 bare 8-character ids not checked; N5 selected tab is the shell's pill, not cream.
+## What the final merge changed
+- D-138: the save delivery follows the owner's video, compressed (`docs/reviews/delivery-video-comparison.md`).
+- D-139: a pasted Gemini key is accepted in any shape Google could issue (the owner's real key was refused).
+- D-140: word search also matches notes; the assistant is told how to answer a price question.
+- D-141: a money question shows the named items' saved prices under the answer; prices still never go to Gemini.
+- D-142, probe 29: installs on any drive, folder or Windows user name. `build.bat` crashed on a `)` in the user name and wrote `.env` in the old code page.
+- Phase 6 N4: an unexpected error no longer ends the embedding loop.
+- `release/`: the file list (`files.txt`) and README of the slim release zip. The root README is now the GitHub one, with images in `docs/images/`; the old pack README is `docs/history/README-pack-v5.1.md`.
 
-## Results (`docs/logs/raw/phase-9v/`)
-- lint clean; unit 296 + vitest 120; integration 359; e2e 179 + 3; probes 1 to 28 (one log each, all PASS). Shots looked at: `raw/phase-9v/shots/`.
+## Results (`docs/logs/raw/final/`)
+- `lint.log`, `unit.log`, `integration.log` exit 0. `e2e.log`: 175 passed, 6 failed.
+- Five failures were my own `delivery-shots.spec.ts` leaving the test clock on 16 October (fixed); `e2e-rerun-lifecycle.log` 8 passed.
+- The sixth is `coach.spec.ts` frame rate (median gap 49.9 ms, limit 35.4 ms) in the full run; `e2e-rerun-coach.log` 14 passed alone. A timing test that is sensitive to load; not investigated further. The whole e2e suite has not been re-run in one go since the clock fix.
+- Probes 1 to 29: see `exit-codes.txt` and `probe-N.log`.
+- Drive check (`raw/final-ux/`): real `build.bat`, `run.bat`, `backup.bat`, `stop.bat` from `C:\Ender Test (C drive)` with backups on D:, and from a virtual `Z:`. Passed. `restore.bat`'s prompts could not be driven (Docker holds redirected input during its listing), so its prompt path was not run here.
 
-## Next steps (final merge, fresh session)
-1. Follow `D:\Projects\final-next-prompt.txt`.
-2. Delivery video: the study and frame sheets are in the shared notes folder (`delivery-video-study.md`, `delivery-video/`); compare with `Delivery.tsx`, fix the gaps with D-lines and tests.
-3. Rebuild, every suite into `docs/logs/raw/final/`, bug sweep of the verification notes, zip `final.zip`, chain "done", delete the keeper task, ask the owner to run /design-sync.
+## Stacks and folders left from the tests (test data only; the owner may remove them)
+- Running: `enderchest-ux` on 8472 (the owner's test copy, `D:\Projects\Enderchest-release-ux-4`, holds the owner's real Gemini key in its own volume `enderchest_ux_data`). Stopped: `enderchest-uxt1` to `uxt4` (ports 8473 to 8476), `enderchest-uxc` (8477, `C:\Ender Test (C drive)`).
+- Volumes `enderchest_uxt_data_1` to `4`, `enderchest_uxc_data`. Backup folders `C:\Users\Admin\Enderchest-UX-Backups`, `Enderchest-UXT-Backups-1` to `4`, `D:\Projects\Ender UX Backups on D`. Zips `D:\Projects\enderchest-release*.zip`. Scratch: `D:\Projects\Ender Path Test (x86) & Co`.
+- The isolation method: in an unzipped copy only, `.env` with its own port, backup folder and `COMPOSE_PROJECT_NAME`, plus a `compose.override.yaml` renaming the volume. Check `docker compose config` before running anything.
 
 ## Owner runs next
-1. **Real Gemini check (you asked to test the real API):** put your key in Settings → Gemini or set `GEMINI_API_KEY` in your shell, then run:
-   `docker run --rm -e GEMINI_API_KEY -v <folder>\Enderchest\backend:/app -w /app enderchest-tools:latest pytest -q -s tests/live`
-   Phase 9 gates 1 to 3 with real answers and the real bad-key message stay BLOCKED until then.
-2. In the app: Settings → Gemini → paste the key, switch on **Use the assistant**, then open **Assistant** and ask "What's expiring this week?" and "Do I have a drill?".
-3. Save the assistant reference image you sent in chat (2026-10-28) as `docs/design/reference-assistant.png`.
-4. Screenshot approval of `/assistant` (`docs/logs/raw/phase-9v/shots/`, dark and light, 1280 and 1024).
-5. Decide the privacy line (note N2): keep "Notes, photos and prices stay on this laptop." or use "The assistant never sends notes, photos or prices."
-6. Still open from earlier phases: `build.bat` then `run.bat`; Phase 8: 60 fps, light mode and truck approval; Phase 7 and 6 gates; screenshot approval for Phases 1 to 8; acceptance runs; `backup.bat`/`restore.bat` once; `test.bat bakeoff`.
+1. Live app: 8470 still runs the old image (schema 1) with the real profile, and has not been upgraded. Run `backup.bat`, then `build.bat` and `run.bat` from a clean copy, and check the profile survived.
+2. `restore.bat` once on real prompts.
+3. Real Gemini: `docker run --rm -e GEMINI_API_KEY -v <folder>\Enderchest\backend:/app -w /app enderchest-tools:latest pytest -q -s tests/live`. Phase 9 gates 1 to 3 stay BLOCKED until then (one real question and the price line were seen working on 8472).
+4. Save the assistant reference image as `docs/design/reference-assistant.png`; screenshot approval of `/assistant` and the delivery (`docs/logs/raw/final/shots-delivery/`).
+5. Decide the privacy line (phase 9 N2), and whether the repository goes public (no licence chosen yet).
+6. Still open from earlier phases: Phase 8 60 fps, light mode and truck approval; Phase 7 and 6 gates; screenshot approval for Phases 1 to 8; acceptance runs; `test.bat bakeoff`.
+7. After the click-through: run /design-sync in the merged main folder `D:\Projects\Enderchest-final\Enderchest`.
 
 ## How to work on this laptop
 - Ryzen 5 5500, 16 GB, RX 6600 LE: small CPU models only. Never touch the live stack (127.0.0.1:8470) except read-only GETs; the test stack is 8471.
-- Quick backend loop: `docker run --rm -v <repo>/backend:/app -w /app enderchest-tools:latest pytest …` (from PowerShell; add `MSYS_NO_PATHCONV=1` from Git Bash).
-- Run `test.bat` through `cmd /c "<full path>\test.bat <what> > <full path>\file 2>&1"`; one probe per `-Only`. Run a loop of suites inline in PowerShell: a script started with `-ExecutionPolicy Bypass` is refused by the permission classifier. A targeted e2e: `docker compose -f compose.test.yaml --profile e2e run --rm e2e npx playwright test <spec names>` after building `app` and `e2e` (specs are baked into the e2e image).
-- Edit with the editor tools, never shell here-documents (F-035). Prettier for tests: pass `--config /repo/frontend/.prettierrc.json` only to new files (older specs use a wider style).
+- Do not build next to a running suite: CPU contention times tests out. The test clock outlives `resetApp`: a spec that sets it must put it back.
+- Computer use cannot click in browsers; use the built-in browser, which draws only while the Claude window is visible.
+- Run `test.bat` through `cmd /c "<full path>\test.bat <what> > <full path>\file 2>&1"`; one probe per `-Only`. A targeted e2e: `docker compose -f compose.test.yaml --profile e2e run --rm e2e npx playwright test <spec names>` after building `app` and `e2e`.
+- Edit with the editor tools, never shell here-documents (F-035).

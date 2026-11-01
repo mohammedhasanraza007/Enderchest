@@ -9,6 +9,11 @@ import { loadFixture, post, resetApp, saveProfile } from "./helpers";
 const SHOTS = "/test-results/shots-delivery";
 const BEATS = [0.15, 0.3, 0.38, 0.5, 0.66, 0.8, 0.93];
 
+// The test clock outlives a reset: put it back, or the specs after this one see the wrong day.
+test.afterEach(async ({ request }) => {
+  await post(request, "/api/v1/test/clock", { now: new Date().toISOString() });
+});
+
 test("the save delivery, paused at each beat, dark and light", async ({ page, request }) => {
   mkdirSync(SHOTS, { recursive: true });
   for (const theme of ["dark", "light"] as const) {

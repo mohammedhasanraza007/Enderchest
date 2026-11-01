@@ -1,0 +1,118 @@
+Enderchest build. Safe to run again at any time; it never deletes anything.
+The data volume already exists. Left as it is.
+ Image enderchest-app:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 573B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB 0.0s done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 ...
+
+#4 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 1.6s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/node:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/python:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 1.2s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 1.2s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B 0.0s done
+#10 DONE 0.0s
+
+#11 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#11 DONE 0.0s
+
+#12 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f
+#12 resolve docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f 0.0s done
+#12 DONE 0.0s
+
+#13 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+#13 resolve docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da 0.0s done
+#13 DONE 0.0s
+
+#14 [internal] load build context
+#14 transferring context: 13.34kB 0.0s done
+#14 DONE 0.0s
+
+#15 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#15 CACHED
+
+#16 [frontend-deps 2/4] WORKDIR /frontend
+#16 CACHED
+
+#17 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#17 CACHED
+
+#18 [frontend-build 2/3] COPY frontend/ ./
+#18 CACHED
+
+#19 [frontend-build 3/3] RUN npm run build
+#19 CACHED
+
+#20 [frontend-build 1/3] COPY assets/logo /assets/logo
+#20 CACHED
+
+#21 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#21 CACHED
+
+#22 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#22 CACHED
+
+#23 [python-base 3/7] WORKDIR /app
+#23 CACHED
+
+#24 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#24 CACHED
+
+#25 [python-base 5/7] RUN pip install -r requirements.lock
+#25 CACHED
+
+#26 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#26 CACHED
+
+#27 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#27 CACHED
+
+#28 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#28 CACHED
+
+#29 exporting to image
+#29 exporting layers done
+#29 exporting manifest sha256:236d749aa3385e0c5d563d988493c3d05ef68eddd924fcd94846fc68b12d79c2 done
+#29 exporting config sha256:cab748132ae03ac755c138c46029082680a3af7f2d63376a1ea2c6ab0f0ab4cd done
+#29 exporting attestation manifest sha256:7424f388b64d0e638b983bf55bcb24cc88c88597f28467f2e78489e2bc488e7a
+#29 exporting attestation manifest sha256:7424f388b64d0e638b983bf55bcb24cc88c88597f28467f2e78489e2bc488e7a 0.0s done
+#29 exporting manifest list sha256:87410ac1635a7bad37c6828738cd23d5685784b0e07f707edd1663a027fe0396 0.0s done
+#29 naming to docker.io/library/enderchest-app:latest done
+#29 unpacking to docker.io/library/enderchest-app:latest 0.0s done
+#29 DONE 0.1s
+
+#30 resolving provenance for metadata file
+#30 DONE 0.0s
+ Image enderchest-app:latest Built 
+Build finished. Next: run.bat

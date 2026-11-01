@@ -15,7 +15,7 @@ Owner's request (2026-10-28): compare the owner's Gemini delivery video with the
 
 ## Not copied (rules)
 - The 10 s length: the beats are compressed to 1.15 s (under 1.2 s, D-130); any input finishes it.
-- The logo glow (CLAUDE.md 7.3), the nav morphing and the made-up truck label.
+- The logo glow (CLAUDE.md section 7, rule 3), the nav morphing and the made-up truck label.
 - The arrowhead creeping up the trail: the creeping dashes carry the same idea without another shape.
 - The trail staying on screen: it fades with the trip; nothing stays behind (never stacks).
 - G5: the toast stays immediate. It is the save confirmation; under reduced motion there is no trip to wait for, and the form closes and the screen can change at once.

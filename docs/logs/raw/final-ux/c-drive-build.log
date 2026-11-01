@@ -1,0 +1,519 @@
+Enderchest build. Safe to run again at any time; it never deletes anything.
+The data volume already exists. Left as it is.
+ Image enderchest-app:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 617B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 6.16kB 0.0s done
+#2 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 ...
+
+#4 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#3 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 2.0s
+
+#5 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#5 resolve docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e 0.0s done
+#5 CACHED
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 ...
+
+#7 [auth] library/python:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#8 [auth] library/node:pull token for registry-1.docker.io
+#8 DONE 0.0s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 ...
+
+#6 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#6 DONE 1.8s
+
+#9 [internal] load metadata for docker.io/library/python:3.13-slim-bookworm
+#9 DONE 2.4s
+
+#10 [internal] load .dockerignore
+#10 transferring context: 320B done
+#10 DONE 0.0s
+
+#11 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#11 DONE 0.0s
+
+#12 [frontend-deps 1/4] FROM docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da
+#12 resolve docker.io/library/node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da 0.0s done
+#12 DONE 0.1s
+
+#13 [frontend-deps 2/4] WORKDIR /frontend
+#13 DONE 0.1s
+
+#14 [internal] load build context
+#14 transferring context: 1.52MB 0.1s done
+#14 DONE 0.1s
+
+#15 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f
+#15 resolve docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f 0.0s done
+#15 ...
+
+#11 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#11 CACHED
+
+#16 [frontend-deps 3/4] COPY frontend/package.json frontend/package-lock.json ./
+#16 DONE 0.0s
+
+#15 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f
+#15 sha256:7e143ada11afde237a069ca6ba1887c691cf44e992e77da323c9139f47b8acd2 0B / 251B 0.2s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 0B / 12.61MB 0.2s
+#15 sha256:6826f8529239b0ebfe5dd429a795c8c4989724db6ae9059fa9f03dda8c31f8f5 0B / 3.34MB 0.2s
+#15 sha256:7e143ada11afde237a069ca6ba1887c691cf44e992e77da323c9139f47b8acd2 251B / 251B 0.3s done
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 4.19MB / 12.61MB 0.8s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 7.34MB / 12.61MB 0.9s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 8.39MB / 12.61MB 1.1s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 9.44MB / 12.61MB 1.2s
+#15 sha256:6826f8529239b0ebfe5dd429a795c8c4989724db6ae9059fa9f03dda8c31f8f5 1.05MB / 3.34MB 1.2s
+#15 sha256:6826f8529239b0ebfe5dd429a795c8c4989724db6ae9059fa9f03dda8c31f8f5 3.15MB / 3.34MB 1.4s
+#15 sha256:6826f8529239b0ebfe5dd429a795c8c4989724db6ae9059fa9f03dda8c31f8f5 3.34MB / 3.34MB 1.6s done
+#15 extracting sha256:6826f8529239b0ebfe5dd429a795c8c4989724db6ae9059fa9f03dda8c31f8f5
+#15 extracting sha256:6826f8529239b0ebfe5dd429a795c8c4989724db6ae9059fa9f03dda8c31f8f5 0.2s done
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 10.49MB / 12.61MB 4.6s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 11.53MB / 12.61MB 5.1s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 12.61MB / 12.61MB 5.9s
+#15 sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 12.61MB / 12.61MB 5.9s done
+#15 extracting sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7
+#15 extracting sha256:2ed7a1a27c6d053227e15859d704914451dfa1f77792489b54ecc64103fe9db7 0.7s done
+#15 DONE 6.7s
+
+#17 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#17 ...
+
+#15 [python-base 1/7] FROM docker.io/library/python:3.13-slim-bookworm@sha256:281d39ff02e3b389401586134ff9e6572954687822a58055ec07a60ded4e0b7f
+#15 extracting sha256:7e143ada11afde237a069ca6ba1887c691cf44e992e77da323c9139f47b8acd2 0.0s done
+#15 DONE 6.7s
+
+#18 [python-base 2/7] RUN useradd --create-home --uid 10001 enderchest     && mkdir -p /data /backups /app     && chown enderchest:enderchest /data /backups /app
+#18 DONE 0.5s
+
+#17 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#17 ...
+
+#19 [python-base 3/7] WORKDIR /app
+#19 DONE 0.0s
+
+#20 [python-base 4/7] COPY backend/requirements.lock ./requirements.lock
+#20 DONE 0.0s
+
+#21 [python-base 5/7] RUN pip install -r requirements.lock
+#21 1.657 Collecting annotated-doc==0.0.5 (from -r requirements.lock (line 1))
+#21 1.866   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#21 1.917 Collecting annotated-types==0.8.0 (from -r requirements.lock (line 2))
+#21 1.970   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#21 2.144 Collecting anyio==4.15.1 (from -r requirements.lock (line 3))
+#21 2.194   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#21 2.274 Collecting certifi==2026.10.23 (from -r requirements.lock (line 4))
+#21 2.326   Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+#21 3.031 Collecting charset-normalizer==3.5.2 (from -r requirements.lock (line 5))
+#21 3.082   Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+#21 3.229 Collecting click==8.5.0 (from -r requirements.lock (line 6))
+#21 3.278   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#21 3.362 Collecting colorlog==6.12.0 (from -r requirements.lock (line 7))
+#21 3.414   Downloading colorlog-6.12.0-py3-none-any.whl.metadata (11 kB)
+#21 3.966 Collecting fastapi==0.157.0 (from -r requirements.lock (line 8))
+#21 4.015   Downloading fastapi-0.157.0-py3-none-any.whl.metadata (26 kB)
+#21 4.098 Collecting flatbuffers==25.12.19 (from -r requirements.lock (line 9))
+#21 4.150   Downloading flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+#21 4.205 Collecting h11==0.16.0 (from -r requirements.lock (line 10))
+#21 4.254   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#21 4.352 Collecting httpcore==1.0.9 (from -r requirements.lock (line 11))
+#21 4.402   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#21 4.517 Collecting httpx==0.28.1 (from -r requirements.lock (line 12))
+#21 4.566   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#21 4.640 Collecting idna==3.20 (from -r requirements.lock (line 13))
+#21 4.691   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+#21 5.779 Collecting numpy==2.5.4 (from -r requirements.lock (line 14))
+#21 5.830   Downloading numpy-2.5.4-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+#21 5.945 Collecting omegaconf==2.4.0 (from -r requirements.lock (line 15))
+#21 5.995   Downloading omegaconf-2.4.0-py3-none-any.whl.metadata (4.9 kB)
+#21 6.259 Collecting onnxruntime==1.31.0 (from -r requirements.lock (line 16))
+#21 6.310   Downloading onnxruntime-1.31.0-cp313-cp313-manylinux_2_28_x86_64.whl.metadata (5.7 kB)
+#21 6.519 Collecting opencv-python-headless==5.0.0.93 (from -r requirements.lock (line 17))
+#21 6.571   Downloading opencv_python_headless-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl.metadata (19 kB)
+#21 6.657 Collecting opentelemetry-api==1.45.1 (from -r requirements.lock (line 18))
+#21 6.706   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+#21 6.770 Collecting packaging==26.3 (from -r requirements.lock (line 19))
+#21 6.822   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+#21 7.504 Collecting pillow==13.0.0 (from -r requirements.lock (line 20))
+#21 7.554   Downloading pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+#21 7.995 Collecting protobuf==7.36.2 (from -r requirements.lock (line 21))
+#21 8.046   Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+#21 8.148 Collecting pyclipper==1.4.0 (from -r requirements.lock (line 22))
+#21 8.199   Downloading pyclipper-1.4.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (8.6 kB)
+#21 8.504 Collecting pydantic==2.14.1 (from -r requirements.lock (line 23))
+#21 8.554   Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+#21 ...
+
+#17 [frontend-deps 4/4] RUN npm ci --ignore-scripts --no-audit --no-fund
+#17 16.89 
+#17 16.89 added 181 packages in 17s
+#17 16.90 npm notice
+#17 16.90 npm notice New major version of npm available! 10.9.9 -> 12.2.1
+#17 16.90 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#17 16.90 npm notice To update run: npm install -g npm@12.2.1
+#17 16.90 npm notice
+#17 DONE 17.1s
+
+#21 [python-base 5/7] RUN pip install -r requirements.lock
+#21 ...
+
+#22 [frontend-build 1/3] COPY assets/logo /assets/logo
+#22 DONE 0.1s
+
+#23 [frontend-build 2/3] COPY frontend/ ./
+#23 DONE 0.0s
+
+#24 [frontend-build 3/3] RUN npm run build
+#24 0.281 
+#24 0.281 > enderchest-frontend@0.1.0 build
+#24 0.281 > tsc --noEmit && vite build
+#24 0.281 
+#24 5.085 vite v8.3.5 building client environment for production...
+#24 5.102 transforming...
+#24 5.122 
+#24 5.122 /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+#24 5.290 ✓ 2090 modules transformed.
+#24 5.384 rendering chunks...
+#24 5.485 computing gzip size...
+#24 5.495 dist/index.html                                                     1.12 kB │ gzip:   0.58 kB
+#24 5.495 dist/assets/jetbrains-mono-vietnamese-wght-normal-Bt-aOZkq.woff2    7.50 kB
+#24 5.495 dist/assets/jetbrains-mono-greek-wght-normal-Bw9x6K1M.woff2         9.00 kB
+#24 5.495 dist/assets/jetbrains-mono-cyrillic-wght-normal-D73BlboJ.woff2     12.10 kB
+#24 5.495 dist/assets/jetbrains-mono-latin-ext-wght-normal-DBQx-q_a.woff2    15.19 kB
+#24 5.495 dist/assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2           18.22 kB
+#24 5.495 dist/assets/newsreader-vietnamese-opsz-normal-BjhtXyW2.woff2       27.24 kB
+#24 5.495 dist/assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2               36.93 kB
+#24 5.495 dist/assets/jetbrains-mono-latin-wght-normal-B9CIFXIH.woff2        40.40 kB
+#24 5.495 dist/assets/newsreader-latin-ext-opsz-normal-BQn1nviT.woff2        86.60 kB
+#24 5.495 dist/assets/newsreader-latin-opsz-normal-s-izfB6B.woff2           132.00 kB
+#24 5.495 dist/assets/index-C4wKLlN8.css                                     51.21 kB │ gzip:  11.78 kB
+#24 5.495 dist/assets/index-Bk13aeXP.js                                     656.20 kB │ gzip: 204.99 kB
+#24 5.495 
+#24 5.497 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+#24 5.497     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/index.mjs:11:1 [38;5;246m][0m
+#24 5.497     [38;5;246m│[0m
+#24 5.497  [38;5;246m11 │[0m "use client";
+#24 5.497  [38;5;240m   │[0m ──────┬──────  
+#24 5.497  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#24 5.497  [38;5;240m   │[0m 
+#24 5.497  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.497 [38;5;246m────╯[0m
+#24 5.497 
+#24 5.497 [plugin builtin:vite-reporter] 
+#24 5.497 (!) Some chunks are larger than 500 kB after minification. Consider:
+#24 5.497 - Using dynamic import() to code-split the application
+#24 5.497 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#24 5.497 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#24 5.497 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+#24 5.497     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/react-router/dist/development/dom-export.mjs:11:1 [38;5;246m][0m
+#24 5.497     [38;5;246m│[0m
+#24 5.497  [38;5;246m11 │[0m "use client";
+#24 5.497  [38;5;240m   │[0m ──────┬──────  
+#24 5.497  [38;5;240m   │[0m       ╰──────── module level directive may not be preserved
+#24 5.497  [38;5;240m   │[0m 
+#24 5.497  [38;5;240m   │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.497 [38;5;246m────╯[0m
+#24 5.497 
+#24 5.497 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+#24 5.497    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+#24 5.497    [38;5;246m│[0m
+#24 5.497  [38;5;246m1 │[0m "use client";
+#24 5.497  [38;5;240m  │[0m ──────┬──────  
+#24 5.497  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.497  [38;5;240m  │[0m 
+#24 5.497  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.497 [38;5;246m───╯[0m
+#24 5.497 
+#24 5.498 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+#24 5.498    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+#24 5.498    [38;5;246m│[0m
+#24 5.498  [38;5;246m1 │[0m "use client";
+#24 5.498  [38;5;240m  │[0m ──────┬──────  
+#24 5.498  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.498  [38;5;240m  │[0m 
+#24 5.498  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.498 [38;5;246m───╯[0m
+#24 5.498 
+#24 5.498 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+#24 5.498    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+#24 5.498    [38;5;246m│[0m
+#24 5.498  [38;5;246m1 │[0m "use client";
+#24 5.498  [38;5;240m  │[0m ──────┬──────  
+#24 5.498  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.498  [38;5;240m  │[0m 
+#24 5.498  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.498 [38;5;246m───╯[0m
+#24 5.498 
+#24 5.499 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+#24 5.499    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+#24 5.499    [38;5;246m│[0m
+#24 5.499  [38;5;246m1 │[0m "use client";
+#24 5.499  [38;5;240m  │[0m ──────┬──────  
+#24 5.499  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.499  [38;5;240m  │[0m 
+#24 5.499  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.499 [38;5;246m───╯[0m
+#24 5.499 
+#24 5.499 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+#24 5.499    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+#24 5.499    [38;5;246m│[0m
+#24 5.499  [38;5;246m1 │[0m "use client";
+#24 5.499  [38;5;240m  │[0m ──────┬──────  
+#24 5.499  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.499  [38;5;240m  │[0m 
+#24 5.499  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.499 [38;5;246m───╯[0m
+#24 5.499 
+#24 5.499 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+#24 5.499    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+#24 5.499    [38;5;246m│[0m
+#24 5.499  [38;5;246m1 │[0m "use client";
+#24 5.499  [38;5;240m  │[0m ──────┬──────  
+#24 5.499  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.499  [38;5;240m  │[0m 
+#24 5.499  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.499 [38;5;246m───╯[0m
+#24 5.499 
+#24 5.500 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+#24 5.500    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+#24 5.500    [38;5;246m│[0m
+#24 5.500  [38;5;246m1 │[0m "use client";
+#24 5.500  [38;5;240m  │[0m ──────┬──────  
+#24 5.500  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.500  [38;5;240m  │[0m 
+#24 5.500  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.500 [38;5;246m───╯[0m
+#24 5.500 
+#24 5.500 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+#24 5.500    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+#24 5.500    [38;5;246m│[0m
+#24 5.500  [38;5;246m1 │[0m "use client";
+#24 5.500  [38;5;240m  │[0m ──────┬──────  
+#24 5.500  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.500  [38;5;240m  │[0m 
+#24 5.500  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.500 [38;5;246m───╯[0m
+#24 5.500 
+#24 5.500 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+#24 5.500    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+#24 5.500    [38;5;246m│[0m
+#24 5.500  [38;5;246m1 │[0m "use client";
+#24 5.500  [38;5;240m  │[0m ──────┬──────  
+#24 5.500  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.500  [38;5;240m  │[0m 
+#24 5.500  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.500 [38;5;246m───╯[0m
+#24 5.500 
+#24 5.501 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+#24 5.501    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+#24 5.501    [38;5;246m│[0m
+#24 5.501  [38;5;246m1 │[0m "use client";
+#24 5.501  [38;5;240m  │[0m ──────┬──────  
+#24 5.501  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.501  [38;5;240m  │[0m 
+#24 5.501  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.501 [38;5;246m───╯[0m
+#24 5.501 
+#24 5.501 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+#24 5.501    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+#24 5.501    [38;5;246m│[0m
+#24 5.501  [38;5;246m1 │[0m "use client";
+#24 5.501  [38;5;240m  │[0m ──────┬──────  
+#24 5.501  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.501  [38;5;240m  │[0m 
+#24 5.501  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.501 [38;5;246m───╯[0m
+#24 5.501 
+#24 5.501 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+#24 5.501    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+#24 5.501    [38;5;246m│[0m
+#24 5.501  [38;5;246m1 │[0m "use client";
+#24 5.501  [38;5;240m  │[0m ──────┬──────  
+#24 5.501  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.501  [38;5;240m  │[0m 
+#24 5.501  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.501 [38;5;246m───╯[0m
+#24 5.501 
+#24 5.501 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+#24 5.501    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+#24 5.501    [38;5;246m│[0m
+#24 5.501  [38;5;246m1 │[0m "use client";
+#24 5.501  [38;5;240m  │[0m ──────┬──────  
+#24 5.501  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.501  [38;5;240m  │[0m 
+#24 5.501  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.501 [38;5;246m───╯[0m
+#24 5.501 
+#24 5.501 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+#24 5.501    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+#24 5.501    [38;5;246m│[0m
+#24 5.501  [38;5;246m1 │[0m "use client";
+#24 5.501  [38;5;240m  │[0m ──────┬──────  
+#24 5.501  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.501  [38;5;240m  │[0m 
+#24 5.501  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.501 [38;5;246m───╯[0m
+#24 5.501 
+#24 5.502 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+#24 5.502    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+#24 5.502    [38;5;246m│[0m
+#24 5.502  [38;5;246m1 │[0m "use client";
+#24 5.502  [38;5;240m  │[0m ──────┬──────  
+#24 5.502  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.502  [38;5;240m  │[0m 
+#24 5.502  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.502 [38;5;246m───╯[0m
+#24 5.502 
+#24 5.502 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+#24 5.502    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/context.mjs:2:1 [38;5;246m][0m
+#24 5.502    [38;5;246m│[0m
+#24 5.502  [38;5;246m2 │[0m "use client";
+#24 5.502  [38;5;240m  │[0m ──────┬──────  
+#24 5.502  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.502  [38;5;240m  │[0m 
+#24 5.502  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.502 [38;5;246m───╯[0m
+#24 5.502 
+#24 5.502 [33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+#24 5.502    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/lucide-react/dist/esm/Icon.mjs:2:1 [38;5;246m][0m
+#24 5.502    [38;5;246m│[0m
+#24 5.502  [38;5;246m2 │[0m "use client";
+#24 5.502  [38;5;240m  │[0m ──────┬──────  
+#24 5.502  [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+#24 5.502  [38;5;240m  │[0m 
+#24 5.502  [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+#24 5.502 [38;5;246m───╯[0m
+#24 5.502 
+#24 5.503 ✓ built in 417ms
+#24 DONE 5.6s
+
+#21 [python-base 5/7] RUN pip install -r requirements.lock
+#21 10.40 Collecting pydantic_core==2.50.1 (from -r requirements.lock (line 24))
+#21 10.45   Downloading pydantic_core-2.50.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+#21 10.50 Collecting python-multipart==0.0.32 (from -r requirements.lock (line 25))
+#21 10.55   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#21 10.65 Collecting PyYAML==6.0.3 (from -r requirements.lock (line 26))
+#21 10.70   Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#21 11.78 Collecting rapidfuzz==3.14.6 (from -r requirements.lock (line 27))
+#21 11.83   Downloading rapidfuzz-3.14.6-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (12 kB)
+#21 11.89 Collecting rapidocr==3.10.0 (from -r requirements.lock (line 28))
+#21 11.94   Downloading rapidocr-3.10.0-py3-none-any.whl.metadata (1.3 kB)
+#21 12.01 Collecting requests==2.34.2 (from -r requirements.lock (line 29))
+#21 12.06   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+#21 12.12 Collecting segno==1.6.6 (from -r requirements.lock (line 30))
+#21 12.17   Downloading segno-1.6.6-py3-none-any.whl.metadata (7.7 kB)
+#21 12.40 Collecting shapely==2.2.0 (from -r requirements.lock (line 31))
+#21 12.45   Downloading shapely-2.2.0-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (6.7 kB)
+#21 12.50 Collecting six==1.17.0 (from -r requirements.lock (line 32))
+#21 12.56   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#21 12.63 Collecting starlette==1.9.0 (from -r requirements.lock (line 33))
+#21 12.68   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
+#21 12.76 Collecting tqdm==4.70.1 (from -r requirements.lock (line 34))
+#21 12.82   Downloading tqdm-4.70.1-py3-none-any.whl.metadata (57 kB)
+#21 12.90 Collecting typing-inspection==0.4.4 (from -r requirements.lock (line 35))
+#21 12.95   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#21 13.00 Collecting typing_extensions==4.16.0 (from -r requirements.lock (line 36))
+#21 13.06   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#21 13.11 Collecting tzdata==2026.5 (from -r requirements.lock (line 37))
+#21 13.16   Downloading tzdata-2026.5-py2.py3-none-any.whl.metadata (1.4 kB)
+#21 13.22 Collecting urllib3==2.8.0 (from -r requirements.lock (line 38))
+#21 13.28   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+#21 13.36 Collecting uvicorn==0.54.0 (from -r requirements.lock (line 39))
+#21 13.41   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+#21 13.50 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#21 13.56 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#21 13.61 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#21 13.76 Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+#21 13.90 Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+#21 14.11 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#21 14.24 Downloading colorlog-6.12.0-py3-none-any.whl (12 kB)
+#21 14.30 Downloading fastapi-0.157.0-py3-none-any.whl (147 kB)
+#21 14.44 Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+#21 14.50 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#21 14.57 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#21 14.67 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#21 14.76 Downloading idna-3.20-py3-none-any.whl (69 kB)
+#21 14.84 Downloading numpy-2.5.4-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.7 MB)
+#21 21.59    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 2.5 MB/s  0:00:06
+#21 21.64 Downloading omegaconf-2.4.0-py3-none-any.whl (254 kB)
+#21 21.76 Downloading onnxruntime-1.31.0-cp313-cp313-manylinux_2_28_x86_64.whl (23.8 MB)
+#21 26.50    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 23.8/23.8 MB 5.0 MB/s  0:00:04
+#21 26.55 Downloading opencv_python_headless-5.0.0.93-cp37-abi3-manylinux_2_28_x86_64.whl (61.2 MB)
+#21 406.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.2/61.2 MB 96.8 kB/s  0:06:19
+#21 406.7 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#21 407.9 Downloading packaging-26.3-py3-none-any.whl (129 kB)
+#21 410.4 Downloading pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+#21 463.1    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 173.3 kB/s  0:00:52
+#21 463.2 Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+#21 463.5 Downloading pyclipper-1.4.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (972 kB)
+#21 464.3    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 972.1/972.1 kB 1.3 MB/s  0:00:00
+#21 464.3 Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+#21 464.7 Downloading pydantic_core-2.50.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+#21 466.0    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 1.7 MB/s  0:00:01
+#21 466.1 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#21 466.1 Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)
+#21 466.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 801.6/801.6 kB 2.0 MB/s  0:00:00
+#21 466.6 Downloading rapidfuzz-3.14.6-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (3.2 MB)
+#21 468.0    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 2.2 MB/s  0:00:01
+#21 468.1 Downloading rapidocr-3.10.0-py3-none-any.whl (27.3 MB)
+#21 472.5    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 27.3/27.3 MB 6.3 MB/s  0:00:04
+#21 472.6 Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+#21 472.6 Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+#21 472.7 Downloading segno-1.6.6-py3-none-any.whl (76 kB)
+#21 472.7 Downloading shapely-2.2.0-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (2.3 MB)
+#21 472.9    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 12.6 MB/s  0:00:00
+#21 473.0 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#21 473.0 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
+#21 473.1 Downloading tqdm-4.70.1-py3-none-any.whl (80 kB)
+#21 473.1 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#21 473.2 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#21 473.3 Downloading tzdata-2026.5-py2.py3-none-any.whl (347 kB)
+#21 473.3 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#21 474.7 Installing collected packages: flatbuffers, urllib3, tzdata, typing_extensions, tqdm, six, segno, rapidfuzz, PyYAML, python-multipart, pyclipper, protobuf, pillow, packaging, numpy, idna, h11, colorlog, click, charset-normalizer, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, shapely, requests, pydantic_core, opentelemetry-api, opencv-python-headless, onnxruntime, omegaconf, httpcore, anyio, starlette, rapidocr, pydantic, httpx, fastapi
+#21 484.9 
+#21 484.9 Successfully installed PyYAML-6.0.3 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.10.23 charset-normalizer-3.5.2 click-8.5.0 colorlog-6.12.0 fastapi-0.157.0 flatbuffers-25.12.19 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 numpy-2.5.4 omegaconf-2.4.0 onnxruntime-1.31.0 opencv-python-headless-5.0.0.93 opentelemetry-api-1.45.1 packaging-26.3 pillow-13.0.0 protobuf-7.36.2 pyclipper-1.4.0 pydantic-2.14.1 pydantic_core-2.50.1 python-multipart-0.0.32 rapidfuzz-3.14.6 rapidocr-3.10.0 requests-2.34.2 segno-1.6.6 shapely-2.2.0 six-1.17.0 starlette-1.9.0 tqdm-4.70.1 typing-inspection-0.4.4 typing_extensions-4.16.0 tzdata-2026.5 urllib3-2.8.0 uvicorn-0.54.0
+#21 484.9 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#21 DONE 486.4s
+
+#25 [python-base 6/7] ADD --checksum=sha256:f22797eabf810a75e41de68d378541ebea372122b25c4ce3ef25ff618250c20a     https://huggingface.co/onnx-community/dinov2-small/resolve/main/onnx/model.onnx     /opt/models/dinov2-small.onnx
+#25 DONE 0.4s
+
+#26 [python-base 7/7] RUN chmod 0644 /opt/models/dinov2-small.onnx
+#26 DONE 0.7s
+
+#27 [runtime 1/2] COPY --chown=enderchest:enderchest backend/app ./app
+#27 DONE 0.1s
+
+#28 [runtime 2/2] COPY --from=frontend-build --chown=enderchest:enderchest /frontend/dist ./frontend-dist
+#28 DONE 0.1s
+
+#29 exporting to image
+#29 exporting layers
+#29 exporting layers 14.4s done
+#29 exporting manifest sha256:236d749aa3385e0c5d563d988493c3d05ef68eddd924fcd94846fc68b12d79c2 0.0s done
+#29 exporting config sha256:cab748132ae03ac755c138c46029082680a3af7f2d63376a1ea2c6ab0f0ab4cd 0.0s done
+#29 exporting attestation manifest sha256:a1348d9490f49cb29c72a53df2b7d0c48e59c2936296b85e524210a61994a9d6 0.0s done
+#29 exporting manifest list sha256:ebf654038e6930d6e8547ef3bf17a5ffb5dbf99d64ab679439115325aa2397ca 0.0s done
+#29 naming to docker.io/library/enderchest-app:latest done
+#29 unpacking to docker.io/library/enderchest-app:latest
+#29 unpacking to docker.io/library/enderchest-app:latest 7.4s done
+#29 DONE 21.9s
+
+#30 resolving provenance for metadata file
+#30 DONE 0.0s
+ Image enderchest-app:latest Built 
+Build finished. Next: run.bat

@@ -1,0 +1,5 @@
+--- probe 29 ---
+Enderchest build. Safe to run again at any time; it never deletes anything.
+José\Enderchest-Backups. was unexpected at this time.
+PROBE 29: FAIL - build.bat exit 255, backup folder made: False, .env UTF-8 no BOM: False, names the folder: False
+FAILED: 29
