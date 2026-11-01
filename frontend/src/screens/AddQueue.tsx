@@ -9,6 +9,7 @@ import { ErrorState } from "../patterns/ErrorState";
 import { Button, LinkButton } from "../primitives/Button";
 import { GlassCard } from "../primitives/Glass";
 import { Skeleton } from "../primitives/Skeleton";
+import { useToast } from "../primitives/Toast";
 
 // P-07, the review queue: photos taken or uploaded that are not items yet. A draft counts nowhere
 // until it is saved (D-049); closing the browser loses nothing.
@@ -64,6 +65,7 @@ export function AddQueue() {
 
 function DraftRow({ draft }: { draft: Draft }) {
   const refresh = useRefreshInventory();
+  const toast = useToast();
   const timeZone = useProfile().data?.timezone ?? "UTC";
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
@@ -78,6 +80,7 @@ function DraftRow({ draft }: { draft: Draft }) {
     try {
       await api.discardDraft(draft.id);
       await refresh();
+      toast({ message: "Draft discarded." });
     } catch (error) {
       setFailure(error instanceof Error ? error.message : "Something went wrong.");
       setBusy(false);

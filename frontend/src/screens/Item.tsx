@@ -263,6 +263,7 @@ function ItemView({ item }: { item: ItemDetail }) {
       />
       <ItemFormSheet
         open={duplicating}
+        duplicate
         onClose={() => setDuplicating(false)}
         initial={{ ...valuesFromItem(item), name: `${item.name} (copy)` }}
         onSaved={(made) => navigate(`/items/${made.public_id}`)}

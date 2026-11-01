@@ -17,15 +17,20 @@ import { useToast } from "../primitives/Toast";
 export function SavingSheet({
   item,
   onClose,
+  onRecorded,
 }: {
   item: { public_id: string; name: string; price_paise: number | null } | null;
   onClose: () => void;
+  /** True once this item's saving is recorded, false if it is then undone. */
+  onRecorded?: (publicId: string, recorded: boolean) => void;
 }) {
   // The sheet stays mounted so closing it calls dialog.close(), which returns focus to the
   // button that opened it; the form inside starts fresh for each item.
   return (
     <Sheet open={item !== null} onClose={onClose} title="I didn't buy it">
-      {item ? <SavingForm key={item.public_id} item={item} onClose={onClose} /> : null}
+      {item ? (
+        <SavingForm key={item.public_id} item={item} onClose={onClose} onRecorded={onRecorded} />
+      ) : null}
     </Sheet>
   );
 }
@@ -33,9 +38,11 @@ export function SavingSheet({
 function SavingForm({
   item,
   onClose,
+  onRecorded,
 }: {
   item: { public_id: string; name: string; price_paise: number | null };
   onClose: () => void;
+  onRecorded?: (publicId: string, recorded: boolean) => void;
 }) {
   const [price, setPrice] = useState(paiseToInput(item.price_paise));
   const [note, setNote] = useState("");
@@ -59,11 +66,16 @@ function SavingForm({
         key,
       );
       await refresh();
+      onRecorded?.(item.public_id, true);
       onClose();
       toast({
         message: `${formatRupees(parsed.paise)} saved on ${item.name}.`,
         actionLabel: "Undo",
-        onAction: () => void api.undo(done.event_id).then(refresh),
+        onAction: () =>
+          void api.undo(done.event_id).then(() => {
+            onRecorded?.(item.public_id, false);
+            return refresh();
+          }),
       });
     } catch (error) {
       setGeneral(error instanceof Error ? error.message : "The saving could not be recorded.");

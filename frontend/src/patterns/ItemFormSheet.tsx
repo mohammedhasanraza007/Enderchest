@@ -23,8 +23,10 @@ interface ItemFormSheetProps {
   onClose: () => void;
   /** Present when editing; the sheet then sends only what changed. */
   editing?: ItemDetail;
-  /** The starting values for a new item (a duplicate); empty when left out. */
+  /** The starting values for a new item; empty when left out. */
   initial?: ItemFormValues;
+  /** `initial` is a copy of an item, not just a head start on a new one. */
+  duplicate?: boolean;
   onSaved: (item: ItemDetail) => void;
 }
 
@@ -33,7 +35,7 @@ export function ItemFormSheet(props: ItemFormSheetProps) {
   return props.open ? <OpenSheet {...props} /> : null;
 }
 
-function OpenSheet({ onClose, editing, initial, onSaved }: ItemFormSheetProps) {
+function OpenSheet({ onClose, editing, initial, duplicate, onSaved }: ItemFormSheetProps) {
   const [start] = useState<ItemFormValues>(() => initial ?? emptyValues());
   const [values, setValues] = useState<ItemFormValues>(start);
   const [touched, setTouched] = useState<Set<string>>(new Set());
@@ -103,7 +105,7 @@ function OpenSheet({ onClose, editing, initial, onSaved }: ItemFormSheetProps) {
     });
   }
 
-  const title = editing ? `Edit ${editing.name}` : initial ? "Duplicate item" : "Add an item";
+  const title = editing ? `Edit ${editing.name}` : duplicate ? "Duplicate item" : "Add an item";
   return (
     <>
       <Sheet open onClose={close} title={title}>

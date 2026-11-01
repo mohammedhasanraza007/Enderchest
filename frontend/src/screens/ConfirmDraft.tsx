@@ -54,6 +54,14 @@ export function ConfirmDraft() {
     );
   }
   if (draft.isError) {
+    // Retry can never find a draft that does not exist: offer the way back instead.
+    if (draft.error instanceof ApiError && draft.error.status === 404) {
+      return (
+        <GlassCard title="That draft does not exist" headingLevel={1}>
+          <LinkButton to="/add">Back to the review list</LinkButton>
+        </GlassCard>
+      );
+    }
     return (
       <GlassCard>
         <ErrorState message={draft.error.message} onRetry={() => void draft.refetch()} />
@@ -212,6 +220,7 @@ function ConfirmForm({ draft }: { draft: Draft }) {
     try {
       await api.discardDraft(draft.id);
       await refresh();
+      toast({ message: "Draft discarded." });
       navigate("/add");
     } catch (error) {
       setGeneral(error instanceof Error ? error.message : "Something went wrong.");

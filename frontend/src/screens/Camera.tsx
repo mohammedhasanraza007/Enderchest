@@ -297,6 +297,7 @@ function ScanControls({
 }) {
   const navigate = useNavigate();
   const [message, setMessage] = useState("Hold a printed label in front of the camera.");
+  const [failure, setFailure] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
   const [busy, setBusy] = useState(false);
   const handling = useRef(false);
@@ -305,12 +306,17 @@ function ScanControls({
   const open = useCallback(
     async (code: string) => {
       handling.current = true;
+      setFailure(null);
       try {
         const item = await api.lookup(code);
         navigate(`/items/${item.public_id}`);
       } catch (error) {
-        setMessage(
-          error instanceof ApiError ? error.message : "The lookup did not work. Try again.",
+        setFailure(
+          error instanceof ApiError && error.status === 404
+            ? "No item with that ID."
+            : error instanceof ApiError
+              ? error.message
+              : "The lookup did not work. Try again.",
         );
       } finally {
         handling.current = false;
@@ -357,7 +363,8 @@ function ScanControls({
   return (
     <div className="camera-controls">
       <InnerPanel role="status" className="scan-status">
-        {live ? message : "Scanning needs the camera. You can still type the ID below."}
+        {failure ??
+          (live ? message : "Scanning needs the camera. You can still type the ID below.")}
       </InnerPanel>
       <form className="inline-add" onSubmit={(event) => void submit(event)}>
         <Input

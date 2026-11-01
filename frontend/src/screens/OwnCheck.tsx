@@ -11,6 +11,7 @@ import { ItemFormSheet } from "../patterns/ItemFormSheet";
 import { ItemPhoto } from "../patterns/ItemVisuals";
 import { SavingSheet } from "../patterns/SavingSheet";
 import { Button, LinkButton } from "../primitives/Button";
+import { Chip } from "../primitives/Chip";
 import { InnerPanel } from "../primitives/Glass";
 import { Input } from "../primitives/Input";
 import { StatusChip } from "../primitives/StatusChip";
@@ -195,6 +196,7 @@ function Results({
 }) {
   const [hidden, setHidden] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState<CheckCandidate | null>(null);
+  const [recorded, setRecorded] = useState<Set<string>>(new Set());
   const shown = result.candidates.filter((candidate) => !hidden.has(candidate.public_id));
 
   return (
@@ -231,7 +233,11 @@ function Results({
                 <span className="own-why">{whyLine(candidate.reasons)}</span>
               </div>
               <div className="chip-row">
-                <Button onClick={() => setSaving(candidate)}>I didn't buy it</Button>
+                {recorded.has(candidate.public_id) ? (
+                  <Chip>Saving recorded</Chip>
+                ) : (
+                  <Button onClick={() => setSaving(candidate)}>I didn't buy it</Button>
+                )}
                 <LinkButton variant="secondary" to={`/items/${candidate.public_id}`}>
                   Open item
                 </LinkButton>
@@ -252,6 +258,14 @@ function Results({
         onClose={() => {
           setSaving(null);
         }}
+        onRecorded={(publicId, isRecorded) =>
+          setRecorded((now) => {
+            const next = new Set(now);
+            if (isRecorded) next.add(publicId);
+            else next.delete(publicId);
+            return next;
+          })
+        }
       />
     </section>
   );
