@@ -1,4 +1,20 @@
 @echo off
+REM The work is in :main, so that every "exit /b" comes back here and a double-clicked window stays
+REM open to show a problem. A good start closes by itself: the browser has opened.
+call :main %*
+set "CODE=%errorlevel%"
+if not "%CODE%"=="0" call :hold
+exit /b %CODE%
+
+:hold
+if defined ENDERCHEST_NO_PAUSE exit /b 0
+setlocal enabledelayedexpansion
+for %%A in (!cmdcmdline!) do if /i "%%~A"=="/c" set "DOUBLE_CLICKED=1"
+if defined DOUBLE_CLICKED pause
+endlocal
+exit /b 0
+
+:main
 REM Before delayed expansion: it would eat a "!" in the folder name.
 cd /d "%~dp0"
 setlocal enabledelayedexpansion

@@ -16,7 +16,7 @@ try {
     foreach ($dir in @($folder, $user, $stand)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
     Copy-Item -LiteralPath (Join-Path $script:Root 'build.bat') -Destination $folder
     # An .exe: a batch file that runs a .cmd without "call" would never come back from it.
-    Add-Type -TypeDefinition 'public class P { public static int Main() { return 0; } }' `
+    Add-Type -TypeDefinition 'public class P { public static int Main() { return System.Environment.GetEnvironmentVariable("STAND_IN_FAILS") == "1" ? 1 : 0; } }' `
         -OutputAssembly (Join-Path $stand 'docker.exe') -OutputType ConsoleApplication
     $env:USERPROFILE = $user
     $env:PATH = "$stand;$savedPath"
@@ -39,8 +39,28 @@ try {
     }
     $wanted = 'ENDERCHEST_BACKUP_DIR=' + ($backups -replace '\\', '/')
     $named = ($text -split "`r?`n") -contains $wanted
-    $ok = ($code -eq 0) -and $made -and $noBom -and $named
-    [void](Result 29 $ok "build.bat exit $code, backup folder made: $made, .env UTF-8 no BOM: $noBom, names the folder: $named")
+
+    # D-143: a failure keeps a double-clicked window open and keeps its exit code. A piped line
+    # stands in for the key, and `cmd /c` looks like a double click to the script.
+    $env:USERPROFILE = $user
+    $env:PATH = "$stand;$savedPath"
+    $env:STAND_IN_FAILS = '1'
+    Remove-Item Env:ENDERCHEST_NO_PAUSE -ErrorAction SilentlyContinue
+    $failed = 'y' | cmd /c "`"$bat`" 2>&1"
+    $failCode = $LASTEXITCODE
+    $env:ENDERCHEST_NO_PAUSE = '1'
+    $quiet = cmd /c "`"$bat`" 2>&1"
+    $quietCode = $LASTEXITCODE
+    Remove-Item Env:STAND_IN_FAILS
+    $env:USERPROFILE = $savedProfile
+    $env:PATH = $savedPath
+    $failedText = $failed -join ' '
+    $quietText = $quiet -join ' '
+    $held = ($failCode -eq 1) -and ($failedText -match 'Docker is not running') -and ($failedText -match 'Press any key')
+    $free = ($quietCode -eq 1) -and ($quietText -match 'Docker is not running') -and ($quietText -notmatch 'Press any key')
+
+    $ok = ($code -eq 0) -and $made -and $noBom -and $named -and $held -and $free
+    [void](Result 29 $ok "build.bat exit $code, backup folder made: $made, .env UTF-8 no BOM: $noBom, names the folder: $named; on failure the window waits: $held, and not when told: $free")
 }
 catch {
     [void](Result 29 $false "error: $_")
