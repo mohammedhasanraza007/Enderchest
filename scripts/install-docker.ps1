@@ -20,7 +20,7 @@ function Manual-Steps {
 function Wait-ForDocker {
     if (-not (Test-Path -LiteralPath $desktop)) { return $false }
     Say 'Starting Docker. This can take a few minutes the first time.'
-    Say 'If Docker shows a terms screen, click Accept. You can skip any sign-in or survey.'
+    Say 'If Docker shows a terms screen, click Accept. If it asks you to sign in, a free account is enough.'
     Start-Process -FilePath $desktop
     $deadline = (Get-Date).AddMinutes(5)
     while ((Get-Date) -lt $deadline) {

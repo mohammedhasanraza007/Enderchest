@@ -1,0 +1,355 @@
+﻿docker :  Container enderchest-test-app-1 Running 
+At line:1 char:831
++ ... ct -Last 1; docker compose -f $f --profile e2e run --rm e2e npx playw ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Container ende...-app-1 Running :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ Container enderchest-test-app-1 Waiting 
+ Container enderchest-test-app-1 Healthy 
+ Container enderchest-test-e2e-run-b57b98520819 Creating 
+ Container enderchest-test-e2e-run-b57b98520819 Created 
+[WebServer] 
+[WebServer] /tokens.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/react-router/dist/development/index.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/index.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 ]
+
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+
+
+
+
+
+
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 ]
+[WebServer]    │
+[WebServer]  1 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/react-router/dist/development/dom-export.mjs" may not be preserved when bundling.
+[WebServer]     ╭─[ node_modules/react-router/dist/development/dom-export.mjs:11:1 ]
+[WebServer]     │
+[WebServer]  11 │ "use client";
+[WebServer]     │ ──────┬──────  
+[WebServer]     │       ╰──────── module level directive may not be preserved
+[WebServer]     │ 
+[WebServer]     │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ────╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/context.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+[WebServer] [MODULE_LEVEL_DIRECTIVE] The semantics of the module level directive "use client" in 
+"node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+[WebServer]    ╭─[ node_modules/lucide-react/dist/esm/Icon.mjs:2:1 ]
+[WebServer]    │
+[WebServer]  2 │ "use client";
+[WebServer]    │ ──────┬──────  
+[WebServer]    │       ╰──────── module level directive may not be preserved
+[WebServer]    │ 
+[WebServer]    │ Help: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[WebServer] ───╯
+[WebServer] 
+
+Running 22 tests using 1 worker
+
+[1/22] ../tests/e2e/assistant.spec.ts:61:5 › the nav has an Assistant tab after Savings
+[2/22] ../tests/e2e/assistant.spec.ts:71:5 › with no key it explains and links to the switch, with no input
+[3/22] ../tests/e2e/assistant.spec.ts:80:5 › with a key but the switch off it says so; the switch turns it on
+[4/22] ../tests/e2e/assistant.spec.ts:97:5 › offline: the real backend's error is shown with Retry
+[5/22] ../tests/e2e/assistant.spec.ts:110:5 › an answer links its items, shows the foot line, and survives a visit
+[6/22] ../tests/e2e/assistant.spec.ts:146:5 › an empty send asks for a question; sending disables the input
+[7/22] ../tests/e2e/assistant.spec.ts:170:5 › at 1024 px the six tabs and the name pill fit inside the capsule
+[8/22] ../tests/e2e/dashboard-shots.spec.ts:65:5 › the reference frame on the three storyboard fixtures
+[9/22] ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (dark)
+  1) ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (dark) ───
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('5 of 9 items, 56%')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('5 of 9 items, 56%') with timeout 10000ms
+      - waiting for getByText('5 of 9 items, 56%')
+
+
+      106 |       .getByRole("radio", { name: /On time/ })
+      107 |       .click();
+    > 108 |     await expect(page.getByText("5 of 9 items, 56%")).toBeVisible();
+          |                                                       ^
+      109 |     await page.screenshot({ path: `${SHOTS}/ring-sheet-${theme}-1280.png` });
+      110 |     await page.keyboard.press("Escape");
+      111 |     await page.getByRole("button", { name: /^18 Oct:/ }).focus();
+        at /tests/e2e/dashboard-shots.spec.ts:108:55
+
+    Error Context: ../test-results/playwright/dashboard-shots-dashboard--5e562--road-at-three-widths-dark-/error-context.md
+
+
+[10/22] ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (light)
+  2) ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (light) ──
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('5 of 9 items, 56%')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('5 of 9 items, 56%') with timeout 10000ms
+      - waiting for getByText('5 of 9 items, 56%')
+
+
+      106 |       .getByRole("radio", { name: /On time/ })
+      107 |       .click();
+    > 108 |     await expect(page.getByText("5 of 9 items, 56%")).toBeVisible();
+          |                                                       ^
+      109 |     await page.screenshot({ path: `${SHOTS}/ring-sheet-${theme}-1280.png` });
+      110 |     await page.keyboard.press("Escape");
+      111 |     await page.getByRole("button", { name: /^18 Oct:/ }).focus();
+        at /tests/e2e/dashboard-shots.spec.ts:108:55
+
+    Error Context: ../test-results/playwright/dashboard-shots-dashboard--ea384-road-at-three-widths-light-/error-context.md
+
+
+[11/22] ../tests/e2e/dashboard.spec.ts:30:5 › frame 1: greeting, score, count, card rows and the truck on the 18th
+[12/22] ../tests/e2e/dashboard.spec.ts:62:5 › frames 2 and 3 move the score, the card and the truck
+[13/22] ../tests/e2e/dashboard.spec.ts:79:5 › using an item from the card takes its row out, and Undo brings it back
+[14/22] ../tests/e2e/dashboard.spec.ts:100:5 › the rings open a sheet whose lists match the ring's numbers
+  3) ../tests/e2e/dashboard.spec.ts:100:5 › the rings open a sheet whose lists match the ring's numbers 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'What counts' }).getByText('5 of 9 count: 56')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'What counts' }).getByText('5 of 9 count: 56') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'What counts' }).getByText('5 of 9 count: 56')
+
+
+      108 |   await expect(sheet.locator(".ring-sheet__group").first().locator("li")).toHaveCount(30);
+      109 |   await sheet.getByRole("radio", { name: "On time 56" }).click();
+    > 110 |   await expect(sheet.getByText("5 of 9 count: 56")).toBeVisible();
+          |                                                     ^
+      111 |   await expect(sheet.locator(".ring-sheet__group").first().locator(".ring-sheet__note")).toHaveText(
+      112 |     ["4 days overdue", "3 days overdue", "2 days overdue", "1 day overdue"],
+      113 |   );
+        at /tests/e2e/dashboard.spec.ts:110:53
+
+    Error Context: ../test-results/playwright/dashboard-the-rings-open-a-a5fc6-ts-match-the-ring-s-numbers/error-context.md
+
+
+[15/22] ../tests/e2e/dashboard.spec.ts:118:5 › a day on the road opens what is on it
+[16/22] ../tests/e2e/dashboard.spec.ts:137:5 › an empty inventory shows the real empty dashboard
+[17/22] ../tests/e2e/dashboard.spec.ts:151:5 › more than three reminders: two rows and View all
+[18/22] ../tests/e2e/dashboard.spec.ts:168:5 › loading shows the page's shape; a failed load says so and retries
+[19/22] ../tests/e2e/dashboard.spec.ts:195:5 › the Tasks page has the same road over 30 days
+[20/22] ../tests/e2e/final-ux-dashboard.spec.ts:14:5 › Enter in the task item picker never saves a half-typed item
+[21/22] ../tests/e2e/final-ux-dashboard.spec.ts:37:5 › Enter picks the only match
+[22/22] ../tests/e2e/final-ux-dashboard.spec.ts:49:5 › a dialog does not clip its panel's shadow
+  3 failed
+    ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (dark) ────
+    ../tests/e2e/dashboard-shots.spec.ts:82:7 › dashboard and Tasks road at three widths (light) ───
+    ../tests/e2e/dashboard.spec.ts:100:5 › the rings open a sheet whose lists match the ring's numbers 
+  19 passed (1.3m)
+npm notice
+npm notice New major version of npm available! 11.19.1 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+

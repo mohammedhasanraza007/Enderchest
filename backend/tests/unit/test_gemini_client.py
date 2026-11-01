@@ -79,7 +79,7 @@ def test_no_network_and_a_timeout_read_plainly():
 
     with pytest.raises(client.GeminiError, match="could not be reached"):
         client.ping(BASE, "m", KEY, transport=httpx.MockTransport(offline))
-    with pytest.raises(client.GeminiError, match="within 20 seconds"):
+    with pytest.raises(client.GeminiError, match="within 60 seconds"):
         client.ping(BASE, "m", KEY, transport=httpx.MockTransport(slow))
 
 

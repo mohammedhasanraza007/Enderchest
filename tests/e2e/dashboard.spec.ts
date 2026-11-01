@@ -103,11 +103,11 @@ test("the rings open a sheet whose lists match the ring's numbers", async ({ pag
   await settled(page);
   await page.getByRole("button", { name: /^Inventory health/ }).click();
   const sheet = page.getByRole("dialog", { name: "What counts" });
-  await expect(sheet.getByText("112 of 142 count: 79")).toBeVisible();
+  await expect(sheet.getByText("112 of 142 items, 79%")).toBeVisible();
   await expect(sheet.getByRole("heading", { name: "Not counted (30)" })).toBeVisible();
   await expect(sheet.locator(".ring-sheet__group").first().locator("li")).toHaveCount(30);
   await sheet.getByRole("radio", { name: "On time 56" }).click();
-  await expect(sheet.getByText("5 of 9 count: 56")).toBeVisible();
+  await expect(sheet.getByText("5 of 9 tasks, 56%")).toBeVisible();
   await expect(sheet.locator(".ring-sheet__group").first().locator(".ring-sheet__note")).toHaveText(
     ["4 days overdue", "3 days overdue", "2 days overdue", "1 day overdue"],
   );

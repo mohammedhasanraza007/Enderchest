@@ -23,7 +23,8 @@ from . import gemini as gemini_service
 from . import profile as profile_service
 
 MAX_ROUNDS = 5  # round 1 must call a tool; rounds 2 to 4 may; round 5 has tools off and answers
-TURN_SECONDS = 45.0
+TURN_SECONDS = 120.0
+EMPTY = "Your inventory is empty. Add something first, then ask me about it."
 # A question about money: the page then shows the named items' prices from this laptop.
 _ASKS_PRICE = re.compile(r"\b(?:prices?|priced|costs?|cost|paid|pay|worth|spent|rupees?|rs)\b|₹",
                          re.IGNORECASE)
@@ -120,9 +121,14 @@ def chat(conn: sqlite3.Connection, user_id: int, settings: Settings,
         log_event("warning", "assistant_failed", tools=box.found.tools,
                   rows=len(box.found.rows), reason=failed.message)
         raise AppError("upstream_unavailable", 502, failed.message) from None
+    names = items_repo.names(conn, user_id)
     checked = assistant_check.check(text, box.found.rows, box.found.searched,
-                                    items_repo.names(conn, user_id), messages[-1]["content"],
+                                    names, messages[-1]["content"],
                                     looked=bool(box.found.tools))
+    if not names and checked.replaced:
+        # "I couldn't find that" reads as a failure when there is nothing to find yet.
+        checked = assistant_check.Checked(EMPTY, [{"text": EMPTY, "public_id": None}], [],
+                                          checked.replaced)
     log_event("info", "assistant_answered", tools=box.found.tools, rows=len(box.found.rows),
               rounds=rounds, ms=int((time.perf_counter() - started) * 1000),
               replaced=checked.replaced)

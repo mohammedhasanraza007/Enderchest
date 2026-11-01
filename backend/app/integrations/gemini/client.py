@@ -13,7 +13,7 @@ import time
 import httpx
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-TIMEOUT_SECONDS = 20.0
+TIMEOUT_SECONDS = 60.0  # 20 s failed on a slow connection with a good key (D-151)
 
 PROMPT = (
     "You read product labels for a personal home inventory. From the photo(s) and the text read "

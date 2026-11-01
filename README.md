@@ -56,13 +56,26 @@ The ideas are borrowed from industrial maintenance and quality management (the p
 |---|---|
 | ![An item page with its QR label, maintenance and history](docs/images/item.png) | ![The assistant answering from the inventory, with item names linked](docs/images/assistant.png) |
 
+| Saving an item |
+|---|
+| ![A saved item's truck climbing a dashed trail to the Enderchest logo](docs/images/save-delivery.png) |
+
 ## Install
 
-You need **Windows 10 or 11**, internet for the first build, and free disk space (Docker Desktop itself, plus about 1.1 GB for the Enderchest image). Chrome or Edge works best, and a webcam (or a phone used as a webcam) is needed for the camera features.
+You need **Windows 10 or 11**, internet for the first build, and about **12 GB of free disk space**. Chrome or Edge works best, and a webcam (or a phone used as a webcam) is needed for the camera features.
 
-1. **Get Enderchest.** On GitHub choose **Code**, then **Download ZIP**, and unzip it on **any drive, in any folder you will keep**: `C:\Enderchest`, `E:\Apps\Enderchest`, wherever you like. (Or use `git clone`.)
-2. Double-click **`build.bat`**. If [Docker Desktop](https://www.docker.com/products/docker-desktop/) is missing, it offers to install it: type Y, approve the Windows permission prompt, and restart if it asks, then double-click `build.bat` again. The first build takes several minutes.
-3. Double-click **`run.bat`**. Your browser opens the app at http://127.0.0.1:8470.
+Enderchest runs inside Docker Desktop, and `build.bat` installs it for you. **On a new PC, the restart and the Docker sign-in below are required. There is no other way to run it.**
+
+1. **Get Enderchest.** On GitHub choose **Code**, then **Download ZIP**, and unzip it on **any drive, in any folder you will keep**. (Or use `git clone`.)
+2. Double-click **`build.bat`**, type **Y**, and approve the Windows permission prompts.
+3. **Restart Windows** when the window tells you to. This is normal, not a failure.
+4. Open **Docker Desktop**, accept its terms, and **sign in** (a free account is enough). Wait until it says the engine is running.
+5. Double-click **`build.bat`** again. **This can take 10 to 15 minutes and may look stuck. It is only downloading and building, and it is safe.** Do not close the window. Wait for "Build finished".
+6. Double-click **`run.bat`**. Your browser opens the app at http://127.0.0.1:8470.
+
+**If the page says it found an earlier copy of your data:** this can appear even on a first install. If you have nothing to restore, open **Start empty anyway**, type `START EMPTY`, and press **Start empty**. If you do have data you want, restore a backup there instead.
+
+From then on you only need `run.bat`, which also starts Docker if it is stopped.
 
 | Script | What it does |
 |---|---|
@@ -74,7 +87,20 @@ You need **Windows 10 or 11**, internet for the first build, and free disk space
 
 To change the port or the backup folder, edit the `.env` file that `build.bat` writes next to it. There is no login: the first run just asks your name and time zone.
 
-If something fails, the window stays open and `build.bat` and `run.bat` save everything they print to a `.txt` file in the `logs` folder. Docker Desktop must use Linux containers and include Compose 2.17 or newer. So far the install has only been run on the developer's PC; a clean second machine is not yet verified.
+If something fails, the window stays open and `build.bat` and `run.bat` save everything they print to a `.txt` file in the `logs` folder.
+
+This install has been run on the developer's PC and on one second Windows 11 laptop that started without Docker (that laptop did hold an earlier backup). A completely clean PC has not been tested.
+
+### Optional: the Assistant
+
+The Assistant needs your own free Google Gemini key:
+
+1. Open [Google AI Studio's API keys page](https://aistudio.google.com/apikey) and sign in with Google.
+2. Create an API key and copy it.
+3. In Enderchest, open **Settings → Gemini**, paste the key and save it.
+4. Press **Test connection**, then switch on **Use the assistant**.
+
+Gemini can take up to 60 seconds to answer on a slow connection, so please wait.
 
 ### Your data
 

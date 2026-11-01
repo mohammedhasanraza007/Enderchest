@@ -105,7 +105,7 @@ for (const theme of ["dark", "light"] as const) {
       .getByRole("dialog", { name: "What counts" })
       .getByRole("radio", { name: /On time/ })
       .click();
-    await expect(page.getByText("5 of 9 count: 56")).toBeVisible();
+    await expect(page.getByText("5 of 9 tasks, 56%")).toBeVisible();
     await page.screenshot({ path: `${SHOTS}/ring-sheet-${theme}-1280.png` });
     await page.keyboard.press("Escape");
     await page.getByRole("button", { name: /^18 Oct:/ }).focus();

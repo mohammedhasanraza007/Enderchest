@@ -1,0 +1,10 @@
+--- probe 29 ---
+Enderchest build. Safe to run again at any time; it never deletes anything.
+Wrote .env with the backup folder C:\Users\Admin\AppData\Local\Temp\enderchest-p29-f2a737\user (work) José\Enderchest-Backups
+Created the backup folder C:/Users/Admin/AppData/Local/Temp/enderchest-p29-f2a737/user (work) José/Enderchest-Backups
+The data volume already exists. Left as it is.
+Build finished. Next: run.bat
+
+Log saved: "C:\Users\Admin\AppData\Local\Temp\enderchest-p29-f2a737\Ender Test (x86) Co\logs\build-20261101-231218.txt"
+PROBE 29: PASS - build.bat exit 0, backup folder made: True, .env UTF-8 no BOM: True, names the folder: True; on failure the window waits: True, and not when told: True; log kept: True; placeholder refused: True
+ALL PASSED: 29

@@ -10,7 +10,9 @@ Everything runs on your own computer. It works with no internet and no account.
 - Chrome or Edge. A webcam (or a phone used as a webcam) for the camera features.
 
 ## Install
-If Docker Desktop is missing, `build.bat` offers to install it: type Y, approve the Windows permission prompt, restart if it asks, then double-click `build.bat` again.
+On a new PC, `build.bat` installs Docker Desktop: type Y and approve the Windows prompts, **restart Windows** when told, then open Docker Desktop, accept its terms and **sign in** (a free account is enough). These steps are required. Then double-click `build.bat` again: **this can take 10 to 15 minutes and may look stuck, which is normal and safe.**
+
+If the page says it found an earlier copy of your data and you have nothing to restore, open **Start empty anyway**, type `START EMPTY` and press **Start empty**.
 
 1. Unzip this folder on any drive, in any folder you will keep, for example `C:\Enderchest` or `E:\Apps\Enderchest`.
 2. Double-click `build.bat`. The first build takes several minutes. It creates your data volume and a backup folder (`%USERPROFILE%\Enderchest-Backups`) and writes a small `.env` settings file. It never deletes anything and is safe to run again.

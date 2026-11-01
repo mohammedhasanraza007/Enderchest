@@ -9,7 +9,7 @@ import pytest
 
 from tests import gemini_fake as fake
 from tests.conftest import HEADERS, Stack
-from tests.integration.test_assistant import ROW_KEYS, ask, gemini, household, item, tool_rows
+from tests.integration.test_assistant import KEY, ROW_KEYS, ask, gemini, household, item, tool_rows
 
 pytestmark = pytest.mark.integration
 __all__ = ["gemini"]  # the shared fixture, used through `indirect=True`
@@ -72,6 +72,20 @@ def test_any_other_question_shows_no_prices(gemini):
     household(stack)
     _controller(stack)
     assert ask(stack, "where is Supernova").json()["prices"] == []
+
+
+@pytest.mark.parametrize("gemini", [(fake.call("search_items", {"q": "drill"}),
+                                     fake.text("Nothing."))], indirect=True)
+def test_an_empty_inventory_says_so_instead_of_could_not_find(gemini):
+    stack, _stand_in = gemini
+    stack.client.put("/api/v1/profile", json={"name": "Ravi", "timezone": "Asia/Kolkata"},
+                     headers=HEADERS)
+    stack.client.put("/api/v1/gemini/key", json={"key": KEY}, headers=HEADERS)
+    stack.client.patch("/api/v1/settings", json={"assistant_share_item_text": True},
+                       headers=HEADERS)
+    answer = ask(stack, "do i have a drill").json()
+    assert answer["reply"].startswith("Your inventory is empty")
+    assert answer["cited"] == []
 
 
 @pytest.mark.parametrize("gemini", [(fake.call("search_items", {"q": "lamp"}),

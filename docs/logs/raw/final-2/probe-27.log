@@ -1,0 +1,3 @@
+--- probe 27 ---
+PROBE 27: PASS - coach frames: {"ok": true, "statuses": [200, 429, 429, 429, 429, 429, 429, 429, 429, 429]}
+ALL PASSED: 27

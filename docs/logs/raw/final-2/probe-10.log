@@ -1,0 +1,3 @@
+--- probe 10 ---
+PROBE 10: PASS - state=locked/newer_data schema_found=99; API 503; file hash unchanged=True
+ALL PASSED: 10
