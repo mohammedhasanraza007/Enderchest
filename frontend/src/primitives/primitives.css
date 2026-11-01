@@ -210,6 +210,13 @@
 .toggle[aria-checked="true"] .toggle__thumb {
   transform: translateX(22px);
 }
+/* Off in the light theme: the pale track and thumb need an edge to be seen on a pale card. */
+:root[data-theme="light"] .toggle[aria-checked="false"] {
+  border-color: var(--text-muted-page);
+}
+:root[data-theme="light"] .toggle[aria-checked="false"] .toggle__thumb {
+  background: var(--text-muted-page);
+}
 .toggle:disabled {
   opacity: 0.4;
   cursor: not-allowed;

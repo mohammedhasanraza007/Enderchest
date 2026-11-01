@@ -3,6 +3,15 @@
 /* ------------------------------------------------------------------ welcome (P-01) */
 .welcome-card__title {
   font-size: 2.25rem;
+  outline: none; /* Focused by script on each step change, never tabbed to. */
+}
+/* Three even columns: a chip gaining its check mark must not move the chips under the pointer. */
+.welcome-card .chip-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.welcome-card .chip-row .chip {
+  justify-content: center;
 }
 .welcome-card__intro {
   color: var(--text-muted-glass);
@@ -839,6 +848,7 @@ body:has(.road) {
   font-size: clamp(2.5rem, 4.15vw, 3.5625rem);
   font-weight: 400;
   line-height: 1.1;
+  overflow-wrap: anywhere; /* A long name stays out of the rings. */
 }
 .greeting__subtitle {
   margin: 0;

@@ -133,6 +133,11 @@ function GeminiControls({ status }: { status: GeminiStatus }) {
         {status.share_images
           ? "On: the photo is sent too, scaled down and without its location or camera details."
           : "Off: only the text read on this computer is sent, never the photo."}
+        {status.mode === "off"
+          ? " Nothing is sent while Gemini is Off."
+          : !status.key_set
+            ? " It needs a key first."
+            : ""}
       </p>
 
       <div id="assistant-switch">
@@ -205,7 +210,10 @@ function KeyForm({ keySet }: { keySet: boolean }) {
         autoComplete="off"
         spellCheck={false}
         value={key}
-        onChange={(event) => setKey(event.target.value)}
+        onChange={(event) => {
+          setKey(event.target.value);
+          setProblem(null);
+        }}
         error={problem ?? undefined}
         hint="From Google AI Studio. Stored on this computer only, outside the database and backups."
       />
@@ -259,7 +267,10 @@ function ModelForm({ model }: { model: string }) {
         label="Model"
         value={value}
         spellCheck={false}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => {
+          setValue(event.target.value);
+          setProblem(null);
+        }}
         error={problem ?? undefined}
       />
       {changed ? (

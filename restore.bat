@@ -18,7 +18,7 @@ exit /b 0
 REM Before delayed expansion: it would eat a "!" in the folder name.
 cd /d "%~dp0"
 setlocal enabledelayedexpansion
-echo Enderchest restore (docs/DATA_SAFETY.md 12).
+echo Enderchest restore.
 echo Your current data is copied to a safety backup first. Old files are moved aside, never deleted.
 echo.
 
@@ -42,7 +42,8 @@ set "COUNT=0"
 for /f "usebackq tokens=1-5 delims=|" %%A in (`docker compose run --rm --no-deps -T app python -m app.backup.cli list`) do (
   set /a COUNT+=1
   set "NAME[%%A]=%%B"
-  echo   %%A. %%D  %%C  %%E bytes  [%%B]
+  set /a "KB=(%%E+512)/1024"
+  echo   %%A. %%D  %%C  !KB! KB  [%%B]
 )
 if "%COUNT%"=="0" (
   echo   none found. Nothing can be restored.
@@ -77,7 +78,7 @@ if errorlevel 1 (
 )
 docker compose up -d --wait --wait-timeout 120
 if errorlevel 1 (
-  echo The restore finished but Enderchest did not start cleanly. See: docker compose logs app
+  echo The restore finished but Enderchest did not start cleanly. Restart Docker Desktop, then run run.bat.
   exit /b 1
 )
 set "STATE=unreachable"

@@ -28,11 +28,15 @@ export function ProfileSection({ profile }: { profile: Profile }) {
 
   function submit(event: FormEvent) {
     event.preventDefault();
+    store(timeZone);
+  }
+
+  function store(timezone: string) {
     setProblems({});
     setFailure(null);
     once((done) =>
       save.mutate(
-        { name, timezone: timeZone },
+        { name, timezone },
         {
           onSuccess: (saved) => {
             setName(saved.name ?? "");
@@ -56,13 +60,19 @@ export function ProfileSection({ profile }: { profile: Profile }) {
           label="Your name"
           autoComplete="given-name"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={(event) => {
+            setName(event.target.value);
+            setProblems({});
+          }}
           error={problems["name"]}
         />
         <Select
           label="Time zone"
           value={timeZone}
-          onChange={(event) => setTimeZone(event.target.value)}
+          onChange={(event) => {
+            setTimeZone(event.target.value);
+            setProblems({});
+          }}
           options={timeZoneOptions(timeZone)}
           error={problems["timezone"]}
         />
@@ -72,7 +82,14 @@ export function ProfileSection({ profile }: { profile: Profile }) {
               Your browser says you are in {browserZone}, but Enderchest is set to{" "}
               {profile.timezone}.
             </p>
-            <Button variant="secondary" onClick={() => setTimeZone(browserZone)}>
+            {/* Saves at once: the banner goes away, so nothing would say Save is still needed. */}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setTimeZone(browserZone);
+                store(browserZone);
+              }}
+            >
               Use {browserZone}
             </Button>
           </InnerPanel>

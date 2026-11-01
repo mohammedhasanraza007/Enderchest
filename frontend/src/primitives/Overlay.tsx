@@ -15,13 +15,25 @@ interface OverlayProps {
 function Overlay({ variant, open, onClose, title, children }: OverlayProps & { variant: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const opener = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const element = dialog.current;
     if (!element) return;
-    if (open && !element.open) element.showModal();
+    if (open && !element.open) {
+      opener.current = document.activeElement as HTMLElement | null;
+      element.showModal();
+    }
     if (!open && element.open) element.close();
   }, [open]);
+
+  // A parent may unmount an open dialog; the browser gives focus back only on a real close.
+  useEffect(() => {
+    const element = dialog.current;
+    return () => {
+      if (element?.open) opener.current?.focus();
+    };
+  }, []);
 
   return (
     <dialog

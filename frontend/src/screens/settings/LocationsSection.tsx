@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../../api/client";
 import { api } from "../../api/endpoints";
 import type { Location } from "../../api/endpoints";
@@ -51,6 +51,27 @@ function LocationRow({ location, all }: { location: Location; all: Location[] })
   const [problem, setProblem] = useState<string | null>(null);
   const [reassign, setReassign] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const opener = useRef<HTMLButtonElement | null>(null);
+  const lastMode = useRef<Mode>("idle");
+
+  // The form goes away when it closes: put the focus back on the button that opened it. A row's
+  // old message goes when its list changes too, for example when a child that was in the way goes.
+  useEffect(() => {
+    if (lastMode.current !== "idle" && mode === "idle") opener.current?.focus();
+    lastMode.current = mode;
+  }, [mode]);
+  useEffect(() => setProblem(null), [all]);
+
+  function enter(next: Mode, button: EventTarget) {
+    opener.current = button as HTMLButtonElement;
+    setProblem(null);
+    setMode(next);
+  }
+
+  function leave() {
+    setProblem(null);
+    setMode("idle");
+  }
 
   async function run(work: () => Promise<unknown>) {
     if (busy) return;
@@ -91,8 +112,8 @@ function LocationRow({ location, all }: { location: Location; all: Location[] })
         </span>
         <Button
           variant="ghost"
-          onClick={() => {
-            setMode("child");
+          onClick={(event) => {
+            enter("child", event.currentTarget);
             setText("");
           }}
         >
@@ -100,8 +121,8 @@ function LocationRow({ location, all }: { location: Location; all: Location[] })
         </Button>
         <Button
           variant="ghost"
-          onClick={() => {
-            setMode("rename");
+          onClick={(event) => {
+            enter("rename", event.currentTarget);
             setText(location.name);
           }}
         >
@@ -109,8 +130,8 @@ function LocationRow({ location, all }: { location: Location; all: Location[] })
         </Button>
         <Button
           variant="ghost"
-          onClick={() => {
-            setMode("move");
+          onClick={(event) => {
+            enter("move", event.currentTarget);
             setParent(String(location.parent_id ?? ""));
           }}
         >
@@ -135,11 +156,18 @@ function LocationRow({ location, all }: { location: Location; all: Location[] })
                 : api.createLocation({ name: text, parent_id: location.id }),
             );
           }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") leave();
+          }}
         >
           <Input
             label={mode === "rename" ? "Name" : `New place inside ${location.name}`}
             value={text}
-            onChange={(event) => setText(event.target.value)}
+            autoFocus
+            onChange={(event) => {
+              setText(event.target.value);
+              setProblem(null);
+            }}
           />
           {text.trim() === "" ? (
             <Button type="submit" disabled disabledReason="Type a name first.">
@@ -150,21 +178,17 @@ function LocationRow({ location, all }: { location: Location; all: Location[] })
               Save
             </Button>
           )}
-          <Button variant="ghost" onClick={() => setMode("idle")}>
+          <Button variant="ghost" onClick={leave}>
             Cancel
           </Button>
         </form>
       ) : null}
-      {problem ? (
+      {problem && mode !== "move" ? (
         <p role="alert" className="field__error">
           {problem}
         </p>
       ) : null}
-      <Dialog
-        open={mode === "move"}
-        onClose={() => setMode("idle")}
-        title={`Move ${location.name}`}
-      >
+      <Dialog open={mode === "move"} onClose={leave} title={`Move ${location.name}`}>
         <div className="stack">
           <Select
             label="Put it inside"

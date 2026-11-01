@@ -403,6 +403,13 @@ function NewLocation({
         value={name}
         autoFocus
         onChange={(event) => setName(event.target.value)}
+        // Enter adds the place: this form sits inside the item form, which it must not submit.
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            void add();
+          }
+        }}
         error={problem ?? undefined}
       />
       <Select

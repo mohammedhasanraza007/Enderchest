@@ -57,7 +57,7 @@ if not defined RUNNING (
 
 docker compose up -d --wait --wait-timeout 120
 if errorlevel 1 (
-  echo Enderchest did not become ready within 2 minutes. See: docker compose logs app
+  echo Enderchest did not become ready within 2 minutes. Your data has not been changed. Restart Docker Desktop, then run run.bat again.
   exit /b 1
 )
 

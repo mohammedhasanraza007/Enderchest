@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiError } from "../../api/client";
 import { api } from "../../api/endpoints";
 import type { Category, CategoryPatch } from "../../api/endpoints";
@@ -108,6 +108,20 @@ function CategoryRow({ category, all }: { category: Category; all: Category[] })
   const [problem, setProblem] = useState<string | null>(null);
   const [reassign, setReassign] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const line = useRef<HTMLDivElement>(null);
+  const wasRenaming = useRef(false);
+
+  // The Rename button unmounts while renaming: put the focus back on it afterwards.
+  useEffect(() => {
+    if (wasRenaming.current && !renaming) line.current?.querySelector("button")?.focus();
+    wasRenaming.current = renaming;
+  }, [renaming]);
+
+  function stopRenaming() {
+    setRenaming(false);
+    setName(category.name);
+    setProblem(null);
+  }
 
   async function change(body: CategoryPatch) {
     setProblem(null);
@@ -141,7 +155,7 @@ function CategoryRow({ category, all }: { category: Category; all: Category[] })
 
   return (
     <li className="row-list__row row-list__row--stacked">
-      <div className="row-list__line">
+      <div className="row-list__line" ref={line}>
         {renaming ? (
           <form
             className="inline-add"
@@ -149,10 +163,21 @@ function CategoryRow({ category, all }: { category: Category; all: Category[] })
               event.preventDefault();
               void change({ name });
             }}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") stopRenaming();
+            }}
           >
-            <Input label="Name" value={name} onChange={(event) => setName(event.target.value)} />
+            <Input
+              label="Name"
+              value={name}
+              autoFocus
+              onChange={(event) => {
+                setName(event.target.value);
+                setProblem(null);
+              }}
+            />
             <Button type="submit">Save</Button>
-            <Button variant="ghost" onClick={() => setRenaming(false)}>
+            <Button variant="ghost" onClick={stopRenaming}>
               Cancel
             </Button>
           </form>
@@ -180,7 +205,7 @@ function CategoryRow({ category, all }: { category: Category; all: Category[] })
           onChange={(next) => void change({ expires_default: next })}
         />
         <Toggle
-          label="Maintenance on"
+          label="Maintenance by default"
           checked={category.maintenance_default}
           onChange={(next) => void change({ maintenance_default: next })}
         />

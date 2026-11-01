@@ -13,7 +13,7 @@ try {
     $message = $_.ErrorDetails.Message
     if ($message) {
         try { $message = ($message | ConvertFrom-Json).error.message } catch { }
-    } else { $message = $_.Exception.Message }
+    } else { $message = 'Enderchest is not running on this computer.' }
     Write-Output "No backup was made. $message"
     exit 1
 }

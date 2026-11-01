@@ -98,7 +98,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  width: 280px;
+  width: 320px;
   padding: var(--space-4);
   border: 1px solid var(--hairline-card);
   border-radius: var(--radius-card);
@@ -224,6 +224,10 @@
 }
 /* Six tabs since Phase 9 (Assistant, D-133): at 1024 px they sit closer still. */
 @media (max-width: 1099px) {
+  /* Six tabs leave this much for a long name; the rest is cut with an ellipsis. */
+  .name-pill {
+    max-width: 148px;
+  }
   .nav__capsule {
     gap: var(--space-2);
     padding-left: var(--space-4);

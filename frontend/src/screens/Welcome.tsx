@@ -1,5 +1,5 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { FormEvent, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { ApiError, fieldProblems } from "../api/client";
@@ -95,13 +95,19 @@ export function Welcome() {
               autoComplete="given-name"
               autoFocus
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => {
+                setName(event.target.value);
+                setProblems({});
+              }}
               error={problems["name"]}
             />
             <Select
               label="Time zone"
               value={timeZone}
-              onChange={(event) => setTimeZone(event.target.value)}
+              onChange={(event) => {
+                setTimeZone(event.target.value);
+                setProblems({});
+              }}
               options={timeZoneOptions(timeZone)}
               error={problems["timezone"]}
             />
@@ -118,9 +124,9 @@ export function Welcome() {
           <StarterCategories onDone={() => setStep("done")} />
         ) : (
           <div className="stack">
-            <h1 className="welcome-card__title">
+            <StepTitle>
               Good {dayPart(localHour(profile.data?.timezone ?? timeZone))}, {savedName}
-            </h1>
+            </StepTitle>
             <p className="welcome-card__intro">
               You are set up. Everything stays on this computer.
             </p>
@@ -133,6 +139,17 @@ export function Welcome() {
 }
 
 /** Step 2: tick any starter categories; Continue makes them, Skip makes none. */
+/** A later step's heading. It takes the focus, so a keyboard user carries on from the new step. */
+function StepTitle({ children }: { children: ReactNode }) {
+  const title = useRef<HTMLHeadingElement>(null);
+  useEffect(() => title.current?.focus(), []);
+  return (
+    <h1 ref={title} className="welcome-card__title" tabIndex={-1}>
+      {children}
+    </h1>
+  );
+}
+
 function StarterCategories({ onDone }: { onDone: () => void }) {
   const client = useQueryClient();
   const [ticked, setTicked] = useState<Set<string>>(new Set());
@@ -165,7 +182,7 @@ function StarterCategories({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="stack">
-      <h1 className="welcome-card__title">Start with some categories?</h1>
+      <StepTitle>Start with some categories?</StepTitle>
       <p className="welcome-card__intro">
         Tick the ones you want. Each sets sensible defaults, such as an expiry date for food. You
         can change or add categories later in Settings.
