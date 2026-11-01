@@ -10,7 +10,7 @@ Everything runs on your own computer. It works with no internet and no account.
 - Chrome or Edge. A webcam (or a phone used as a webcam) for the camera features.
 
 ## Install
-1. Unzip this folder somewhere permanent, for example `C:\Enderchest`.
+1. Unzip this folder on any drive, in any folder you will keep, for example `C:\Enderchest` or `E:\Apps\Enderchest`.
 2. Double-click `build.bat`. The first build takes several minutes. It creates your data volume and a backup folder (`%USERPROFILE%\Enderchest-Backups`) and writes a small `.env` settings file. It never deletes anything and is safe to run again.
 3. Double-click `run.bat`. Your browser opens Enderchest at http://127.0.0.1:8470 and asks your name on the first run.
 
